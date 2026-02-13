@@ -98,8 +98,7 @@
       "type": "file",
       "desc": "output file",
       "cli": {
-        "argstr": "> %s",
-        "position": -1
+        "stdout_to": "out_file"
       }
     },
     "quiet": {

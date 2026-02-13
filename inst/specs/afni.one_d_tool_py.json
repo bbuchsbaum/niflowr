@@ -77,8 +77,10 @@
       "type": "file",
       "desc": "Write cormat warnings to a file",
       "cli": {
-        "argstr": "-show_cormat_warnings |& tee %s",
-        "position": -1
+        "argstr": "-show_cormat_warnings",
+        "position": -1,
+        "stdout_to": "show_cormat_warnings",
+        "stderr_to": "show_cormat_warnings"
       },
       "constraints": {
         "xor": [

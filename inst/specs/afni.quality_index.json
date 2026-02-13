@@ -78,8 +78,7 @@
       "type": "file",
       "desc": "capture standard output",
       "cli": {
-        "argstr": "> %s",
-        "position": -1
+        "stdout_to": "out_file"
       }
     },
     "quadrant": {

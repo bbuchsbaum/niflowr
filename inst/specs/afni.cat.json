@@ -55,8 +55,7 @@
       "required": true,
       "default": "catout.1d",
       "cli": {
-        "argstr": "> %s",
-        "position": -1
+        "stdout_to": "out_file"
       }
     },
     "out_fint": {

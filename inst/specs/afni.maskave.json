@@ -32,8 +32,7 @@
       "type": "file",
       "desc": "output image file name",
       "cli": {
-        "argstr": "> %s",
-        "position": -1
+        "stdout_to": "out_file"
       }
     },
     "quiet": {

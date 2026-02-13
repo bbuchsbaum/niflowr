@@ -93,8 +93,8 @@
       "type": "file",
       "desc": "collect output to a file",
       "cli": {
-        "argstr": "|& tee %s",
-        "position": -1
+        "stdout_to": "out_file",
+        "stderr_to": "out_file"
       }
     },
     "show_labels": {

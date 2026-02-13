@@ -64,3 +64,17 @@ python tools/import_nipype_specs.py \
   --overwrite \
   --omit-imported-at
 ```
+
+## Lint + Golden Cmdline Fixtures
+
+After import, normalize specs and regenerate command snapshots:
+
+```bash
+Rscript tools/lint_specs.R --fix
+Rscript tools/gen_golden_cmdline.R
+```
+
+- `tools/lint_specs.R --fix` rewrites shell-style arg strings (e.g. `> %s`,
+  `|& tee %s`) into runner-level redirects.
+- `tools/gen_golden_cmdline.R` writes
+  `tests/golden/cmdline_golden.json` for regression testing.

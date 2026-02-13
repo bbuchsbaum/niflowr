@@ -8,8 +8,10 @@
       "type": "file",
       "desc": "Compute and print ALL available cost functionals for the un-warped inputsAND THEN QUIT. If you use this option none of the other expected outputs will be produced",
       "cli": {
-        "argstr": "-allcostx |& tee %s",
-        "position": -1
+        "argstr": "-allcostx",
+        "position": -1,
+        "stdout_to": "allcostx",
+        "stderr_to": "allcostx"
       },
       "constraints": {
         "xor": [

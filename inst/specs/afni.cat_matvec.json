@@ -64,8 +64,7 @@
       "desc": "File to write concattenated matvecs to",
       "required": true,
       "cli": {
-        "argstr": "> %s",
-        "position": -1
+        "stdout_to": "out_file"
       }
     }
   },
