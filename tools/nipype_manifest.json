@@ -9,7 +9,7 @@
   },
   {
     "interface": "nipype.interfaces.fsl.preprocess:ApplyWarp",
-    "id": "fsl.applywarp"
+    "id": "fsl.apply_warp"
   },
   {
     "interface": "nipype.interfaces.ants.resampling:ApplyTransforms",
@@ -29,10 +29,10 @@
   },
   {
     "interface": "nipype.interfaces.afni.utils:Calc",
-    "id": "afni.3dcalc"
+    "id": "afni.calc"
   },
   {
     "interface": "nipype.interfaces.afni.utils:Resample",
-    "id": "afni.3dresample"
+    "id": "afni.resample"
   }
 ]

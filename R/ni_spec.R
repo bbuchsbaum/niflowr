@@ -7,6 +7,8 @@
 #' @return An `ni_spec` object (S3 list).
 #' @export
 ni_spec_read <- function(id_or_path, cache = TRUE) {
+  id_or_path <- resolve_legacy_spec_id(id_or_path)
+
   # Check cache first
 
   if (cache && exists(id_or_path, envir = .spec_registry, inherits = FALSE)) {
@@ -31,6 +33,27 @@ ni_spec_read <- function(id_or_path, cache = TRUE) {
   }
 
   spec
+}
+
+#' Resolve legacy spec IDs to canonical discovered IDs
+#' @keywords internal
+resolve_legacy_spec_id <- function(id_or_path) {
+  if (!is.character(id_or_path) || length(id_or_path) != 1) {
+    return(id_or_path)
+  }
+
+  legacy_aliases <- c(
+    "afni.3dcalc" = "afni.calc",
+    "afni.3dresample" = "afni.resample",
+    "fsl.applywarp" = "fsl.apply_warp"
+  )
+
+  if (id_or_path %in% names(legacy_aliases)) {
+    canonical <- unname(legacy_aliases[[id_or_path]])
+    return(canonical)
+  }
+
+  id_or_path
 }
 
 #' List available bundled specs
