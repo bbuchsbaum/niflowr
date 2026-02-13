@@ -126,9 +126,9 @@ ni_afni_align_epi_anat_py <- function(anat,
 #' @param check Character or numeric vector. After cost functional optimization is done, start at the final parameters and RE-optimize using this new cost functions. If the results are too different, a warning message will be printed. However, the final parameters from the original optimization will be used to create the output dataset.
 #' @param convergence Numeric. Convergence test in millimeters (default 0.05mm).
 #' @param cost Character; one of: "leastsq", "ls", "mutualinfo", "mi", "corratio_mul", "crM", "norm_mutualinfo", "nmi", "hellinger", "hel", "corratio_add", "crA", "corratio_uns", "crU". Defines the 'cost' function that defines the matching between the source and the base
-#' @param epi Logical. Treat the source dataset as being composed of warped EPI slices, and the base as comprising anatomically 'true' images.  Only phase-encoding direction image shearing and scaling will be allowed with this option.
+#' @param epi Logical. Treat the source dataset as being composed of warped EPI slices, and the base as comprising anatomically 'true' images. Only phase-encoding direction image shearing and scaling will be allowed with this option.
 #' @param final_interpolation Character; one of: "nearestneighbour", "linear", "cubic", "quintic", "wsinc5". Defines interpolation method used to create the output dataset
-#' @param fine_blur Numeric. Set the blurring radius to use in the fine resolution pass to 'x' mm.  A small amount (1-2 mm?) of blurring at the fine step may help with convergence, if there is some problem, especially if the base volume is very noisy. \[Default == 0 mm = no blurring at the final alignment pass\]
+#' @param fine_blur Numeric. Set the blurring radius to use in the fine resolution pass to 'x' mm. A small amount (1-2 mm?) of blurring at the fine step may help with convergence, if there is some problem, especially if the base volume is very noisy. \[Default == 0 mm = no blurring at the final alignment pass\]
 #' @param in_matrix Character; file path. matrix to align input file
 #' @param in_param_file Character; file path. Read warp parameters from file and apply them to the source dataset, and produce a new dataset
 #' @param interpolation Character; one of: "nearestneighbour", "linear", "cubic", "quintic". Defines interpolation method to use during matching
@@ -144,7 +144,7 @@ ni_afni_align_epi_anat_py <- function(anat,
 #' @param nwarp Character; one of: "bilinear", "cubic", "quintic", "heptic", "nonic", "poly3", "poly5", "poly7", "poly9". Experimental nonlinear warping: bilinear or legendre poly.
 #' @param nwarp_fixdep Character or numeric vector. To fix non-linear warp dependency along directions.
 #' @param nwarp_fixmot Character or numeric vector. To fix motion along directions.
-#' @param one_pass Logical. Use only the refining pass -- do not try a coarse resolution pass first.  Useful if you know that only small amounts of image alignment are needed.
+#' @param one_pass Logical. Use only the refining pass -- do not try a coarse resolution pass first. Useful if you know that only small amounts of image alignment are needed.
 #' @param out_file Character; file path. output file from 3dAllineate
 #' @param out_matrix Character; file path. Save the transformation matrix for each volume.
 #' @param out_param_file Character; file path. Save the warp parameters in ASCII (.1D) format.
@@ -156,7 +156,7 @@ ni_afni_align_epi_anat_py <- function(anat,
 #' @param replacemeth Character; one of: "leastsq", "ls", "mutualinfo", "mi", "corratio_mul", "crM", "norm_mutualinfo", "nmi", "hellinger", "hel", "corratio_add", "crA", "corratio_uns", "crU". After first volume is aligned, switch method for later volumes. For use with '-replacebase'.
 #' @param source_automask Integer. Automatically mask the source dataset with dilation or 0.
 #' @param source_mask Character; file path. mask the input dataset
-#' @param two_best Integer. In the coarse pass, use the best 'bb' set of initialpoints to search for the starting point for the finepass.  If bb==0, then no search is made for the beststarting point, and the identity transformation isused as the starting point.  \[Default=5; min=0 max=11\]
+#' @param two_best Integer. In the coarse pass, use the best 'bb' set of initialpoints to search for the starting point for the finepass. If bb==0, then no search is made for the beststarting point, and the identity transformation isused as the starting point. \[Default=5; min=0 max=11\]
 #' @param two_blur Numeric. Set the blurring radius for the first pass in mm.
 #' @param two_first Logical. Use -twopass on the first image to be registered, and then on all subsequent images from the source dataset, use results from the first image's coarse pass to start the fine pass.
 #' @param two_pass Logical. Use a two pass alignment strategy for all volumes, searching for a large rotation+shift and then refining the alignment.
@@ -274,66 +274,10 @@ ni_afni_auto_tcorrelate <- function(in_file,
 #'
 #' A minimal wrapper for the AutoTLRC script
 #'
-#' @param base Character. Reference anatomical volume.
-Usually this volume is in some standard space like
-TLRC or MNI space and with afni dataset view of
-(+tlrc).
-Preferably, this reference volume should have had
-the skull removed but that is not mandatory.
-AFNI's distribution contains several templates.
-For a longer list, use "whereami -show_templates"
-TT_N27+tlrc --> Single subject, skull stripped volume.
-This volume is also known as
-N27_SurfVol_NoSkull+tlrc elsewhere in
-AFNI and SUMA land.
-(www.loni.ucla.edu, www.bic.mni.mcgill.ca)
-This template has a full set of FreeSurfer
-(surfer.nmr.mgh.harvard.edu)
-surface models that can be used in SUMA.
-For details, see Talairach-related link:
-https://afni.nimh.nih.gov/afni/suma
-TT_icbm452+tlrc --> Average volume of 452 normal brains.
-Skull Stripped. (www.loni.ucla.edu)
-TT_avg152T1+tlrc --> Average volume of 152 normal brains.
-Skull Stripped.(www.bic.mni.mcgill.ca)
-TT_EPI+tlrc --> EPI template from spm2, masked as TT_avg152T1
-TT_avg152 and TT_EPI volume sources are from
-SPM's distribution. (www.fil.ion.ucl.ac.uk/spm/)
-If you do not specify a path for the template, the script
-will attempt to locate the template AFNI's binaries directory.
-NOTE: These datasets have been slightly modified from
-their original size to match the standard TLRC
-dimensions (Jean Talairach and Pierre Tournoux
-Co-Planar Stereotaxic Atlas of the Human Brain
-Thieme Medical Publishers, New York, 1988).
-That was done for internal consistency in AFNI.
-You may use the original form of these
-volumes if you choose but your TLRC coordinates
-will not be consistent with AFNI's TLRC database
-(San Antonio Talairach Daemon database), for example. **Required.**
+#' @param base Character. Reference anatomical volume. Usually this volume is in some standard space like TLRC or MNI space and with afni dataset view of (+tlrc). Preferably, this reference volume should have had the skull removed but that is not mandatory. AFNI's distribution contains several templates. For a longer list, use "whereami -show_templates" TT_N27+tlrc --> Single subject, skull stripped volume. This volume is also known as N27_SurfVol_NoSkull+tlrc elsewhere in AFNI and SUMA land. (www.loni.ucla.edu, www.bic.mni.mcgill.ca) This template has a full set of FreeSurfer (surfer.nmr.mgh.harvard.edu) surface models that can be used in SUMA. For details, see Talairach-related link: https://afni.nimh.nih.gov/afni/suma TT_icbm452+tlrc --> Average volume of 452 normal brains. Skull Stripped. (www.loni.ucla.edu) TT_avg152T1+tlrc --> Average volume of 152 normal brains. Skull Stripped.(www.bic.mni.mcgill.ca) TT_EPI+tlrc --> EPI template from spm2, masked as TT_avg152T1 TT_avg152 and TT_EPI volume sources are from SPM's distribution. (www.fil.ion.ucl.ac.uk/spm/) If you do not specify a path for the template, the script will attempt to locate the template AFNI's binaries directory. NOTE: These datasets have been slightly modified from their original size to match the standard TLRC dimensions (Jean Talairach and Pierre Tournoux Co-Planar Stereotaxic Atlas of the Human Brain Thieme Medical Publishers, New York, 1988). That was done for internal consistency in AFNI. You may use the original form of these volumes if you choose but your TLRC coordinates will not be consistent with AFNI's TLRC database (San Antonio Talairach Daemon database), for example. **Required.**
 #' @param in_file Character; file path. Original anatomical volume (+orig).The skull is removed by this scriptunless instructed otherwise (-no_ss). **Required.**
 #' @param args Character. Additional parameters to the command
-#' @param no_ss Logical. Do not strip skull of input data set
-(because skull has already been removed
-or because template still has the skull)
-NOTE: The ``-no_ss`` option is not all that optional.
-Here is a table of when you should and should not use ``-no_ss``
-
-  +------------------+------------+---------------+
-  | Dataset          | Template                   |
-  +==================+============+===============+
-  |                  | w/ skull   | wo/ skull     |
-  +------------------+------------+---------------+
-  | WITH skull       | ``-no_ss`` | xxx           |
-  +------------------+------------+---------------+
-  | WITHOUT skull    | No Cigar   | ``-no_ss``    |
-  +------------------+------------+---------------+
-
-Template means: Your template of choice
-Dset. means: Your anatomical dataset
-``-no_ss`` means: Skull stripping should not be attempted on Dset
-xxx means: Don't put anything, the script will strip Dset
-No Cigar means: Don't try that combination, it makes no sense.
+#' @param no_ss Logical. Do not strip skull of input data set (because skull has already been removed or because template still has the skull) NOTE: The ``-no_ss`` option is not all that optional. Here is a table of when you should and should not use ``-no_ss`` +------------------+------------+---------------+ | Dataset | Template | +==================+============+===============+ | | w/ skull | wo/ skull | +------------------+------------+---------------+ | WITH skull | ``-no_ss`` | xxx | +------------------+------------+---------------+ | WITHOUT skull | No Cigar | ``-no_ss`` | +------------------+------------+---------------+ Template means: Your template of choice Dset. means: Your anatomical dataset ``-no_ss`` means: Skull stripping should not be attempted on Dset xxx means: Don't put anything, the script will strip Dset No Cigar means: Don't try that combination, it makes no sense.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -424,8 +368,8 @@ ni_afni_automask <- function(in_file,
 #'
 #' @param in_file Character; file path. input file to 3daxialize **Required.**
 #' @param args Character. Additional parameters to the command
-#' @param axial Logical. Do axial slice order    \[-orient RAI\]This is the default AFNI axial order, andis the one currently required by thevolume rendering plugin; this is alsothe default orientation output by thisprogram (hence the program's name).
-#' @param coronal Logical. Do coronal slice order  \[-orient RSA\]
+#' @param axial Logical. Do axial slice order \[-orient RAI\]This is the default AFNI axial order, andis the one currently required by thevolume rendering plugin; this is alsothe default orientation output by thisprogram (hence the program's name).
+#' @param coronal Logical. Do coronal slice order \[-orient RSA\]
 #' @param orientation Character. new orientation code
 #' @param out_file Character; file path. output image file name
 #' @param sagittal Logical. Do sagittal slice order \[-orient ASL\]
@@ -517,7 +461,7 @@ ni_afni_bandpass <- function(highpass,
 #' @param args Character. Additional parameters to the command
 #' @param automask Logical. Create an automask from the input dataset.
 #' @param float_out Logical. Save dataset as floats, no matter what the input data type is.
-#' @param mask Character; file path. Mask dataset, if desired.  Blurring will occur only within the mask. Voxels NOT in the mask will be set to zero in the output.
+#' @param mask Character; file path. Mask dataset, if desired. Blurring will occur only within the mask. Voxels NOT in the mask will be set to zero in the output.
 #' @param multimask Character; file path. Multi-mask dataset -- each distinct nonzero value in dataset will be treated as a separate mask for blurring purposes.
 #' @param options Character. options
 #' @param out_file Character; file path. output to the file
@@ -628,43 +572,7 @@ ni_afni_brick_stat <- function(in_file,
 #'
 #' Concatenate sub-bricks from input datasets into one big
 #'
-#' @param in_file Character or numeric vector. List of tuples of input datasets and subbrick selection strings
-as described in more detail in the following afni help string
-Input dataset specified using one of these forms:
-``prefix+view``, ``prefix+view.HEAD``, or ``prefix+view.BRIK``.
-You can also add a sub-brick selection list after the end of the
-dataset name.  This allows only a subset of the sub-bricks to be
-included into the output (by default, all of the input dataset
-is copied into the output).  A sub-brick selection list looks like
-one of the following forms::
-
-    fred+orig\[5\]                     ==> use only sub-brick #5
-    fred+orig\[5,9,17\]                ==> use #5, #9, and #17
-    fred+orig\[5..8\]     or \[5-8\]     ==> use #5, #6, #7, and #8
-    fred+orig\[5..13(2)\] or \[5-13(2)\] ==> use #5, #7, #9, #11, and #13
-
-Sub-brick indexes start at 0.  You can use the character '$'
-to indicate the last sub-brick in a dataset; for example, you
-can select every third sub-brick by using the selection list
-``fred+orig\[0..$(3)\]``
-N.B.: The sub-bricks are output in the order specified, which may
-not be the order in the original datasets.  For example, using
-``fred+orig\[0..$(2),1..$(2)\]``
-will cause the sub-bricks in fred+orig to be output into the
-new dataset in an interleaved fashion. Using ``fred+orig\[$..0\]``
-will reverse the order of the sub-bricks in the output.
-N.B.: Bucket datasets have multiple sub-bricks, but do NOT have
-a time dimension.  You can input sub-bricks from a 3D+time dataset
-into a bucket dataset.  You can use the '3dinfo' program to see
-how many sub-bricks a 3D+time or a bucket dataset contains.
-N.B.: In non-bucket functional datasets (like the 'fico' datasets
-output by FIM, or the 'fitt' datasets output by 3dttest), sub-brick
-``\[0\]`` is the 'intensity' and sub-brick \[1\] is the statistical parameter
-used as a threshold.  Thus, to create a bucket dataset using the
-intensity from dataset A and the threshold from dataset B, and
-calling the output dataset C, you would type::
-
-    3dbucket -prefix C -fbuc 'A+orig\[0\]' -fbuc 'B+orig\[1\] **Required.**
+#' @param in_file Character or numeric vector. List of tuples of input datasets and subbrick selection strings as described in more detail in the following afni help string Input dataset specified using one of these forms: ``prefix+view``, ``prefix+view.HEAD``, or ``prefix+view.BRIK``. You can also add a sub-brick selection list after the end of the dataset name. This allows only a subset of the sub-bricks to be included into the output (by default, all of the input dataset is copied into the output). A sub-brick selection list looks like one of the following forms:: fred+orig\[5\] ==> use only sub-brick #5 fred+orig\[5,9,17\] ==> use #5, #9, and #17 fred+orig\[5..8\] or \[5-8\] ==> use #5, #6, #7, and #8 fred+orig\[5..13(2)\] or \[5-13(2)\] ==> use #5, #7, #9, #11, and #13 Sub-brick indexes start at 0. You can use the character '$' to indicate the last sub-brick in a dataset; for example, you can select every third sub-brick by using the selection list ``fred+orig\[0..$(3)\]`` N.B.: The sub-bricks are output in the order specified, which may not be the order in the original datasets. For example, using ``fred+orig\[0..$(2),1..$(2)\]`` will cause the sub-bricks in fred+orig to be output into the new dataset in an interleaved fashion. Using ``fred+orig\[$..0\]`` will reverse the order of the sub-bricks in the output. N.B.: Bucket datasets have multiple sub-bricks, but do NOT have a time dimension. You can input sub-bricks from a 3D+time dataset into a bucket dataset. You can use the '3dinfo' program to see how many sub-bricks a 3D+time or a bucket dataset contains. N.B.: In non-bucket functional datasets (like the 'fico' datasets output by FIM, or the 'fitt' datasets output by 3dttest), sub-brick ``\[0\]`` is the 'intensity' and sub-brick \[1\] is the statistical parameter used as a threshold. Thus, to create a bucket dataset using the intensity from dataset A and the threshold from dataset B, and calling the output dataset C, you would type:: 3dbucket -prefix C -fbuc 'A+orig\[0\]' -fbuc 'B+orig\[1\] **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param out_file Character; file path
 #' @param .cwd Working directory override.
@@ -720,38 +628,6 @@ ni_afni_calc <- function(expr,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' AFNI CatMatvec
-#'
-#' Catenates 3D rotation+shift matrix+vector transformations.
-#'
-#' @param in_file Character or numeric vector. list of tuples of mfiles and associated opkeys **Required.**
-#' @param out_file Character; file path. File to write concattenated matvecs to **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param fourxfour Logical. Output matrix in augmented form (last row is 0 0 0 1)This option does not work with -MATRIX or -ONELINE
-#' @param matrix Logical. indicates that the resulting matrix willbe written to outfile in the 'MATRIX(...)' format (FORM 3).This feature could be used, with clever scripting, to inputa matrix directly on the command line to program 3dWarp.
-#' @param oneline Logical. indicates that the resulting matrixwill simply be written as 12 numbers on one line.
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_afni_cat_matvec <- function(in_file,
-                     out_file,
-                     args = NULL,
-                     fourxfour = NULL,
-                     matrix = NULL,
-                     oneline = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("afni.cat_matvec", in_file = in_file, out_file = out_file, args = args, fourxfour = fourxfour, matrix = matrix, oneline = oneline, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' AFNI Cat
 #'
 #' 1dcat takes as input one or more 1D files, and writes out a 1D file
@@ -793,6 +669,38 @@ ni_afni_cat <- function(in_files,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("afni.cat", in_files = in_files, out_file = out_file, args = args, keepfree = keepfree, omitconst = omitconst, out_double = out_double, out_fint = out_fint, out_format = out_format, out_int = out_int, out_nice = out_nice, sel = sel, stack = stack, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' AFNI CatMatvec
+#'
+#' Catenates 3D rotation+shift matrix+vector transformations.
+#'
+#' @param in_file Character or numeric vector. list of tuples of mfiles and associated opkeys **Required.**
+#' @param out_file Character; file path. File to write concattenated matvecs to **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param fourxfour Logical. Output matrix in augmented form (last row is 0 0 0 1)This option does not work with -MATRIX or -ONELINE
+#' @param matrix Logical. indicates that the resulting matrix willbe written to outfile in the 'MATRIX(...)' format (FORM 3).This feature could be used, with clever scripting, to inputa matrix directly on the command line to program 3dWarp.
+#' @param oneline Logical. indicates that the resulting matrixwill simply be written as 12 numbers on one line.
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_afni_cat_matvec <- function(in_file,
+                     out_file,
+                     args = NULL,
+                     fourxfour = NULL,
+                     matrix = NULL,
+                     oneline = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("afni.cat_matvec", in_file = in_file, out_file = out_file, args = args, fourxfour = fourxfour, matrix = matrix, oneline = oneline, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -1372,7 +1280,7 @@ ni_afni_fourier <- function(highpass,
 #' @param combine Logical. combine the final measurements along each axis
 #' @param compat Logical. be compatible with the older 3dFWHM
 #' @param demed Logical. If the input dataset has more than one sub-brick (e.g., has a time axis), then subtract the median of each voxel's time series before processing FWHM. This will tend to remove intrinsic spatial structure and leave behind the noise.
-#' @param detrend Character. instead of demed (0th order detrending), detrend to the specified order.  If order is not given, the program picks q=NT/30. -detrend disables -demed, and includes -unif.
+#' @param detrend Character. instead of demed (0th order detrending), detrend to the specified order. If order is not given, the program picks q=NT/30. -detrend disables -demed, and includes -unif.
 #' @param geom Logical. if in_file has more than one sub-brick, compute the final estimate as the geometric mean of the individual sub-brick FWHM estimates
 #' @param mask Character; file path. use only voxels that are nonzero in mask
 #' @param out_detrend Character; file path. Save the detrended file into a dataset
@@ -1523,37 +1431,12 @@ ni_afni_lfcd <- function(in_file,
 #' @param in_file1 Character; file path. Filename of the first image **Required.**
 #' @param in_file2 Character; file path. Filename of the second image **Required.**
 #' @param neighborhood Character or numeric vector. The region around each voxel that will be extracted for the statistics calculation. Possible regions are: 'SPHERE', 'RHDD' (rhombic dodecahedron), 'TOHD' (truncated octahedron) with a given radius in mm or 'RECT' (rectangular block) with dimensions to specify in mm. **Required.**
-#' @param stat Character or numeric vector. Statistics to compute. Possible names are:
-
-  * pearson  = Pearson correlation coefficient
-  * spearman = Spearman correlation coefficient
-  * quadrant = Quadrant correlation coefficient
-  * mutinfo  = Mutual Information
-  * normuti  = Normalized Mutual Information
-  * jointent = Joint entropy
-  * hellinger= Hellinger metric
-  * crU      = Correlation ratio (Unsymmetric)
-  * crM      = Correlation ratio (symmetrized by Multiplication)
-  * crA      = Correlation ratio (symmetrized by Addition)
-  * L2slope  = slope of least-squares (L2) linear regression of
-               the data from dataset1 vs. the dataset2
-               (i.e., d2 = a + b*d1 ==> this is 'b')
-  * L1slope  = slope of least-absolute-sum (L1) linear
-               regression of the data from dataset1 vs.
-               the dataset2
-  * num      = number of the values in the region:
-               with the use of -mask or -automask,
-               the size of the region around any given
-               voxel will vary; this option lets you
-               map that size.
-  * ALL      = all of the above, in that order
-
-More than one option can be used. **Required.**
+#' @param stat Character or numeric vector. Statistics to compute. Possible names are: * pearson = Pearson correlation coefficient * spearman = Spearman correlation coefficient * quadrant = Quadrant correlation coefficient * mutinfo = Mutual Information * normuti = Normalized Mutual Information * jointent = Joint entropy * hellinger= Hellinger metric * crU = Correlation ratio (Unsymmetric) * crM = Correlation ratio (symmetrized by Multiplication) * crA = Correlation ratio (symmetrized by Addition) * L2slope = slope of least-squares (L2) linear regression of the data from dataset1 vs. the dataset2 (i.e., d2 = a + b*d1 ==> this is 'b') * L1slope = slope of least-absolute-sum (L1) linear regression of the data from dataset1 vs. the dataset2 * num = number of the values in the region: with the use of -mask or -automask, the size of the region around any given voxel will vary; this option lets you map that size. * ALL = all of the above, in that order More than one option can be used. **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param automask Logical. Compute the mask as in program 3dAutomask.
 #' @param mask_file Character; file path. mask image file name. Voxels NOT in the mask will not be used in the neighborhood of any voxel. Also, a voxel NOT in the mask will have its statistic(s) computed as zero (0).
 #' @param out_file Character; file path. Output dataset.
-#' @param weight_file Character; file path. File name of an image to use as a weight.  Only applies to 'pearson' statistics.
+#' @param weight_file Character; file path. File name of an image to use as a weight. Only applies to 'pearson' statistics.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -1585,59 +1468,12 @@ ni_afni_local_bistat <- function(in_file1,
 #'
 #' @param in_file Character; file path. input dataset **Required.**
 #' @param neighborhood Character or numeric vector. The region around each voxel that will be extracted for the statistics calculation. Possible regions are: 'SPHERE', 'RHDD' (rhombic dodecahedron), 'TOHD' (truncated octahedron) with a given radius in mm or 'RECT' (rectangular block) with dimensions to specify in mm. **Required.**
-#' @param stat Character or numeric vector. statistics to compute. Possible names are:
-
- * mean   = average of the values
- * stdev  = standard deviation
- * var    = variance (stdev\*stdev)
- * cvar   = coefficient of variation = stdev/fabs(mean)
- * median = median of the values
- * MAD    = median absolute deviation
- * min    = minimum
- * max    = maximum
- * absmax = maximum of the absolute values
- * num    = number of the values in the region:
-            with the use of -mask or -automask,
-            the size of the region around any given
-            voxel will vary; this option lets you
-            map that size.  It may be useful if you
-            plan to compute a t-statistic (say) from
-            the mean and stdev outputs.
- * sum    = sum of the values in the region
- * FWHM   = compute (like 3dFWHM) image smoothness
-            inside each voxel's neighborhood.  Results
-            are in 3 sub-bricks: FWHMx, FHWMy, and FWHMz.
-            Places where an output is -1 are locations
-            where the FWHM value could not be computed
-            (e.g., outside the mask).
- * FWHMbar= Compute just the average of the 3 FWHM values
-            (normally would NOT do this with FWHM also).
- * perc:P0:P1:Pstep =
-            Compute percentiles between P0 and P1 with a
-            step of Pstep.
-            Default P1 is equal to P0 and default P2 = 1
- * rank   = rank of the voxel's intensity
- * frank  = rank / number of voxels in neighborhood
- * P2skew = Pearson's second skewness coefficient
-             3 \* (mean - median) / stdev
- * ALL    = all of the above, in that order
-            (except for FWHMbar and perc).
- * mMP2s  = Exactly the same output as:
-            median, MAD, P2skew,
-            but a little faster
- * mmMP2s = Exactly the same output as:
-            mean, median, MAD, P2skew
-
-More than one option can be used. **Required.**
+#' @param stat Character or numeric vector. statistics to compute. Possible names are: * mean = average of the values * stdev = standard deviation * var = variance (stdev\*stdev) * cvar = coefficient of variation = stdev/fabs(mean) * median = median of the values * MAD = median absolute deviation * min = minimum * max = maximum * absmax = maximum of the absolute values * num = number of the values in the region: with the use of -mask or -automask, the size of the region around any given voxel will vary; this option lets you map that size. It may be useful if you plan to compute a t-statistic (say) from the mean and stdev outputs. * sum = sum of the values in the region * FWHM = compute (like 3dFWHM) image smoothness inside each voxel's neighborhood. Results are in 3 sub-bricks: FWHMx, FHWMy, and FWHMz. Places where an output is -1 are locations where the FWHM value could not be computed (e.g., outside the mask). * FWHMbar= Compute just the average of the 3 FWHM values (normally would NOT do this with FWHM also). * perc:P0:P1:Pstep = Compute percentiles between P0 and P1 with a step of Pstep. Default P1 is equal to P0 and default P2 = 1 * rank = rank of the voxel's intensity * frank = rank / number of voxels in neighborhood * P2skew = Pearson's second skewness coefficient 3 \* (mean - median) / stdev * ALL = all of the above, in that order (except for FWHMbar and perc). * mMP2s = Exactly the same output as: median, MAD, P2skew, but a little faster * mmMP2s = Exactly the same output as: mean, median, MAD, P2skew More than one option can be used. **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param automask Logical. Compute the mask as in program 3dAutomask.
 #' @param grid_rmode Character; one of: "NN", "Li", "Cu", "Bk". Interpolant to use when resampling the output with thereduce_restore_grid option. The resampling method string RESAM should come from the set \{'NN', 'Li', 'Cu', 'Bk'\}. These stand for 'Nearest Neighbor', 'Linear', 'Cubic', and 'Blocky' interpolation, respectively.
 #' @param mask_file Character; file path. Mask image file name. Voxels NOT in the mask will not be used in the neighborhood of any voxel. Also, a voxel NOT in the mask will have its statistic(s) computed as zero (0) unless the parameter 'nonmask' is set to true.
-#' @param nonmask Logical. Voxels not in the mask WILL have their local statistics
-computed from all voxels in their neighborhood that ARE in
-the mask. For instance, this option can be used to compute the
-average local white matter time series, even at non-WM
-voxels.
+#' @param nonmask Logical. Voxels not in the mask WILL have their local statistics computed from all voxels in their neighborhood that ARE in the mask. For instance, this option can be used to compute the average local white matter time series, even at non-WM voxels.
 #' @param out_file Character; file path. Output dataset.
 #' @param overwrite Logical. overwrite output file if it already exists
 #' @param quiet Logical. Stop the highly informative progress reports.
@@ -1838,16 +1674,16 @@ ni_afni_merge <- function(in_files,
 #' @param mask Character; file path. can include a whole brain mask within which to calculate correlation. Otherwise, data should be masked already
 #' @param nifti Logical. output any correlation map files as NIFTI files (default is BRIK/HEAD). Only useful if using '-ts_wb_corr' and/or '-ts_wb_Z'
 #' @param out_file Character; file path. output file name part
-#' @param output_mask_nonnull Logical. internally, this program checks for where there are nonnull time series, because we don't like those, in general.  With this flag, the user can output the determined mask of non-null time series.
+#' @param output_mask_nonnull Logical. internally, this program checks for where there are nonnull time series, because we don't like those, in general. With this flag, the user can output the determined mask of non-null time series.
 #' @param part_corr Logical. output the partial correlation matrix
-#' @param push_thru_many_zeros Logical. by default, this program will grind to a halt and refuse to calculate if any ROI contains >10 percent of voxels with null times series (i.e., each point is 0), as of April, 2017.  This is because it seems most likely that hidden badness is responsible. However, if the user still wants to carry on the calculation anyways, then this option will allow one to push on through.  However, if any ROI *only* has null time series, then the program will not calculate and the user will really, really, really need to address their masking
+#' @param push_thru_many_zeros Logical. by default, this program will grind to a halt and refuse to calculate if any ROI contains >10 percent of voxels with null times series (i.e., each point is 0), as of April, 2017. This is because it seems most likely that hidden badness is responsible. However, if the user still wants to carry on the calculation anyways, then this option will allow one to push on through. However, if any ROI *only* has null time series, then the program will not calculate and the user will really, really, really need to address their masking
 #' @param ts_indiv Logical. switch to create a directory for each network that contains the average time series for each ROI in individual files (each file has one line). The directories are labelled PREFIX_000_INDIV/, PREFIX_001_INDIV/, etc. (one per network). Within each directory, the files are labelled ROI_001.netts, ROI_002.netts, etc., with the numbers given by the actual ROI integer labels
 #' @param ts_label Logical. additional switch when using '-ts_out'. Using this option will insert the integer ROI label at the start of each line of the *.netts file created. Thus, for a time series of length N, each line will have N+1 numbers, where the first is the integer ROI label and the subsequent N are scientific notation values
 #' @param ts_out Logical. switch to output the mean time series of the ROIs that have been used to generate the correlation matrices. Output filenames mirror those of the correlation matrix files, with a '.netts' postfix
 #' @param ts_wb_Z Logical. same as above in '-ts_wb_corr', except that the maps have been Fisher transformed to Z-scores the relation: Z=atanh(r). To avoid infinities in the transform, Pearson values are effectively capped at |r| = 0.999329 (where |Z| = 4.0). Files are labelled WB_Z_ROI_001+orig, etc
 #' @param ts_wb_corr Logical. switch to create a set of whole brain correlation maps. Performs whole brain correlation for each ROI's average time series; this will automatically create a directory for each network that contains the set of whole brain correlation maps (Pearson 'r's). The directories are labelled as above for '-ts_indiv' Within each directory, the files are labelled WB_CORR_ROI_001+orig, WB_CORR_ROI_002+orig, etc., with the numbers given by the actual ROI integer labels
 #' @param ts_wb_strlabel Logical. by default, '-ts_wb_\{corr,Z\}' output files are named using the int number of a given ROI, such as: WB_Z_ROI_001+orig. With this option, one can replace the int (such as '001') with the string label (such as 'L-thalamus') *if* one has a labeltable attached to the file
-#' @param weight_ts Character; file path. input a 1D file WTS of weights that will be applied multiplicatively to each ROI's average time series. WTS can be a column- or row-file of values, but it must have the same length as the input time series volume. If the initial average time series was A\[n\] for n=0,..,(N-1) time points, then applying a set of weights W\[n\] of the same length from WTS would produce a new time series:  B\[n\] = A\[n\] * W\[n\]
+#' @param weight_ts Character; file path. input a 1D file WTS of weights that will be applied multiplicatively to each ROI's average time series. WTS can be a column- or row-file of values, but it must have the same length as the input time series volume. If the initial average time series was A\[n\] for n=0,..,(N-1) time points, then applying a set of weights W\[n\] of the same length from WTS would produce a new time series: B\[n\] = A\[n\] * W\[n\]
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -1924,7 +1760,7 @@ ni_afni_notes <- function(in_file,
 #'
 #' @param warps Character or numeric vector. List of input 3D warp datasets **Required.**
 #' @param args Character. Additional parameters to the command
-#' @param in_files Character or numeric vector. List of input 3D datasets to be warped by the adjusted warp datasets.  There must be exactly as many of these datasets as there are input warps.
+#' @param in_files Character or numeric vector. List of input 3D datasets to be warped by the adjusted warp datasets. There must be exactly as many of these datasets as there are input warps.
 #' @param out_file Character; file path. Output mean dataset, only needed if in_files are also given. The output dataset will be on the common grid shared by the source datasets.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
@@ -2036,7 +1872,7 @@ ni_afni_nwarp_cat <- function(in_files,
 #' @param derivative Logical. take the temporal derivative of each vector (done as first backward difference)
 #' @param out_file Character; file path. write the current 1D data to FILE
 #' @param set_nruns Integer. treat the input data as if it has nruns
-#' @param show_censor_count Logical. display the total number of censored TRs  Note : if input is a valid xmat.1D dataset, then the count will come from the header.  Otherwise the input is assumed to be a binary censorfile, and zeros are simply counted.
+#' @param show_censor_count Logical. display the total number of censored TRs Note : if input is a valid xmat.1D dataset, then the count will come from the header. Otherwise the input is assumed to be a binary censorfile, and zeros are simply counted.
 #' @param show_cormat_warnings Character; file path. Write cormat warnings to a file
 #' @param show_indices_interest Logical. display column indices for regs of interest
 #' @param show_trs_run Integer. restrict -show_trs_\[un\]censored to the given 1-based run
@@ -2152,290 +1988,178 @@ ni_afni_quality_index <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' AFNI Qwarp
+#'
+#' Allineate your images prior to passing them to this workflow.
+#'
+#' @param base_file Character; file path. Base image (opposite phase encoding direction than source image). **Required.**
+#' @param in_file Character; file path. Source image (opposite phase encoding direction than base image). **Required.**
+#' @param Qfinal Logical. At the finest patch size (the final level), use Hermite quintic polynomials for the warp instead of cubic polynomials. * In a 3D 'patch', there are 2x2x2x3=24 cubic polynomial basis function parameters over which to optimize (2 polynomials dependent on each of the x,y,z directions, and 3 different directions of displacement). * There are 3x3x3x3=81 quintic polynomial parameters per patch. * With -Qfinal, the final level will have more detail in the allowed warps, at the cost of yet more CPU time. * However, no patch below 7x7x7 in size will be done with quintic polynomials. * This option is also not usually needed, and is experimental.
+#' @param Qonly Logical. Use Hermite quintic polynomials at all levels. * Very slow (about 4 times longer). Also experimental. * Will produce a (discrete representation of a) C2 warp.
+#' @param allineate Logical. This option will make 3dQwarp run 3dAllineate first, to align the source dataset to the base with an affine transformation. It will then use that alignment as a starting point for the nonlinear warping.
+#' @param allineate_opts Character. add extra options to the 3dAllineate command to be run by 3dQwarp.
+#' @param allsave Logical. This option lets you save the output warps from each level" of the refinement process. Mostly used for experimenting." Will only save all the outputs if the program terminates" normally -- if it crashes, or freezes, then all these" warps are lost.
+#' @param args Character. Additional parameters to the command
+#' @param ballopt Logical. Normally, the incremental warp parameters are optimized insidea rectangular 'box' (24 dimensional for cubic patches, 81 forquintic patches), whose limits define the amount of distortionallowed at each step. Using '-ballopt' switches these limitsto be applied to a 'ball' (interior of a hypersphere), whichcan allow for larger incremental displacements. Use thisoption if you think things need to be able to move farther.
+#' @param bandpass Character or numeric vector
+#' @param baxopt Logical. Use the 'box' optimization limits instead of the 'ball'\[this is the default at present\].Note that if '-workhard' is used, then ball and box optimizationare alternated in the different iterations at each level, sothese two options have no effect in that case.
+#' @param blur Character or numeric vector. Gaussian blur the input images by 'bb' (FWHM) voxels before doing the alignment (the output dataset will not be blurred). The default is 2.345 (for no good reason). * Optionally, you can provide 2 values for 'bb', and then the first one is applied to the base volume, the second to the source volume. e.g., '-blur 0 3' to skip blurring the base image (if the base is a blurry template, for example). * A negative blur radius means to use 3D median filtering, rather than Gaussian blurring. This type of filtering will better preserve edges, which can be important in alignment. * If the base is a template volume that is already blurry, you probably don't want to blur it again, but blurring the source volume a little is probably a good idea, to help the program avoid trying to match tiny features. * Note that -duplo will blur the volumes some extra amount for the initial small-scale warping, to make that phase of the program converge more rapidly.
+#' @param duplo Logical. Start off with 1/2 scale versions of the volumes," for getting a speedy coarse first alignment." * Then scales back up to register the full volumes." The goal is greater speed, and it seems to help this" positively piggish program to be more expeditious." * However, accuracy is somewhat lower with '-duplo'," for reasons that currently elude Zhark; for this reason," the Emperor does not usually use '-duplo'.
+#' @param emask Character; file path. Here, 'ee' is a dataset to specify a mask of voxelsto EXCLUDE from the analysis -- all voxels in 'ee'that are NONZERO will not be used in the alignment.The base image always automasked -- the emask isextra, to indicate voxels you definitely DON'T wantincluded in the matching process, even if they areinside the brain.
+#' @param expad Integer. This option instructs the program to pad the warp by an extra'EE' voxels (and then 3dQwarp starts optimizing it).This option is seldom needed, but can be useful if youmight later catenate the nonlinear warp -- via 3dNwarpCat --with an affine transformation that contains a large shift.Under that circumstance, the nonlinear warp might be shiftedpartially outside its original grid, so expanding that gridcan avoid this problem.Note that this option perforce turns off '-nopadWARP'.
+#' @param gridlist Character; file path. This option provides an alternate way to specify the patch grid sizes used in the warp optimization process. 'gl' is a 1D file with a list of patches to use -- in most cases, you will want to use it in the following form: ``-gridlist '1D: 0 151 101 75 51'`` * Here, a 0 patch size means the global domain. Patch sizes otherwise should be odd integers >= 5. * If you use the '0' patch size again after the first position, you will actually get an iteration at the size of the default patch level 1, where the patch sizes are 75% of the volume dimension. There is no way to force the program to literally repeat the sui generis step of lev=0.
+#' @param hel Logical. Hellinger distance: a matching function for the adventurousThis option has NOT be extensively tested for usefulnessand should be considered experimental at this infundibulum.
+#' @param inilev Integer. The initial refinement 'level' at which to start. * Usually used with -iniwarp; CANNOT be used with -duplo. * The combination of -inilev and -iniwarp lets you take the results of a previous 3dQwarp run and refine them further: Note that the source dataset in the second run is the SAME as in the first run. If you don't see why this is necessary, then you probably need to seek help from an AFNI guru.
+#' @param iniwarp Character or numeric vector. A dataset with an initial nonlinear warp to use. * If this option is not used, the initial warp is the identity. * You can specify a catenation of warps (in quotes) here, as in program 3dNwarpApply. * As a special case, if you just input an affine matrix in a .1D file, that will work also -- it is treated as giving the initial warp via the string "IDENT(base_dataset) matrix_file.aff12.1D". * You CANNOT use this option with -duplo !! * -iniwarp is usually used with -inilev to re-start 3dQwarp from a previous stopping point.
+#' @param iwarp Logical. Do compute and save the _WARPINV file.
+#' @param lpa Logical. Local Pearson maximization. This option has not be extensively tested
+#' @param lpc Logical. Local Pearson minimization (i.e., EPI-T1 registration)This option has not be extensively testedIf you use '-lpc', then '-maxlev 0' is automatically set.If you want to go to more refined levels, you can set '-maxlev'This should be set up to have lpc as the second to last argumentand maxlev as the second to last argument, as needed by AFNIUsing maxlev > 1 is not recommended for EPI-T1 alignment.
+#' @param maxlev Integer. The initial refinement 'level' at which to start. * Usually used with -iniwarp; CANNOT be used with -duplo. * The combination of -inilev and -iniwarp lets you take the results of a previous 3dQwarp run and refine them further: Note that the source dataset in the second run is the SAME as in the first run. If you don't see why this is necessary, then you probably need to seek help from an AFNI guru.
+#' @param mi Logical. Mutual Information: a matching function for the adventurousThis option has NOT be extensively tested for usefulnessand should be considered experimental at this infundibulum.
+#' @param minpatch Integer. The value of mm should be an odd integer. * The default value of mm is 25. * For more accurate results than mm=25, try 19 or 13. * The smallest allowed patch size is 5. * You may want stop at a larger patch size (say 7 or 9) and use the -Qfinal option to run that final level with quintic warps, which might run faster and provide the same degree of warp detail. * Trying to make two different brain volumes match in fine detail is usually a waste of time, especially in humans. There is too much variability in anatomy to match gyrus to gyrus accurately. For this reason, the default minimum patch size is 25 voxels. Using a smaller '-minpatch' might try to force the warp to match features that do not match, and the result can be useless image distortions -- another reason to LOOK AT THE RESULTS.
+#' @param nmi Logical. Normalized Mutual Information: a matching function for the adventurousThis option has NOT been extensively tested for usefulnessand should be considered experimental at this infundibulum.
+#' @param noXdis Logical. Warp will not displace in x direction
+#' @param noYdis Logical. Warp will not displace in y direction
+#' @param noZdis Logical. Warp will not displace in z direction
+#' @param noneg Logical. Replace negative values in either input volume with 0. * If there ARE negative input values, and you do NOT use -noneg, then strict Pearson correlation will be used, since the 'clipped' method only is implemented for non-negative volumes. * '-noneg' is not the default, since there might be situations where you want to align datasets with positive and negative values mixed. * But, in many cases, the negative values in a dataset are just the result of interpolation artifacts (or other peculiarities), and so they should be ignored. That is what '-noneg' is for.
+#' @param nopad Logical. Do NOT use zero-padding on the 3D base and source images. \[Default == zero-pad, if needed\] * The underlying model for deformations goes to zero at the edge of the volume being warped. However, if there is significant data near an edge of the volume, then it won't get displaced much, and so the results might not be good. * Zero padding is designed as a way to work around this potential problem. You should NOT need the '-nopad' option for any reason that Zhark can think of, but it is here to be symmetrical with 3dAllineate. * Note that the output (warped from source) dataset will be on the base dataset grid whether or not zero-padding is allowed. However, unless you use the following option, allowing zero-padding (i.e., the default operation) will make the output WARP dataset(s) be on a larger grid (also see '-expad' below).
+#' @param nopadWARP Logical. If for some reason you require the warp volume tomatch the base volume, then use this option to have the outputWARP dataset(s) truncated.
+#' @param nopenalty Logical. Replace negative values in either input volume with 0. * If there ARE negative input values, and you do NOT use -noneg, then strict Pearson correlation will be used, since the 'clipped' method only is implemented for non-negative volumes. * '-noneg' is not the default, since there might be situations where you want to align datasets with positive and negative values mixed. * But, in many cases, the negative values in a dataset are just the result of interpolation artifacts (or other peculiarities), and so they should be ignored. That is what '-noneg' is for.
+#' @param nowarp Logical. Do not save the _WARP file.
+#' @param noweight Logical. If you want a binary weight (the old default), use this option.That is, each voxel in the base volume automask will beweighted the same in the computation of the cost functional.
+#' @param out_file Character; file path. Sets the prefix/suffix for the output datasets. * The source dataset is warped to match the base and gets prefix 'ppp'. (Except if '-plusminus' is used * The final interpolation to this output dataset is done using the 'wsinc5' method. See the output of 3dAllineate -HELP (in the "Modifying '-final wsinc5'" section) for the lengthy technical details. * The 3D warp used is saved in a dataset with prefix 'ppp_WARP' -- this dataset can be used with 3dNwarpApply and 3dNwarpCat, for example. * To be clear, this is the warp from source dataset coordinates to base dataset coordinates, where the values at each base grid point are the xyz displacements needed to move that grid point's xyz values to the corresponding xyz values in the source dataset: base( (x,y,z) + WARP(x,y,z) ) matches source(x,y,z) Another way to think of this warp is that it 'pulls' values back from source space to base space. * 3dNwarpApply would use 'ppp_WARP' to transform datasets aligned with the source dataset to be aligned with the base dataset. **If you do NOT want this warp saved, use the option '-nowarp'**. (However, this warp is usually the most valuable possible output!) * If you want to calculate and save the inverse 3D warp, use the option '-iwarp'. This inverse warp will then be saved in a dataset with prefix 'ppp_WARPINV'. * This inverse warp could be used to transform data from base space to source space, if you need to do such an operation. * You can easily compute the inverse later, say by a command like 3dNwarpCat -prefix Z_WARPINV 'INV(Z_WARP+tlrc)' or the inverse can be computed as needed in 3dNwarpApply, like 3dNwarpApply -nwarp 'INV(Z_WARP+tlrc)' -source Dataset.nii ...
+#' @param out_weight_file Character; file path. Write the weight volume to disk as a dataset
+#' @param overwrite Logical. Overwrite outputs
+#' @param pblur Character or numeric vector. Use progressive blurring; that is, for larger patch sizes, the amount of blurring is larger. The general idea is to avoid trying to match finer details when the patch size and incremental warps are coarse. When '-blur' is used as well, it sets a minimum amount of blurring that will be used. \[06 Aug 2014 -- '-pblur' may become the default someday\]. * You can optionally give the fraction of the patch size that is used for the progressive blur by providing a value between 0 and 0.25 after '-pblur'. If you provide TWO values, the the first fraction is used for progressively blurring the base image and the second for the source image. The default parameters when just '-pblur' is given is the same as giving the options as '-pblur 0.09 0.09'. * '-pblur' is useful when trying to match 2 volumes with high amounts of detail; e.g, warping one subject's brain image to match another's, or trying to warp to match a detailed template. * Note that using negative values with '-blur' means that the progressive blurring will be done with median filters, rather than Gaussian linear blurring. Note: The combination of the -allineate and -pblur options will make the results of using 3dQwarp to align to a template somewhat less sensitive to initial head position and scaling.
+#' @param pear Logical. Use strict Pearson correlation for matching.Not usually recommended, since the 'clipped Pearson' methodused by default will reduce the impact of outlier values.
+#' @param penfac Numeric. Use this value to weight the penalty. The default value is 1. Larger values mean the penalty counts more, reducing grid distortions, insha'Allah; '-nopenalty' is the same as '-penfac 0'. In 23 Sep 2013 Zhark increased the default value of the penalty by a factor of 5, and also made it get progressively larger with each level of refinement. Thus, warping results will vary from earlier instances of 3dQwarp. * The progressive increase in the penalty at higher levels means that the 'cost function' can actually look like the alignment is getting worse when the levels change. * IF you wish to turn off this progression, for whatever reason (e.g., to keep compatibility with older results), use the option '-penold'.To be completely compatible with the older 3dQwarp, you'll also have to use '-penfac 0.2'.
+#' @param plusminus Logical. Normally, the warp displacements dis(x) are defined to match base(x) to source(x+dis(x)). With this option, the match is between base(x-dis(x)) and source(x+dis(x)) -- the two images 'meet in the middle'. * One goal is to mimic the warping done to MRI EPI data by field inhomogeneities, when registering between a 'blip up' and a 'blip down' down volume, which will have opposite distortions. * Define Wp(x) = x+dis(x) and Wm(x) = x-dis(x). Then since base(Wm(x)) matches source(Wp(x)), by substituting INV(Wm(x)) wherever we see x, we have base(x) matches source(Wp(INV(Wm(x)))); that is, the warp V(x) that one would get from the 'usual' way of running 3dQwarp is V(x) = Wp(INV(Wm(x))). * Conversely, we can calculate Wp(x) in terms of V(x) as follows: If V(x) = x + dv(x), define Vh(x) = x + dv(x)/2; then Wp(x) = V(INV(Vh(x))) * With the above formulas, it is possible to compute Wp(x) from V(x) and vice-versa, using program 3dNwarpCalc. The requisite commands are left as an exercise for the aspiring AFNI Jedi Master. * You can use the semi-secret '-pmBASE' option to get the V(x) warp and the source dataset warped to base space, in addition to the Wp(x) '_PLUS' and Wm(x) '_MINUS' warps. * Alas: -plusminus does not work with -duplo or -allineate :-( * However, you can use -iniwarp with -plusminus :-) * The outputs have _PLUS (from the source dataset) and _MINUS (from the base dataset) in their filenames, in addition to the prefix. The -iwarp option, if present, will be ignored.
+#' @param quiet Logical. Cut out most of the fun fun fun progress messages :-(
+#' @param resample Logical. This option simply resamples the source dataset to match the base dataset grid. You can use this if the two datasets overlap well (as seen in the AFNI GUI), but are not on the same 3D grid. * If they don't overlap well, allineate them first * The reampling here is done with the 'wsinc5' method, which has very little blurring artifact. * If the base and source datasets ARE on the same 3D grid, then the -resample option will be ignored. * You CAN use -resample with these 3dQwarp options: -plusminus -inilev -iniwarp -duplo
+#' @param verb Logical. more detailed description of the process
+#' @param wball Character or numeric vector. "``-wball x y z r f`` Enhance automatic weight from '-useweight' by a factor of 1+f\*Gaussian(FWHM=r) centered in the base image at DICOM coordinates (x,y,z) and with radius 'r'. The goal of this option is to try and make the alignment better in a specific part of the brain. Example: -wball 0 14 6 30 40 to emphasize the thalamic area (in MNI/Talairach space). * The 'r' parameter must be positive! * The 'f' parameter must be between 1 and 100 (inclusive). * '-wball' does nothing if you input your own weight with the '-weight' option. * '-wball' does change the binary weight created by the '-noweight' option. * You can only use '-wball' once in a run of 3dQwarp. **The effect of '-wball' is not dramatic.** The example above makes the average brain image across a collection of subjects a little sharper in the thalamic area, which might have some small value. If you care enough about alignment to use '-wball', then you should examine the results from 3dQwarp for each subject, to see if the alignments are good enough for your purposes.
+#' @param weight Character; file path. Instead of computing the weight from the base dataset,directly input the weight volume from dataset 'www'.Useful if you know what over parts of the base image youwant to emphasize or de-emphasize the matching functional.
+#' @param wmask Character or numeric vector. Similar to '-wball', but here, you provide a dataset 'ws' that indicates where to increase the weight. * The 'ws' dataset must be on the same 3D grid as the base dataset. * 'ws' is treated as a mask -- it only matters where it is nonzero -- otherwise, the values inside are not used. * After 'ws' comes the factor 'f' by which to increase the automatically computed weight. Where 'ws' is nonzero, the weighting will be multiplied by (1+f). * As with '-wball', the factor 'f' should be between 1 and 100.
+#' @param workhard Logical. Iterate more times, which can help when the volumes are hard to align at all, or when you hope to get a more precise alignment. * Slows the program down (possibly a lot), of course. * When you combine '-workhard' with '-duplo', only the full size volumes get the extra iterations. * For finer control over which refinement levels work hard, you can use this option in the form (for example) ``-workhard:4:7`` which implies the extra iterations will be done at levels 4, 5, 6, and 7, but not otherwise. * You can also use '-superhard' to iterate even more, but this extra option will REALLY slow things down. * Under most circumstances, you should not need to use either ``-workhard`` or ``-superhard``. * The fastest way to register to a template image is via the ``-duplo`` option, and without the ``-workhard`` or ``-superhard`` options. * If you use this option in the form '-Workhard' (first letter in upper case), then the second iteration at each level is done with quintic polynomial warps.
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_afni_qwarp <- function(base_file,
+                     in_file,
+                     Qfinal = NULL,
+                     Qonly = NULL,
+                     allineate = NULL,
+                     allineate_opts = NULL,
+                     allsave = NULL,
+                     args = NULL,
+                     ballopt = NULL,
+                     bandpass = NULL,
+                     baxopt = NULL,
+                     blur = NULL,
+                     duplo = NULL,
+                     emask = NULL,
+                     expad = NULL,
+                     gridlist = NULL,
+                     hel = NULL,
+                     inilev = NULL,
+                     iniwarp = NULL,
+                     iwarp = NULL,
+                     lpa = NULL,
+                     lpc = NULL,
+                     maxlev = NULL,
+                     mi = NULL,
+                     minpatch = NULL,
+                     nmi = NULL,
+                     noXdis = NULL,
+                     noYdis = NULL,
+                     noZdis = NULL,
+                     noneg = NULL,
+                     nopad = NULL,
+                     nopadWARP = NULL,
+                     nopenalty = NULL,
+                     nowarp = NULL,
+                     noweight = NULL,
+                     out_file = NULL,
+                     out_weight_file = NULL,
+                     overwrite = NULL,
+                     pblur = NULL,
+                     pear = NULL,
+                     penfac = NULL,
+                     plusminus = NULL,
+                     quiet = NULL,
+                     resample = NULL,
+                     verb = NULL,
+                     wball = NULL,
+                     weight = NULL,
+                     wmask = NULL,
+                     workhard = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("afni.qwarp", base_file = base_file, in_file = in_file, Qfinal = Qfinal, Qonly = Qonly, allineate = allineate, allineate_opts = allineate_opts, allsave = allsave, args = args, ballopt = ballopt, bandpass = bandpass, baxopt = baxopt, blur = blur, duplo = duplo, emask = emask, expad = expad, gridlist = gridlist, hel = hel, inilev = inilev, iniwarp = iniwarp, iwarp = iwarp, lpa = lpa, lpc = lpc, maxlev = maxlev, mi = mi, minpatch = minpatch, nmi = nmi, noXdis = noXdis, noYdis = noYdis, noZdis = noZdis, noneg = noneg, nopad = nopad, nopadWARP = nopadWARP, nopenalty = nopenalty, nowarp = nowarp, noweight = noweight, out_file = out_file, out_weight_file = out_weight_file, overwrite = overwrite, pblur = pblur, pear = pear, penfac = penfac, plusminus = plusminus, quiet = quiet, resample = resample, verb = verb, wball = wball, weight = weight, wmask = wmask, workhard = workhard, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' AFNI QwarpPlusMinus
 #'
 #' A version of 3dQwarp for performing field susceptibility correction
 #'
 #' @param base_file Character; file path. Base image (opposite phase encoding direction than source image). **Required.**
 #' @param in_file Character; file path. Source image (opposite phase encoding direction than base image). **Required.**
-#' @param Qfinal Logical. At the finest patch size (the final level), use Hermite
-quintic polynomials for the warp instead of cubic polynomials.
-
-* In a 3D 'patch', there are 2x2x2x3=24 cubic polynomial basis
-  function parameters over which to optimize (2 polynomials
-  dependent on each of the x,y,z directions, and 3 different
-  directions of displacement).
-* There are 3x3x3x3=81 quintic polynomial parameters per patch.
-* With -Qfinal, the final level will have more detail in
-  the allowed warps, at the cost of yet more CPU time.
-* However, no patch below 7x7x7 in size will be done with quintic
-  polynomials.
-* This option is also not usually needed, and is experimental.
-#' @param Qonly Logical. Use Hermite quintic polynomials at all levels.
-
-* Very slow (about 4 times longer).  Also experimental.
-* Will produce a (discrete representation of a) C2 warp.
+#' @param Qfinal Logical. At the finest patch size (the final level), use Hermite quintic polynomials for the warp instead of cubic polynomials. * In a 3D 'patch', there are 2x2x2x3=24 cubic polynomial basis function parameters over which to optimize (2 polynomials dependent on each of the x,y,z directions, and 3 different directions of displacement). * There are 3x3x3x3=81 quintic polynomial parameters per patch. * With -Qfinal, the final level will have more detail in the allowed warps, at the cost of yet more CPU time. * However, no patch below 7x7x7 in size will be done with quintic polynomials. * This option is also not usually needed, and is experimental.
+#' @param Qonly Logical. Use Hermite quintic polynomials at all levels. * Very slow (about 4 times longer). Also experimental. * Will produce a (discrete representation of a) C2 warp.
 #' @param allineate Logical. This option will make 3dQwarp run 3dAllineate first, to align the source dataset to the base with an affine transformation. It will then use that alignment as a starting point for the nonlinear warping.
 #' @param allineate_opts Character. add extra options to the 3dAllineate command to be run by 3dQwarp.
-#' @param allsave Logical. This option lets you save the output warps from each level"
-of the refinement process.  Mostly used for experimenting."
-Will only save all the outputs if the program terminates"
-normally -- if it crashes, or freezes, then all these"
-warps are lost.
+#' @param allsave Logical. This option lets you save the output warps from each level" of the refinement process. Mostly used for experimenting." Will only save all the outputs if the program terminates" normally -- if it crashes, or freezes, then all these" warps are lost.
 #' @param args Character. Additional parameters to the command
-#' @param ballopt Logical. Normally, the incremental warp parameters are optimized insidea rectangular 'box' (24 dimensional for cubic patches, 81 forquintic patches), whose limits define the amount of distortionallowed at each step.  Using '-ballopt' switches these limitsto be applied to a 'ball' (interior of a hypersphere), whichcan allow for larger incremental displacements.  Use thisoption if you think things need to be able to move farther.
+#' @param ballopt Logical. Normally, the incremental warp parameters are optimized insidea rectangular 'box' (24 dimensional for cubic patches, 81 forquintic patches), whose limits define the amount of distortionallowed at each step. Using '-ballopt' switches these limitsto be applied to a 'ball' (interior of a hypersphere), whichcan allow for larger incremental displacements. Use thisoption if you think things need to be able to move farther.
 #' @param bandpass Character or numeric vector
 #' @param baxopt Logical. Use the 'box' optimization limits instead of the 'ball'\[this is the default at present\].Note that if '-workhard' is used, then ball and box optimizationare alternated in the different iterations at each level, sothese two options have no effect in that case.
-#' @param blur Character or numeric vector. Gaussian blur the input images by 'bb' (FWHM) voxels before
-doing the alignment (the output dataset will not be blurred).
-The default is 2.345 (for no good reason).
-
-* Optionally, you can provide 2 values for 'bb', and then
-  the first one is applied to the base volume, the second
-  to the source volume.
-  e.g., '-blur 0 3' to skip blurring the base image
-  (if the base is a blurry template, for example).
-* A negative blur radius means to use 3D median filtering,
-  rather than Gaussian blurring.  This type of filtering will
-  better preserve edges, which can be important in alignment.
-* If the base is a template volume that is already blurry,
-  you probably don't want to blur it again, but blurring
-  the source volume a little is probably a good idea, to
-  help the program avoid trying to match tiny features.
-* Note that -duplo will blur the volumes some extra
-  amount for the initial small-scale warping, to make
-  that phase of the program converge more rapidly.
-#' @param duplo Logical. Start off with 1/2 scale versions of the volumes,"
-for getting a speedy coarse first alignment."
-
-* Then scales back up to register the full volumes."
-  The goal is greater speed, and it seems to help this"
-  positively piggish program to be more expeditious."
-* However, accuracy is somewhat lower with '-duplo',"
-  for reasons that currently elude Zhark; for this reason,"
-  the Emperor does not usually use '-duplo'.
+#' @param blur Character or numeric vector. Gaussian blur the input images by 'bb' (FWHM) voxels before doing the alignment (the output dataset will not be blurred). The default is 2.345 (for no good reason). * Optionally, you can provide 2 values for 'bb', and then the first one is applied to the base volume, the second to the source volume. e.g., '-blur 0 3' to skip blurring the base image (if the base is a blurry template, for example). * A negative blur radius means to use 3D median filtering, rather than Gaussian blurring. This type of filtering will better preserve edges, which can be important in alignment. * If the base is a template volume that is already blurry, you probably don't want to blur it again, but blurring the source volume a little is probably a good idea, to help the program avoid trying to match tiny features. * Note that -duplo will blur the volumes some extra amount for the initial small-scale warping, to make that phase of the program converge more rapidly.
+#' @param duplo Logical. Start off with 1/2 scale versions of the volumes," for getting a speedy coarse first alignment." * Then scales back up to register the full volumes." The goal is greater speed, and it seems to help this" positively piggish program to be more expeditious." * However, accuracy is somewhat lower with '-duplo'," for reasons that currently elude Zhark; for this reason," the Emperor does not usually use '-duplo'.
 #' @param emask Character; file path. Here, 'ee' is a dataset to specify a mask of voxelsto EXCLUDE from the analysis -- all voxels in 'ee'that are NONZERO will not be used in the alignment.The base image always automasked -- the emask isextra, to indicate voxels you definitely DON'T wantincluded in the matching process, even if they areinside the brain.
 #' @param expad Integer. This option instructs the program to pad the warp by an extra'EE' voxels (and then 3dQwarp starts optimizing it).This option is seldom needed, but can be useful if youmight later catenate the nonlinear warp -- via 3dNwarpCat --with an affine transformation that contains a large shift.Under that circumstance, the nonlinear warp might be shiftedpartially outside its original grid, so expanding that gridcan avoid this problem.Note that this option perforce turns off '-nopadWARP'.
-#' @param gridlist Character; file path. This option provides an alternate way to specify the patch
-grid sizes used in the warp optimization process. 'gl' is
-a 1D file with a list of patches to use -- in most cases,
-you will want to use it in the following form:
-``-gridlist '1D: 0 151 101 75 51'``
-
-* Here, a 0 patch size means the global domain. Patch sizes
-  otherwise should be odd integers >= 5.
-* If you use the '0' patch size again after the first position,
-  you will actually get an iteration at the size of the
-  default patch level 1, where the patch sizes are 75% of
-  the volume dimension.  There is no way to force the program
-  to literally repeat the sui generis step of lev=0.
+#' @param gridlist Character; file path. This option provides an alternate way to specify the patch grid sizes used in the warp optimization process. 'gl' is a 1D file with a list of patches to use -- in most cases, you will want to use it in the following form: ``-gridlist '1D: 0 151 101 75 51'`` * Here, a 0 patch size means the global domain. Patch sizes otherwise should be odd integers >= 5. * If you use the '0' patch size again after the first position, you will actually get an iteration at the size of the default patch level 1, where the patch sizes are 75% of the volume dimension. There is no way to force the program to literally repeat the sui generis step of lev=0.
 #' @param hel Logical. Hellinger distance: a matching function for the adventurousThis option has NOT be extensively tested for usefulnessand should be considered experimental at this infundibulum.
-#' @param inilev Integer. The initial refinement 'level' at which to start.
-
-* Usually used with -iniwarp; CANNOT be used with -duplo.
-* The combination of -inilev and -iniwarp lets you take the
-  results of a previous 3dQwarp run and refine them further:
-  Note that the source dataset in the second run is the SAME as
-  in the first run.  If you don't see why this is necessary,
-  then you probably need to seek help from an AFNI guru.
-#' @param iniwarp Character or numeric vector. A dataset with an initial nonlinear warp to use.
-
-* If this option is not used, the initial warp is the identity.
-* You can specify a catenation of warps (in quotes) here, as in
-  program 3dNwarpApply.
-* As a special case, if you just input an affine matrix in a .1D
-  file, that will work also -- it is treated as giving the initial
-  warp via the string "IDENT(base_dataset) matrix_file.aff12.1D".
-* You CANNOT use this option with -duplo !!
-* -iniwarp is usually used with -inilev to re-start 3dQwarp from
-  a previous stopping point.
+#' @param inilev Integer. The initial refinement 'level' at which to start. * Usually used with -iniwarp; CANNOT be used with -duplo. * The combination of -inilev and -iniwarp lets you take the results of a previous 3dQwarp run and refine them further: Note that the source dataset in the second run is the SAME as in the first run. If you don't see why this is necessary, then you probably need to seek help from an AFNI guru.
+#' @param iniwarp Character or numeric vector. A dataset with an initial nonlinear warp to use. * If this option is not used, the initial warp is the identity. * You can specify a catenation of warps (in quotes) here, as in program 3dNwarpApply. * As a special case, if you just input an affine matrix in a .1D file, that will work also -- it is treated as giving the initial warp via the string "IDENT(base_dataset) matrix_file.aff12.1D". * You CANNOT use this option with -duplo !! * -iniwarp is usually used with -inilev to re-start 3dQwarp from a previous stopping point.
 #' @param iwarp Logical. Do compute and save the _WARPINV file.
 #' @param lpa Logical. Local Pearson maximization. This option has not be extensively tested
 #' @param lpc Logical. Local Pearson minimization (i.e., EPI-T1 registration)This option has not be extensively testedIf you use '-lpc', then '-maxlev 0' is automatically set.If you want to go to more refined levels, you can set '-maxlev'This should be set up to have lpc as the second to last argumentand maxlev as the second to last argument, as needed by AFNIUsing maxlev > 1 is not recommended for EPI-T1 alignment.
-#' @param maxlev Integer. The initial refinement 'level' at which to start.
-
-* Usually used with -iniwarp; CANNOT be used with -duplo.
-* The combination of -inilev and -iniwarp lets you take the
-  results of a previous 3dQwarp run and refine them further:
-  Note that the source dataset in the second run is the SAME as
-  in the first run.  If you don't see why this is necessary,
-  then you probably need to seek help from an AFNI guru.
+#' @param maxlev Integer. The initial refinement 'level' at which to start. * Usually used with -iniwarp; CANNOT be used with -duplo. * The combination of -inilev and -iniwarp lets you take the results of a previous 3dQwarp run and refine them further: Note that the source dataset in the second run is the SAME as in the first run. If you don't see why this is necessary, then you probably need to seek help from an AFNI guru.
 #' @param mi Logical. Mutual Information: a matching function for the adventurousThis option has NOT be extensively tested for usefulnessand should be considered experimental at this infundibulum.
-#' @param minpatch Integer. The value of mm should be an odd integer.
-
-* The default value of mm is 25.
-* For more accurate results than mm=25, try 19 or 13.
-* The smallest allowed patch size is 5.
-* You may want stop at a larger patch size (say 7 or 9) and use
-  the -Qfinal option to run that final level with quintic warps,
-  which might run faster and provide the same degree of warp detail.
-* Trying to make two different brain volumes match in fine detail
-  is usually a waste of time, especially in humans.  There is too
-  much variability in anatomy to match gyrus to gyrus accurately.
-  For this reason, the default minimum patch size is 25 voxels.
-  Using a smaller '-minpatch' might try to force the warp to
-  match features that do not match, and the result can be useless
-  image distortions -- another reason to LOOK AT THE RESULTS.
+#' @param minpatch Integer. The value of mm should be an odd integer. * The default value of mm is 25. * For more accurate results than mm=25, try 19 or 13. * The smallest allowed patch size is 5. * You may want stop at a larger patch size (say 7 or 9) and use the -Qfinal option to run that final level with quintic warps, which might run faster and provide the same degree of warp detail. * Trying to make two different brain volumes match in fine detail is usually a waste of time, especially in humans. There is too much variability in anatomy to match gyrus to gyrus accurately. For this reason, the default minimum patch size is 25 voxels. Using a smaller '-minpatch' might try to force the warp to match features that do not match, and the result can be useless image distortions -- another reason to LOOK AT THE RESULTS.
 #' @param nmi Logical. Normalized Mutual Information: a matching function for the adventurousThis option has NOT been extensively tested for usefulnessand should be considered experimental at this infundibulum.
 #' @param noXdis Logical. Warp will not displace in x direction
 #' @param noYdis Logical. Warp will not displace in y direction
 #' @param noZdis Logical. Warp will not displace in z direction
-#' @param noneg Logical. Replace negative values in either input volume with 0.
-
-* If there ARE negative input values, and you do NOT use -noneg,
-  then strict Pearson correlation will be used, since the 'clipped'
-  method only is implemented for non-negative volumes.
-* '-noneg' is not the default, since there might be situations where
-  you want to align datasets with positive and negative values mixed.
-* But, in many cases, the negative values in a dataset are just the
-  result of interpolation artifacts (or other peculiarities), and so
-  they should be ignored.  That is what '-noneg' is for.
-#' @param nopad Logical. Do NOT use zero-padding on the 3D base and source images.
-\[Default == zero-pad, if needed\]
-
-* The underlying model for deformations goes to zero at the
-  edge of the volume being warped.  However, if there is
-  significant data near an edge of the volume, then it won't
-  get displaced much, and so the results might not be good.
-* Zero padding is designed as a way to work around this potential
-  problem.  You should NOT need the '-nopad' option for any
-  reason that Zhark can think of, but it is here to be symmetrical
-  with 3dAllineate.
-* Note that the output (warped from source) dataset will be on the
-  base dataset grid whether or not zero-padding is allowed.  However,
-  unless you use the following option, allowing zero-padding (i.e.,
-  the default operation) will make the output WARP dataset(s) be
-  on a larger grid (also see '-expad' below).
+#' @param noneg Logical. Replace negative values in either input volume with 0. * If there ARE negative input values, and you do NOT use -noneg, then strict Pearson correlation will be used, since the 'clipped' method only is implemented for non-negative volumes. * '-noneg' is not the default, since there might be situations where you want to align datasets with positive and negative values mixed. * But, in many cases, the negative values in a dataset are just the result of interpolation artifacts (or other peculiarities), and so they should be ignored. That is what '-noneg' is for.
+#' @param nopad Logical. Do NOT use zero-padding on the 3D base and source images. \[Default == zero-pad, if needed\] * The underlying model for deformations goes to zero at the edge of the volume being warped. However, if there is significant data near an edge of the volume, then it won't get displaced much, and so the results might not be good. * Zero padding is designed as a way to work around this potential problem. You should NOT need the '-nopad' option for any reason that Zhark can think of, but it is here to be symmetrical with 3dAllineate. * Note that the output (warped from source) dataset will be on the base dataset grid whether or not zero-padding is allowed. However, unless you use the following option, allowing zero-padding (i.e., the default operation) will make the output WARP dataset(s) be on a larger grid (also see '-expad' below).
 #' @param nopadWARP Logical. If for some reason you require the warp volume tomatch the base volume, then use this option to have the outputWARP dataset(s) truncated.
-#' @param nopenalty Logical. Replace negative values in either input volume with 0.
-
-* If there ARE negative input values, and you do NOT use -noneg,
-  then strict Pearson correlation will be used, since the 'clipped'
-  method only is implemented for non-negative volumes.
-* '-noneg' is not the default, since there might be situations where
-  you want to align datasets with positive and negative values mixed.
-* But, in many cases, the negative values in a dataset are just the
-  result of interpolation artifacts (or other peculiarities), and so
-  they should be ignored. That is what '-noneg' is for.
+#' @param nopenalty Logical. Replace negative values in either input volume with 0. * If there ARE negative input values, and you do NOT use -noneg, then strict Pearson correlation will be used, since the 'clipped' method only is implemented for non-negative volumes. * '-noneg' is not the default, since there might be situations where you want to align datasets with positive and negative values mixed. * But, in many cases, the negative values in a dataset are just the result of interpolation artifacts (or other peculiarities), and so they should be ignored. That is what '-noneg' is for.
 #' @param nowarp Logical. Do not save the _WARP file.
 #' @param noweight Logical. If you want a binary weight (the old default), use this option.That is, each voxel in the base volume automask will beweighted the same in the computation of the cost functional.
 #' @param out_file Character; file path. Output file
 #' @param out_weight_file Character; file path. Write the weight volume to disk as a dataset
 #' @param overwrite Logical. Overwrite outputs
-#' @param pblur Character or numeric vector. Use progressive blurring; that is, for larger patch sizes,
-the amount of blurring is larger.  The general idea is to
-avoid trying to match finer details when the patch size
-and incremental warps are coarse.  When '-blur' is used
-as well, it sets a minimum amount of blurring that will
-be used. \[06 Aug 2014 -- '-pblur' may become the default someday\].
-
-* You can optionally give the fraction of the patch size that
-  is used for the progressive blur by providing a value between
-  0 and 0.25 after '-pblur'.  If you provide TWO values, the
-  the first fraction is used for progressively blurring the
-  base image and the second for the source image.  The default
-  parameters when just '-pblur' is given is the same as giving
-  the options as '-pblur 0.09 0.09'.
-* '-pblur' is useful when trying to match 2 volumes with high
-  amounts of detail; e.g, warping one subject's brain image to
-  match another's, or trying to warp to match a detailed template.
-* Note that using negative values with '-blur' means that the
-  progressive blurring will be done with median filters, rather
-  than Gaussian linear blurring.
-
-Note: The combination of the -allineate and -pblur options will make
-the results of using 3dQwarp to align to a template somewhat
-less sensitive to initial head position and scaling.
+#' @param pblur Character or numeric vector. Use progressive blurring; that is, for larger patch sizes, the amount of blurring is larger. The general idea is to avoid trying to match finer details when the patch size and incremental warps are coarse. When '-blur' is used as well, it sets a minimum amount of blurring that will be used. \[06 Aug 2014 -- '-pblur' may become the default someday\]. * You can optionally give the fraction of the patch size that is used for the progressive blur by providing a value between 0 and 0.25 after '-pblur'. If you provide TWO values, the the first fraction is used for progressively blurring the base image and the second for the source image. The default parameters when just '-pblur' is given is the same as giving the options as '-pblur 0.09 0.09'. * '-pblur' is useful when trying to match 2 volumes with high amounts of detail; e.g, warping one subject's brain image to match another's, or trying to warp to match a detailed template. * Note that using negative values with '-blur' means that the progressive blurring will be done with median filters, rather than Gaussian linear blurring. Note: The combination of the -allineate and -pblur options will make the results of using 3dQwarp to align to a template somewhat less sensitive to initial head position and scaling.
 #' @param pear Logical. Use strict Pearson correlation for matching.Not usually recommended, since the 'clipped Pearson' methodused by default will reduce the impact of outlier values.
-#' @param penfac Numeric. Use this value to weight the penalty.
-The default value is 1. Larger values mean the
-penalty counts more, reducing grid distortions,
-insha'Allah; '-nopenalty' is the same as '-penfac 0'.
-In 23 Sep 2013 Zhark increased the default value of
-the penalty by a factor of 5, and also made it get
-progressively larger with each level of refinement.
-Thus, warping results will vary from earlier instances
-of 3dQwarp.
-
-* The progressive increase in the penalty at higher levels
-  means that the 'cost function' can actually look like the
-  alignment is getting worse when the levels change.
-* IF you wish to turn off this progression, for whatever
-  reason (e.g., to keep compatibility with older results),
-  use the option '-penold'.To be completely compatible with
-  the older 3dQwarp, you'll also have to use '-penfac 0.2'.
-#' @param plusminus Logical. Normally, the warp displacements dis(x) are defined to matchbase(x) to source(x+dis(x)).  With this option, the matchis between base(x-dis(x)) and source(x+dis(x)) -- the twoimages 'meet in the middle'. For more info, view Qwarp` interface
+#' @param penfac Numeric. Use this value to weight the penalty. The default value is 1. Larger values mean the penalty counts more, reducing grid distortions, insha'Allah; '-nopenalty' is the same as '-penfac 0'. In 23 Sep 2013 Zhark increased the default value of the penalty by a factor of 5, and also made it get progressively larger with each level of refinement. Thus, warping results will vary from earlier instances of 3dQwarp. * The progressive increase in the penalty at higher levels means that the 'cost function' can actually look like the alignment is getting worse when the levels change. * IF you wish to turn off this progression, for whatever reason (e.g., to keep compatibility with older results), use the option '-penold'.To be completely compatible with the older 3dQwarp, you'll also have to use '-penfac 0.2'.
+#' @param plusminus Logical. Normally, the warp displacements dis(x) are defined to matchbase(x) to source(x+dis(x)). With this option, the matchis between base(x-dis(x)) and source(x+dis(x)) -- the twoimages 'meet in the middle'. For more info, view Qwarp` interface
 #' @param quiet Logical. Cut out most of the fun fun fun progress messages :-(
-#' @param resample Logical. This option simply resamples the source dataset to match the
-base dataset grid.  You can use this if the two datasets
-overlap well (as seen in the AFNI GUI), but are not on the
-same 3D grid.
-
-* If they don't overlap well, allineate them first
-* The reampling here is done with the
-  'wsinc5' method, which has very little blurring artifact.
-* If the base and source datasets ARE on the same 3D grid,
-  then the -resample option will be ignored.
-* You CAN use -resample with these 3dQwarp options:
-  -plusminus  -inilev  -iniwarp  -duplo
+#' @param resample Logical. This option simply resamples the source dataset to match the base dataset grid. You can use this if the two datasets overlap well (as seen in the AFNI GUI), but are not on the same 3D grid. * If they don't overlap well, allineate them first * The reampling here is done with the 'wsinc5' method, which has very little blurring artifact. * If the base and source datasets ARE on the same 3D grid, then the -resample option will be ignored. * You CAN use -resample with these 3dQwarp options: -plusminus -inilev -iniwarp -duplo
 #' @param source_file Character; file path. Source image (opposite phase encoding direction than base image)
 #' @param verb Logical. more detailed description of the process
-#' @param wball Character or numeric vector. "``-wball x y z r f``
-Enhance automatic weight from '-useweight' by a factor
-of 1+f\*Gaussian(FWHM=r) centered in the base image at
-DICOM coordinates (x,y,z) and with radius 'r'. The
-goal of this option is to try and make the alignment
-better in a specific part of the brain.
-Example:  -wball 0 14 6 30 40
-to emphasize the thalamic area (in MNI/Talairach space).
-
-* The 'r' parameter must be positive!
-* The 'f' parameter must be between 1 and 100 (inclusive).
-* '-wball' does nothing if you input your own weight
-  with the '-weight' option.
-* '-wball' does change the binary weight created by
-  the '-noweight' option.
-* You can only use '-wball' once in a run of 3dQwarp.
-
-**The effect of '-wball' is not dramatic.** The example
-above makes the average brain image across a collection
-of subjects a little sharper in the thalamic area, which
-might have some small value.  If you care enough about
-alignment to use '-wball', then you should examine the
-results from 3dQwarp for each subject, to see if the
-alignments are good enough for your purposes.
+#' @param wball Character or numeric vector. "``-wball x y z r f`` Enhance automatic weight from '-useweight' by a factor of 1+f\*Gaussian(FWHM=r) centered in the base image at DICOM coordinates (x,y,z) and with radius 'r'. The goal of this option is to try and make the alignment better in a specific part of the brain. Example: -wball 0 14 6 30 40 to emphasize the thalamic area (in MNI/Talairach space). * The 'r' parameter must be positive! * The 'f' parameter must be between 1 and 100 (inclusive). * '-wball' does nothing if you input your own weight with the '-weight' option. * '-wball' does change the binary weight created by the '-noweight' option. * You can only use '-wball' once in a run of 3dQwarp. **The effect of '-wball' is not dramatic.** The example above makes the average brain image across a collection of subjects a little sharper in the thalamic area, which might have some small value. If you care enough about alignment to use '-wball', then you should examine the results from 3dQwarp for each subject, to see if the alignments are good enough for your purposes.
 #' @param weight Character; file path. Instead of computing the weight from the base dataset,directly input the weight volume from dataset 'www'.Useful if you know what over parts of the base image youwant to emphasize or de-emphasize the matching functional.
-#' @param wmask Character or numeric vector. Similar to '-wball', but here, you provide a dataset 'ws'
-that indicates where to increase the weight.
-
-* The 'ws' dataset must be on the same 3D grid as the base dataset.
-* 'ws' is treated as a mask -- it only matters where it
-  is nonzero -- otherwise, the values inside are not used.
-* After 'ws' comes the factor 'f' by which to increase the
-  automatically computed weight.  Where 'ws' is nonzero,
-  the weighting will be multiplied by (1+f).
-* As with '-wball', the factor 'f' should be between 1 and 100.
-#' @param workhard Logical. Iterate more times, which can help when the volumes are
-hard to align at all, or when you hope to get a more precise
-alignment.
-
-* Slows the program down (possibly a lot), of course.
-* When you combine '-workhard'  with '-duplo', only the
-  full size volumes get the extra iterations.
-* For finer control over which refinement levels work hard,
-  you can use this option in the form (for example) ``-workhard:4:7``
-  which implies the extra iterations will be done at levels
-  4, 5, 6, and 7, but not otherwise.
-* You can also use '-superhard' to iterate even more, but
-  this extra option will REALLY slow things down.
-
-  * Under most circumstances, you should not need to use either
-    ``-workhard`` or ``-superhard``.
-  * The fastest way to register to a template image is via the
-    ``-duplo`` option, and without the ``-workhard`` or ``-superhard`` options.
-  * If you use this option in the form '-Workhard' (first letter
-    in upper case), then the second iteration at each level is
-    done with quintic polynomial warps.
+#' @param wmask Character or numeric vector. Similar to '-wball', but here, you provide a dataset 'ws' that indicates where to increase the weight. * The 'ws' dataset must be on the same 3D grid as the base dataset. * 'ws' is treated as a mask -- it only matters where it is nonzero -- otherwise, the values inside are not used. * After 'ws' comes the factor 'f' by which to increase the automatically computed weight. Where 'ws' is nonzero, the weighting will be multiplied by (1+f). * As with '-wball', the factor 'f' should be between 1 and 100.
+#' @param workhard Logical. Iterate more times, which can help when the volumes are hard to align at all, or when you hope to get a more precise alignment. * Slows the program down (possibly a lot), of course. * When you combine '-workhard' with '-duplo', only the full size volumes get the extra iterations. * For finer control over which refinement levels work hard, you can use this option in the form (for example) ``-workhard:4:7`` which implies the extra iterations will be done at levels 4, 5, 6, and 7, but not otherwise. * You can also use '-superhard' to iterate even more, but this extra option will REALLY slow things down. * Under most circumstances, you should not need to use either ``-workhard`` or ``-superhard``. * The fastest way to register to a template image is via the ``-duplo`` option, and without the ``-workhard`` or ``-superhard`` options. * If you use this option in the form '-Workhard' (first letter in upper case), then the second iteration at each level is done with quintic polynomial warps.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -2502,417 +2226,6 @@ ni_afni_qwarp_plus_minus <- function(base_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' AFNI Qwarp
-#'
-#' Allineate your images prior to passing them to this workflow.
-#'
-#' @param base_file Character; file path. Base image (opposite phase encoding direction than source image). **Required.**
-#' @param in_file Character; file path. Source image (opposite phase encoding direction than base image). **Required.**
-#' @param Qfinal Logical. At the finest patch size (the final level), use Hermite
-quintic polynomials for the warp instead of cubic polynomials.
-
-* In a 3D 'patch', there are 2x2x2x3=24 cubic polynomial basis
-  function parameters over which to optimize (2 polynomials
-  dependent on each of the x,y,z directions, and 3 different
-  directions of displacement).
-* There are 3x3x3x3=81 quintic polynomial parameters per patch.
-* With -Qfinal, the final level will have more detail in
-  the allowed warps, at the cost of yet more CPU time.
-* However, no patch below 7x7x7 in size will be done with quintic
-  polynomials.
-* This option is also not usually needed, and is experimental.
-#' @param Qonly Logical. Use Hermite quintic polynomials at all levels.
-
-* Very slow (about 4 times longer).  Also experimental.
-* Will produce a (discrete representation of a) C2 warp.
-#' @param allineate Logical. This option will make 3dQwarp run 3dAllineate first, to align the source dataset to the base with an affine transformation. It will then use that alignment as a starting point for the nonlinear warping.
-#' @param allineate_opts Character. add extra options to the 3dAllineate command to be run by 3dQwarp.
-#' @param allsave Logical. This option lets you save the output warps from each level"
-of the refinement process.  Mostly used for experimenting."
-Will only save all the outputs if the program terminates"
-normally -- if it crashes, or freezes, then all these"
-warps are lost.
-#' @param args Character. Additional parameters to the command
-#' @param ballopt Logical. Normally, the incremental warp parameters are optimized insidea rectangular 'box' (24 dimensional for cubic patches, 81 forquintic patches), whose limits define the amount of distortionallowed at each step.  Using '-ballopt' switches these limitsto be applied to a 'ball' (interior of a hypersphere), whichcan allow for larger incremental displacements.  Use thisoption if you think things need to be able to move farther.
-#' @param bandpass Character or numeric vector
-#' @param baxopt Logical. Use the 'box' optimization limits instead of the 'ball'\[this is the default at present\].Note that if '-workhard' is used, then ball and box optimizationare alternated in the different iterations at each level, sothese two options have no effect in that case.
-#' @param blur Character or numeric vector. Gaussian blur the input images by 'bb' (FWHM) voxels before
-doing the alignment (the output dataset will not be blurred).
-The default is 2.345 (for no good reason).
-
-* Optionally, you can provide 2 values for 'bb', and then
-  the first one is applied to the base volume, the second
-  to the source volume.
-  e.g., '-blur 0 3' to skip blurring the base image
-  (if the base is a blurry template, for example).
-* A negative blur radius means to use 3D median filtering,
-  rather than Gaussian blurring.  This type of filtering will
-  better preserve edges, which can be important in alignment.
-* If the base is a template volume that is already blurry,
-  you probably don't want to blur it again, but blurring
-  the source volume a little is probably a good idea, to
-  help the program avoid trying to match tiny features.
-* Note that -duplo will blur the volumes some extra
-  amount for the initial small-scale warping, to make
-  that phase of the program converge more rapidly.
-#' @param duplo Logical. Start off with 1/2 scale versions of the volumes,"
-for getting a speedy coarse first alignment."
-
-* Then scales back up to register the full volumes."
-  The goal is greater speed, and it seems to help this"
-  positively piggish program to be more expeditious."
-* However, accuracy is somewhat lower with '-duplo',"
-  for reasons that currently elude Zhark; for this reason,"
-  the Emperor does not usually use '-duplo'.
-#' @param emask Character; file path. Here, 'ee' is a dataset to specify a mask of voxelsto EXCLUDE from the analysis -- all voxels in 'ee'that are NONZERO will not be used in the alignment.The base image always automasked -- the emask isextra, to indicate voxels you definitely DON'T wantincluded in the matching process, even if they areinside the brain.
-#' @param expad Integer. This option instructs the program to pad the warp by an extra'EE' voxels (and then 3dQwarp starts optimizing it).This option is seldom needed, but can be useful if youmight later catenate the nonlinear warp -- via 3dNwarpCat --with an affine transformation that contains a large shift.Under that circumstance, the nonlinear warp might be shiftedpartially outside its original grid, so expanding that gridcan avoid this problem.Note that this option perforce turns off '-nopadWARP'.
-#' @param gridlist Character; file path. This option provides an alternate way to specify the patch
-grid sizes used in the warp optimization process. 'gl' is
-a 1D file with a list of patches to use -- in most cases,
-you will want to use it in the following form:
-``-gridlist '1D: 0 151 101 75 51'``
-
-* Here, a 0 patch size means the global domain. Patch sizes
-  otherwise should be odd integers >= 5.
-* If you use the '0' patch size again after the first position,
-  you will actually get an iteration at the size of the
-  default patch level 1, where the patch sizes are 75% of
-  the volume dimension.  There is no way to force the program
-  to literally repeat the sui generis step of lev=0.
-#' @param hel Logical. Hellinger distance: a matching function for the adventurousThis option has NOT be extensively tested for usefulnessand should be considered experimental at this infundibulum.
-#' @param inilev Integer. The initial refinement 'level' at which to start.
-
-* Usually used with -iniwarp; CANNOT be used with -duplo.
-* The combination of -inilev and -iniwarp lets you take the
-  results of a previous 3dQwarp run and refine them further:
-  Note that the source dataset in the second run is the SAME as
-  in the first run.  If you don't see why this is necessary,
-  then you probably need to seek help from an AFNI guru.
-#' @param iniwarp Character or numeric vector. A dataset with an initial nonlinear warp to use.
-
-* If this option is not used, the initial warp is the identity.
-* You can specify a catenation of warps (in quotes) here, as in
-  program 3dNwarpApply.
-* As a special case, if you just input an affine matrix in a .1D
-  file, that will work also -- it is treated as giving the initial
-  warp via the string "IDENT(base_dataset) matrix_file.aff12.1D".
-* You CANNOT use this option with -duplo !!
-* -iniwarp is usually used with -inilev to re-start 3dQwarp from
-  a previous stopping point.
-#' @param iwarp Logical. Do compute and save the _WARPINV file.
-#' @param lpa Logical. Local Pearson maximization. This option has not be extensively tested
-#' @param lpc Logical. Local Pearson minimization (i.e., EPI-T1 registration)This option has not be extensively testedIf you use '-lpc', then '-maxlev 0' is automatically set.If you want to go to more refined levels, you can set '-maxlev'This should be set up to have lpc as the second to last argumentand maxlev as the second to last argument, as needed by AFNIUsing maxlev > 1 is not recommended for EPI-T1 alignment.
-#' @param maxlev Integer. The initial refinement 'level' at which to start.
-
-* Usually used with -iniwarp; CANNOT be used with -duplo.
-* The combination of -inilev and -iniwarp lets you take the
-  results of a previous 3dQwarp run and refine them further:
-  Note that the source dataset in the second run is the SAME as
-  in the first run.  If you don't see why this is necessary,
-  then you probably need to seek help from an AFNI guru.
-#' @param mi Logical. Mutual Information: a matching function for the adventurousThis option has NOT be extensively tested for usefulnessand should be considered experimental at this infundibulum.
-#' @param minpatch Integer. The value of mm should be an odd integer.
-
-* The default value of mm is 25.
-* For more accurate results than mm=25, try 19 or 13.
-* The smallest allowed patch size is 5.
-* You may want stop at a larger patch size (say 7 or 9) and use
-  the -Qfinal option to run that final level with quintic warps,
-  which might run faster and provide the same degree of warp detail.
-* Trying to make two different brain volumes match in fine detail
-  is usually a waste of time, especially in humans.  There is too
-  much variability in anatomy to match gyrus to gyrus accurately.
-  For this reason, the default minimum patch size is 25 voxels.
-  Using a smaller '-minpatch' might try to force the warp to
-  match features that do not match, and the result can be useless
-  image distortions -- another reason to LOOK AT THE RESULTS.
-#' @param nmi Logical. Normalized Mutual Information: a matching function for the adventurousThis option has NOT been extensively tested for usefulnessand should be considered experimental at this infundibulum.
-#' @param noXdis Logical. Warp will not displace in x direction
-#' @param noYdis Logical. Warp will not displace in y direction
-#' @param noZdis Logical. Warp will not displace in z direction
-#' @param noneg Logical. Replace negative values in either input volume with 0.
-
-* If there ARE negative input values, and you do NOT use -noneg,
-  then strict Pearson correlation will be used, since the 'clipped'
-  method only is implemented for non-negative volumes.
-* '-noneg' is not the default, since there might be situations where
-  you want to align datasets with positive and negative values mixed.
-* But, in many cases, the negative values in a dataset are just the
-  result of interpolation artifacts (or other peculiarities), and so
-  they should be ignored.  That is what '-noneg' is for.
-#' @param nopad Logical. Do NOT use zero-padding on the 3D base and source images.
-\[Default == zero-pad, if needed\]
-
-* The underlying model for deformations goes to zero at the
-  edge of the volume being warped.  However, if there is
-  significant data near an edge of the volume, then it won't
-  get displaced much, and so the results might not be good.
-* Zero padding is designed as a way to work around this potential
-  problem.  You should NOT need the '-nopad' option for any
-  reason that Zhark can think of, but it is here to be symmetrical
-  with 3dAllineate.
-* Note that the output (warped from source) dataset will be on the
-  base dataset grid whether or not zero-padding is allowed.  However,
-  unless you use the following option, allowing zero-padding (i.e.,
-  the default operation) will make the output WARP dataset(s) be
-  on a larger grid (also see '-expad' below).
-#' @param nopadWARP Logical. If for some reason you require the warp volume tomatch the base volume, then use this option to have the outputWARP dataset(s) truncated.
-#' @param nopenalty Logical. Replace negative values in either input volume with 0.
-
-* If there ARE negative input values, and you do NOT use -noneg,
-  then strict Pearson correlation will be used, since the 'clipped'
-  method only is implemented for non-negative volumes.
-* '-noneg' is not the default, since there might be situations where
-  you want to align datasets with positive and negative values mixed.
-* But, in many cases, the negative values in a dataset are just the
-  result of interpolation artifacts (or other peculiarities), and so
-  they should be ignored. That is what '-noneg' is for.
-#' @param nowarp Logical. Do not save the _WARP file.
-#' @param noweight Logical. If you want a binary weight (the old default), use this option.That is, each voxel in the base volume automask will beweighted the same in the computation of the cost functional.
-#' @param out_file Character; file path. Sets the prefix/suffix for the output datasets.
-
-* The source dataset is warped to match the base
-  and gets prefix 'ppp'. (Except if '-plusminus' is used
-* The final interpolation to this output dataset is
-  done using the 'wsinc5' method.  See the output of
-  3dAllineate -HELP
-  (in the "Modifying '-final wsinc5'" section) for
-  the lengthy technical details.
-* The 3D warp used is saved in a dataset with
-  prefix 'ppp_WARP' -- this dataset can be used
-  with 3dNwarpApply and 3dNwarpCat, for example.
-* To be clear, this is the warp from source dataset
-  coordinates to base dataset coordinates, where the
-  values at each base grid point are the xyz displacements
-  needed to move that grid point's xyz values to the
-  corresponding xyz values in the source dataset:
-  base( (x,y,z) + WARP(x,y,z) ) matches source(x,y,z)
-  Another way to think of this warp is that it 'pulls'
-  values back from source space to base space.
-* 3dNwarpApply would use 'ppp_WARP' to transform datasets
-  aligned with the source dataset to be aligned with the
-  base dataset.
-
-**If you do NOT want this warp saved, use the option '-nowarp'**.
-(However, this warp is usually the most valuable possible output!)
-
-* If you want to calculate and save the inverse 3D warp,
-  use the option '-iwarp'.  This inverse warp will then be
-  saved in a dataset with prefix 'ppp_WARPINV'.
-* This inverse warp could be used to transform data from base
-  space to source space, if you need to do such an operation.
-* You can easily compute the inverse later, say by a command like
-  3dNwarpCat -prefix Z_WARPINV 'INV(Z_WARP+tlrc)'
-  or the inverse can be computed as needed in 3dNwarpApply, like
-  3dNwarpApply -nwarp 'INV(Z_WARP+tlrc)' -source Dataset.nii ...
-#' @param out_weight_file Character; file path. Write the weight volume to disk as a dataset
-#' @param overwrite Logical. Overwrite outputs
-#' @param pblur Character or numeric vector. Use progressive blurring; that is, for larger patch sizes,
-the amount of blurring is larger.  The general idea is to
-avoid trying to match finer details when the patch size
-and incremental warps are coarse.  When '-blur' is used
-as well, it sets a minimum amount of blurring that will
-be used. \[06 Aug 2014 -- '-pblur' may become the default someday\].
-
-* You can optionally give the fraction of the patch size that
-  is used for the progressive blur by providing a value between
-  0 and 0.25 after '-pblur'.  If you provide TWO values, the
-  the first fraction is used for progressively blurring the
-  base image and the second for the source image.  The default
-  parameters when just '-pblur' is given is the same as giving
-  the options as '-pblur 0.09 0.09'.
-* '-pblur' is useful when trying to match 2 volumes with high
-  amounts of detail; e.g, warping one subject's brain image to
-  match another's, or trying to warp to match a detailed template.
-* Note that using negative values with '-blur' means that the
-  progressive blurring will be done with median filters, rather
-  than Gaussian linear blurring.
-
-Note: The combination of the -allineate and -pblur options will make
-the results of using 3dQwarp to align to a template somewhat
-less sensitive to initial head position and scaling.
-#' @param pear Logical. Use strict Pearson correlation for matching.Not usually recommended, since the 'clipped Pearson' methodused by default will reduce the impact of outlier values.
-#' @param penfac Numeric. Use this value to weight the penalty.
-The default value is 1. Larger values mean the
-penalty counts more, reducing grid distortions,
-insha'Allah; '-nopenalty' is the same as '-penfac 0'.
-In 23 Sep 2013 Zhark increased the default value of
-the penalty by a factor of 5, and also made it get
-progressively larger with each level of refinement.
-Thus, warping results will vary from earlier instances
-of 3dQwarp.
-
-* The progressive increase in the penalty at higher levels
-  means that the 'cost function' can actually look like the
-  alignment is getting worse when the levels change.
-* IF you wish to turn off this progression, for whatever
-  reason (e.g., to keep compatibility with older results),
-  use the option '-penold'.To be completely compatible with
-  the older 3dQwarp, you'll also have to use '-penfac 0.2'.
-#' @param plusminus Logical. Normally, the warp displacements dis(x) are defined to match
-base(x) to source(x+dis(x)).  With this option, the match
-is between base(x-dis(x)) and source(x+dis(x)) -- the two
-images 'meet in the middle'.
-
-* One goal is to mimic the warping done to MRI EPI data by
-  field inhomogeneities, when registering between a 'blip up'
-  and a 'blip down' down volume, which will have opposite
-  distortions.
-* Define Wp(x) = x+dis(x) and Wm(x) = x-dis(x).  Then since
-  base(Wm(x)) matches source(Wp(x)), by substituting INV(Wm(x))
-  wherever we see x, we have base(x) matches source(Wp(INV(Wm(x))));
-  that is, the warp V(x) that one would get from the 'usual' way
-  of running 3dQwarp is V(x) = Wp(INV(Wm(x))).
-* Conversely, we can calculate Wp(x) in terms of V(x) as follows:
-  If V(x) = x + dv(x), define Vh(x) = x + dv(x)/2;
-  then Wp(x) = V(INV(Vh(x)))
-* With the above formulas, it is possible to compute Wp(x) from
-  V(x) and vice-versa, using program 3dNwarpCalc.  The requisite
-  commands are left as an exercise for the aspiring AFNI Jedi Master.
-* You can use the semi-secret '-pmBASE' option to get the V(x)
-  warp and the source dataset warped to base space, in addition to
-  the Wp(x) '_PLUS' and Wm(x) '_MINUS' warps.
-
-  * Alas: -plusminus does not work with -duplo or -allineate :-(
-  * However, you can use -iniwarp with -plusminus :-)
-  * The outputs have _PLUS (from the source dataset) and _MINUS
-    (from the base dataset) in their filenames, in addition to
-    the prefix.  The -iwarp option, if present, will be ignored.
-#' @param quiet Logical. Cut out most of the fun fun fun progress messages :-(
-#' @param resample Logical. This option simply resamples the source dataset to match the
-base dataset grid.  You can use this if the two datasets
-overlap well (as seen in the AFNI GUI), but are not on the
-same 3D grid.
-
-* If they don't overlap well, allineate them first
-* The reampling here is done with the
-  'wsinc5' method, which has very little blurring artifact.
-* If the base and source datasets ARE on the same 3D grid,
-  then the -resample option will be ignored.
-* You CAN use -resample with these 3dQwarp options:
-  -plusminus  -inilev  -iniwarp  -duplo
-#' @param verb Logical. more detailed description of the process
-#' @param wball Character or numeric vector. "``-wball x y z r f``
-Enhance automatic weight from '-useweight' by a factor
-of 1+f\*Gaussian(FWHM=r) centered in the base image at
-DICOM coordinates (x,y,z) and with radius 'r'. The
-goal of this option is to try and make the alignment
-better in a specific part of the brain.
-Example:  -wball 0 14 6 30 40
-to emphasize the thalamic area (in MNI/Talairach space).
-
-* The 'r' parameter must be positive!
-* The 'f' parameter must be between 1 and 100 (inclusive).
-* '-wball' does nothing if you input your own weight
-  with the '-weight' option.
-* '-wball' does change the binary weight created by
-  the '-noweight' option.
-* You can only use '-wball' once in a run of 3dQwarp.
-
-**The effect of '-wball' is not dramatic.** The example
-above makes the average brain image across a collection
-of subjects a little sharper in the thalamic area, which
-might have some small value.  If you care enough about
-alignment to use '-wball', then you should examine the
-results from 3dQwarp for each subject, to see if the
-alignments are good enough for your purposes.
-#' @param weight Character; file path. Instead of computing the weight from the base dataset,directly input the weight volume from dataset 'www'.Useful if you know what over parts of the base image youwant to emphasize or de-emphasize the matching functional.
-#' @param wmask Character or numeric vector. Similar to '-wball', but here, you provide a dataset 'ws'
-that indicates where to increase the weight.
-
-* The 'ws' dataset must be on the same 3D grid as the base dataset.
-* 'ws' is treated as a mask -- it only matters where it
-  is nonzero -- otherwise, the values inside are not used.
-* After 'ws' comes the factor 'f' by which to increase the
-  automatically computed weight.  Where 'ws' is nonzero,
-  the weighting will be multiplied by (1+f).
-* As with '-wball', the factor 'f' should be between 1 and 100.
-#' @param workhard Logical. Iterate more times, which can help when the volumes are
-hard to align at all, or when you hope to get a more precise
-alignment.
-
-* Slows the program down (possibly a lot), of course.
-* When you combine '-workhard'  with '-duplo', only the
-  full size volumes get the extra iterations.
-* For finer control over which refinement levels work hard,
-  you can use this option in the form (for example) ``-workhard:4:7``
-  which implies the extra iterations will be done at levels
-  4, 5, 6, and 7, but not otherwise.
-* You can also use '-superhard' to iterate even more, but
-  this extra option will REALLY slow things down.
-
-  * Under most circumstances, you should not need to use either
-    ``-workhard`` or ``-superhard``.
-  * The fastest way to register to a template image is via the
-    ``-duplo`` option, and without the ``-workhard`` or ``-superhard`` options.
-  * If you use this option in the form '-Workhard' (first letter
-    in upper case), then the second iteration at each level is
-    done with quintic polynomial warps.
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_afni_qwarp <- function(base_file,
-                     in_file,
-                     Qfinal = NULL,
-                     Qonly = NULL,
-                     allineate = NULL,
-                     allineate_opts = NULL,
-                     allsave = NULL,
-                     args = NULL,
-                     ballopt = NULL,
-                     bandpass = NULL,
-                     baxopt = NULL,
-                     blur = NULL,
-                     duplo = NULL,
-                     emask = NULL,
-                     expad = NULL,
-                     gridlist = NULL,
-                     hel = NULL,
-                     inilev = NULL,
-                     iniwarp = NULL,
-                     iwarp = NULL,
-                     lpa = NULL,
-                     lpc = NULL,
-                     maxlev = NULL,
-                     mi = NULL,
-                     minpatch = NULL,
-                     nmi = NULL,
-                     noXdis = NULL,
-                     noYdis = NULL,
-                     noZdis = NULL,
-                     noneg = NULL,
-                     nopad = NULL,
-                     nopadWARP = NULL,
-                     nopenalty = NULL,
-                     nowarp = NULL,
-                     noweight = NULL,
-                     out_file = NULL,
-                     out_weight_file = NULL,
-                     overwrite = NULL,
-                     pblur = NULL,
-                     pear = NULL,
-                     penfac = NULL,
-                     plusminus = NULL,
-                     quiet = NULL,
-                     resample = NULL,
-                     verb = NULL,
-                     wball = NULL,
-                     weight = NULL,
-                     wmask = NULL,
-                     workhard = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("afni.qwarp", base_file = base_file, in_file = in_file, Qfinal = Qfinal, Qonly = Qonly, allineate = allineate, allineate_opts = allineate_opts, allsave = allsave, args = args, ballopt = ballopt, bandpass = bandpass, baxopt = baxopt, blur = blur, duplo = duplo, emask = emask, expad = expad, gridlist = gridlist, hel = hel, inilev = inilev, iniwarp = iniwarp, iwarp = iwarp, lpa = lpa, lpc = lpc, maxlev = maxlev, mi = mi, minpatch = minpatch, nmi = nmi, noXdis = noXdis, noYdis = noYdis, noZdis = noZdis, noneg = noneg, nopad = nopad, nopadWARP = nopadWARP, nopenalty = nopenalty, nowarp = nowarp, noweight = noweight, out_file = out_file, out_weight_file = out_weight_file, overwrite = overwrite, pblur = pblur, pear = pear, penfac = penfac, plusminus = plusminus, quiet = quiet, resample = resample, verb = verb, wball = wball, weight = weight, wmask = wmask, workhard = workhard, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' AFNI ReHo
 #'
 #' Compute regional homogeneity for a given neighbourhood.l,
@@ -2920,39 +2233,13 @@ ni_afni_qwarp <- function(base_file,
 #' @param in_file Character; file path. input dataset **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param chi_sq Logical. Output the Friedman chi-squared value in addition to the Kendall's W. This option is currently compatible only with the AFNI (BRIK/HEAD) output type; the chi-squared value will be the second sub-brick of the output dataset.
-#' @param ellipsoid Character or numeric vector. \
-Tuple indicating the x, y, and z radius of an ellipsoid
-defining the neighbourhood of each voxel.
-The 'hood is then made according to the following relation:
-:math:`(i/A)^2 + (j/B)^2 + (k/C)^2 \le 1.`
-which will have approx. :math:`V=4 \pi \, A B C/3`. The impetus for
-this freedom was for use with data having anisotropic
-voxel edge lengths.
+#' @param ellipsoid Character or numeric vector. \ Tuple indicating the x, y, and z radius of an ellipsoid defining the neighbourhood of each voxel. The 'hood is then made according to the following relation: :math:`(i/A)^2 + (j/B)^2 + (k/C)^2 \le 1.` which will have approx. :math:`V=4 \pi \, A B C/3`. The impetus for this freedom was for use with data having anisotropic voxel edge lengths.
 #' @param label_set Character; file path. a set of ROIs, each labelled with distinct integers. ReHo will then be calculated per ROI.
 #' @param mask_file Character; file path. Mask within which ReHo should be calculated voxelwise
-#' @param neighborhood Character; one of: "faces", "edges", "vertices". voxels in neighborhood. can be:
-``faces`` (for voxel and 6 facewise neighbors, only),
-``edges`` (for voxel and 18 face- and edge-wise neighbors),
-``vertices`` (for voxel and 26 face-, edge-, and node-wise neighbors).
+#' @param neighborhood Character; one of: "faces", "edges", "vertices". voxels in neighborhood. can be: ``faces`` (for voxel and 6 facewise neighbors, only), ``edges`` (for voxel and 18 face- and edge-wise neighbors), ``vertices`` (for voxel and 26 face-, edge-, and node-wise neighbors).
 #' @param out_file Character; file path. Output dataset.
 #' @param overwrite Logical. overwrite output file if it already exists
-#' @param sphere Numeric. \
-For additional voxelwise neighborhood control, the
-radius R of a desired neighborhood can be put in; R is
-a floating point number, and must be >1. Examples of
-the numbers of voxels in a given radius are as follows
-(you can roughly approximate with the ol' :math:`4\pi\,R^3/3`
-thing):
-
-    * R=2.0 -> V=33
-    * R=2.3 -> V=57,
-    * R=2.9 -> V=93,
-    * R=3.1 -> V=123,
-    * R=3.9 -> V=251,
-    * R=4.5 -> V=389,
-    * R=6.1 -> V=949,
-
-but you can choose most any value.
+#' @param sphere Numeric. \ For additional voxelwise neighborhood control, the radius R of a desired neighborhood can be put in; R is a floating point number, and must be >1. Examples of the numbers of voxels in a given radius are as follows (you can roughly approximate with the ol' :math:`4\pi\,R^3/3` thing): * R=2.0 -> V=33 * R=2.3 -> V=57, * R=2.9 -> V=93, * R=3.1 -> V=123, * R=3.9 -> V=251, * R=4.5 -> V=389, * R=6.1 -> V=949, but you can choose most any value.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -3215,36 +2502,11 @@ ni_afni_retroicor <- function(in_file,
 #' @param mask_file Character; file path. input mask
 #' @param nobriklab Logical. Do not print the sub-brick label next to its index
 #' @param nomeanout Logical. Do not include the (zero-inclusive) mean among computed stats
-#' @param num_roi Integer. Forces the assumption that the mask dataset's ROIs are denoted by 1 to n inclusive.  Normally, the program figures out the ROIs on its own.  This option is useful if a) you are certain that the mask dataset has no values outside the range \[0 n\], b) there may be some ROIs missing between \[1 n\] in the mask data-set and c) you want those columns in the output any-way so the output lines up with the output from other invocations of 3dROIstats.
+#' @param num_roi Integer. Forces the assumption that the mask dataset's ROIs are denoted by 1 to n inclusive. Normally, the program figures out the ROIs on its own. This option is useful if a) you are certain that the mask dataset has no values outside the range \[0 n\], b) there may be some ROIs missing between \[1 n\] in the mask data-set and c) you want those columns in the output any-way so the output lines up with the output from other invocations of 3dROIstats.
 #' @param out_file Character; file path. output file
 #' @param quiet Logical. execute quietly
 #' @param roisel Character; file path. Only considers ROIs denoted by values found in the specified file. Note that the order of the ROIs as specified in the file is not preserved. So an SEL.1D of '2 8 20' produces the same output as '8 20 2'
-#' @param stat Character or numeric vector. Statistics to compute. Options include:
-
- * mean       =   Compute the mean using only non_zero voxels.
-                  Implies the opposite for the mean computed
-                  by default.
- * median     =   Compute the median of nonzero voxels
- * mode       =   Compute the mode of nonzero voxels.
-                  (integral valued sets only)
- * minmax     =   Compute the min/max of nonzero voxels
- * sum        =   Compute the sum using only nonzero voxels.
- * voxels     =   Compute the number of nonzero voxels
- * sigma      =   Compute the standard deviation of nonzero
-                  voxels
-
-Statistics that include zero-valued voxels:
-
- * zerominmax =   Compute the min/max of all voxels.
- * zerosigma  =   Compute the standard deviation of all
-                  voxels.
- * zeromedian =   Compute the median of all voxels.
- * zeromode   =   Compute the mode of all voxels.
- * summary    =   Only output a summary line with the grand
-                  mean across all briks in the input dataset.
-                  This option cannot be used with nomeanout.
-
-More that one option can be specified.
+#' @param stat Character or numeric vector. Statistics to compute. Options include: * mean = Compute the mean using only non_zero voxels. Implies the opposite for the mean computed by default. * median = Compute the median of nonzero voxels * mode = Compute the mode of nonzero voxels. (integral valued sets only) * minmax = Compute the min/max of nonzero voxels * sum = Compute the sum using only nonzero voxels. * voxels = Compute the number of nonzero voxels * sigma = Compute the standard deviation of nonzero voxels Statistics that include zero-valued voxels: * zerominmax = Compute the min/max of all voxels. * zerosigma = Compute the standard deviation of all voxels. * zeromedian = Compute the median of all voxels. * zeromode = Compute the mode of all voxels. * summary = Only output a summary line with the grand mean across all briks in the input dataset. This option cannot be used with nomeanout. More that one option can be specified.
 #' @param zerofill Character. For ROI labels not found, use the provided string instead of a '0' in the output file. Only active if `num_roi` is enabled.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
@@ -3442,11 +2704,11 @@ ni_afni_svm_train <- function(in_file,
 #'
 #' @param cbucket Character; file path. Read the dataset output from 3dDeconvolve via the '-cbucket' option. **Required.**
 #' @param matrix Character; file path. Read the matrix output from 3dDeconvolve via the '-x1D' option. **Required.**
-#' @param select Character or numeric vector. A list of selected columns from the matrix (and the corresponding coefficient sub-bricks from the cbucket). Valid types include 'baseline',  'polort', 'allfunc', 'allstim', 'all', Can also provide 'something' where something matches a stim_label from 3dDeconvolve, and 'digits' where digits are the numbers of the select matrix columns by numbers (starting at 0), or number ranges of the form '3..7' and '3-7'. **Required.**
-#' @param TR Numeric. TR to set in the output.  The default value of TR is read from the header of the matrix file.
+#' @param select Character or numeric vector. A list of selected columns from the matrix (and the corresponding coefficient sub-bricks from the cbucket). Valid types include 'baseline', 'polort', 'allfunc', 'allstim', 'all', Can also provide 'something' where something matches a stim_label from 3dDeconvolve, and 'digits' where digits are the numbers of the select matrix columns by numbers (starting at 0), or number ranges of the form '3..7' and '3-7'. **Required.**
+#' @param TR Numeric. TR to set in the output. The default value of TR is read from the header of the matrix file.
 #' @param args Character. Additional parameters to the command
 #' @param cenfill Character; one of: "zero", "nbhr", "none". Determines how censored time points from the 3dDeconvolve run will be filled. Valid types are 'zero', 'nbhr' and 'none'.
-#' @param dry_run Logical. Don't compute the output, just check the inputs.
+#' @param dry_run_arg Logical. Don't compute the output, just check the inputs. (spec input: dry_run)
 #' @param out_file Character; file path. output dataset prefix name (default 'syn')
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
@@ -3461,14 +2723,44 @@ ni_afni_synthesize <- function(cbucket,
                      TR = NULL,
                      args = NULL,
                      cenfill = NULL,
-                     dry_run = NULL,
+                     dry_run_arg = NULL,
                      out_file = NULL,
                      .cwd = NULL,
                      .env = NULL,
                      .container = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("afni.synthesize", cbucket = cbucket, matrix = matrix, select = select, TR = TR, args = args, cenfill = cenfill, dry_run = dry_run, out_file = out_file, .cwd = .cwd, .env = .env, .container = .container)
+  call <- ni_call("afni.synthesize", cbucket = cbucket, matrix = matrix, select = select, TR = TR, args = args, cenfill = cenfill, dry_run = dry_run_arg, out_file = out_file, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' AFNI TCat
+#'
+#' Concatenate sub-bricks from input datasets into one big 3D+time dataset.
+#'
+#' @param in_files Character or numeric vector. input file to 3dTcat **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param out_file Character; file path. output image file name
+#' @param rlt Character; one of: "", "+", "++". Remove linear trends in each voxel time series loaded from each input dataset, SEPARATELY. Option -rlt removes the least squares fit of 'a+b*t' to each voxel time series. Option -rlt+ adds dataset mean back in. Option -rlt++ adds overall mean of all dataset timeseries back in.
+#' @param verbose Logical. Print out some verbose output as the program
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_afni_t_cat <- function(in_files,
+                     args = NULL,
+                     out_file = NULL,
+                     rlt = NULL,
+                     verbose = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("afni.t_cat", in_files = in_files, args = args, out_file = out_file, rlt = rlt, verbose = verbose, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -3500,15 +2792,18 @@ ni_afni_t_cat_sub_brick <- function(in_files,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' AFNI TCat
+#' AFNI TCorr1D
 #'
-#' Concatenate sub-bricks from input datasets into one big 3D+time dataset.
+#' Computes the correlation coefficient between each voxel time series
 #'
-#' @param in_files Character or numeric vector. input file to 3dTcat **Required.**
+#' @param xset Character; file path. 3d+time dataset input **Required.**
+#' @param y_1d Character; file path. 1D time series file input **Required.**
 #' @param args Character. Additional parameters to the command
-#' @param out_file Character; file path. output image file name
-#' @param rlt Character; one of: "", "+", "++". Remove linear trends in each voxel time series loaded from each input dataset, SEPARATELY. Option -rlt removes the least squares fit of 'a+b*t' to each voxel time series. Option -rlt+ adds dataset mean back in. Option -rlt++ adds overall mean of all dataset timeseries back in.
-#' @param verbose Logical. Print out some verbose output as the program
+#' @param ktaub Logical. Correlation is the Kendall's tau_b correlation coefficient
+#' @param out_file Character; file path. output filename prefix
+#' @param pearson Logical. Correlation is the normal Pearson correlation coefficient
+#' @param quadrant Logical. Correlation is the quadrant correlation coefficient
+#' @param spearman Logical. Correlation is the Spearman (rank) correlation coefficient
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -3516,17 +2811,20 @@ ni_afni_t_cat_sub_brick <- function(in_files,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_afni_t_cat <- function(in_files,
+ni_afni_t_corr1_d <- function(xset,
+                     y_1d,
                      args = NULL,
+                     ktaub = NULL,
                      out_file = NULL,
-                     rlt = NULL,
-                     verbose = NULL,
+                     pearson = NULL,
+                     quadrant = NULL,
+                     spearman = NULL,
                      .cwd = NULL,
                      .env = NULL,
                      .container = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("afni.t_cat", in_files = in_files, args = args, out_file = out_file, rlt = rlt, verbose = verbose, .cwd = .cwd, .env = .env, .container = .container)
+  call <- ni_call("afni.t_corr1_d", xset = xset, y_1d = y_1d, args = args, ktaub = ktaub, out_file = out_file, pearson = pearson, quadrant = quadrant, spearman = spearman, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -3598,42 +2896,6 @@ ni_afni_t_corr_map <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' AFNI TCorr1D
-#'
-#' Computes the correlation coefficient between each voxel time series
-#'
-#' @param xset Character; file path. 3d+time dataset input **Required.**
-#' @param y_1d Character; file path. 1D time series file input **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param ktaub Logical. Correlation is the Kendall's tau_b correlation coefficient
-#' @param out_file Character; file path. output filename prefix
-#' @param pearson Logical. Correlation is the normal Pearson correlation coefficient
-#' @param quadrant Logical. Correlation is the quadrant correlation coefficient
-#' @param spearman Logical. Correlation is the Spearman (rank) correlation coefficient
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_afni_t_corr1_d <- function(xset,
-                     y_1d,
-                     args = NULL,
-                     ktaub = NULL,
-                     out_file = NULL,
-                     pearson = NULL,
-                     quadrant = NULL,
-                     spearman = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("afni.t_corr1_d", xset = xset, y_1d = y_1d, args = args, ktaub = ktaub, out_file = out_file, pearson = pearson, quadrant = quadrant, spearman = spearman, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' AFNI TCorrelate
 #'
 #' Computes the correlation coefficient between corresponding voxel
@@ -3671,16 +2933,14 @@ ni_afni_t_correlate <- function(xset,
 #' Shifts voxel time series from input so that separate slices are aligned
 #'
 #' @param in_file Character; file path. input file to 3dTNorm **Required.**
-#' @param L1fit Logical. Detrend with L1 regression (L2 is the default)
-This option is here just for the hell of it
+#' @param L1fit Logical. Detrend with L1 regression (L2 is the default) This option is here just for the hell of it
 #' @param args Character. Additional parameters to the command
 #' @param norm1 Logical. L1 normalize (sum of absolute values = 1)
 #' @param norm2 Logical. L2 normalize (sum of squares = 1) \[DEFAULT\]
 #' @param normR Logical. normalize so sum of squares = number of time points \* e.g., so RMS = 1.
 #' @param normx Logical. Scale so max absolute value = 1 (L_infinity norm)
 #' @param out_file Character; file path. output image file name
-#' @param polort Integer. Detrend with polynomials of order p before normalizing \[DEFAULT = don't do this\].
-Use '-polort 0' to remove the mean, for example
+#' @param polort Integer. Detrend with polynomials of order p before normalizing \[DEFAULT = don't do this\]. Use '-polort 0' to remove the mean, for example
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -3711,97 +2971,22 @@ ni_afni_t_norm <- function(in_file,
 #' This program projects (detrends) out various 'nuisance' time series from
 #'
 #' @param in_file Character; file path. input file to 3dTproject **Required.**
-#' @param TR Numeric. Use time step dd for the frequency calculations,
-rather than the value stored in the dataset header.
+#' @param TR Numeric. Use time step dd for the frequency calculations, rather than the value stored in the dataset header.
 #' @param args Character. Additional parameters to the command
 #' @param automask Logical. Generate a mask automatically
 #' @param bandpass Character or numeric vector. Remove all frequencies EXCEPT those in the range
-#' @param blur Numeric. Blur (inside the mask only) with a filter that has
-width (FWHM) of fff millimeters.
-Spatial blurring (if done) is after the time
-series filtering.
-#' @param cenmode Character; one of: "KILL", "ZERO", "NTRP". Specifies how censored time points are treated in
-the output dataset:
-
-* mode = ZERO -- put zero values in their place;
-  output dataset is same length as input
-* mode = KILL -- remove those time points;
-  output dataset is shorter than input
-* mode = NTRP -- censored values are replaced by interpolated
-  neighboring (in time) non-censored values,
-  BEFORE any projections, and then the
-  analysis proceeds without actual removal
-  of any time points -- this feature is to
-  keep the Spanish Inquisition happy.
-* The default mode is KILL !!!
-#' @param censor Character; file path. Filename of censor .1D time series.
-This is a file of 1s and 0s, indicating which
-time points are to be included (1) and which are
-to be excluded (0).
-#' @param censortr Character or numeric vector. List of strings that specify time indexes
-to be removed from the analysis.  Each string is
-of one of the following forms:
-
-* ``37`` => remove global time index #37
-* ``2:37`` => remove time index #37 in run #2
-* ``37..47`` => remove global time indexes #37-47
-* ``37-47`` => same as above
-* ``2:37..47`` => remove time indexes #37-47 in run #2
-* ``*:0-2`` => remove time indexes #0-2 in all runs
-
-  * Time indexes within each run start at 0.
-  * Run indexes start at 1 (just be to confusing).
-  * N.B.: 2:37,47 means index #37 in run #2 and
-    global time index 47; it does NOT mean
-    index #37 in run #2 AND index #47 in run #2.
-#' @param concat Character; file path. The catenation file, as in 3dDeconvolve, containing the
-TR indexes of the start points for each contiguous run
-within the input dataset (the first entry should be 0).
-
-* Also as in 3dDeconvolve, if the input dataset is
-  automatically catenated from a collection of datasets,
-  then the run start indexes are determined directly,
-  and '-concat' is not needed (and will be ignored).
-* Each run must have at least 9 time points AFTER
-  censoring, or the program will not work!
-* The only use made of this input is in setting up
-  the bandpass/stopband regressors.
-* '-ort' and '-dsort' regressors run through all time
-  points, as read in.  If you want separate projections
-  in each run, then you must either break these ort files
-  into appropriate components, OR you must run 3dTproject
-  for each run separately, using the appropriate pieces
-  from the ort files via the ``\{...\}`` selector for the
-  1D files and the ``\[...\]`` selector for the datasets.
-#' @param dsort Character or numeric vector. Remove the 3D+time time series in dataset fset.
-
-* That is, 'fset' contains a different nuisance time
-  series for each voxel (e.g., from AnatICOR).
-* Multiple -dsort options are allowed.
-#' @param mask Character; file path. Only operate on voxels nonzero in the mset dataset.
-
-* Voxels outside the mask will be filled with zeros.
-* If no masking option is given, then all voxels
-  will be processed.
-#' @param noblock Logical. Also as in 3dDeconvolve, if you want the program to treat
-an auto-catenated dataset as one long run, use this option.
-However, '-noblock' will not affect catenation if you use
-the '-concat' option.
-#' @param norm Logical. Normalize each output time series to have sum of
-squares = 1. This is the LAST operation.
-#' @param ort Character; file path. Remove each column in file.
-Each column will have its mean removed.
+#' @param blur Numeric. Blur (inside the mask only) with a filter that has width (FWHM) of fff millimeters. Spatial blurring (if done) is after the time series filtering.
+#' @param cenmode Character; one of: "KILL", "ZERO", "NTRP". Specifies how censored time points are treated in the output dataset: * mode = ZERO -- put zero values in their place; output dataset is same length as input * mode = KILL -- remove those time points; output dataset is shorter than input * mode = NTRP -- censored values are replaced by interpolated neighboring (in time) non-censored values, BEFORE any projections, and then the analysis proceeds without actual removal of any time points -- this feature is to keep the Spanish Inquisition happy. * The default mode is KILL !!!
+#' @param censor Character; file path. Filename of censor .1D time series. This is a file of 1s and 0s, indicating which time points are to be included (1) and which are to be excluded (0).
+#' @param censortr Character or numeric vector. List of strings that specify time indexes to be removed from the analysis. Each string is of one of the following forms: * ``37`` => remove global time index #37 * ``2:37`` => remove time index #37 in run #2 * ``37..47`` => remove global time indexes #37-47 * ``37-47`` => same as above * ``2:37..47`` => remove time indexes #37-47 in run #2 * ``*:0-2`` => remove time indexes #0-2 in all runs * Time indexes within each run start at 0. * Run indexes start at 1 (just be to confusing). * N.B.: 2:37,47 means index #37 in run #2 and global time index 47; it does NOT mean index #37 in run #2 AND index #47 in run #2.
+#' @param concat Character; file path. The catenation file, as in 3dDeconvolve, containing the TR indexes of the start points for each contiguous run within the input dataset (the first entry should be 0). * Also as in 3dDeconvolve, if the input dataset is automatically catenated from a collection of datasets, then the run start indexes are determined directly, and '-concat' is not needed (and will be ignored). * Each run must have at least 9 time points AFTER censoring, or the program will not work! * The only use made of this input is in setting up the bandpass/stopband regressors. * '-ort' and '-dsort' regressors run through all time points, as read in. If you want separate projections in each run, then you must either break these ort files into appropriate components, OR you must run 3dTproject for each run separately, using the appropriate pieces from the ort files via the ``\{...\}`` selector for the 1D files and the ``\[...\]`` selector for the datasets.
+#' @param dsort Character or numeric vector. Remove the 3D+time time series in dataset fset. * That is, 'fset' contains a different nuisance time series for each voxel (e.g., from AnatICOR). * Multiple -dsort options are allowed.
+#' @param mask Character; file path. Only operate on voxels nonzero in the mset dataset. * Voxels outside the mask will be filled with zeros. * If no masking option is given, then all voxels will be processed.
+#' @param noblock Logical. Also as in 3dDeconvolve, if you want the program to treat an auto-catenated dataset as one long run, use this option. However, '-noblock' will not affect catenation if you use the '-concat' option.
+#' @param norm Logical. Normalize each output time series to have sum of squares = 1. This is the LAST operation.
+#' @param ort Character; file path. Remove each column in file. Each column will have its mean removed.
 #' @param out_file Character; file path. output image file name
-#' @param polort Integer. Remove polynomials up to and including degree pp.
-
-* Default value is 2.
-* It makes no sense to use a value of pp greater than
-  2, if you are bandpassing out the lower frequencies!
-* For catenated datasets, each run gets a separate set
-  set of pp+1 Legendre polynomial regressors.
-* Use of -polort -1 is not advised (if data mean != 0),
-  even if -ort contains constant terms, as all means are
-  removed.
+#' @param polort Integer. Remove polynomials up to and including degree pp. * Default value is 2. * It makes no sense to use a value of pp greater than 2, if you are bandpassing out the lower frequencies! * For catenated datasets, each run gets a separate set set of pp+1 Legendre polynomial regressors. * Use of -polort -1 is not advised (if data mean != 0), even if -ort contains constant terms, as all means are removed.
 #' @param stopband Character or numeric vector. Remove all frequencies in the range
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
@@ -4003,7 +3188,7 @@ ni_afni_to3_d <- function(in_folder,
 #' @param fill_value Numeric. value, used for each voxel in the output dataset that is NOT listed in the input file
 #' @param head_only Logical. create only the .HEAD file which gets exploited by the AFNI matlab library function New_HEAD.m
 #' @param mask_file Character; file path. mask image file name. Only voxels that are nonzero in the mask can be set.
-#' @param orient Character or numeric vector. Specifies the coordinate order used by -xyz. The code must be 3 letters, one each from the pairs \{R,L\} \{A,P\} \{I,S\}.  The first letter gives the orientation of the x-axis, the second the orientation of the y-axis, the third the z-axis: R = right-to-left         L = left-to-right A = anterior-to-posterior P = posterior-to-anterior I = inferior-to-superior  S = superior-to-inferior If -orient isn't used, then the coordinate order of the -master (in_file) dataset is used to interpret (x,y,z) inputs.
+#' @param orient Character or numeric vector. Specifies the coordinate order used by -xyz. The code must be 3 letters, one each from the pairs \{R,L\} \{A,P\} \{I,S\}. The first letter gives the orientation of the x-axis, the second the orientation of the y-axis, the third the z-axis: R = right-to-left L = left-to-right A = anterior-to-posterior P = posterior-to-anterior I = inferior-to-superior S = superior-to-inferior If -orient isn't used, then the coordinate order of the -master (in_file) dataset is used to interpret (x,y,z) inputs.
 #' @param out_file Character; file path. output image file name
 #' @param srad Numeric. radius in mm of the sphere that will be filled about each input (x,y,z) or (i,j,k) voxel. If the radius is not given, or is 0, then each input data line sets the value in only one voxel.
 #' @param .cwd Working directory override.
@@ -4039,19 +3224,16 @@ ni_afni_undump <- function(in_file,
 #'
 #' @param in_file Character; file path. input file to 3dUnifize **Required.**
 #' @param args Character. Additional parameters to the command
-#' @param cl_frac Numeric. Option for AFNI experts only.Set the automask 'clip level fraction'. Must be between 0.1 and 0.9. A small fraction means to make the initial threshold for clipping (a la 3dClipLevel) smaller, which will tend to make the mask larger.  \[default=0.1\]
+#' @param cl_frac Numeric. Option for AFNI experts only.Set the automask 'clip level fraction'. Must be between 0.1 and 0.9. A small fraction means to make the initial threshold for clipping (a la 3dClipLevel) smaller, which will tend to make the mask larger. \[default=0.1\]
 #' @param epi Logical. Assume the input dataset is a T2 (or T2\*) weighted EPI time series. After computing the scaling, apply it to ALL volumes (TRs) in the input dataset. That is, a given voxel will be scaled by the same factor at each TR. This option also implies '-noduplo' and '-T2'.This option turns off '-GM' if you turned it on.
 #' @param gm Logical. Also scale to unifize 'gray matter' = lower intensity voxels (to aid in registering images from different scanners).
 #' @param no_duplo Logical. Do NOT use the 'duplo down' step; this can be useful for lower resolution datasets.
 #' @param out_file Character; file path. output image file name
 #' @param quiet Logical. Don't print the progress messages.
-#' @param rbt Character or numeric vector. Option for AFNI experts only.Specify the 3 parameters for the algorithm:
-R = radius; same as given by option '-Urad', \[default=18.3\]
-b = bottom percentile of normalizing data range, \[default=70.0\]
-r = top percentile of normalizing data range, \[default=80.0\]
+#' @param rbt Character or numeric vector. Option for AFNI experts only.Specify the 3 parameters for the algorithm: R = radius; same as given by option '-Urad', \[default=18.3\] b = bottom percentile of normalizing data range, \[default=70.0\] r = top percentile of normalizing data range, \[default=80.0\]
 #' @param scale_file Character; file path. output file name to save the scale factor used at each voxel
 #' @param t2 Logical. Treat the input as if it were T2-weighted, rather than T1-weighted. This processing is done simply by inverting the image contrast, processing it as if that result were T1-weighted, and then re-inverting the results counts of voxel overlap, i.e., each voxel will contain the number of masks that it is set in.
-#' @param t2_up Numeric. Option for AFNI experts only.Set the upper percentile point used for T2-T1 inversion. Allowed to be anything between 90 and 100 (inclusive), with default to 98.5  (for no good reason).
+#' @param t2_up Numeric. Option for AFNI experts only.Set the upper percentile point used for T2-T1 inversion. Allowed to be anything between 90 and 100 (inclusive), with default to 98.5 (for no good reason).
 #' @param urad Numeric. Sets the radius (in voxels) of the ball used for the sneaky trick. Default value is 18.3, and should be changed proportionally if the dataset voxel size differs significantly from 1 mm.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
@@ -4209,7 +3391,7 @@ ni_afni_z_cut_up <- function(in_file,
 #' @param in_files Character or numeric vector **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param datum Character; one of: "byte", "short", "float". specify data type for output. Valid types are 'byte', 'short' and 'float'.
-#' @param fscale Logical. Force scaling of the output to the maximum integer range.  This only has effect if the output datum is byte or short (either forced or defaulted). This option is sometimes necessary to eliminate unpleasant truncation artifacts.
+#' @param fscale Logical. Force scaling of the output to the maximum integer range. This only has effect if the output datum is byte or short (either forced or defaulted). This option is sometimes necessary to eliminate unpleasant truncation artifacts.
 #' @param nscale Logical. Don't do any scaling on output to byte or short datasets. This may be especially useful when operating on mask datasets whose output values are only 0's and 1's.
 #' @param out_file Character; file path. output dataset prefix name (default 'zcat')
 #' @param verb Logical. print out some verbositiness as the program proceeds.
@@ -4252,7 +3434,7 @@ ni_afni_zcat <- function(in_files,
 #' @param S Integer. adds 'n' planes of zero at the Superior edge
 #' @param args Character. Additional parameters to the command
 #' @param master Character; file path. match the volume described in dataset 'mset', where mset must have the same orientation and grid spacing as dataset to be padded. the goal of -master is to make the output dataset from 3dZeropad match the spatial 'extents' of mset by adding or subtracting slices as needed. You can't use -I,-S,..., or -mm with -master
-#' @param mm Logical. pad counts 'n' are in mm instead of slices, where each 'n' is an integer and at least 'n' mm of slices will be added/removed; e.g., n =  3 and slice thickness = 2.5 mm ==> 2 slices added
+#' @param mm Logical. pad counts 'n' are in mm instead of slices, where each 'n' is an integer and at least 'n' mm of slices will be added/removed; e.g., n = 3 and slice thickness = 2.5 mm ==> 2 slices added
 #' @param out_file Character; file path. output dataset prefix name (default 'zeropad')
 #' @param z Integer. adds 'n' planes of zero on EACH of the dataset z-axis (slice-direction) faces
 #' @param .cwd Working directory override.
@@ -4352,18 +3534,14 @@ ni_ants_ai <- function(fixed_image,
                      metric,
                      moving_image,
                      args = NULL,
-                     convergence = 10,
-                     convergence = 1e-06,
-                     convergence = 10,
+                     convergence = c(10, 1e-06, 10),
                      dimension = 3,
                      fixed_image_mask = NULL,
                      output_transform = "initialization.mat",
                      principal_axes = FALSE,
-                     search_factor = 20,
-                     search_factor = 0.12,
+                     search_factor = c(20, 0.12),
                      search_grid = NULL,
-                     transform = "Affine",
-                     transform = "0.1",
+                     transform = c("Affine", "0.1"),
                      verbose = FALSE,
                      .cwd = NULL,
                      .env = NULL,
@@ -4371,50 +3549,6 @@ ni_ants_ai <- function(fixed_image,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("ants.ai", fixed_image = fixed_image, metric = metric, moving_image = moving_image, args = args, convergence = convergence, dimension = dimension, fixed_image_mask = fixed_image_mask, output_transform = output_transform, principal_axes = principal_axes, search_factor = search_factor, search_grid = search_grid, transform = transform, verbose = verbose, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' ANTS antsIntroduction
-#'
-#' Uses ANTS to generate matrices to warp data from one space to another.
-#'
-#' @param input_image Character; file path. input image to warp to template **Required.**
-#' @param reference_image Character; file path. template file to warp to **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param bias_field_correction Logical. Applies bias field correction to moving image
-#' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
-#' @param force_proceed Logical. force script to proceed even if headers may be incompatible
-#' @param inverse_warp_template_labels Logical. Applies inverse warp to the template labels to estimate label positions in target space (use for template-based segmentation)
-#' @param max_iterations Character or numeric vector. maximum number of iterations (must be list of integers in the form \[J,K,L...\]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations
-#' @param out_prefix Character. Prefix that is prepended to all output files (default = ants_)
-#' @param quality_check Logical. Perform a quality check of the result
-#' @param similarity_metric Character; one of: "PR", "CC", "MI", "MSQ". Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)
-#' @param transformation_model Character; one of: "GR", "EL", "SY", "S2", "EX", "DD", "RI", "RA". Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 =  SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping, RI = purely rigid, RA = affine rigid
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_ants_ants_introduction <- function(input_image,
-                     reference_image,
-                     args = NULL,
-                     bias_field_correction = NULL,
-                     dimension = 3,
-                     force_proceed = NULL,
-                     inverse_warp_template_labels = NULL,
-                     max_iterations = NULL,
-                     out_prefix = "ants_",
-                     quality_check = NULL,
-                     similarity_metric = NULL,
-                     transformation_model = "GR",
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("ants.ants_introduction", input_image = input_image, reference_image = reference_image, args = args, bias_field_correction = bias_field_correction, dimension = dimension, force_proceed = force_proceed, inverse_warp_template_labels = inverse_warp_template_labels, max_iterations = max_iterations, out_prefix = out_prefix, quality_check = quality_check, similarity_metric = similarity_metric, transformation_model = transformation_model, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -4472,15 +3606,22 @@ ni_ants_ants <- function(fixed_image,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' ANTS ApplyTransformsToPoints
+#' ANTS antsIntroduction
 #'
-#' ApplyTransformsToPoints, applied to an CSV file, transforms coordinates
+#' Uses ANTS to generate matrices to warp data from one space to another.
 #'
-#' @param input_file Character; file path. Currently, the only input supported is a csv file with columns including x,y (2D), x,y,z (3D) or x,y,z,t,label (4D) column headers. The points should be defined in physical space. If in doubt how to convert coordinates from your files to the space required by antsApplyTransformsToPoints try creating/drawing a simple label volume with only one voxel set to 1 and all others set to 0. Write down the voxel coordinates. Then use ImageMaths LabelStats to find out what coordinates for this voxel antsApplyTransformsToPoints is expecting. **Required.**
-#' @param transforms Character or numeric vector. transforms that will be applied to the points **Required.**
+#' @param input_image Character; file path. input image to warp to template **Required.**
+#' @param reference_image Character; file path. template file to warp to **Required.**
 #' @param args Character. Additional parameters to the command
-#' @param dimension Character; one of: "2", "3", "4". This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.
-#' @param output_file Character. Name of the output CSV file
+#' @param bias_field_correction Logical. Applies bias field correction to moving image
+#' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
+#' @param force_proceed Logical. force script to proceed even if headers may be incompatible
+#' @param inverse_warp_template_labels Logical. Applies inverse warp to the template labels to estimate label positions in target space (use for template-based segmentation)
+#' @param max_iterations Character or numeric vector. maximum number of iterations (must be list of integers in the form \[J,K,L...\]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations
+#' @param out_prefix Character. Prefix that is prepended to all output files (default = ants_)
+#' @param quality_check Logical. Perform a quality check of the result
+#' @param similarity_metric Character; one of: "PR", "CC", "MI", "MSQ". Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)
+#' @param transformation_model Character; one of: "GR", "EL", "SY", "S2", "EX", "DD", "RI", "RA". Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 = SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping, RI = purely rigid, RA = affine rigid
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -4488,17 +3629,24 @@ ni_ants_ants <- function(fixed_image,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_ants_apply_transforms_to_points <- function(input_file,
-                     transforms,
+ni_ants_ants_introduction <- function(input_image,
+                     reference_image,
                      args = NULL,
-                     dimension = NULL,
-                     output_file = NULL,
+                     bias_field_correction = NULL,
+                     dimension = 3,
+                     force_proceed = NULL,
+                     inverse_warp_template_labels = NULL,
+                     max_iterations = NULL,
+                     out_prefix = "ants_",
+                     quality_check = NULL,
+                     similarity_metric = NULL,
+                     transformation_model = "GR",
                      .cwd = NULL,
                      .env = NULL,
                      .container = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("ants.apply_transforms_to_points", input_file = input_file, transforms = transforms, args = args, dimension = dimension, output_file = output_file, .cwd = .cwd, .env = .env, .container = .container)
+  call <- ni_call("ants.ants_introduction", input_image = input_image, reference_image = reference_image, args = args, bias_field_correction = bias_field_correction, dimension = dimension, force_proceed = force_proceed, inverse_warp_template_labels = inverse_warp_template_labels, max_iterations = max_iterations, out_prefix = out_prefix, quality_check = quality_check, similarity_metric = similarity_metric, transformation_model = transformation_model, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -4539,6 +3687,36 @@ ni_ants_apply_transforms <- function(input_image,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("ants.apply_transforms", input_image = input_image, reference_image = reference_image, transforms = transforms, args = args, default_value = default_value, dimension = dimension, float = float, input_image_type = input_image_type, interpolation = interpolation, output_image = output_image, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' ANTS ApplyTransformsToPoints
+#'
+#' ApplyTransformsToPoints, applied to an CSV file, transforms coordinates
+#'
+#' @param input_file Character; file path. Currently, the only input supported is a csv file with columns including x,y (2D), x,y,z (3D) or x,y,z,t,label (4D) column headers. The points should be defined in physical space. If in doubt how to convert coordinates from your files to the space required by antsApplyTransformsToPoints try creating/drawing a simple label volume with only one voxel set to 1 and all others set to 0. Write down the voxel coordinates. Then use ImageMaths LabelStats to find out what coordinates for this voxel antsApplyTransformsToPoints is expecting. **Required.**
+#' @param transforms Character or numeric vector. transforms that will be applied to the points **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param dimension Character; one of: "2", "3", "4". This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.
+#' @param output_file Character. Name of the output CSV file
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_ants_apply_transforms_to_points <- function(input_file,
+                     transforms,
+                     args = NULL,
+                     dimension = NULL,
+                     output_file = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("ants.apply_transforms_to_points", input_file = input_file, transforms = transforms, args = args, dimension = dimension, output_file = output_file, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -4650,7 +3828,7 @@ ni_ants_average_images <- function(dimension,
 #'
 #' Atlas-based brain extraction.
 #'
-#' @param anatomical_image Character; file path. Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs. **Required.**
+#' @param anatomical_image Character; file path. Structural image, typically T1. If more than one anatomical image is specified, subsequently specified images are used during the segmentation process. However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs. **Required.**
 #' @param brain_probability_mask Character; file path. Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image. **Required.**
 #' @param brain_template Character; file path. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs. **Required.**
 #' @param args Character. Additional parameters to the command
@@ -4706,7 +3884,7 @@ ni_ants_brain_extraction <- function(anatomical_image,
 #' @param parallelization Character; one of: "0", "1", "2". control for parallel processing (0 = serial, 1 = use PBS, 2 = use PEXEC, 3 = use Apple XGrid
 #' @param rigid_body_registration Logical. registers inputs before creating template (useful if no initial template available)
 #' @param similarity_metric Character; one of: "PR", "CC", "MI", "MSQ". Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)
-#' @param transformation_model Character; one of: "GR", "EL", "SY", "S2", "EX", "DD". Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 =  SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping
+#' @param transformation_model Character; one of: "GR", "EL", "SY", "S2", "EX", "DD". Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 = SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -4844,7 +4022,7 @@ ni_ants_convert_scalar_image_to_rgb <- function(colormap,
 #'
 #' @param anatomical_image Character; file path. Structural *intensity* image, typically T1. If more than one anatomical image is specified, subsequently specified images are used during the segmentation process. However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. **Required.**
 #' @param brain_probability_mask Character; file path. brain probability mask in template space **Required.**
-#' @param brain_template Character; file path. Anatomical *intensity* template (possibly created using a population data set with buildtemplateparallel.sh in ANTs). This template is  *not* skull-stripped. **Required.**
+#' @param brain_template Character; file path. Anatomical *intensity* template (possibly created using a population data set with buildtemplateparallel.sh in ANTs). This template is *not* skull-stripped. **Required.**
 #' @param segmentation_priors Character or numeric vector **Required.**
 #' @param t1_registration_template Character; file path. Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped. **Required.**
 #' @param args Character. Additional parameters to the command
@@ -4854,7 +4032,7 @@ ni_ants_convert_scalar_image_to_rgb <- function(colormap,
 #' @param extraction_registration_mask Character; file path. Mask (defined in the template space) used during registration for brain extraction.
 #' @param image_suffix Character. any of standard ITK formats, nii.gz is default
 #' @param keep_temporary_files Integer. Keep brain extraction/segmentation warps, etc (default = 0).
-#' @param label_propagation Character. Incorporate a distance prior one the posterior formulation.  Should be of the form 'label\[lambda,boundaryProbability\]' where label is a value of 1,2,3,... denoting label ID.  The label probability for anything outside the current label = boundaryProbability * exp( -lambda * distanceFromBoundary ) Intuitively, smaller lambda values will increase the spatial capture range of the distance prior.  To apply to all label values, simply omit specifying the label, i.e. -l \[lambda,boundaryProbability\].
+#' @param label_propagation Character. Incorporate a distance prior one the posterior formulation. Should be of the form 'label\[lambda,boundaryProbability\]' where label is a value of 1,2,3,... denoting label ID. The label probability for anything outside the current label = boundaryProbability * exp( -lambda * distanceFromBoundary ) Intuitively, smaller lambda values will increase the spatial capture range of the distance prior. To apply to all label values, simply omit specifying the label, i.e. -l \[lambda,boundaryProbability\].
 #' @param max_iterations Integer. ANTS registration max iterations (default = 100x100x70x20)
 #' @param out_prefix Character. Prefix that is prepended to all output files
 #' @param posterior_formulation Character. Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates\[1\]' (default) or 'Aristotle\[1\]'. Choose the latter if you want use the distance priors (see also the -l option for label propagation control).
@@ -5027,7 +4205,7 @@ ni_ants_denoise_image <- function(input_image,
 #' @param out_prefix Character. Prefix that is prepended to all output files (default = ants_)
 #' @param quality_check Logical. Perform a quality check of the result
 #' @param similarity_metric Character; one of: "PR", "CC", "MI", "MSQ". Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)
-#' @param transformation_model Character; one of: "GR", "EL", "SY", "S2", "EX", "DD", "RI", "RA". Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 =  SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping, RI = purely rigid, RA = affine rigid
+#' @param transformation_model Character; one of: "GR", "EL", "SY", "S2", "EX", "DD", "RI", "RA". Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 = SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping, RI = purely rigid, RA = affine rigid
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -5131,9 +4309,7 @@ ni_ants_joint_fusion <- function(atlas_image,
                      patch_radius = NULL,
                      retain_atlas_voting_images = FALSE,
                      retain_label_posterior_images = FALSE,
-                     search_radius = 3,
-                     search_radius = 3,
-                     search_radius = 3,
+                     search_radius = c(3, 3, 3),
                      verbose = NULL,
                      .cwd = NULL,
                      .env = NULL,
@@ -5338,18 +4514,11 @@ ni_ants_multiply_images <- function(dimension,
 #' @param args Character. Additional parameters to the command
 #' @param bspline_fitting_distance Numeric
 #' @param dimension Character; one of: "3", "2", "4". image dimension (2, 3 or 4)
-#' @param histogram_sharpening Character or numeric vector. Three-values tuple of histogram sharpening parameters (FWHM, wienerNose, numberOfHistogramBins).
-These options describe the histogram sharpening parameters, i.e. the deconvolution step parameters described in the original N3 algorithm.
-The default values have been shown to work fairly well.
+#' @param histogram_sharpening Character or numeric vector. Three-values tuple of histogram sharpening parameters (FWHM, wienerNose, numberOfHistogramBins). These options describe the histogram sharpening parameters, i.e. the deconvolution step parameters described in the original N3 algorithm. The default values have been shown to work fairly well.
 #' @param mask_image Character; file path. image to specify region to perform final bias correction in
 #' @param n_iterations Character or numeric vector
 #' @param output_image Character. output file name
-#' @param rescale_intensities Logical. \[NOTE: Only ANTs>=2.1.0\]
-At each iteration, a new intensity mapping is calculated and applied but there
-is nothing which constrains the new intensity range to be within certain values.
-The result is that the range can "drift" from the original at each iteration.
-This option rescales to the \[min,max\] range of the original image intensities
-within the user-specified mask.
+#' @param rescale_intensities Logical. \[NOTE: Only ANTs>=2.1.0\] At each iteration, a new intensity mapping is calculated and applied but there is nothing which constrains the new intensity range to be within certain values. The result is that the range can "drift" from the original at each iteration. This option rescales to the \[min,max\] range of the original image intensities within the user-specified mask.
 #' @param shrink_factor Integer
 #' @param weight_image Character; file path. image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting.
 #' @param .cwd Working directory override.
@@ -5378,58 +4547,6 @@ ni_ants_n4_bias_field_correction <- function(copy_header,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("ants.n4_bias_field_correction", copy_header = copy_header, input_image = input_image, save_bias = save_bias, args = args, bspline_fitting_distance = bspline_fitting_distance, dimension = dimension, histogram_sharpening = histogram_sharpening, mask_image = mask_image, n_iterations = n_iterations, output_image = output_image, rescale_intensities = rescale_intensities, shrink_factor = shrink_factor, weight_image = weight_image, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' ANTS RegistrationSynQuick
-#'
-#' Registration using a symmetric image normalization method (SyN).
-#'
-#' @param fixed_image Character or numeric vector. Fixed image or source image or reference image **Required.**
-#' @param moving_image Character or numeric vector. Moving image or target image **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
-#' @param histogram_bins Integer. histogram bins for mutual information in SyN stage                                  (default = 32)
-#' @param num_threads Integer. Number of threads (default = 1)
-#' @param output_prefix Character. A prefix that is prepended to all output files
-#' @param precision_type Character; one of: "double", "float". precision type (default = double)
-#' @param random_seed Integer. fixed random seed
-#' @param spline_distance Integer. spline distance for deformable B-spline SyN transform                                  (default = 26)
-#' @param transform_type Character; one of: "s", "t", "r", "a", "sr", "b", "br". Transform type
-
-  * t:  translation
-  * r:  rigid
-  * a:  rigid + affine
-  * s:  rigid + affine + deformable syn (default)
-  * sr: rigid + deformable syn
-  * b:  rigid + affine + deformable b-spline syn
-  * br: rigid + deformable b-spline syn
-#' @param use_histogram_matching Logical. use histogram matching
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_ants_registration_syn_quick <- function(fixed_image,
-                     moving_image,
-                     args = NULL,
-                     dimension = 3,
-                     histogram_bins = 32,
-                     num_threads = 1,
-                     output_prefix = "transform",
-                     precision_type = "double",
-                     random_seed = NULL,
-                     spline_distance = 26,
-                     transform_type = "s",
-                     use_histogram_matching = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("ants.registration_syn_quick", fixed_image = fixed_image, moving_image = moving_image, args = args, dimension = dimension, histogram_bins = histogram_bins, num_threads = num_threads, output_prefix = output_prefix, precision_type = precision_type, random_seed = random_seed, spline_distance = spline_distance, transform_type = transform_type, use_histogram_matching = use_histogram_matching, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -5498,6 +4615,50 @@ ni_ants_registration <- function(fixed_image,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("ants.registration", fixed_image = fixed_image, metric = metric, metric_weight = metric_weight, moving_image = moving_image, shrink_factors = shrink_factors, smoothing_sigmas = smoothing_sigmas, transforms = transforms, args = args, collapse_output_transforms = collapse_output_transforms, dimension = dimension, fixed_image_mask = fixed_image_mask, float = float, initial_moving_transform = initial_moving_transform, initial_moving_transform_com = initial_moving_transform_com, initialize_transforms_per_stage = initialize_transforms_per_stage, interpolation = interpolation, output_transform_prefix = output_transform_prefix, random_seed = random_seed, restore_state = restore_state, save_state = save_state, verbose = verbose, winsorize_lower_quantile = winsorize_lower_quantile, winsorize_upper_quantile = winsorize_upper_quantile, write_composite_transform = write_composite_transform, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' ANTS RegistrationSynQuick
+#'
+#' Registration using a symmetric image normalization method (SyN).
+#'
+#' @param fixed_image Character or numeric vector. Fixed image or source image or reference image **Required.**
+#' @param moving_image Character or numeric vector. Moving image or target image **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
+#' @param histogram_bins Integer. histogram bins for mutual information in SyN stage (default = 32)
+#' @param num_threads Integer. Number of threads (default = 1)
+#' @param output_prefix Character. A prefix that is prepended to all output files
+#' @param precision_type Character; one of: "double", "float". precision type (default = double)
+#' @param random_seed Integer. fixed random seed
+#' @param spline_distance Integer. spline distance for deformable B-spline SyN transform (default = 26)
+#' @param transform_type Character; one of: "s", "t", "r", "a", "sr", "b", "br". Transform type * t: translation * r: rigid * a: rigid + affine * s: rigid + affine + deformable syn (default) * sr: rigid + deformable syn * b: rigid + affine + deformable b-spline syn * br: rigid + deformable b-spline syn
+#' @param use_histogram_matching Logical. use histogram matching
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_ants_registration_syn_quick <- function(fixed_image,
+                     moving_image,
+                     args = NULL,
+                     dimension = 3,
+                     histogram_bins = 32,
+                     num_threads = 1,
+                     output_prefix = "transform",
+                     precision_type = "double",
+                     random_seed = NULL,
+                     spline_distance = 26,
+                     transform_type = "s",
+                     use_histogram_matching = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("ants.registration_syn_quick", fixed_image = fixed_image, moving_image = moving_image, args = args, dimension = dimension, histogram_bins = histogram_bins, num_threads = num_threads, output_prefix = output_prefix, precision_type = precision_type, random_seed = random_seed, spline_distance = spline_distance, transform_type = transform_type, use_histogram_matching = use_histogram_matching, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -5713,9 +4874,7 @@ ni_freesurfer_add_x_form_to_header <- function(in_file,
 #' @param aseg Character; file path. Input aseg file
 #' @param ctxseg Character; file path
 #' @param hypo_wm Logical. Label hypointensities as WM
-#' @param label_wm Logical. For each voxel labeled as white matter in the aseg, re-assign
-its label to be that of the closest cortical point if its
-distance is less than dmaxctx.
+#' @param label_wm Logical. For each voxel labeled as white matter in the aseg, re-assign its label to be that of the closest cortical point if its distance is less than dmaxctx.
 #' @param rip_unknown Logical. Do not label WM based on 'unknown' corical label
 #' @param volmask Logical. Volume mask flag
 #' @param .cwd Working directory override.
@@ -5832,7 +4991,7 @@ ni_freesurfer_apply_mask <- function(in_file,
 #' @param lta_file Character; file path. Linear Transform Array file **Required.**
 #' @param lta_inv_file Character; file path. LTA, invert **Required.**
 #' @param mni_152_reg Logical. target MNI152 space **Required.**
-#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix   (tkregister2 format) **Required.**
+#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) **Required.**
 #' @param reg_header Logical. ScannerRAS-to-ScannerRAS matrix = identity **Required.**
 #' @param source_file Character; file path. Input volume you wish to transform **Required.**
 #' @param subject Character. set matrix = identity and use subject for any templates **Required.**
@@ -6167,48 +5326,6 @@ ni_freesurfer_check_talairach_alignment <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' FREESURFER ConcatenateLTA
-#'
-#' Concatenates two consecutive LTA transformations into one overall
-#'
-#' @param in_lta1 Character; file path. maps some src1 to dst1 **Required.**
-#' @param in_lta2 Character or numeric vector. maps dst1(src2) to dst2 **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param invert_1 Logical. invert in_lta1 before applying it
-#' @param invert_2 Logical. invert in_lta2 before applying it
-#' @param invert_out Logical. invert output LTA
-#' @param out_file Character; file path. the combined LTA maps: src1 to dst2 = LTA2*LTA1
-#' @param out_type Character; one of: "VOX2VOX", "RAS2RAS". set final LTA type
-#' @param subject Character. set subject in output LTA
-#' @param tal_source_file Character; file path. if in_lta2 is talairach.xfm, specify source for talairach
-#' @param tal_template_file Character; file path. if in_lta2 is talairach.xfm, specify template for talairach
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_freesurfer_concatenate_lta <- function(in_lta1,
-                     in_lta2,
-                     args = NULL,
-                     invert_1 = NULL,
-                     invert_2 = NULL,
-                     invert_out = NULL,
-                     out_file = NULL,
-                     out_type = NULL,
-                     subject = NULL,
-                     tal_source_file = NULL,
-                     tal_template_file = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("freesurfer.concatenate_lta", in_lta1 = in_lta1, in_lta2 = in_lta2, args = args, invert_1 = invert_1, invert_2 = invert_2, invert_out = invert_out, out_file = out_file, out_type = out_type, subject = subject, tal_source_file = tal_source_file, tal_template_file = tal_template_file, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' FREESURFER Concatenate
 #'
 #' Use Freesurfer mri_concat to combine several input volumes
@@ -6265,6 +5382,48 @@ ni_freesurfer_concatenate <- function(in_files,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FREESURFER ConcatenateLTA
+#'
+#' Concatenates two consecutive LTA transformations into one overall
+#'
+#' @param in_lta1 Character; file path. maps some src1 to dst1 **Required.**
+#' @param in_lta2 Character or numeric vector. maps dst1(src2) to dst2 **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param invert_1 Logical. invert in_lta1 before applying it
+#' @param invert_2 Logical. invert in_lta2 before applying it
+#' @param invert_out Logical. invert output LTA
+#' @param out_file Character; file path. the combined LTA maps: src1 to dst2 = LTA2*LTA1
+#' @param out_type Character; one of: "VOX2VOX", "RAS2RAS". set final LTA type
+#' @param subject Character. set subject in output LTA
+#' @param tal_source_file Character; file path. if in_lta2 is talairach.xfm, specify source for talairach
+#' @param tal_template_file Character; file path. if in_lta2 is talairach.xfm, specify template for talairach
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_freesurfer_concatenate_lta <- function(in_lta1,
+                     in_lta2,
+                     args = NULL,
+                     invert_1 = NULL,
+                     invert_2 = NULL,
+                     invert_out = NULL,
+                     out_file = NULL,
+                     out_type = NULL,
+                     subject = NULL,
+                     tal_source_file = NULL,
+                     tal_template_file = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("freesurfer.concatenate_lta", in_lta1 = in_lta1, in_lta2 = in_lta2, args = args, invert_1 = invert_1, invert_2 = invert_2, invert_out = invert_out, out_file = out_file, out_type = out_type, subject = subject, tal_source_file = tal_source_file, tal_template_file = tal_template_file, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FREESURFER Contrast
 #'
 #' Compute surface-wise gray/white contrast
@@ -6300,6 +5459,40 @@ ni_freesurfer_contrast <- function(annotation,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("freesurfer.contrast", annotation = annotation, cortex = cortex, hemisphere = hemisphere, orig = orig, rawavg = rawavg, subject_id = subject_id, thickness = thickness, white = white, args = args, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' FREESURFER Curvature
+#'
+#' This program will compute the second fundamental form of a cortical
+#'
+#' @param in_file Character; file path. Input file for Curvature **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param averages Integer. Perform this number iterative averages of curvature measure before saving
+#' @param distances Character or numeric vector. Undocumented input integer distances
+#' @param n Logical. Undocumented boolean flag
+#' @param save Logical. Save curvature files (will only generate screen output without this option)
+#' @param threshold Numeric. Undocumented input threshold
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_freesurfer_curvature <- function(in_file,
+                     args = NULL,
+                     averages = NULL,
+                     distances = NULL,
+                     n = NULL,
+                     save = NULL,
+                     threshold = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("freesurfer.curvature", in_file = in_file, args = args, averages = averages, distances = distances, n = n, save = save, threshold = threshold, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -6340,40 +5533,6 @@ ni_freesurfer_curvature_stats <- function(curvfile1,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("freesurfer.curvature_stats", curvfile1 = curvfile1, curvfile2 = curvfile2, hemisphere = hemisphere, subject_id = subject_id, args = args, min_max = min_max, out_file = out_file, surface = surface, values = values, write = write, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' FREESURFER Curvature
-#'
-#' This program will compute the second fundamental form of a cortical
-#'
-#' @param in_file Character; file path. Input file for Curvature **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param averages Integer. Perform this number iterative averages of curvature measure before saving
-#' @param distances Character or numeric vector. Undocumented input integer distances
-#' @param n Logical. Undocumented boolean flag
-#' @param save Logical. Save curvature files (will only generate screen output without this option)
-#' @param threshold Numeric. Undocumented input threshold
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_freesurfer_curvature <- function(in_file,
-                     args = NULL,
-                     averages = NULL,
-                     distances = NULL,
-                     n = NULL,
-                     save = NULL,
-                     threshold = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("freesurfer.curvature", in_file = in_file, args = args, averages = averages, distances = distances, n = n, save = save, threshold = threshold, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -6595,9 +5754,9 @@ ni_freesurfer_fix_topology <- function(copy_inputs,
 #'
 #' fuse segmentations together from multiple timepoints
 #'
-#' @param in_norms Character or numeric vector. -n <filename>  - name of norm file to use (default: norm.mgs)         must include the corresponding norm file for all given timepoints         as well as for the current subject **Required.**
-#' @param in_segmentations Character or numeric vector. name of aseg file to use (default: aseg.mgz)         must include the aseg files for all the given timepoints **Required.**
-#' @param in_segmentations_noCC Character or numeric vector. name of aseg file w/o CC labels (default: aseg.auto_noCCseg.mgz)         must include the corresponding file for all the given timepoints **Required.**
+#' @param in_norms Character or numeric vector. -n <filename> - name of norm file to use (default: norm.mgs) must include the corresponding norm file for all given timepoints as well as for the current subject **Required.**
+#' @param in_segmentations Character or numeric vector. name of aseg file to use (default: aseg.mgz) must include the aseg files for all the given timepoints **Required.**
+#' @param in_segmentations_noCC Character or numeric vector. name of aseg file w/o CC labels (default: aseg.auto_noCCseg.mgz) must include the corresponding file for all the given timepoints **Required.**
 #' @param out_file Character; file path. output fused segmentation file **Required.**
 #' @param timepoints Character or numeric vector. subject_ids or timepoints to be processed **Required.**
 #' @param args Character. Additional parameters to the command
@@ -6653,7 +5812,7 @@ ni_freesurfer_fuse_segmentations <- function(in_norms,
 #' @param glm_dir Character. save outputs to dir
 #' @param invert_mask Logical. invert mask
 #' @param label_file Character; file path. use label as mask, surfaces only
-#' @param logan Character or numeric vector. RefTac TimeSec tstar   : perform Logan kinetic modeling
+#' @param logan Character or numeric vector. RefTac TimeSec tstar : perform Logan kinetic modeling
 #' @param mask_file Character; file path. binary mask
 #' @param mrtm1 Character or numeric vector. RefTac TimeSec : perform MRTM1 kinetic modeling
 #' @param mrtm2 Character or numeric vector. RefTac TimeSec k2prime : perform MRTM2 kinetic modeling
@@ -6864,7 +6023,7 @@ ni_freesurfer_gtm_seg <- function(subject_id,
 #' @param rbv_res Numeric. voxsize : set RBV voxel resolution (good for when standard res takes too much memory)
 #' @param reduce_fox_eqodd Logical. reduce FoV to encompass mask but force nc=nr and ns to be odd
 #' @param replace Character or numeric vector. Id1 Id2 : replace seg Id1 with seg Id2
-#' @param rescale Character or numeric vector. Id1 <Id2...>  : specify reference region(s) used to rescale (default is pons)
+#' @param rescale Character or numeric vector. Id1 <Id2...> : specify reference region(s) used to rescale (default is pons)
 #' @param save_eres Logical. saves residual error
 #' @param save_input Logical. saves rescaled input as input.rescaled.nii.gz
 #' @param save_yhat Logical. save signal estimate (yhat) smoothed with the PSF
@@ -7098,7 +6257,7 @@ ni_freesurfer_label2_label <- function(hemisphere,
 #' @param label_hit_file Character; file path. file with each frame is nhits for a label
 #' @param label_voxel_volume Numeric. volume of each label point (def 1mm3)
 #' @param map_label_stat Character; file path. map the label stats field into the vol
-#' @param native_vox2ras Logical. use native vox2ras xform instead of  tkregister-style
+#' @param native_vox2ras Logical. use native vox2ras xform instead of tkregister-style
 #' @param proj Character or numeric vector. project along surface normal
 #' @param reg_file Character; file path. tkregister style matrix VolXYZ = R*LabelXYZ
 #' @param reg_header Character; file path. label template volume
@@ -7146,7 +6305,7 @@ ni_freesurfer_label2_vol <- function(annot_file,
 #' Perform Logan kinetic modeling.
 #'
 #' @param in_file Character; file path. input 4D file **Required.**
-#' @param logan Character or numeric vector. RefTac TimeSec tstar   : perform Logan kinetic modeling **Required.**
+#' @param logan Character or numeric vector. RefTac TimeSec tstar : perform Logan kinetic modeling **Required.**
 #' @param allow_ill_cond Logical. allow ill-conditioned design matrices
 #' @param allow_repeated_subjects Logical. allow subject names to repeat in the fsgd file (must appear before --fsgd
 #' @param args Character. Additional parameters to the command
@@ -7592,7 +6751,7 @@ ni_freesurfer_mr_is_combine <- function(in_files,
 #' Uses Freesurfer's mris_convert to convert surface files to various formats
 #'
 #' @param in_file Character; file path. File to read/convert **Required.**
-#' @param out_datatype Character; one of: "asc", "ico", "tri", "stl", "vtk", "gii", "mgh", "mgz". These file formats are supported:  ASCII:       .ascICO: .ico, .tri GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded 'volume': .mgh, .mgz **Required.**
+#' @param out_datatype Character; one of: "asc", "ico", "tri", "stl", "vtk", "gii", "mgh", "mgz". These file formats are supported: ASCII: .ascICO: .ico, .tri GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded 'volume': .mgh, .mgz **Required.**
 #' @param out_file Character; file path. output filename or True to generate one **Required.**
 #' @param annot_file Character; file path. input is annotation or gifti label data
 #' @param args Character. Additional parameters to the command
@@ -7659,15 +6818,11 @@ ni_freesurfer_mr_is_convert <- function(in_file,
 #' @param dt Numeric. dt (implicit: 0.25)
 #' @param nsurfaces Integer. Number of surfacces to write during expansion
 #' @param out_name Character. Output surface file. If no path, uses directory of ``in_file``. If no path AND missing "lh." or "rh.", derive from ``in_file``
-#' @param pial Character. Name of pial file (implicit: "pial")
-If no path, uses directory of ``in_file``
-If no path AND missing "lh." or "rh.", derive from ``in_file``
+#' @param pial Character. Name of pial file (implicit: "pial") If no path, uses directory of ``in_file`` If no path AND missing "lh." or "rh.", derive from ``in_file``
 #' @param smooth_averages Integer. Smooth surface with N iterations after expansion
 #' @param spring Numeric. Spring term (implicit: 0.05)
 #' @param thickness Logical. Expand by fraction of cortical thickness, not mm
-#' @param thickness_name Character. Name of thickness file (implicit: "thickness")
-If no path, uses directory of ``in_file``
-If no path AND missing "lh." or "rh.", derive from `in_file`
+#' @param thickness_name Character. Name of thickness file (implicit: "thickness") If no path, uses directory of ``in_file`` If no path AND missing "lh." or "rh.", derive from `in_file`
 #' @param write_iterations Integer. Write snapshots of expansion every N iterations
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
@@ -8125,6 +7280,64 @@ ni_freesurfer_mri_tessellate <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FREESURFER MRISPreproc
+#'
+#' Use FreeSurfer mris_preproc to prepare a group of contrasts for
+#'
+#' @param hemi Character; one of: "lh", "rh". hemisphere for source and target **Required.**
+#' @param target Character. target subject name **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param fsgd_file Character; file path. specify subjects using fsgd file
+#' @param fwhm Numeric. smooth by fwhm mm on the target surface
+#' @param fwhm_source Numeric. smooth by fwhm mm on the source surface
+#' @param num_iters Integer. niters : smooth by niters on the target surface
+#' @param num_iters_source Integer. niters : smooth by niters on the source surface
+#' @param out_file Character; file path. output filename
+#' @param proj_frac Numeric. projection fraction for vol2surf
+#' @param smooth_cortex_only Logical. only smooth cortex (ie, exclude medial wall)
+#' @param source_format Character. source format
+#' @param subject_file Character; file path. file specifying subjects separated by white space
+#' @param subjects Character or numeric vector. subjects from who measures are calculated
+#' @param surf_area Character. Extract vertex area from subject/surf/hemi.surfname to use as input.
+#' @param surf_dir Character. alternative directory (instead of surf)
+#' @param surf_measure Character. Use subject/surf/hemi.surf_measure as input
+#' @param surf_measure_file Character or numeric vector. file alternative to surfmeas, still requires list of subjects
+#' @param vol_measure_file Character or numeric vector. list of volume measure and reg file tuples
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_freesurfer_mris_preproc <- function(hemi,
+                     target,
+                     args = NULL,
+                     fsgd_file = NULL,
+                     fwhm = NULL,
+                     fwhm_source = NULL,
+                     num_iters = NULL,
+                     num_iters_source = NULL,
+                     out_file = NULL,
+                     proj_frac = NULL,
+                     smooth_cortex_only = NULL,
+                     source_format = NULL,
+                     subject_file = NULL,
+                     subjects = NULL,
+                     surf_area = NULL,
+                     surf_dir = NULL,
+                     surf_measure = NULL,
+                     surf_measure_file = NULL,
+                     vol_measure_file = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("freesurfer.mris_preproc", hemi = hemi, target = target, args = args, fsgd_file = fsgd_file, fwhm = fwhm, fwhm_source = fwhm_source, num_iters = num_iters, num_iters_source = num_iters_source, out_file = out_file, proj_frac = proj_frac, smooth_cortex_only = smooth_cortex_only, source_format = source_format, subject_file = subject_file, subjects = subjects, surf_area = surf_area, surf_dir = surf_dir, surf_measure = surf_measure, surf_measure_file = surf_measure_file, vol_measure_file = vol_measure_file, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FREESURFER MRISPreprocReconAll
 #'
 #' Extends MRISPreproc to allow it to be used in a recon-all workflow
@@ -8187,64 +7400,6 @@ ni_freesurfer_mris_preproc_recon_all <- function(hemi,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' FREESURFER MRISPreproc
-#'
-#' Use FreeSurfer mris_preproc to prepare a group of contrasts for
-#'
-#' @param hemi Character; one of: "lh", "rh". hemisphere for source and target **Required.**
-#' @param target Character. target subject name **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param fsgd_file Character; file path. specify subjects using fsgd file
-#' @param fwhm Numeric. smooth by fwhm mm on the target surface
-#' @param fwhm_source Numeric. smooth by fwhm mm on the source surface
-#' @param num_iters Integer. niters : smooth by niters on the target surface
-#' @param num_iters_source Integer. niters : smooth by niters on the source surface
-#' @param out_file Character; file path. output filename
-#' @param proj_frac Numeric. projection fraction for vol2surf
-#' @param smooth_cortex_only Logical. only smooth cortex (ie, exclude medial wall)
-#' @param source_format Character. source format
-#' @param subject_file Character; file path. file specifying subjects separated by white space
-#' @param subjects Character or numeric vector. subjects from who measures are calculated
-#' @param surf_area Character. Extract vertex area from subject/surf/hemi.surfname to use as input.
-#' @param surf_dir Character. alternative directory (instead of surf)
-#' @param surf_measure Character. Use subject/surf/hemi.surf_measure as input
-#' @param surf_measure_file Character or numeric vector. file alternative to surfmeas, still requires list of subjects
-#' @param vol_measure_file Character or numeric vector. list of volume measure and reg file tuples
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_freesurfer_mris_preproc <- function(hemi,
-                     target,
-                     args = NULL,
-                     fsgd_file = NULL,
-                     fwhm = NULL,
-                     fwhm_source = NULL,
-                     num_iters = NULL,
-                     num_iters_source = NULL,
-                     out_file = NULL,
-                     proj_frac = NULL,
-                     smooth_cortex_only = NULL,
-                     source_format = NULL,
-                     subject_file = NULL,
-                     subjects = NULL,
-                     surf_area = NULL,
-                     surf_dir = NULL,
-                     surf_measure = NULL,
-                     surf_measure_file = NULL,
-                     vol_measure_file = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("freesurfer.mris_preproc", hemi = hemi, target = target, args = args, fsgd_file = fsgd_file, fwhm = fwhm, fwhm_source = fwhm_source, num_iters = num_iters, num_iters_source = num_iters_source, out_file = out_file, proj_frac = proj_frac, smooth_cortex_only = smooth_cortex_only, source_format = source_format, subject_file = subject_file, subjects = subjects, surf_area = surf_area, surf_dir = surf_dir, surf_measure = surf_measure, surf_measure_file = surf_measure_file, vol_measure_file = vol_measure_file, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' FREESURFER MRTM1
 #'
 #' Perform MRTM1 kinetic modeling.
@@ -8274,7 +7429,7 @@ ni_freesurfer_mris_preproc <- function(hemi,
 #' @param glm_dir Character. save outputs to dir
 #' @param invert_mask Logical. invert mask
 #' @param label_file Character; file path. use label as mask, surfaces only
-#' @param logan Character or numeric vector. RefTac TimeSec tstar   : perform Logan kinetic modeling
+#' @param logan Character or numeric vector. RefTac TimeSec tstar : perform Logan kinetic modeling
 #' @param mask_file Character; file path. binary mask
 #' @param mrtm2 Character or numeric vector. RefTac TimeSec k2prime : perform MRTM2 kinetic modeling
 #' @param nii Logical. save outputs as nii
@@ -8410,7 +7565,7 @@ ni_freesurfer_mrtm1 <- function(in_file,
 #' @param glm_dir Character. save outputs to dir
 #' @param invert_mask Logical. invert mask
 #' @param label_file Character; file path. use label as mask, surfaces only
-#' @param logan Character or numeric vector. RefTac TimeSec tstar   : perform Logan kinetic modeling
+#' @param logan Character or numeric vector. RefTac TimeSec tstar : perform Logan kinetic modeling
 #' @param mask_file Character; file path. binary mask
 #' @param mrtm1 Character or numeric vector. RefTac TimeSec : perform MRTM1 kinetic modeling
 #' @param nii Logical. save outputs as nii
@@ -8617,7 +7772,7 @@ ni_freesurfer_normalize <- function(in_file,
 #' @param glm_dir Character. save outputs to dir
 #' @param invert_mask Logical. invert mask
 #' @param label_file Character; file path. use label as mask, surfaces only
-#' @param logan Character or numeric vector. RefTac TimeSec tstar   : perform Logan kinetic modeling
+#' @param logan Character or numeric vector. RefTac TimeSec tstar : perform Logan kinetic modeling
 #' @param mask_file Character; file path. binary mask
 #' @param mrtm1 Character or numeric vector. RefTac TimeSec : perform MRTM1 kinetic modeling
 #' @param mrtm2 Character or numeric vector. RefTac TimeSec k2prime : perform MRTM2 kinetic modeling
@@ -8919,36 +8074,6 @@ ni_freesurfer_recon_all <- function(FLAIR_file = NULL,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' FREESURFER RegisterAVItoTalairach
-#'
-#' converts the vox2vox from talairach_avi to a talairach.xfm file
-#'
-#' @param in_file Character; file path. The input file **Required.**
-#' @param target Character; file path. The target file **Required.**
-#' @param vox2vox Character; file path. The vox2vox file **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param out_file Character; file path. The transform output
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_freesurfer_register_av_ito_talairach <- function(in_file,
-                     target,
-                     vox2vox,
-                     args = NULL,
-                     out_file = "talairach.auto.xfm",
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("freesurfer.register_av_ito_talairach", in_file = in_file, target = target, vox2vox = vox2vox, args = args, out_file = out_file, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' FREESURFER Register
 #'
 #' This program registers a surface to an average surface template.
@@ -8978,6 +8103,36 @@ ni_freesurfer_register <- function(in_sulc,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("freesurfer.register", in_sulc = in_sulc, in_surf = in_surf, target = target, args = args, curv = curv, out_file = out_file, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' FREESURFER RegisterAVItoTalairach
+#'
+#' converts the vox2vox from talairach_avi to a talairach.xfm file
+#'
+#' @param in_file Character; file path. The input file **Required.**
+#' @param target Character; file path. The target file **Required.**
+#' @param vox2vox Character; file path. The vox2vox file **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param out_file Character; file path. The transform output
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_freesurfer_register_av_ito_talairach <- function(in_file,
+                     target,
+                     vox2vox,
+                     args = NULL,
+                     out_file = "talairach.auto.xfm",
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("freesurfer.register_av_ito_talairach", in_file = in_file, target = target, vox2vox = vox2vox, args = args, out_file = out_file, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -9315,6 +8470,102 @@ ni_freesurfer_sample_to_surface <- function(hemi,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FREESURFER SegStats
+#'
+#' Use FreeSurfer mri_segstats for ROI analysis
+#'
+#' @param annot Character or numeric vector. subject hemi parc : use surface parcellation **Required.**
+#' @param segmentation_file Character; file path. segmentation volume path **Required.**
+#' @param surf_label Character or numeric vector. subject hemi label : use surface label **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param avgwf_file Character or numeric vector. Save as binary volume (bool or filename)
+#' @param avgwf_txt_file Character or numeric vector. Save average waveform into file (bool or filename)
+#' @param brain_vol Character; one of: "brain-vol-from-seg", "brainmask". Compute brain volume either with ``brainmask`` or ``brain-vol-from-seg``
+#' @param brainmask_file Character; file path. Load brain mask and compute the volume of the brain as the non-zero voxels in this volume
+#' @param calc_power Character; one of: "sqr", "sqrt". Compute either the sqr or the sqrt of the input
+#' @param calc_snr Logical. save mean/std as extra column in output table
+#' @param color_table_file Character; file path. color table file with seg id names
+#' @param cortex_vol_from_surf Logical. Compute cortex volume from surf
+#' @param default_color_table Logical. use $FREESURFER_HOME/FreeSurferColorLUT.txt
+#' @param empty Logical. Report on segmentations listed in the color table
+#' @param etiv Logical. Compute ICV from talairach transform
+#' @param euler Logical. Write out number of defect holes in orig.nofix based on the euler number
+#' @param exclude_ctx_gm_wm Logical. exclude cortical gray and white matter
+#' @param exclude_id Integer. Exclude seg id from report
+#' @param frame Integer. Report stats on nth frame of input volume
+#' @param gca_color_table Character; file path. get color table from GCA (CMA)
+#' @param in_file Character; file path. Use the segmentation to report stats on this volume
+#' @param in_intensity Character; file path. Undocumented input norm.mgz file
+#' @param intensity_units Character; one of: "MR". Intensity units
+#' @param mask_erode Integer. Erode mask by some amount
+#' @param mask_file Character; file path. Mask volume (same size as seg
+#' @param mask_invert Logical. Invert binarized mask volume
+#' @param mask_thresh Numeric. binarize mask with this threshold <0.5>
+#' @param multiply Numeric. multiply input by val
+#' @param non_empty_only Logical. Only report nonempty segmentations
+#' @param partial_volume_file Character; file path. Compensate for partial voluming
+#' @param segment_id Character or numeric vector. Manually specify segmentation ids
+#' @param sf_avg_file Character or numeric vector. Save mean across space and time
+#' @param subcort_gm Logical. Compute volume of subcortical gray matter
+#' @param summary_file Character; file path. Segmentation stats summary table file
+#' @param supratent Logical. Undocumented input flag
+#' @param total_gray Logical. Compute volume of total gray matter
+#' @param vox Character or numeric vector. Replace seg with all 0s except at C R S (three int inputs)
+#' @param wm_vol_from_surf Logical. Compute wm volume from surf
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_freesurfer_seg_stats <- function(annot,
+                     segmentation_file,
+                     surf_label,
+                     args = NULL,
+                     avgwf_file = NULL,
+                     avgwf_txt_file = NULL,
+                     brain_vol = NULL,
+                     brainmask_file = NULL,
+                     calc_power = NULL,
+                     calc_snr = NULL,
+                     color_table_file = NULL,
+                     cortex_vol_from_surf = NULL,
+                     default_color_table = NULL,
+                     empty = NULL,
+                     etiv = NULL,
+                     euler = NULL,
+                     exclude_ctx_gm_wm = NULL,
+                     exclude_id = NULL,
+                     frame = NULL,
+                     gca_color_table = NULL,
+                     in_file = NULL,
+                     in_intensity = NULL,
+                     intensity_units = NULL,
+                     mask_erode = NULL,
+                     mask_file = NULL,
+                     mask_invert = NULL,
+                     mask_thresh = NULL,
+                     multiply = NULL,
+                     non_empty_only = NULL,
+                     partial_volume_file = NULL,
+                     segment_id = NULL,
+                     sf_avg_file = NULL,
+                     subcort_gm = NULL,
+                     summary_file = NULL,
+                     supratent = NULL,
+                     total_gray = NULL,
+                     vox = NULL,
+                     wm_vol_from_surf = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("freesurfer.seg_stats", annot = annot, segmentation_file = segmentation_file, surf_label = surf_label, args = args, avgwf_file = avgwf_file, avgwf_txt_file = avgwf_txt_file, brain_vol = brain_vol, brainmask_file = brainmask_file, calc_power = calc_power, calc_snr = calc_snr, color_table_file = color_table_file, cortex_vol_from_surf = cortex_vol_from_surf, default_color_table = default_color_table, empty = empty, etiv = etiv, euler = euler, exclude_ctx_gm_wm = exclude_ctx_gm_wm, exclude_id = exclude_id, frame = frame, gca_color_table = gca_color_table, in_file = in_file, in_intensity = in_intensity, intensity_units = intensity_units, mask_erode = mask_erode, mask_file = mask_file, mask_invert = mask_invert, mask_thresh = mask_thresh, multiply = multiply, non_empty_only = non_empty_only, partial_volume_file = partial_volume_file, segment_id = segment_id, sf_avg_file = sf_avg_file, subcort_gm = subcort_gm, summary_file = summary_file, supratent = supratent, total_gray = total_gray, vox = vox, wm_vol_from_surf = wm_vol_from_surf, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FREESURFER SegStatsReconAll
 #'
 #' This class inherits SegStats and modifies it for use in a recon-all workflow.
@@ -9429,102 +8680,6 @@ ni_freesurfer_seg_stats_recon_all <- function(annot,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' FREESURFER SegStats
-#'
-#' Use FreeSurfer mri_segstats for ROI analysis
-#'
-#' @param annot Character or numeric vector. subject hemi parc : use surface parcellation **Required.**
-#' @param segmentation_file Character; file path. segmentation volume path **Required.**
-#' @param surf_label Character or numeric vector. subject hemi label : use surface label **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param avgwf_file Character or numeric vector. Save as binary volume (bool or filename)
-#' @param avgwf_txt_file Character or numeric vector. Save average waveform into file (bool or filename)
-#' @param brain_vol Character; one of: "brain-vol-from-seg", "brainmask". Compute brain volume either with ``brainmask`` or ``brain-vol-from-seg``
-#' @param brainmask_file Character; file path. Load brain mask and compute the volume of the brain as the non-zero voxels in this volume
-#' @param calc_power Character; one of: "sqr", "sqrt". Compute either the sqr or the sqrt of the input
-#' @param calc_snr Logical. save mean/std as extra column in output table
-#' @param color_table_file Character; file path. color table file with seg id names
-#' @param cortex_vol_from_surf Logical. Compute cortex volume from surf
-#' @param default_color_table Logical. use $FREESURFER_HOME/FreeSurferColorLUT.txt
-#' @param empty Logical. Report on segmentations listed in the color table
-#' @param etiv Logical. Compute ICV from talairach transform
-#' @param euler Logical. Write out number of defect holes in orig.nofix based on the euler number
-#' @param exclude_ctx_gm_wm Logical. exclude cortical gray and white matter
-#' @param exclude_id Integer. Exclude seg id from report
-#' @param frame Integer. Report stats on nth frame of input volume
-#' @param gca_color_table Character; file path. get color table from GCA (CMA)
-#' @param in_file Character; file path. Use the segmentation to report stats on this volume
-#' @param in_intensity Character; file path. Undocumented input norm.mgz file
-#' @param intensity_units Character; one of: "MR". Intensity units
-#' @param mask_erode Integer. Erode mask by some amount
-#' @param mask_file Character; file path. Mask volume (same size as seg
-#' @param mask_invert Logical. Invert binarized mask volume
-#' @param mask_thresh Numeric. binarize mask with this threshold <0.5>
-#' @param multiply Numeric. multiply input by val
-#' @param non_empty_only Logical. Only report nonempty segmentations
-#' @param partial_volume_file Character; file path. Compensate for partial voluming
-#' @param segment_id Character or numeric vector. Manually specify segmentation ids
-#' @param sf_avg_file Character or numeric vector. Save mean across space and time
-#' @param subcort_gm Logical. Compute volume of subcortical gray matter
-#' @param summary_file Character; file path. Segmentation stats summary table file
-#' @param supratent Logical. Undocumented input flag
-#' @param total_gray Logical. Compute volume of total gray matter
-#' @param vox Character or numeric vector. Replace seg with all 0s except at C R S (three int inputs)
-#' @param wm_vol_from_surf Logical. Compute wm volume from surf
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_freesurfer_seg_stats <- function(annot,
-                     segmentation_file,
-                     surf_label,
-                     args = NULL,
-                     avgwf_file = NULL,
-                     avgwf_txt_file = NULL,
-                     brain_vol = NULL,
-                     brainmask_file = NULL,
-                     calc_power = NULL,
-                     calc_snr = NULL,
-                     color_table_file = NULL,
-                     cortex_vol_from_surf = NULL,
-                     default_color_table = NULL,
-                     empty = NULL,
-                     etiv = NULL,
-                     euler = NULL,
-                     exclude_ctx_gm_wm = NULL,
-                     exclude_id = NULL,
-                     frame = NULL,
-                     gca_color_table = NULL,
-                     in_file = NULL,
-                     in_intensity = NULL,
-                     intensity_units = NULL,
-                     mask_erode = NULL,
-                     mask_file = NULL,
-                     mask_invert = NULL,
-                     mask_thresh = NULL,
-                     multiply = NULL,
-                     non_empty_only = NULL,
-                     partial_volume_file = NULL,
-                     segment_id = NULL,
-                     sf_avg_file = NULL,
-                     subcort_gm = NULL,
-                     summary_file = NULL,
-                     supratent = NULL,
-                     total_gray = NULL,
-                     vox = NULL,
-                     wm_vol_from_surf = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("freesurfer.seg_stats", annot = annot, segmentation_file = segmentation_file, surf_label = surf_label, args = args, avgwf_file = avgwf_file, avgwf_txt_file = avgwf_txt_file, brain_vol = brain_vol, brainmask_file = brainmask_file, calc_power = calc_power, calc_snr = calc_snr, color_table_file = color_table_file, cortex_vol_from_surf = cortex_vol_from_surf, default_color_table = default_color_table, empty = empty, etiv = etiv, euler = euler, exclude_ctx_gm_wm = exclude_ctx_gm_wm, exclude_id = exclude_id, frame = frame, gca_color_table = gca_color_table, in_file = in_file, in_intensity = in_intensity, intensity_units = intensity_units, mask_erode = mask_erode, mask_file = mask_file, mask_invert = mask_invert, mask_thresh = mask_thresh, multiply = multiply, non_empty_only = non_empty_only, partial_volume_file = partial_volume_file, segment_id = segment_id, sf_avg_file = sf_avg_file, subcort_gm = subcort_gm, summary_file = summary_file, supratent = supratent, total_gray = total_gray, vox = vox, wm_vol_from_surf = wm_vol_from_surf, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' FREESURFER SegmentCC
 #'
 #' This program segments the corpus callosum into five separate labels in
@@ -9583,6 +8738,44 @@ ni_freesurfer_segment_wm <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FREESURFER Smooth
+#'
+#' Use FreeSurfer mris_volsmooth to smooth a volume
+#'
+#' @param in_file Character; file path. source volume **Required.**
+#' @param num_iters Character. number of iterations instead of fwhm **Required.**
+#' @param reg_file Character; file path. registers volume to surface anatomical **Required.**
+#' @param surface_fwhm Character. surface FWHM in mm **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param proj_frac Numeric. project frac of thickness a long surface normal
+#' @param proj_frac_avg Character or numeric vector. average a long normal min max delta
+#' @param smoothed_file Character; file path. output volume
+#' @param vol_fwhm Character. volume smoothing outside of surface
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_freesurfer_smooth <- function(in_file,
+                     num_iters,
+                     reg_file,
+                     surface_fwhm,
+                     args = NULL,
+                     proj_frac = NULL,
+                     proj_frac_avg = NULL,
+                     smoothed_file = NULL,
+                     vol_fwhm = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("freesurfer.smooth", in_file = in_file, num_iters = num_iters, reg_file = reg_file, surface_fwhm = surface_fwhm, args = args, proj_frac = proj_frac, proj_frac_avg = proj_frac_avg, smoothed_file = smoothed_file, vol_fwhm = vol_fwhm, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FREESURFER SmoothTessellation
 #'
 #' Smooth a tessellated surface.
@@ -9633,44 +8826,6 @@ ni_freesurfer_smooth_tessellation <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' FREESURFER Smooth
-#'
-#' Use FreeSurfer mris_volsmooth to smooth a volume
-#'
-#' @param in_file Character; file path. source volume **Required.**
-#' @param num_iters Character. number of iterations instead of fwhm **Required.**
-#' @param reg_file Character; file path. registers volume to surface anatomical **Required.**
-#' @param surface_fwhm Character. surface FWHM in mm **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param proj_frac Numeric. project frac of thickness a long surface normal
-#' @param proj_frac_avg Character or numeric vector. average a long normal min max delta
-#' @param smoothed_file Character; file path. output volume
-#' @param vol_fwhm Character. volume smoothing outside of surface
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_freesurfer_smooth <- function(in_file,
-                     num_iters,
-                     reg_file,
-                     surface_fwhm,
-                     args = NULL,
-                     proj_frac = NULL,
-                     proj_frac_avg = NULL,
-                     smoothed_file = NULL,
-                     vol_fwhm = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("freesurfer.smooth", in_file = in_file, num_iters = num_iters, reg_file = reg_file, surface_fwhm = surface_fwhm, args = args, proj_frac = proj_frac, proj_frac_avg = proj_frac_avg, smoothed_file = smoothed_file, vol_fwhm = vol_fwhm, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' FREESURFER Sphere
 #'
 #' This program will add a template into an average surface
@@ -9705,10 +8860,7 @@ ni_freesurfer_sphere <- function(in_file,
 #'
 #' This program will add a template into an average surface.
 #'
-#' @param fname Character. Filename from the average subject directory.
-Example: to use rh.entorhinal.label as the input label filename, set fname to 'rh.entorhinal'
-and which to 'label'. The program will then search for
-``<in_average>/label/rh.entorhinal.label`` **Required.**
+#' @param fname Character. Filename from the average subject directory. Example: to use rh.entorhinal.label as the input label filename, set fname to 'rh.entorhinal' and which to 'label'. The program will then search for ``<in_average>/label/rh.entorhinal.label`` **Required.**
 #' @param hemisphere Character; one of: "lh", "rh". Input hemisphere **Required.**
 #' @param in_surf Character; file path. Input surface file **Required.**
 #' @param subject_id Character. Output subject id **Required.**
@@ -9743,6 +8895,50 @@ ni_freesurfer_spherical_average <- function(fname,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("freesurfer.spherical_average", fname = fname, hemisphere = hemisphere, in_surf = in_surf, subject_id = subject_id, which = which, args = args, erode = erode, in_average = in_average, in_orig = in_orig, out_file = out_file, threshold = threshold, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' FREESURFER Surface2VolTransform
+#'
+#' Use FreeSurfer mri_surf2vol to apply a transform.
+#'
+#' @param hemi Character. hemisphere of data **Required.**
+#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) **Required.**
+#' @param source_file Character; file path. This is the source of the surface values **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param mkmask Logical. make a mask instead of loading surface values
+#' @param projfrac Numeric. thickness fraction
+#' @param subject_id Character. subject id
+#' @param subjects_dir Character. freesurfer subjects directory defaults to $SUBJECTS_DIR
+#' @param surf_name Character. surfname (default is white)
+#' @param template_file Character; file path. Output template volume
+#' @param transformed_file Character; file path. Output volume
+#' @param vertexvol_file Character; file path. Path name of the vertex output volume, which is the same as output volume except that the value of each voxel is the vertex-id that is mapped to that voxel.
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_freesurfer_surface2_vol_transform <- function(hemi,
+                     reg_file,
+                     source_file,
+                     args = NULL,
+                     mkmask = NULL,
+                     projfrac = NULL,
+                     subject_id = NULL,
+                     subjects_dir = NULL,
+                     surf_name = NULL,
+                     template_file = NULL,
+                     transformed_file = NULL,
+                     vertexvol_file = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("freesurfer.surface2_vol_transform", hemi = hemi, reg_file = reg_file, source_file = source_file, args = args, mkmask = mkmask, projfrac = projfrac, subject_id = subject_id, subjects_dir = subjects_dir, surf_name = surf_name, template_file = template_file, transformed_file = transformed_file, vertexvol_file = vertexvol_file, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -9903,50 +9099,6 @@ ni_freesurfer_surface_transform <- function(hemi,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("freesurfer.surface_transform", hemi = hemi, source_annot_file = source_annot_file, source_file = source_file, source_subject = source_subject, target_subject = target_subject, args = args, out_file = out_file, reshape = reshape, reshape_factor = reshape_factor, source_type = source_type, target_ico_order = target_ico_order, target_type = target_type, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' FREESURFER Surface2VolTransform
-#'
-#' Use FreeSurfer mri_surf2vol to apply a transform.
-#'
-#' @param hemi Character. hemisphere of data **Required.**
-#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix   (tkregister2 format) **Required.**
-#' @param source_file Character; file path. This is the source of the surface values **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param mkmask Logical. make a mask instead of loading surface values
-#' @param projfrac Numeric. thickness fraction
-#' @param subject_id Character. subject id
-#' @param subjects_dir Character. freesurfer subjects directory defaults to $SUBJECTS_DIR
-#' @param surf_name Character. surfname (default is white)
-#' @param template_file Character; file path. Output template volume
-#' @param transformed_file Character; file path. Output volume
-#' @param vertexvol_file Character; file path. Path name of the vertex output volume, which is the same as output volume except that the value of each voxel is the vertex-id that is mapped to that voxel.
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_freesurfer_surface2_vol_transform <- function(hemi,
-                     reg_file,
-                     source_file,
-                     args = NULL,
-                     mkmask = NULL,
-                     projfrac = NULL,
-                     subject_id = NULL,
-                     subjects_dir = NULL,
-                     surf_name = NULL,
-                     template_file = NULL,
-                     transformed_file = NULL,
-                     vertexvol_file = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("freesurfer.surface2_vol_transform", hemi = hemi, reg_file = reg_file, source_file = source_file, args = args, mkmask = mkmask, projfrac = projfrac, subject_id = subject_id, subjects_dir = subjects_dir, surf_name = surf_name, template_file = template_file, transformed_file = transformed_file, vertexvol_file = vertexvol_file, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -11206,76 +10358,6 @@ ni_fsl_dual_regression <- function(group_IC_maps_4D,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' FSL EddyCorrect
-#'
-#' .. warning:: Deprecated in FSL. Please use
-#'
-#' @param in_file Character; file path. 4D input file **Required.**
-#' @param ref_num Integer. reference number **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param out_file Character; file path. 4D output file
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_fsl_eddy_correct <- function(in_file,
-                     ref_num,
-                     args = NULL,
-                     out_file = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("fsl.eddy_correct", in_file = in_file, ref_num = ref_num, args = args, out_file = out_file, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' FSL EddyQuad
-#'
-#' Interface for FSL eddy_quad, a tool for generating single subject reports
-#'
-#' @param bval_file Character; file path. b-values file **Required.**
-#' @param idx_file Character; file path. File containing indices for all volumes into acquisition parameters **Required.**
-#' @param mask_file Character; file path. Binary mask file **Required.**
-#' @param param_file Character; file path. File containing acquisition parameters **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param base_name Character. Basename (including path) for EDDY output files, i.e., corrected images and QC files
-#' @param bvec_file Character; file path. b-vectors file - only used when <base_name>.eddy_residuals file is present
-#' @param field Character; file path. TOPUP estimated field (in Hz)
-#' @param output_dir Character. Output directory - default = '<base_name>.qc'
-#' @param slice_spec Character; file path. Text file specifying slice/group acquisition
-#' @param verbose Logical. Display debug messages
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_fsl_eddy_quad <- function(bval_file,
-                     idx_file,
-                     mask_file,
-                     param_file,
-                     args = NULL,
-                     base_name = "eddy_corrected",
-                     bvec_file = NULL,
-                     field = NULL,
-                     output_dir = NULL,
-                     slice_spec = NULL,
-                     verbose = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("fsl.eddy_quad", bval_file = bval_file, idx_file = idx_file, mask_file = mask_file, param_file = param_file, args = args, base_name = base_name, bvec_file = bvec_file, field = field, output_dir = output_dir, slice_spec = slice_spec, verbose = verbose, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' FSL Eddy
 #'
 #' Interface for FSL eddy, a tool for estimating and correcting eddy
@@ -11386,6 +10468,76 @@ ni_fsl_eddy <- function(in_acqp,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FSL EddyCorrect
+#'
+#' .. warning:: Deprecated in FSL. Please use
+#'
+#' @param in_file Character; file path. 4D input file **Required.**
+#' @param ref_num Integer. reference number **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param out_file Character; file path. 4D output file
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_fsl_eddy_correct <- function(in_file,
+                     ref_num,
+                     args = NULL,
+                     out_file = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("fsl.eddy_correct", in_file = in_file, ref_num = ref_num, args = args, out_file = out_file, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' FSL EddyQuad
+#'
+#' Interface for FSL eddy_quad, a tool for generating single subject reports
+#'
+#' @param bval_file Character; file path. b-values file **Required.**
+#' @param idx_file Character; file path. File containing indices for all volumes into acquisition parameters **Required.**
+#' @param mask_file Character; file path. Binary mask file **Required.**
+#' @param param_file Character; file path. File containing acquisition parameters **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param base_name Character. Basename (including path) for EDDY output files, i.e., corrected images and QC files
+#' @param bvec_file Character; file path. b-vectors file - only used when <base_name>.eddy_residuals file is present
+#' @param field Character; file path. TOPUP estimated field (in Hz)
+#' @param output_dir Character. Output directory - default = '<base_name>.qc'
+#' @param slice_spec Character; file path. Text file specifying slice/group acquisition
+#' @param verbose Logical. Display debug messages
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_fsl_eddy_quad <- function(bval_file,
+                     idx_file,
+                     mask_file,
+                     param_file,
+                     args = NULL,
+                     base_name = "eddy_corrected",
+                     bvec_file = NULL,
+                     field = NULL,
+                     output_dir = NULL,
+                     slice_spec = NULL,
+                     verbose = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("fsl.eddy_quad", bval_file = bval_file, idx_file = idx_file, mask_file = mask_file, param_file = param_file, args = args, base_name = base_name, bvec_file = bvec_file, field = field, output_dir = output_dir, slice_spec = slice_spec, verbose = verbose, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FSL EPIDeWarp
 #'
 #' Wraps the unwarping script `epidewarp.fsl
@@ -11400,7 +10552,7 @@ ni_fsl_eddy <- function(in_acqp,
 #' @param exf_file Character; file path. example func volume (or use epi)
 #' @param exfdw Character. dewarped example func volume
 #' @param nocleanup Logical. no cleanup
-#' @param sigma Integer. 2D spatial gaussing smoothing                        stdev (default = 2mm)
+#' @param sigma Integer. 2D spatial gaussing smoothing stdev (default = 2mm)
 #' @param tediff Numeric. difference in B0 field map TEs
 #' @param tmpdir Character. tmpdir
 #' @param vsm Character. voxel shift map
@@ -11442,16 +10594,16 @@ ni_fsl_epi_de_warp <- function(dph_file,
 #' @param t1_brain Character; file path. brain extracted T1 image **Required.**
 #' @param t1_head Character; file path. wholehead T1 image **Required.**
 #' @param args Character. Additional parameters to the command
-#' @param echospacing Numeric. Effective EPI echo spacing                                 (sometimes called dwell time) - in seconds
+#' @param echospacing Numeric. Effective EPI echo spacing (sometimes called dwell time) - in seconds
 #' @param fmap Character; file path. fieldmap image (in rad/s)
 #' @param fmapmag Character; file path. fieldmap magnitude image - wholehead
 #' @param fmapmagbrain Character; file path. fieldmap magnitude image - brain extracted
 #' @param no_clean Logical. do not clean up intermediate files
-#' @param no_fmapreg Logical. do not perform registration of fmap to T1                         (use if fmap already registered)
+#' @param no_fmapreg Logical. do not perform registration of fmap to T1 (use if fmap already registered)
 #' @param out_base Character. output base name
 #' @param pedir Character; one of: "x", "y", "z", "-x", "-y", "-z". phase encoding direction, dir = x/y/z/-x/-y/-z
 #' @param weight_image Character; file path. weighting image (in T1 space)
-#' @param wmseg Character; file path. white matter segmentation of T1 image, has to be named                  like the t1brain and end on _wmseg
+#' @param wmseg Character; file path. white matter segmentation of T1 image, has to be named like the t1brain and end on _wmseg
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .container Container configuration list.
@@ -11632,6 +10784,30 @@ ni_fsl_fast <- function(in_files,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FSL FEAT
+#'
+#' Uses FSL feat to calculate first level stats
+#'
+#' @param fsf_file Character; file path. File specifying the feat design spec file **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_fsl_feat <- function(fsf_file,
+                     args = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("fsl.feat", fsf_file = fsf_file, args = args, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FSL FEATModel
 #'
 #' Uses FSL feat_model to generate design.mat files
@@ -11655,30 +10831,6 @@ ni_fsl_feat_model <- function(ev_files,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("fsl.feat_model", ev_files = ev_files, fsf_file = fsf_file, args = args, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' FSL FEAT
-#'
-#' Uses FSL feat to calculate first level stats
-#'
-#' @param fsf_file Character; file path. File specifying the feat design spec file **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_fsl_feat <- function(fsf_file,
-                     args = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("fsl.feat", fsf_file = fsf_file, args = args, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -12044,8 +11196,8 @@ ni_fsl_flirt <- function(in_file,
 #' @param refmask_val Numeric. Value to mask out in --ref image. Default =0.0
 #' @param regularization_lambda Character or numeric vector. Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documentation.
 #' @param regularization_model Character; one of: "membrane_energy", "bending_energy". Model for regularisation of warp-field \[membrane_energy bending_energy\], default bending_energy
-#' @param skip_implicit_in_masking Logical. skip implicit masking  based on value in --in image. Default = 0
-#' @param skip_implicit_ref_masking Logical. skip implicit masking  based on value in --ref image. Default = 0
+#' @param skip_implicit_in_masking Logical. skip implicit masking based on value in --in image. Default = 0
+#' @param skip_implicit_ref_masking Logical. skip implicit masking based on value in --ref image. Default = 0
 #' @param skip_inmask Logical. skip specified inmask if set, default false
 #' @param skip_intensity_mapping Logical. Skip estimate intensity-mapping default false
 #' @param skip_lambda_ssq Logical. If true, lambda is not weighted by current ssq, default false
@@ -12260,11 +11412,7 @@ ni_fsl_glm <- function(design,
 #'
 #' Interface for the ICA_AROMA.py script.
 #'
-#' @param denoise_type Character; one of: "nonaggr", "aggr", "both", "no". Type of denoising strategy:
--no: only classification, no denoising
--nonaggr (default): non-aggresssive denoising, i.e. partial component regression
--aggr: aggressive denoising, i.e. full component regression
--both: both aggressive and non-aggressive denoising (two outputs) **Required.**
+#' @param denoise_type Character; one of: "nonaggr", "aggr", "both", "no". Type of denoising strategy: -no: only classification, no denoising -nonaggr (default): non-aggresssive denoising, i.e. partial component regression -aggr: aggressive denoising, i.e. full component regression -both: both aggressive and non-aggressive denoising (two outputs) **Required.**
 #' @param feat_dir Character; directory path. If a feat directory exists and temporal filtering has not been run yet, ICA_AROMA can use the files in this directory. **Required.**
 #' @param in_file Character; file path. volume to be denoised **Required.**
 #' @param motion_parameters Character; file path. motion parameters file **Required.**
@@ -12350,7 +11498,7 @@ ni_fsl_image_maths <- function(in_file,
 #' @param order Integer. select number of Eigenvariates
 #' @param out_file Character; file path. name of output text matrix
 #' @param show_all Logical. show all voxel time series (within mask) instead of averaging
-#' @param spatial_coord Character or numeric vector. <x y z>  requested spatial coordinate (instead of mask)
+#' @param spatial_coord Character or numeric vector. <x y z> requested spatial coordinate (instead of mask)
 #' @param transpose Logical. output results in transpose format (one row per voxel/mean)
 #' @param use_mm Logical. use mm instead of voxel coordinates (for -c option)
 #' @param .cwd Working directory override.
@@ -13696,6 +12844,32 @@ ni_fsl_sig_loss <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FSL Slice
+#'
+#' Use fslslice to split a 3D file into lots of 2D files (along z-axis).
+#'
+#' @param in_file Character; file path. input filename **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param out_base_name Character. outputs prefix
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_fsl_slice <- function(in_file,
+                     args = NULL,
+                     out_base_name = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("fsl.slice", in_file = in_file, args = args, out_base_name = out_base_name, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FSL SliceTimer
 #'
 #' FSL slicetimer wrapper to perform slice timing correction
@@ -13733,32 +12907,6 @@ ni_fsl_slice_timer <- function(in_file,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("fsl.slice_timer", in_file = in_file, args = args, custom_order = custom_order, custom_timings = custom_timings, global_shift = global_shift, index_dir = index_dir, interleaved = interleaved, out_file = out_file, slice_direction = slice_direction, time_repetition = time_repetition, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' FSL Slice
-#'
-#' Use fslslice to split a 3D file into lots of 2D files (along z-axis).
-#'
-#' @param in_file Character; file path. input filename **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param out_base_name Character. outputs prefix
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_fsl_slice <- function(in_file,
-                     args = NULL,
-                     out_base_name = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("fsl.slice", in_file = in_file, args = args, out_base_name = out_base_name, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -13846,36 +12994,6 @@ ni_fsl_smm <- function(mask,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
-#' FSL SmoothEstimate
-#'
-#' Estimates the smoothness of an image
-#'
-#' @param dof Integer. number of degrees of freedom **Required.**
-#' @param mask_file Character; file path. brain mask volume **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param residual_fit_file Character; file path. residual-fit image file
-#' @param zstat_file Character; file path. zstat image file
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_fsl_smooth_estimate <- function(dof,
-                     mask_file,
-                     args = NULL,
-                     residual_fit_file = NULL,
-                     zstat_file = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("fsl.smooth_estimate", dof = dof, mask_file = mask_file, args = args, residual_fit_file = residual_fit_file, zstat_file = zstat_file, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
 #' FSL Smooth
 #'
 #' Use fslmaths to smooth the image
@@ -13903,6 +13021,36 @@ ni_fsl_smooth <- function(fwhm,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("fsl.smooth", fwhm = fwhm, in_file = in_file, sigma = sigma, args = args, smoothed_file = smoothed_file, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
+#' FSL SmoothEstimate
+#'
+#' Estimates the smoothness of an image
+#'
+#' @param dof Integer. number of degrees of freedom **Required.**
+#' @param mask_file Character; file path. brain mask volume **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param residual_fit_file Character; file path. residual-fit image file
+#' @param zstat_file Character; file path. zstat image file
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_fsl_smooth_estimate <- function(dof,
+                     mask_file,
+                     args = NULL,
+                     residual_fit_file = NULL,
+                     zstat_file = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("fsl.smooth_estimate", dof = dof, mask_file = mask_file, args = args, residual_fit_file = residual_fit_file, zstat_file = zstat_file, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -14374,6 +13522,42 @@ ni_fsl_vest2_text <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FSL WarpPoints
+#'
+#' Use FSL `img2imgcoord <http://fsl.fmrib.ox.ac.uk/fsl/fsl-4.1.9/flirt/overview.html>`_
+#'
+#' @param dest_file Character; file path. filename of destination image **Required.**
+#' @param in_coords Character; file path. filename of file containing coordinates **Required.**
+#' @param src_file Character; file path. filename of source image **Required.**
+#' @param args Character. Additional parameters to the command
+#' @param coord_mm Logical. all coordinates in mm
+#' @param coord_vox Logical. all coordinates in voxels - default
+#' @param warp_file Character; file path. filename of warpfield (e.g. intermediate2dest_warp.nii.gz)
+#' @param xfm_file Character; file path. filename of affine transform (e.g. source2dest.mat)
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .container Container configuration list.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_fsl_warp_points <- function(dest_file,
+                     in_coords,
+                     src_file,
+                     args = NULL,
+                     coord_mm = NULL,
+                     coord_vox = NULL,
+                     warp_file = NULL,
+                     xfm_file = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .container = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("fsl.warp_points", dest_file = dest_file, in_coords = in_coords, src_file = src_file, args = args, coord_mm = coord_mm, coord_vox = coord_vox, warp_file = warp_file, xfm_file = xfm_file, .cwd = .cwd, .env = .env, .container = .container)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FSL WarpPointsFromStd
 #'
 #' Use FSL `std2imgcoord <http://fsl.fmrib.ox.ac.uk/fsl/fsl-4.1.9/flirt/overview.html>`_
@@ -14445,42 +13629,6 @@ ni_fsl_warp_points_to_std <- function(img_file,
                      dry_run = FALSE,
                      echo = interactive()) {
   call <- ni_call("fsl.warp_points_to_std", img_file = img_file, in_coords = in_coords, std_file = std_file, args = args, coord_mm = coord_mm, coord_vox = coord_vox, premat_file = premat_file, warp_file = warp_file, xfm_file = xfm_file, .cwd = .cwd, .env = .env, .container = .container)
-  ni_run(call, dry_run = dry_run, echo = echo)
-}
-
-#' FSL WarpPoints
-#'
-#' Use FSL `img2imgcoord <http://fsl.fmrib.ox.ac.uk/fsl/fsl-4.1.9/flirt/overview.html>`_
-#'
-#' @param dest_file Character; file path. filename of destination image **Required.**
-#' @param in_coords Character; file path. filename of file containing coordinates **Required.**
-#' @param src_file Character; file path. filename of source image **Required.**
-#' @param args Character. Additional parameters to the command
-#' @param coord_mm Logical. all coordinates in mm
-#' @param coord_vox Logical. all coordinates in voxels - default
-#' @param warp_file Character; file path. filename of warpfield (e.g. intermediate2dest_warp.nii.gz)
-#' @param xfm_file Character; file path. filename of affine transform (e.g. source2dest.mat)
-#' @param .cwd Working directory override.
-#' @param .env Named character vector of environment variables.
-#' @param .container Container configuration list.
-#' @param dry_run Logical; preview command without executing.
-#' @param echo Logical; echo stdout/stderr in real time.
-#' @return An `ni_result` object.
-#' @export
-ni_fsl_warp_points <- function(dest_file,
-                     in_coords,
-                     src_file,
-                     args = NULL,
-                     coord_mm = NULL,
-                     coord_vox = NULL,
-                     warp_file = NULL,
-                     xfm_file = NULL,
-                     .cwd = NULL,
-                     .env = NULL,
-                     .container = NULL,
-                     dry_run = FALSE,
-                     echo = interactive()) {
-  call <- ni_call("fsl.warp_points", dest_file = dest_file, in_coords = in_coords, src_file = src_file, args = args, coord_mm = coord_mm, coord_vox = coord_vox, warp_file = warp_file, xfm_file = xfm_file, .cwd = .cwd, .env = .env, .container = .container)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
