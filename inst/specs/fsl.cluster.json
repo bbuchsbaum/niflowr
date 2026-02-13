@@ -1,0 +1,215 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.cluster",
+  "title": "FSL Cluster",
+  "command": "cluster",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "connectivity": {
+      "type": "int",
+      "desc": "the connectivity of voxels (default 26)",
+      "cli": {
+        "argstr": "--connectivity=%d"
+      }
+    },
+    "cope_file": {
+      "type": "file",
+      "desc": "cope volume",
+      "cli": {
+        "argstr": "--cope=%s"
+      }
+    },
+    "dlh": {
+      "type": "double",
+      "desc": "smoothness estimate = sqrt(det(Lambda))",
+      "cli": {
+        "argstr": "--dlh=%.10f"
+      }
+    },
+    "find_min": {
+      "type": "flag",
+      "desc": "find minima instead of maxima",
+      "default": false,
+      "cli": {
+        "argstr": "--min"
+      }
+    },
+    "fractional": {
+      "type": "flag",
+      "desc": "interprets the threshold as a fraction of the robust range",
+      "default": false,
+      "cli": {
+        "argstr": "--fractional"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input volume",
+      "required": true,
+      "cli": {
+        "argstr": "--in=%s"
+      }
+    },
+    "minclustersize": {
+      "type": "flag",
+      "desc": "prints out minimum significant cluster size",
+      "default": false,
+      "cli": {
+        "argstr": "--minclustersize"
+      }
+    },
+    "no_table": {
+      "type": "flag",
+      "desc": "suppresses printing of the table info",
+      "default": false,
+      "cli": {
+        "argstr": "--no_table"
+      }
+    },
+    "num_maxima": {
+      "type": "int",
+      "desc": "no of local maxima to report",
+      "cli": {
+        "argstr": "--num=%d"
+      }
+    },
+    "out_index_file": {
+      "type": "list",
+      "desc": "output of cluster index (in size order)",
+      "cli": {
+        "argstr": "--oindex=%s"
+      }
+    },
+    "out_localmax_txt_file": {
+      "type": "list",
+      "desc": "local maxima text file",
+      "cli": {
+        "argstr": "--olmax=%s"
+      }
+    },
+    "out_localmax_vol_file": {
+      "type": "list",
+      "desc": "output of local maxima volume",
+      "cli": {
+        "argstr": "--olmaxim=%s"
+      }
+    },
+    "out_max_file": {
+      "type": "list",
+      "desc": "filename for output of max image",
+      "cli": {
+        "argstr": "--omax=%s"
+      }
+    },
+    "out_mean_file": {
+      "type": "list",
+      "desc": "filename for output of mean image",
+      "cli": {
+        "argstr": "--omean=%s"
+      }
+    },
+    "out_pval_file": {
+      "type": "list",
+      "desc": "filename for image output of log pvals",
+      "cli": {
+        "argstr": "--opvals=%s"
+      }
+    },
+    "out_size_file": {
+      "type": "list",
+      "desc": "filename for output of size image",
+      "cli": {
+        "argstr": "--osize=%s"
+      }
+    },
+    "out_threshold_file": {
+      "type": "list",
+      "desc": "thresholded image",
+      "cli": {
+        "argstr": "--othresh=%s"
+      }
+    },
+    "peak_distance": {
+      "type": "double",
+      "desc": "minimum distance between local maxima/minima, in mm (default 0)",
+      "cli": {
+        "argstr": "--peakdist=%.10f"
+      }
+    },
+    "pthreshold": {
+      "type": "double",
+      "desc": "p-threshold for clusters",
+      "cli": {
+        "argstr": "--pthresh=%.10f"
+      },
+      "constraints": {
+        "requires": [
+          "dlh",
+          "volume"
+        ]
+      }
+    },
+    "std_space_file": {
+      "type": "file",
+      "desc": "filename for standard-space volume",
+      "cli": {
+        "argstr": "--stdvol=%s"
+      }
+    },
+    "threshold": {
+      "type": "double",
+      "desc": "threshold for input volume",
+      "required": true,
+      "cli": {
+        "argstr": "--thresh=%.10f"
+      }
+    },
+    "use_mm": {
+      "type": "flag",
+      "desc": "use mm, not voxel, coordinates",
+      "default": false,
+      "cli": {
+        "argstr": "--mm"
+      }
+    },
+    "volume": {
+      "type": "int",
+      "desc": "number of voxels in the mask",
+      "cli": {
+        "argstr": "--volume=%d"
+      }
+    },
+    "warpfield_file": {
+      "type": "file",
+      "desc": "file containing warpfield",
+      "cli": {
+        "argstr": "--warpvol=%s"
+      }
+    },
+    "xfm_file": {
+      "type": "file",
+      "desc": "filename for Linear: input->standard-space transform. Non-linear: input->highres transform",
+      "cli": {
+        "argstr": "--xfm=%s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.Cluster",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Uses FSL cluster to perform clustering on statistical output"
+}

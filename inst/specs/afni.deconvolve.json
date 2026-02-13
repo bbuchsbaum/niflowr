@@ -1,0 +1,396 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.deconvolve",
+  "title": "AFNI Deconvolve",
+  "command": "3dDeconvolve",
+  "inputs": {
+    "STATmask": {
+      "type": "file",
+      "desc": "build a mask from provided file, and use this mask for the purpose of reporting truncation-to float issues AND for computing the FDR curves. The actual results ARE not masked with this option (only with 'mask' or 'automask' options).",
+      "cli": {
+        "argstr": "-STATmask %s"
+      }
+    },
+    "TR_1D": {
+      "type": "double",
+      "desc": "TR to use with 'input1D'. This option has no effect if you do not also use 'input1D'.",
+      "cli": {
+        "argstr": "-TR_1D %f"
+      }
+    },
+    "allzero_OK": {
+      "type": "flag",
+      "desc": "don't consider all zero matrix columns to be the type of error that 'gotforit' is needed to ignore.",
+      "cli": {
+        "argstr": "-allzero_OK"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "build a mask automatically from input data (will be slow for long time series datasets)",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "cbucket": {
+      "type": "string",
+      "desc": "Name for dataset in which to save the regression coefficients (no statistics). This dataset will be used in a -xrestore run [not yet implemented] instead of the bucket dataset, if possible.",
+      "cli": {
+        "argstr": "-cbucket %s"
+      }
+    },
+    "censor": {
+      "type": "file",
+      "desc": "filename of censor .1D time series. This is a file of 1s and 0s, indicating which time points are to be included (1) and which are to be excluded (0).",
+      "cli": {
+        "argstr": "-censor %s"
+      }
+    },
+    "dmbase": {
+      "type": "flag",
+      "desc": "de-mean baseline time series (default if 'polort' >= 0)",
+      "cli": {
+        "argstr": "-dmbase"
+      }
+    },
+    "dname": {
+      "type": "list",
+      "desc": "set environmental variable to provided value",
+      "cli": {
+        "argstr": "-D%s=%s"
+      }
+    },
+    "force_TR": {
+      "type": "double",
+      "desc": "use this value instead of the TR in the 'input' dataset. (It's better to fix the input using Refit.)",
+      "cli": {
+        "argstr": "-force_TR %f",
+        "position": 0
+      }
+    },
+    "fout": {
+      "type": "flag",
+      "desc": "output F-statistic for each stimulus",
+      "cli": {
+        "argstr": "-fout"
+      }
+    },
+    "global_times": {
+      "type": "flag",
+      "desc": "use global timing for stimulus timing files",
+      "cli": {
+        "argstr": "-global_times"
+      },
+      "constraints": {
+        "xor": [
+          "local_times"
+        ]
+      }
+    },
+    "glt_label": {
+      "type": "list",
+      "desc": "general linear test (i.e., contrast) labels",
+      "cli": {
+        "argstr": "-glt_label %d %s...",
+        "position": -1
+      },
+      "constraints": {
+        "requires": [
+          "gltsym"
+        ]
+      }
+    },
+    "gltsym": {
+      "type": "list",
+      "desc": "general linear tests (i.e., contrasts) using symbolic conventions (e.g., '+Label1 -Label2')",
+      "cli": {
+        "argstr": "-gltsym 'SYM: %s'...",
+        "position": -2
+      }
+    },
+    "goforit": {
+      "type": "int",
+      "desc": "use this to proceed even if the matrix has bad problems (e.g., duplicate columns, large condition number, etc.).",
+      "cli": {
+        "argstr": "-GOFORIT %i"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "filenames of 3D+time input datasets. More than one filename can be given and the datasets will be auto-catenated in time. You can input a 1D time series file here, but the time axis should run along the ROW direction, not the COLUMN direction as in the 'input1D' option.",
+      "cli": {
+        "argstr": "-input %s",
+        "position": 1,
+        "sep": " "
+      }
+    },
+    "input1D": {
+      "type": "file",
+      "desc": "filename of single (fMRI) .1D time series where time runs down the column.",
+      "cli": {
+        "argstr": "-input1D %s"
+      }
+    },
+    "legendre": {
+      "type": "flag",
+      "desc": "use Legendre polynomials for null hypothesis (baseline model)",
+      "cli": {
+        "argstr": "-legendre"
+      }
+    },
+    "local_times": {
+      "type": "flag",
+      "desc": "use local timing for stimulus timing files",
+      "cli": {
+        "argstr": "-local_times"
+      },
+      "constraints": {
+        "xor": [
+          "global_times"
+        ]
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "filename of 3D mask dataset; only data time series from within the mask will be analyzed; results for voxels outside the mask will be set to zero.",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "noblock": {
+      "type": "flag",
+      "desc": "normally, if you input multiple datasets with 'input', then the separate datasets are taken to be separate image runs that get separate baseline models. Use this options if you want to have the program consider these to be all one big run.* If any of the input dataset has only 1 sub-brick, then this option is automatically invoked!* If the auto-catenation feature isn't used, then this option has no effect, no how, no way.",
+      "cli": {
+        "argstr": "-noblock"
+      }
+    },
+    "nocond": {
+      "type": "flag",
+      "desc": "DON'T calculate matrix condition number",
+      "cli": {
+        "argstr": "-nocond"
+      }
+    },
+    "nodmbase": {
+      "type": "flag",
+      "desc": "don't de-mean baseline time series",
+      "cli": {
+        "argstr": "-nodmbase"
+      }
+    },
+    "nofdr": {
+      "type": "flag",
+      "desc": "Don't compute the statistic-vs-FDR curves for the bucket dataset.",
+      "cli": {
+        "argstr": "-noFDR"
+      }
+    },
+    "nolegendre": {
+      "type": "flag",
+      "desc": "use power polynomials for null hypotheses. Don't do this unless you are crazy!",
+      "cli": {
+        "argstr": "-nolegendre"
+      }
+    },
+    "nosvd": {
+      "type": "flag",
+      "desc": "use Gaussian elimination instead of SVD",
+      "cli": {
+        "argstr": "-nosvd"
+      }
+    },
+    "num_glt": {
+      "type": "int",
+      "desc": "number of general linear tests (i.e., contrasts)",
+      "cli": {
+        "argstr": "-num_glt %d",
+        "position": -3
+      }
+    },
+    "num_stimts": {
+      "type": "int",
+      "desc": "number of stimulus timing files",
+      "cli": {
+        "argstr": "-num_stimts %d",
+        "position": -6
+      }
+    },
+    "num_threads": {
+      "type": "int",
+      "desc": "run the program with provided number of sub-processes",
+      "cli": {
+        "argstr": "-jobs %d"
+      }
+    },
+    "ortvec": {
+      "type": "list",
+      "desc": "this option lets you input a rectangular array of 1 or more baseline vectors from a file. This method is a fast way to include a lot of baseline regressors in one step.",
+      "cli": {
+        "argstr": "-ortvec %s %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output statistics file",
+      "cli": {
+        "argstr": "-bucket %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "desc": "degree of polynomial corresponding to the null hypothesis [default: 1]",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    },
+    "rmsmin": {
+      "type": "double",
+      "desc": "minimum rms error to reject reduced model (default = 0; don't use this option normally!)",
+      "cli": {
+        "argstr": "-rmsmin %f"
+      }
+    },
+    "rout": {
+      "type": "flag",
+      "desc": "output the R^2 statistic for each stimulus",
+      "cli": {
+        "argstr": "-rout"
+      }
+    },
+    "sat": {
+      "type": "flag",
+      "desc": "check the dataset time series for initial saturation transients, which should normally have been excised before data analysis.",
+      "cli": {
+        "argstr": "-sat"
+      },
+      "constraints": {
+        "xor": [
+          "trans"
+        ]
+      }
+    },
+    "singvals": {
+      "type": "flag",
+      "desc": "print out the matrix singular values",
+      "cli": {
+        "argstr": "-singvals"
+      }
+    },
+    "stim_label": {
+      "type": "list",
+      "desc": "label for kth input stimulus (e.g., Label1)",
+      "cli": {
+        "argstr": "-stim_label %d %s...",
+        "position": -4
+      },
+      "constraints": {
+        "requires": [
+          "stim_times"
+        ]
+      }
+    },
+    "stim_times": {
+      "type": "list",
+      "desc": "generate a response model from a set of stimulus times given in file.",
+      "cli": {
+        "argstr": "-stim_times %d %s '%s'...",
+        "position": -5
+      }
+    },
+    "stim_times_subtract": {
+      "type": "double",
+      "desc": "this option means to subtract specified seconds from each time encountered in any 'stim_times' option. The purpose of this option is to make it simple to adjust timing files for the removal of images from the start of each imaging run.",
+      "cli": {
+        "argstr": "-stim_times_subtract %f"
+      }
+    },
+    "svd": {
+      "type": "flag",
+      "desc": "use SVD instead of Gaussian elimination (default)",
+      "cli": {
+        "argstr": "-svd"
+      }
+    },
+    "tout": {
+      "type": "flag",
+      "desc": "output the T-statistic for each stimulus",
+      "cli": {
+        "argstr": "-tout"
+      }
+    },
+    "trans": {
+      "type": "flag",
+      "desc": "check the dataset time series for initial saturation transients, which should normally have been excised before data analysis.",
+      "cli": {
+        "argstr": "-trans"
+      },
+      "constraints": {
+        "xor": [
+          "sat"
+        ]
+      }
+    },
+    "vout": {
+      "type": "flag",
+      "desc": "output the sample variance (MSE) for each stimulus",
+      "cli": {
+        "argstr": "-vout"
+      }
+    },
+    "x1D": {
+      "type": "file",
+      "desc": "specify name for saved X matrix",
+      "cli": {
+        "argstr": "-x1D %s"
+      }
+    },
+    "x1D_stop": {
+      "type": "flag",
+      "desc": "stop running after writing .xmat.1D file",
+      "cli": {
+        "argstr": "-x1D_stop"
+      }
+    }
+  },
+  "outputs": {
+    "cbucket": {
+      "type": "file",
+      "path": {
+        "from_input": "cbucket"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "x1D": {
+      "type": "file",
+      "path": {
+        "from_input": "x1D"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.model.Deconvolve",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Performs OLS regression given a 4D neuroimage file and stimulus timings"
+}

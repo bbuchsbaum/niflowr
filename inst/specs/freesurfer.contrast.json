@@ -1,0 +1,78 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.contrast",
+  "title": "FREESURFER Contrast",
+  "command": "pctsurfcon",
+  "inputs": {
+    "annotation": {
+      "type": "file",
+      "desc": "Input annotation file must be <subject_id>/label/<hemisphere>.aparc.annot",
+      "required": true
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "cortex": {
+      "type": "file",
+      "desc": "Input cortex label must be <subject_id>/label/<hemisphere>.cortex.label",
+      "required": true
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Hemisphere being processed",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--%s-only"
+      }
+    },
+    "orig": {
+      "type": "file",
+      "desc": "Implicit input file mri/orig.mgz",
+      "required": true
+    },
+    "rawavg": {
+      "type": "file",
+      "desc": "Implicit input file mri/rawavg.mgz",
+      "required": true
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "--s %s"
+      }
+    },
+    "thickness": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/?h.thickness",
+      "required": true
+    },
+    "white": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/<hemisphere>.white",
+      "required": true
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.Contrast",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Compute surface-wise gray/white contrast"
+}

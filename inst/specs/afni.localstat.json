@@ -1,0 +1,160 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.localstat",
+  "title": "AFNI Localstat",
+  "command": "3dLocalstat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Compute the mask as in program 3dAutomask.",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "grid_rmode": {
+      "type": "enum",
+      "desc": "Interpolant to use when resampling the output with thereduce_restore_grid option. The resampling method string RESAM should come from the set {'NN', 'Li', 'Cu', 'Bk'}. These stand for 'Nearest Neighbor', 'Linear', 'Cubic', and 'Blocky' interpolation, respectively.",
+      "choices": [
+        "NN",
+        "Li",
+        "Cu",
+        "Bk"
+      ],
+      "cli": {
+        "argstr": "-grid_rmode %s"
+      },
+      "constraints": {
+        "requires": [
+          "reduce_restore_grid"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input dataset",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "Mask image file name. Voxels NOT in the mask will not be used in the neighborhood of any voxel. Also, a voxel NOT in the mask will have its statistic(s) computed as zero (0) unless the parameter 'nonmask' is set to true.",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "neighborhood": {
+      "type": "list",
+      "desc": "The region around each voxel that will be extracted for the statistics calculation. Possible regions are: 'SPHERE', 'RHDD' (rhombic dodecahedron), 'TOHD' (truncated octahedron) with a given radius in mm or 'RECT' (rectangular block) with dimensions to specify in mm.",
+      "required": true,
+      "cli": {
+        "argstr": "-nbhd '%s(%s)'"
+      }
+    },
+    "nonmask": {
+      "type": "flag",
+      "desc": "Voxels not in the mask WILL have their local statistics\ncomputed from all voxels in their neighborhood that ARE in\nthe mask. For instance, this option can be used to compute the\naverage local white matter time series, even at non-WM\nvoxels.",
+      "cli": {
+        "argstr": "-use_nonmask"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output dataset.",
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": 0
+      }
+    },
+    "overwrite": {
+      "type": "flag",
+      "desc": "overwrite output file if it already exists",
+      "cli": {
+        "argstr": "-overwrite"
+      }
+    },
+    "quiet": {
+      "type": "flag",
+      "desc": "Stop the highly informative progress reports.",
+      "cli": {
+        "argstr": "-quiet"
+      }
+    },
+    "reduce_grid": {
+      "type": "list",
+      "desc": "Compute output on a grid that is reduced by the specified factors. If a single value is passed, output is resampled to the specified isotropic grid. Otherwise, the 3 inputs describe the reduction in the X, Y, and Z directions. This option speeds up computations at the expense of resolution. It should only be used when the nbhd is quite large with respect to the input's resolution, and the resultant stats are expected to be smooth.",
+      "cli": {
+        "argstr": "-reduce_grid %s"
+      },
+      "constraints": {
+        "xor": [
+          "reduce_restore_grid",
+          "reduce_max_vox"
+        ]
+      }
+    },
+    "reduce_max_vox": {
+      "type": "double",
+      "desc": "Like reduce_restore_grid, but automatically set Rx Ry Rz sothat the computation grid is at a resolution of nbhd/MAX_VOXvoxels.",
+      "cli": {
+        "argstr": "-reduce_max_vox %s"
+      },
+      "constraints": {
+        "xor": [
+          "reduce_restore_grid",
+          "reduce_grid"
+        ]
+      }
+    },
+    "reduce_restore_grid": {
+      "type": "list",
+      "desc": "Like reduce_grid, but also resample output back to input grid.",
+      "cli": {
+        "argstr": "-reduce_restore_grid %s"
+      },
+      "constraints": {
+        "xor": [
+          "reduce_max_vox",
+          "reduce_grid"
+        ]
+      }
+    },
+    "stat": {
+      "type": "list",
+      "desc": "statistics to compute. Possible names are:\n\n * mean   = average of the values\n * stdev  = standard deviation\n * var    = variance (stdev\\*stdev)\n * cvar   = coefficient of variation = stdev/fabs(mean)\n * median = median of the values\n * MAD    = median absolute deviation\n * min    = minimum\n * max    = maximum\n * absmax = maximum of the absolute values\n * num    = number of the values in the region:\n            with the use of -mask or -automask,\n            the size of the region around any given\n            voxel will vary; this option lets you\n            map that size.  It may be useful if you\n            plan to compute a t-statistic (say) from\n            the mean and stdev outputs.\n * sum    = sum of the values in the region\n * FWHM   = compute (like 3dFWHM) image smoothness\n            inside each voxel's neighborhood.  Results\n            are in 3 sub-bricks: FWHMx, FHWMy, and FWHMz.\n            Places where an output is -1 are locations\n            where the FWHM value could not be computed\n            (e.g., outside the mask).\n * FWHMbar= Compute just the average of the 3 FWHM values\n            (normally would NOT do this with FWHM also).\n * perc:P0:P1:Pstep =\n            Compute percentiles between P0 and P1 with a\n            step of Pstep.\n            Default P1 is equal to P0 and default P2 = 1\n * rank   = rank of the voxel's intensity\n * frank  = rank / number of voxels in neighborhood\n * P2skew = Pearson's second skewness coefficient\n             3 \\* (mean - median) / stdev\n * ALL    = all of the above, in that order\n            (except for FWHMbar and perc).\n * mMP2s  = Exactly the same output as:\n            median, MAD, P2skew,\n            but a little faster\n * mmMP2s = Exactly the same output as:\n            mean, median, MAD, P2skew\n\nMore than one option can be used.",
+      "required": true,
+      "cli": {
+        "argstr": "-stat %s..."
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Localstat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "3dLocalstat - computes statistics at each voxel,"
+}

@@ -1,0 +1,52 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.power_spectrum",
+  "title": "FSL PowerSpectrum",
+  "command": "fslpspec",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input 4D file to estimate the power spectrum",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "name of output 4D file for power spectrum",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.PowerSpectrum",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL PowerSpectrum command for power spectrum estimation."
+}

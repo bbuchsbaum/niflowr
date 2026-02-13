@@ -1,0 +1,96 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.auto_tcorrelate",
+  "title": "AFNI AutoTcorrelate",
+  "command": "3dAutoTcorrelate",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "eta2": {
+      "type": "flag",
+      "desc": "eta^2 similarity",
+      "cli": {
+        "argstr": "-eta2"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "timeseries x space (volume or surface) file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask of voxels",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "mask_only_targets": {
+      "type": "flag",
+      "desc": "use mask only on targets voxels",
+      "cli": {
+        "argstr": "-mask_only_targets"
+      },
+      "constraints": {
+        "xor": [
+          "mask_source"
+        ]
+      }
+    },
+    "mask_source": {
+      "type": "file",
+      "desc": "mask for source voxels",
+      "cli": {
+        "argstr": "-mask_source %s"
+      },
+      "constraints": {
+        "xor": [
+          "mask_only_targets"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "desc": "Remove polynomial trend of order m or -1 for no detrending",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.AutoTcorrelate",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes the correlation coefficient between the time series of each"
+}

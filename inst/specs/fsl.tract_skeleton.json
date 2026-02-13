@@ -1,0 +1,78 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.tract_skeleton",
+  "title": "FSL TractSkeleton",
+  "command": "tbss_skeleton",
+  "inputs": {
+    "alt_data_file": {
+      "type": "file",
+      "desc": "4D non-FA data to project onto skeleton",
+      "cli": {
+        "argstr": "-a %s"
+      }
+    },
+    "alt_skeleton": {
+      "type": "file",
+      "desc": "alternate skeleton to use",
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input image (typically mean FA volume)",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s"
+      }
+    },
+    "project_data": {
+      "type": "bool",
+      "desc": "project data onto skeleton",
+      "cli": {
+        "argstr": "-p %.3f %s %s %s %s"
+      },
+      "constraints": {
+        "requires": [
+          "threshold",
+          "distance_map",
+          "data_file"
+        ]
+      }
+    },
+    "skeleton_file": {
+      "type": "list",
+      "desc": "write out skeleton image",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    }
+  },
+  "outputs": {
+    "skeleton_file": {
+      "type": "file",
+      "path": {
+        "from_input": "skeleton_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.TractSkeleton",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL's tbss_skeleton to skeletonise an FA image or project arbitrary"
+}

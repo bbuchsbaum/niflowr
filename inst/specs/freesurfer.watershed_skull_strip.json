@@ -1,0 +1,76 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.watershed_skull_strip",
+  "title": "FREESURFER WatershedSkullStrip",
+  "command": "mri_watershed",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "brain_atlas": {
+      "type": "file",
+      "cli": {
+        "argstr": "-brain_atlas %s",
+        "position": -4
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input volume",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output volume",
+      "required": true,
+      "default": "brainmask.auto.mgz",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "t1": {
+      "type": "flag",
+      "desc": "specify T1 input volume (T1 grey value = 110)",
+      "cli": {
+        "argstr": "-T1"
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "undocumented",
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.WatershedSkullStrip",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program strips skull and other outer non-brain tissue and"
+}

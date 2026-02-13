@@ -1,0 +1,127 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.warp",
+  "title": "AFNI Warp",
+  "command": "3dWarp",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "deoblique": {
+      "type": "flag",
+      "desc": "transform dataset from oblique to cardinal",
+      "cli": {
+        "argstr": "-deoblique"
+      }
+    },
+    "gridset": {
+      "type": "file",
+      "desc": "copy grid of specified dataset",
+      "cli": {
+        "argstr": "-gridset %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dWarp",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "spatial interpolation methods [default = linear]",
+      "choices": [
+        "linear",
+        "cubic",
+        "NN",
+        "quintic"
+      ],
+      "cli": {
+        "argstr": "-%s"
+      }
+    },
+    "matparent": {
+      "type": "file",
+      "desc": "apply transformation from 3dWarpDrive",
+      "cli": {
+        "argstr": "-matparent %s"
+      }
+    },
+    "mni2tta": {
+      "type": "flag",
+      "desc": "transform dataset from MNI152 to Talaraich",
+      "cli": {
+        "argstr": "-mni2tta"
+      }
+    },
+    "newgrid": {
+      "type": "double",
+      "desc": "specify grid of this size (mm)",
+      "cli": {
+        "argstr": "-newgrid %f"
+      }
+    },
+    "oblique_parent": {
+      "type": "file",
+      "desc": "Read in the oblique transformation matrix from an oblique dataset and make cardinal dataset oblique to match",
+      "cli": {
+        "argstr": "-oblique_parent %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "tta2mni": {
+      "type": "flag",
+      "desc": "transform dataset from Talairach to MNI152",
+      "cli": {
+        "argstr": "-tta2mni"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Print out some information along the way.",
+      "cli": {
+        "argstr": "-verb"
+      }
+    },
+    "zpad": {
+      "type": "int",
+      "desc": "pad input dataset with N planes of zero on all sides.",
+      "cli": {
+        "argstr": "-zpad %d"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Warp",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use 3dWarp for spatially transforming a dataset."
+}

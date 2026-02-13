@@ -1,0 +1,78 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.register",
+  "title": "FREESURFER Register",
+  "command": "mris_register",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "curv": {
+      "type": "flag",
+      "desc": "Use smoothwm curvature for final alignment",
+      "cli": {
+        "argstr": "-curv"
+      },
+      "constraints": {
+        "requires": [
+          "in_smoothwm"
+        ]
+      }
+    },
+    "in_sulc": {
+      "type": "file",
+      "desc": "Undocumented mandatory input file ${SUBJECTS_DIR}/surf/{hemisphere}.sulc",
+      "required": true
+    },
+    "in_surf": {
+      "type": "file",
+      "desc": "Surface to register, often {hemi}.sphere",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output surface file to capture registration",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "target": {
+      "type": "file",
+      "desc": "The data to register to. In normal recon-all usage, this is a template file for average surface.",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.registration.Register",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program registers a surface to an average surface template."
+}

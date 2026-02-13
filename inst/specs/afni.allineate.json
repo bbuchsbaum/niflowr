@@ -1,0 +1,518 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.allineate",
+  "title": "AFNI Allineate",
+  "command": "3dAllineate",
+  "inputs": {
+    "allcostx": {
+      "type": "file",
+      "desc": "Compute and print ALL available cost functionals for the un-warped inputsAND THEN QUIT. If you use this option none of the other expected outputs will be produced",
+      "cli": {
+        "argstr": "-allcostx |& tee %s",
+        "position": -1
+      },
+      "constraints": {
+        "xor": [
+          "out_file",
+          "out_matrix",
+          "out_param_file",
+          "out_weight_file"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "autobox": {
+      "type": "flag",
+      "desc": "Expand the -automask function to enclose a rectangular box that holds the irregular mask.",
+      "cli": {
+        "argstr": "-autobox"
+      }
+    },
+    "automask": {
+      "type": "int",
+      "desc": "Compute a mask function, set a value for dilation or 0.",
+      "cli": {
+        "argstr": "-automask+%d"
+      }
+    },
+    "autoweight": {
+      "type": "string",
+      "desc": "Compute a weight function using the 3dAutomask algorithm plus some blurring of the base image.",
+      "cli": {
+        "argstr": "-autoweight%s"
+      }
+    },
+    "center_of_mass": {
+      "type": "string",
+      "desc": "Use the center-of-mass calculation to bracket the shifts.",
+      "cli": {
+        "argstr": "-cmass%s"
+      }
+    },
+    "check": {
+      "type": "list",
+      "desc": "After cost functional optimization is done, start at the final parameters and RE-optimize using this new cost functions. If the results are too different, a warning message will be printed. However, the final parameters from the original optimization will be used to create the output dataset.",
+      "cli": {
+        "argstr": "-check %s"
+      }
+    },
+    "convergence": {
+      "type": "double",
+      "desc": "Convergence test in millimeters (default 0.05mm).",
+      "cli": {
+        "argstr": "-conv %f"
+      }
+    },
+    "cost": {
+      "type": "enum",
+      "desc": "Defines the 'cost' function that defines the matching between the source and the base",
+      "choices": [
+        "leastsq",
+        "ls",
+        "mutualinfo",
+        "mi",
+        "corratio_mul",
+        "crM",
+        "norm_mutualinfo",
+        "nmi",
+        "hellinger",
+        "hel",
+        "corratio_add",
+        "crA",
+        "corratio_uns",
+        "crU"
+      ],
+      "cli": {
+        "argstr": "-cost %s"
+      }
+    },
+    "epi": {
+      "type": "flag",
+      "desc": "Treat the source dataset as being composed of warped EPI slices, and the base as comprising anatomically 'true' images.  Only phase-encoding direction image shearing and scaling will be allowed with this option.",
+      "cli": {
+        "argstr": "-EPI"
+      }
+    },
+    "final_interpolation": {
+      "type": "enum",
+      "desc": "Defines interpolation method used to create the output dataset",
+      "choices": [
+        "nearestneighbour",
+        "linear",
+        "cubic",
+        "quintic",
+        "wsinc5"
+      ],
+      "cli": {
+        "argstr": "-final %s"
+      }
+    },
+    "fine_blur": {
+      "type": "double",
+      "desc": "Set the blurring radius to use in the fine resolution pass to 'x' mm.  A small amount (1-2 mm?) of blurring at the fine step may help with convergence, if there is some problem, especially if the base volume is very noisy. [Default == 0 mm = no blurring at the final alignment pass]",
+      "cli": {
+        "argstr": "-fineblur %f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dAllineate",
+      "required": true,
+      "cli": {
+        "argstr": "-source %s"
+      }
+    },
+    "in_matrix": {
+      "type": "file",
+      "desc": "matrix to align input file",
+      "cli": {
+        "argstr": "-1Dmatrix_apply %s",
+        "position": -3
+      },
+      "constraints": {
+        "xor": [
+          "out_matrix"
+        ]
+      }
+    },
+    "in_param_file": {
+      "type": "file",
+      "desc": "Read warp parameters from file and apply them to the source dataset, and produce a new dataset",
+      "cli": {
+        "argstr": "-1Dparam_apply %s"
+      },
+      "constraints": {
+        "xor": [
+          "out_param_file"
+        ]
+      }
+    },
+    "interpolation": {
+      "type": "enum",
+      "desc": "Defines interpolation method to use during matching",
+      "choices": [
+        "nearestneighbour",
+        "linear",
+        "cubic",
+        "quintic"
+      ],
+      "cli": {
+        "argstr": "-interp %s"
+      }
+    },
+    "master": {
+      "type": "file",
+      "desc": "Write the output dataset on the same grid as this file.",
+      "cli": {
+        "argstr": "-master %s"
+      }
+    },
+    "maxrot": {
+      "type": "double",
+      "desc": "Maximum allowed rotation in degrees.",
+      "cli": {
+        "argstr": "-maxrot %f"
+      }
+    },
+    "maxscl": {
+      "type": "double",
+      "desc": "Maximum allowed scaling factor.",
+      "cli": {
+        "argstr": "-maxscl %f"
+      }
+    },
+    "maxshf": {
+      "type": "double",
+      "desc": "Maximum allowed shift in mm.",
+      "cli": {
+        "argstr": "-maxshf %f"
+      }
+    },
+    "maxshr": {
+      "type": "double",
+      "desc": "Maximum allowed shearing factor.",
+      "cli": {
+        "argstr": "-maxshr %f"
+      }
+    },
+    "newgrid": {
+      "type": "double",
+      "desc": "Write the output dataset using isotropic grid spacing in mm.",
+      "cli": {
+        "argstr": "-newgrid %f"
+      }
+    },
+    "nmatch": {
+      "type": "int",
+      "desc": "Use at most n scattered points to match the datasets.",
+      "cli": {
+        "argstr": "-nmatch %d"
+      }
+    },
+    "no_pad": {
+      "type": "flag",
+      "desc": "Do not use zero-padding on the base image.",
+      "cli": {
+        "argstr": "-nopad"
+      }
+    },
+    "nomask": {
+      "type": "flag",
+      "desc": "Don't compute the autoweight/mask; if -weight is not also used, then every voxel will be counted equally.",
+      "cli": {
+        "argstr": "-nomask"
+      }
+    },
+    "nwarp": {
+      "type": "enum",
+      "desc": "Experimental nonlinear warping: bilinear or legendre poly.",
+      "choices": [
+        "bilinear",
+        "cubic",
+        "quintic",
+        "heptic",
+        "nonic",
+        "poly3",
+        "poly5",
+        "poly7",
+        "poly9"
+      ],
+      "cli": {
+        "argstr": "-nwarp %s"
+      }
+    },
+    "nwarp_fixdep": {
+      "type": "list",
+      "desc": "To fix non-linear warp dependency along directions.",
+      "cli": {
+        "argstr": "-nwarp_fixdep%s..."
+      }
+    },
+    "nwarp_fixmot": {
+      "type": "list",
+      "desc": "To fix motion along directions.",
+      "cli": {
+        "argstr": "-nwarp_fixmot%s..."
+      }
+    },
+    "one_pass": {
+      "type": "flag",
+      "desc": "Use only the refining pass -- do not try a coarse resolution pass first.  Useful if you know that only small amounts of image alignment are needed.",
+      "cli": {
+        "argstr": "-onepass"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output file from 3dAllineate",
+      "cli": {
+        "argstr": "-prefix %s"
+      },
+      "constraints": {
+        "xor": [
+          "allcostx"
+        ]
+      }
+    },
+    "out_matrix": {
+      "type": "file",
+      "desc": "Save the transformation matrix for each volume.",
+      "cli": {
+        "argstr": "-1Dmatrix_save %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_matrix",
+          "allcostx"
+        ]
+      }
+    },
+    "out_param_file": {
+      "type": "file",
+      "desc": "Save the warp parameters in ASCII (.1D) format.",
+      "cli": {
+        "argstr": "-1Dparam_save %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_param_file",
+          "allcostx"
+        ]
+      }
+    },
+    "out_weight_file": {
+      "type": "file",
+      "desc": "Write the weight volume to disk as a dataset",
+      "cli": {
+        "argstr": "-wtprefix %s"
+      },
+      "constraints": {
+        "xor": [
+          "allcostx"
+        ]
+      }
+    },
+    "overwrite": {
+      "type": "flag",
+      "desc": "overwrite output file if it already exists",
+      "cli": {
+        "argstr": "-overwrite"
+      }
+    },
+    "quiet": {
+      "type": "flag",
+      "desc": "Don't print out verbose progress reports.",
+      "cli": {
+        "argstr": "-quiet"
+      }
+    },
+    "reference": {
+      "type": "file",
+      "desc": "file to be used as reference, the first volume will be used if not given the reference will be the first volume of in_file.",
+      "cli": {
+        "argstr": "-base %s"
+      }
+    },
+    "replacebase": {
+      "type": "flag",
+      "desc": "If the source has more than one volume, then after the first volume is aligned to the base.",
+      "cli": {
+        "argstr": "-replacebase"
+      }
+    },
+    "replacemeth": {
+      "type": "enum",
+      "desc": "After first volume is aligned, switch method for later volumes. For use with '-replacebase'.",
+      "choices": [
+        "leastsq",
+        "ls",
+        "mutualinfo",
+        "mi",
+        "corratio_mul",
+        "crM",
+        "norm_mutualinfo",
+        "nmi",
+        "hellinger",
+        "hel",
+        "corratio_add",
+        "crA",
+        "corratio_uns",
+        "crU"
+      ],
+      "cli": {
+        "argstr": "-replacemeth %s"
+      }
+    },
+    "source_automask": {
+      "type": "int",
+      "desc": "Automatically mask the source dataset with dilation or 0.",
+      "cli": {
+        "argstr": "-source_automask+%d"
+      }
+    },
+    "source_mask": {
+      "type": "file",
+      "desc": "mask the input dataset",
+      "cli": {
+        "argstr": "-source_mask %s"
+      }
+    },
+    "two_best": {
+      "type": "int",
+      "desc": "In the coarse pass, use the best 'bb' set of initialpoints to search for the starting point for the finepass.  If bb==0, then no search is made for the beststarting point, and the identity transformation isused as the starting point.  [Default=5; min=0 max=11]",
+      "cli": {
+        "argstr": "-twobest %d"
+      }
+    },
+    "two_blur": {
+      "type": "double",
+      "desc": "Set the blurring radius for the first pass in mm.",
+      "cli": {
+        "argstr": "-twoblur %f"
+      }
+    },
+    "two_first": {
+      "type": "flag",
+      "desc": "Use -twopass on the first image to be registered, and then on all subsequent images from the source dataset, use results from the first image's coarse pass to start the fine pass.",
+      "cli": {
+        "argstr": "-twofirst"
+      }
+    },
+    "two_pass": {
+      "type": "flag",
+      "desc": "Use a two pass alignment strategy for all volumes, searching for a large rotation+shift and then refining the alignment.",
+      "cli": {
+        "argstr": "-twopass"
+      }
+    },
+    "usetemp": {
+      "type": "flag",
+      "desc": "temporary file use",
+      "cli": {
+        "argstr": "-usetemp"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Print out verbose progress reports.",
+      "cli": {
+        "argstr": "-verb"
+      }
+    },
+    "warp_type": {
+      "type": "enum",
+      "desc": "Set the warp type.",
+      "choices": [
+        "shift_only",
+        "shift_rotate",
+        "shift_rotate_scale",
+        "affine_general"
+      ],
+      "cli": {
+        "argstr": "-warp %s"
+      }
+    },
+    "warpfreeze": {
+      "type": "flag",
+      "desc": "Freeze the non-rigid body parameters after first volume.",
+      "cli": {
+        "argstr": "-warpfreeze"
+      }
+    },
+    "weight": {
+      "type": "list",
+      "desc": "Set the weighting for each voxel in the base dataset; larger weights mean that voxel count more in the cost function. If an image file is given, the volume must be defined on the same grid as the base dataset",
+      "cli": {
+        "argstr": "-weight %s"
+      }
+    },
+    "weight_file": {
+      "type": "file",
+      "desc": "Set the weighting for each voxel in the base dataset; larger weights mean that voxel count more in the cost function. Must be defined on the same grid as the base dataset",
+      "cli": {
+        "argstr": "-weight %s"
+      }
+    },
+    "zclip": {
+      "type": "flag",
+      "desc": "Replace negative values in the input datasets (source & base) with zero.",
+      "cli": {
+        "argstr": "-zclip"
+      }
+    }
+  },
+  "outputs": {
+    "allcostx": {
+      "type": "file",
+      "path": {
+        "from_input": "allcostx"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_matrix": {
+      "type": "file",
+      "path": {
+        "from_input": "out_matrix"
+      },
+      "must_exist": false
+    },
+    "out_param_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_param_file"
+      },
+      "must_exist": false
+    },
+    "out_weight_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_weight_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Allineate",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Program to align one dataset (the 'source') to a base dataset"
+}

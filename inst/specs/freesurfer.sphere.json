@@ -1,0 +1,66 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.sphere",
+  "title": "FREESURFER Sphere",
+  "command": "mris_sphere",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input file for Sphere",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "magic": {
+      "type": "flag",
+      "desc": "No documentation. Direct questions to analysis-bugs@nmr.mgh.harvard.edu",
+      "cli": {
+        "argstr": "-q"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output file for Sphere",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "seed": {
+      "type": "int",
+      "desc": "Seed for setting random number generator",
+      "cli": {
+        "argstr": "-seed %d"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.Sphere",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program will add a template into an average surface"
+}

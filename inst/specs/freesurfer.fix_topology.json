@@ -1,0 +1,99 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.fix_topology",
+  "title": "FREESURFER FixTopology",
+  "command": "mris_fix_topology",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "copy_inputs": {
+      "type": "bool",
+      "desc": "If running as a node, set this to True otherwise, the topology fixing will be done in place.",
+      "required": true
+    },
+    "ga": {
+      "type": "flag",
+      "desc": "No documentation. Direct questions to analysis-bugs@nmr.mgh.harvard.edu",
+      "cli": {
+        "argstr": "-ga"
+      }
+    },
+    "hemisphere": {
+      "type": "string",
+      "desc": "Hemisphere being processed",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "in_brain": {
+      "type": "file",
+      "desc": "Implicit input brain.mgz",
+      "required": true
+    },
+    "in_inflated": {
+      "type": "file",
+      "desc": "Undocumented input file <hemisphere>.inflated",
+      "required": true
+    },
+    "in_orig": {
+      "type": "file",
+      "desc": "Undocumented input file <hemisphere>.orig",
+      "required": true
+    },
+    "in_wm": {
+      "type": "file",
+      "desc": "Implicit input wm.mgz",
+      "required": true
+    },
+    "mgz": {
+      "type": "flag",
+      "desc": "No documentation. Direct questions to analysis-bugs@nmr.mgh.harvard.edu",
+      "cli": {
+        "argstr": "-mgz"
+      }
+    },
+    "seed": {
+      "type": "int",
+      "desc": "Seed for setting random number generator",
+      "cli": {
+        "argstr": "-seed %d"
+      }
+    },
+    "sphere": {
+      "type": "file",
+      "desc": "Sphere input file",
+      "cli": {
+        "argstr": "-sphere %s"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.FixTopology",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program computes a mapping from the unit sphere onto the surface"
+}

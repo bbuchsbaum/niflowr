@@ -1,0 +1,111 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.label2_label",
+  "title": "FREESURFER Label2Label",
+  "command": "mri_label2label",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Input hemisphere",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Target label",
+      "cli": {
+        "argstr": "--trglabel %s"
+      }
+    },
+    "registration_method": {
+      "type": "enum",
+      "desc": "Registration method",
+      "default": "surface",
+      "choices": [
+        "surface",
+        "volume"
+      ],
+      "cli": {
+        "argstr": "--regmethod %s"
+      }
+    },
+    "source_label": {
+      "type": "file",
+      "desc": "Source label",
+      "required": true,
+      "cli": {
+        "argstr": "--srclabel %s"
+      }
+    },
+    "source_sphere_reg": {
+      "type": "file",
+      "desc": "Implicit input <hemisphere>.sphere.reg",
+      "required": true
+    },
+    "source_subject": {
+      "type": "string",
+      "desc": "Source subject name",
+      "required": true,
+      "cli": {
+        "argstr": "--srcsubject %s"
+      }
+    },
+    "source_white": {
+      "type": "file",
+      "desc": "Implicit input <hemisphere>.white",
+      "required": true
+    },
+    "sphere_reg": {
+      "type": "file",
+      "desc": "Implicit input <hemisphere>.sphere.reg",
+      "required": true
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Target subject",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "--trgsubject %s"
+      }
+    },
+    "white": {
+      "type": "file",
+      "desc": "Implicit input <hemisphere>.white",
+      "required": true
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.Label2Label",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Converts a label in one subject's space to a label"
+}

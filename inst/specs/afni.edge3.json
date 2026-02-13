@@ -1,0 +1,127 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.edge3",
+  "title": "AFNI Edge3",
+  "command": "3dedge3",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "datum": {
+      "type": "enum",
+      "desc": "specify data type for output. Valid types are 'byte', 'short' and 'float'.",
+      "choices": [
+        "byte",
+        "short",
+        "float"
+      ],
+      "cli": {
+        "argstr": "-datum %s"
+      }
+    },
+    "fscale": {
+      "type": "flag",
+      "desc": "Force scaling of the output to the maximum integer range.",
+      "cli": {
+        "argstr": "-fscale"
+      },
+      "constraints": {
+        "xor": [
+          "gscale",
+          "nscale",
+          "scale_floats"
+        ]
+      }
+    },
+    "gscale": {
+      "type": "flag",
+      "desc": "Same as '-fscale', but also forces each output sub-brick to to get the same scaling factor.",
+      "cli": {
+        "argstr": "-gscale"
+      },
+      "constraints": {
+        "xor": [
+          "fscale",
+          "nscale",
+          "scale_floats"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dedge3",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s",
+        "position": 0
+      }
+    },
+    "nscale": {
+      "type": "flag",
+      "desc": "Don't do any scaling on output to byte or short datasets.",
+      "cli": {
+        "argstr": "-nscale"
+      },
+      "constraints": {
+        "xor": [
+          "fscale",
+          "gscale",
+          "scale_floats"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": -1
+      }
+    },
+    "scale_floats": {
+      "type": "double",
+      "desc": "Multiply input by VAL, but only if the input datum is float. This is needed when the input dataset has a small range, like 0 to 2.0 for instance. With such a range, very few edges are detected due to what I suspect to be truncation problems. Multiplying such a dataset by 10000 fixes the problem and the scaling is undone at the output.",
+      "cli": {
+        "argstr": "-scale_floats %f"
+      },
+      "constraints": {
+        "xor": [
+          "fscale",
+          "gscale",
+          "nscale"
+        ]
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Print out some information along the way.",
+      "cli": {
+        "argstr": "-verbose"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Edge3",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Does 3D Edge detection using the library 3DEdge"
+}

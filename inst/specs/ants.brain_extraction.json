@@ -1,0 +1,122 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.brain_extraction",
+  "title": "ANTS BrainExtraction",
+  "command": "antsBrainExtraction.sh",
+  "inputs": {
+    "anatomical_image": {
+      "type": "file",
+      "desc": "Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.",
+      "required": true,
+      "cli": {
+        "argstr": "-a %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "brain_probability_mask": {
+      "type": "file",
+      "desc": "Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.",
+      "required": true,
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "brain_template": {
+      "type": "file",
+      "desc": "Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.",
+      "required": true,
+      "cli": {
+        "argstr": "-e %s"
+      }
+    },
+    "debug": {
+      "type": "flag",
+      "desc": "If > 0, runs a faster version of the script. Only for testing. Implies -u 0. Requires single thread computation for complete reproducibility.",
+      "cli": {
+        "argstr": "-z 1"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "extraction_registration_mask": {
+      "type": "file",
+      "desc": "Mask (defined in the template space) used during registration for brain extraction. To limit the metric computation to a specific region.",
+      "cli": {
+        "argstr": "-f %s"
+      }
+    },
+    "image_suffix": {
+      "type": "string",
+      "desc": "any of standard ITK formats, nii.gz is default",
+      "default": "nii.gz",
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "keep_temporary_files": {
+      "type": "int",
+      "desc": "Keep brain extraction/segmentation warps, etc (default = 0).",
+      "cli": {
+        "argstr": "-k %d"
+      }
+    },
+    "out_prefix": {
+      "type": "string",
+      "desc": "Prefix that is prepended to all output files",
+      "default": "highres001_",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "use_floatingpoint_precision": {
+      "type": "enum",
+      "desc": "Use floating point precision in registrations (default = 0)",
+      "choices": [
+        0,
+        1
+      ],
+      "cli": {
+        "argstr": "-q %d"
+      }
+    },
+    "use_random_seeding": {
+      "type": "enum",
+      "desc": "Use random number generated from system clock in Atropos (default = 1)",
+      "choices": [
+        0,
+        1
+      ],
+      "cli": {
+        "argstr": "-u %d"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.segmentation.BrainExtraction",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Atlas-based brain extraction."
+}

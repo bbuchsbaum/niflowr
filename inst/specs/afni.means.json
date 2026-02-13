@@ -1,0 +1,122 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.means",
+  "title": "AFNI Means",
+  "command": "3dMean",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "count": {
+      "type": "flag",
+      "desc": "compute count of non-zero voxels",
+      "cli": {
+        "argstr": "-count"
+      }
+    },
+    "datum": {
+      "type": "string",
+      "desc": "Sets the data type of the output dataset",
+      "cli": {
+        "argstr": "-datum %s"
+      }
+    },
+    "in_file_a": {
+      "type": "file",
+      "desc": "input file to 3dMean",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "in_file_b": {
+      "type": "file",
+      "desc": "another input file to 3dMean",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask_inter": {
+      "type": "flag",
+      "desc": "create intersection mask",
+      "cli": {
+        "argstr": "-mask_inter"
+      }
+    },
+    "mask_union": {
+      "type": "flag",
+      "desc": "create union mask",
+      "cli": {
+        "argstr": "-mask_union"
+      }
+    },
+    "non_zero": {
+      "type": "flag",
+      "desc": "use only non-zero values",
+      "cli": {
+        "argstr": "-non_zero"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "scale": {
+      "type": "string",
+      "desc": "scaling of output",
+      "cli": {
+        "argstr": "-%sscale"
+      }
+    },
+    "sqr": {
+      "type": "flag",
+      "desc": "mean square instead of value",
+      "cli": {
+        "argstr": "-sqr"
+      }
+    },
+    "std_dev": {
+      "type": "flag",
+      "desc": "calculate std dev",
+      "cli": {
+        "argstr": "-stdev"
+      }
+    },
+    "summ": {
+      "type": "flag",
+      "desc": "take sum, (not average)",
+      "cli": {
+        "argstr": "-sum"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Means",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Takes the voxel-by-voxel mean of all input datasets using 3dMean"
+}

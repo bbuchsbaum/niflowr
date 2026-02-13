@@ -1,0 +1,115 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.apply_topup",
+  "title": "FSL ApplyTOPUP",
+  "command": "applytopup",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "datatype": {
+      "type": "enum",
+      "desc": "force output data type",
+      "choices": [
+        "char",
+        "short",
+        "int",
+        "float",
+        "double"
+      ],
+      "cli": {
+        "argstr": "-d=%s"
+      }
+    },
+    "encoding_file": {
+      "type": "file",
+      "desc": "name of text file with PE directions/times",
+      "required": true,
+      "cli": {
+        "argstr": "--datain=%s"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "name of file with images",
+      "required": true,
+      "cli": {
+        "argstr": "--imain=%s",
+        "sep": ","
+      }
+    },
+    "in_index": {
+      "type": "list",
+      "desc": "comma separated list of indices corresponding to --datain",
+      "cli": {
+        "argstr": "--inindex=%s",
+        "sep": ","
+      }
+    },
+    "in_topup_fieldcoef": {
+      "type": "file",
+      "desc": "topup file containing the field coefficients",
+      "cli": {
+        "argstr": "--topup=%s"
+      },
+      "constraints": {
+        "requires": [
+          "in_topup_movpar"
+        ]
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "interpolation method",
+      "choices": [
+        "trilinear",
+        "spline"
+      ],
+      "cli": {
+        "argstr": "--interp=%s"
+      }
+    },
+    "method": {
+      "type": "enum",
+      "desc": "use jacobian modulation (jac) or least-squares resampling (lsr)",
+      "choices": [
+        "jac",
+        "lsr"
+      ],
+      "cli": {
+        "argstr": "--method=%s"
+      }
+    },
+    "out_corrected": {
+      "type": "file",
+      "desc": "output (warped) image",
+      "cli": {
+        "argstr": "--out=%s"
+      }
+    }
+  },
+  "outputs": {
+    "out_corrected": {
+      "type": "file",
+      "path": {
+        "from_input": "out_corrected"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.ApplyTOPUP",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Interface for FSL topup, a tool for estimating and correcting"
+}

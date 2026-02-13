@@ -1,0 +1,68 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.maskave",
+  "title": "AFNI Maskave",
+  "command": "3dmaskave",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dmaskave",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "matrix to align input file",
+      "cli": {
+        "argstr": "-mask %s",
+        "position": 1
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "> %s",
+        "position": -1
+      }
+    },
+    "quiet": {
+      "type": "flag",
+      "desc": "matrix to align input file",
+      "cli": {
+        "argstr": "-quiet",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Maskave",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes average of all voxels in the input dataset"
+}

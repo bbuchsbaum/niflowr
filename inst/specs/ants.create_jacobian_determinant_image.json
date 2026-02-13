@@ -1,0 +1,82 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.create_jacobian_determinant_image",
+  "title": "ANTS CreateJacobianDeterminantImage",
+  "command": "CreateJacobianDeterminantImage",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "deformationField": {
+      "type": "file",
+      "desc": "deformation transformation file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "doLogJacobian": {
+      "type": "enum",
+      "desc": "return the log jacobian",
+      "choices": [
+        0,
+        1
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 3
+      }
+    },
+    "imageDimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "required": true,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 0
+      }
+    },
+    "outputImage": {
+      "type": "file",
+      "desc": "output filename",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "useGeometric": {
+      "type": "enum",
+      "desc": "return the geometric jacobian",
+      "choices": [
+        0,
+        1
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 4
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.CreateJacobianDeterminantImage",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Examples"
+}

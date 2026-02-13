@@ -1,0 +1,133 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.unpack_sdicom_dir",
+  "title": "FREESURFER UnpackSDICOMDir",
+  "command": "unpacksdcmdir",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "config": {
+      "type": "file",
+      "desc": "specify unpacking rules in file",
+      "required": true,
+      "cli": {
+        "argstr": "-cfg %s"
+      },
+      "constraints": {
+        "xor": [
+          "run_info",
+          "config",
+          "seq_config"
+        ]
+      }
+    },
+    "dir_structure": {
+      "type": "enum",
+      "desc": "unpack to specified directory structures",
+      "choices": [
+        "fsfast",
+        "generic"
+      ],
+      "cli": {
+        "argstr": "-%s"
+      }
+    },
+    "log_file": {
+      "type": "file",
+      "desc": "explicitly set log file",
+      "cli": {
+        "argstr": "-log %s"
+      }
+    },
+    "no_info_dump": {
+      "type": "flag",
+      "desc": "do not create infodump file",
+      "cli": {
+        "argstr": "-noinfodump"
+      }
+    },
+    "no_unpack_err": {
+      "type": "flag",
+      "desc": "do not try to unpack runs with errors",
+      "cli": {
+        "argstr": "-no-unpackerr"
+      }
+    },
+    "output_dir": {
+      "type": "dir",
+      "desc": "top directory into which the files will be unpacked",
+      "cli": {
+        "argstr": "-targ %s"
+      }
+    },
+    "run_info": {
+      "type": "list",
+      "desc": "runno subdir format name : spec unpacking rules on cmdline",
+      "required": true,
+      "cli": {
+        "argstr": "-run %d %s %s %s"
+      },
+      "constraints": {
+        "xor": [
+          "run_info",
+          "config",
+          "seq_config"
+        ]
+      }
+    },
+    "scan_only": {
+      "type": "file",
+      "desc": "only scan the directory and put result in file",
+      "cli": {
+        "argstr": "-scanonly %s"
+      }
+    },
+    "seq_config": {
+      "type": "file",
+      "desc": "specify unpacking rules based on sequence",
+      "required": true,
+      "cli": {
+        "argstr": "-seqcfg %s"
+      },
+      "constraints": {
+        "xor": [
+          "run_info",
+          "config",
+          "seq_config"
+        ]
+      }
+    },
+    "source_dir": {
+      "type": "dir",
+      "desc": "directory with the DICOM files",
+      "required": true,
+      "cli": {
+        "argstr": "-src %s"
+      }
+    },
+    "spm_zeropad": {
+      "type": "int",
+      "desc": "set frame number zero padding width for SPM",
+      "cli": {
+        "argstr": "-nspmzeropad %d"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.UnpackSDICOMDir",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use unpacksdcmdir to convert dicom files"
+}

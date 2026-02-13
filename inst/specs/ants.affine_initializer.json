@@ -1,0 +1,111 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.affine_initializer",
+  "title": "ANTS AffineInitializer",
+  "command": "antsAffineInitializer",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "dimension",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "fixed_image": {
+      "type": "file",
+      "desc": "reference image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "local_search": {
+      "type": "int",
+      "desc": "determines if a local optimization is run at each search point for the set number of iterations",
+      "default": 10,
+      "cli": {
+        "argstr": "%d",
+        "position": 7
+      }
+    },
+    "moving_image": {
+      "type": "file",
+      "desc": "moving image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output transform file",
+      "default": "transform.mat",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "principal_axes": {
+      "type": "bool",
+      "desc": "whether the rotation is searched around an initial principal axis alignment.",
+      "default": false,
+      "cli": {
+        "argstr": "%d",
+        "position": 6
+      }
+    },
+    "radian_fraction": {
+      "type": "string",
+      "desc": "search this arc +/- principal axes",
+      "default": 0.1,
+      "cli": {
+        "argstr": "%f",
+        "position": 5
+      }
+    },
+    "search_factor": {
+      "type": "double",
+      "desc": "increments (degrees) for affine search",
+      "default": 15.0,
+      "cli": {
+        "argstr": "%f",
+        "position": 4
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.AffineInitializer",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Initialize an affine transform (as in antsBrainExtraction.sh)"
+}

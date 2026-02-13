@@ -1,0 +1,158 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.image_math",
+  "title": "ANTS ImageMath",
+  "command": "ImageMath",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "dimension": {
+      "type": "int",
+      "desc": "dimension of output image",
+      "default": 3,
+      "cli": {
+        "argstr": "%d",
+        "position": 1
+      }
+    },
+    "op1": {
+      "type": "file",
+      "desc": "first operator",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "op2": {
+      "type": "list",
+      "desc": "second operator",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "operation": {
+      "type": "enum",
+      "desc": "mathematical operations",
+      "required": true,
+      "choices": [
+        "m",
+        "vm",
+        "+",
+        "v+",
+        "-",
+        "v-",
+        "/",
+        "^",
+        "max",
+        "exp",
+        "addtozero",
+        "overadd",
+        "abs",
+        "total",
+        "mean",
+        "vtotal",
+        "Decision",
+        "Neg",
+        "Project",
+        "G",
+        "MD",
+        "ME",
+        "MO",
+        "MC",
+        "GD",
+        "GE",
+        "GO",
+        "GC",
+        "ExtractContours",
+        "Translate",
+        "4DTensorTo3DTensor",
+        "ExtractVectorComponent",
+        "TensorColor",
+        "TensorFA",
+        "TensorFADenominator",
+        "TensorFANumerator",
+        "TensorMeanDiffusion",
+        "TensorRadialDiffusion",
+        "TensorAxialDiffusion",
+        "TensorEigenvalue",
+        "TensorToVector",
+        "TensorToVectorComponent",
+        "TensorMask",
+        "Byte",
+        "CorruptImage",
+        "D",
+        "MaurerDistance",
+        "ExtractSlice",
+        "FillHoles",
+        "Convolve",
+        "Finite",
+        "FlattenImage",
+        "GetLargestComponent",
+        "Grad",
+        "RescaleImage",
+        "WindowImage",
+        "NeighborhoodStats",
+        "ReplicateDisplacement",
+        "ReplicateImage",
+        "LabelStats",
+        "Laplacian",
+        "Canny",
+        "Lipschitz",
+        "MTR",
+        "Normalize",
+        "PadImage",
+        "SigmoidImage",
+        "Sharpen",
+        "UnsharpMask",
+        "PValueImage",
+        "ReplaceVoxelValue",
+        "SetTimeSpacing",
+        "SetTimeSpacingWarp",
+        "stack",
+        "ThresholdAtMean",
+        "TriPlanarView",
+        "TruncateImageIntensity"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "output_image": {
+      "type": "file",
+      "desc": "output image file",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.ImageMath",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Operations over images."
+}

@@ -1,0 +1,97 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.slice_timer",
+  "title": "FSL SliceTimer",
+  "command": "slicetimer",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "custom_order": {
+      "type": "file",
+      "desc": "filename of single-column custom interleave order file (first slice is referred to as 1 not 0)",
+      "cli": {
+        "argstr": "--ocustom=%s"
+      }
+    },
+    "custom_timings": {
+      "type": "file",
+      "desc": "slice timings, in fractions of TR, range 0:1 (default is 0.5 = no shift)",
+      "cli": {
+        "argstr": "--tcustom=%s"
+      }
+    },
+    "global_shift": {
+      "type": "double",
+      "desc": "shift in fraction of TR, range 0:1 (default is 0.5 = no shift)",
+      "cli": {
+        "argstr": "--tglobal"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "filename of input timeseries",
+      "required": true,
+      "cli": {
+        "argstr": "--in=%s",
+        "position": 0
+      }
+    },
+    "index_dir": {
+      "type": "flag",
+      "desc": "slice indexing from top to bottom",
+      "cli": {
+        "argstr": "--down"
+      }
+    },
+    "interleaved": {
+      "type": "flag",
+      "desc": "use interleaved acquisition",
+      "cli": {
+        "argstr": "--odd"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "filename of output timeseries",
+      "cli": {
+        "argstr": "--out=%s"
+      }
+    },
+    "slice_direction": {
+      "type": "enum",
+      "desc": "direction of slice acquisition (x=1, y=2, z=3) - default is z",
+      "choices": [
+        1,
+        2,
+        3
+      ],
+      "cli": {
+        "argstr": "--direction=%d"
+      }
+    },
+    "time_repetition": {
+      "type": "double",
+      "desc": "Specify TR of data - default is 3s",
+      "cli": {
+        "argstr": "--repeat=%f"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.SliceTimer",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL slicetimer wrapper to perform slice timing correction"
+}

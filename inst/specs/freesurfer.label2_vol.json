@@ -1,0 +1,240 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.label2_vol",
+  "title": "FREESURFER Label2Vol",
+  "command": "mri_label2vol",
+  "inputs": {
+    "annot_file": {
+      "type": "file",
+      "desc": "surface annotation file",
+      "required": true,
+      "cli": {
+        "argstr": "--annot %s"
+      },
+      "constraints": {
+        "xor": [
+          "label_file",
+          "annot_file",
+          "seg_file",
+          "aparc_aseg"
+        ],
+        "requires": [
+          "subject_id",
+          "hemi"
+        ]
+      }
+    },
+    "aparc_aseg": {
+      "type": "flag",
+      "desc": "use aparc+aseg.mgz in subjectdir as seg",
+      "required": true,
+      "cli": {
+        "argstr": "--aparc+aseg"
+      },
+      "constraints": {
+        "xor": [
+          "label_file",
+          "annot_file",
+          "seg_file",
+          "aparc_aseg"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fill_thresh": {
+      "type": "string",
+      "desc": "thresh : between 0 and 1",
+      "cli": {
+        "argstr": "--fillthresh %g"
+      }
+    },
+    "hemi": {
+      "type": "enum",
+      "desc": "hemisphere to use lh or rh",
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "identity": {
+      "type": "flag",
+      "desc": "set R=I",
+      "cli": {
+        "argstr": "--identity"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "reg_header",
+          "identity"
+        ]
+      }
+    },
+    "invert_mtx": {
+      "type": "flag",
+      "desc": "Invert the registration matrix",
+      "cli": {
+        "argstr": "--invertmtx"
+      }
+    },
+    "label_file": {
+      "type": "list",
+      "desc": "list of label files",
+      "required": true,
+      "cli": {
+        "argstr": "--label %s..."
+      },
+      "constraints": {
+        "xor": [
+          "label_file",
+          "annot_file",
+          "seg_file",
+          "aparc_aseg"
+        ]
+      }
+    },
+    "label_hit_file": {
+      "type": "file",
+      "desc": "file with each frame is nhits for a label",
+      "cli": {
+        "argstr": "--hits %s"
+      }
+    },
+    "label_voxel_volume": {
+      "type": "double",
+      "desc": "volume of each label point (def 1mm3)",
+      "cli": {
+        "argstr": "--labvoxvol %f"
+      }
+    },
+    "map_label_stat": {
+      "type": "file",
+      "desc": "map the label stats field into the vol",
+      "cli": {
+        "argstr": "--label-stat %s"
+      }
+    },
+    "native_vox2ras": {
+      "type": "flag",
+      "desc": "use native vox2ras xform instead of  tkregister-style",
+      "cli": {
+        "argstr": "--native-vox2ras"
+      }
+    },
+    "proj": {
+      "type": "list",
+      "desc": "project along surface normal",
+      "cli": {
+        "argstr": "--proj %s %f %f %f"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id",
+          "hemi"
+        ]
+      }
+    },
+    "reg_file": {
+      "type": "file",
+      "desc": "tkregister style matrix VolXYZ = R*LabelXYZ",
+      "cli": {
+        "argstr": "--reg %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "reg_header",
+          "identity"
+        ]
+      }
+    },
+    "reg_header": {
+      "type": "file",
+      "desc": "label template volume",
+      "cli": {
+        "argstr": "--regheader %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "reg_header",
+          "identity"
+        ]
+      }
+    },
+    "seg_file": {
+      "type": "file",
+      "desc": "segmentation file",
+      "required": true,
+      "cli": {
+        "argstr": "--seg %s"
+      },
+      "constraints": {
+        "xor": [
+          "label_file",
+          "annot_file",
+          "seg_file",
+          "aparc_aseg"
+        ]
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "subject id",
+      "cli": {
+        "argstr": "--subject %s"
+      }
+    },
+    "surface": {
+      "type": "string",
+      "desc": "use surface instead of white",
+      "cli": {
+        "argstr": "--surf %s"
+      }
+    },
+    "template_file": {
+      "type": "file",
+      "desc": "output template volume",
+      "required": true,
+      "cli": {
+        "argstr": "--temp %s"
+      }
+    },
+    "vol_label_file": {
+      "type": "file",
+      "desc": "output volume",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    }
+  },
+  "outputs": {
+    "vol_label_file": {
+      "type": "file",
+      "path": {
+        "from_input": "vol_label_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.Label2Vol",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Make a binary volume from a Freesurfer label"
+}

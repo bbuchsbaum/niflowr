@@ -1,0 +1,467 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.eddy",
+  "title": "FSL Eddy",
+  "command": "eddy_openmp",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "cnr_maps": {
+      "type": "flag",
+      "desc": "Output CNR-Maps",
+      "cli": {
+        "argstr": "--cnr_maps"
+      }
+    },
+    "dont_peas": {
+      "type": "flag",
+      "desc": "Do NOT perform a post-eddy alignment of shells",
+      "cli": {
+        "argstr": "--dont_peas"
+      }
+    },
+    "dont_sep_offs_move": {
+      "type": "flag",
+      "desc": "Do NOT attempt to separate field offset from subject movement",
+      "cli": {
+        "argstr": "--dont_sep_offs_move"
+      }
+    },
+    "estimate_move_by_susceptibility": {
+      "type": "flag",
+      "desc": "Estimate how susceptibility field changes with subject movement",
+      "cli": {
+        "argstr": "--estimate_move_by_susceptibility"
+      }
+    },
+    "fep": {
+      "type": "flag",
+      "desc": "Fill empty planes in x- or y-directions",
+      "cli": {
+        "argstr": "--fep"
+      }
+    },
+    "field": {
+      "type": "file",
+      "desc": "Non-topup derived fieldmap scaled in Hz",
+      "cli": {
+        "argstr": "--field=%s"
+      }
+    },
+    "field_mat": {
+      "type": "file",
+      "desc": "Matrix specifying the relative positions of the fieldmap, --field, and the first volume of the input file, --imain",
+      "cli": {
+        "argstr": "--field_mat=%s"
+      }
+    },
+    "flm": {
+      "type": "enum",
+      "desc": "First level EC model",
+      "default": "quadratic",
+      "choices": [
+        "quadratic",
+        "linear",
+        "cubic"
+      ],
+      "cli": {
+        "argstr": "--flm=%s"
+      }
+    },
+    "fudge_factor": {
+      "type": "double",
+      "desc": "Fudge factor for hyperparameter error variance",
+      "default": 10.0,
+      "cli": {
+        "argstr": "--ff=%s"
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "FWHM for conditioning filter when estimating the parameters",
+      "cli": {
+        "argstr": "--fwhm=%s"
+      }
+    },
+    "in_acqp": {
+      "type": "file",
+      "desc": "File containing acquisition parameters",
+      "required": true,
+      "cli": {
+        "argstr": "--acqp=%s"
+      }
+    },
+    "in_bval": {
+      "type": "file",
+      "desc": "File containing the b-values for all volumes in --imain",
+      "required": true,
+      "cli": {
+        "argstr": "--bvals=%s"
+      }
+    },
+    "in_bvec": {
+      "type": "file",
+      "desc": "File containing the b-vectors for all volumes in --imain",
+      "required": true,
+      "cli": {
+        "argstr": "--bvecs=%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "File containing all the images to estimate distortions for",
+      "required": true,
+      "cli": {
+        "argstr": "--imain=%s"
+      }
+    },
+    "in_index": {
+      "type": "file",
+      "desc": "File containing indices for all volumes in --imain into --acqp and --topup",
+      "required": true,
+      "cli": {
+        "argstr": "--index=%s"
+      }
+    },
+    "in_mask": {
+      "type": "file",
+      "desc": "Mask to indicate brain",
+      "required": true,
+      "cli": {
+        "argstr": "--mask=%s"
+      }
+    },
+    "in_topup_fieldcoef": {
+      "type": "file",
+      "desc": "Topup results file containing the field coefficients",
+      "cli": {
+        "argstr": "--topup=%s"
+      },
+      "constraints": {
+        "requires": [
+          "in_topup_movpar"
+        ]
+      }
+    },
+    "initrand": {
+      "type": "flag",
+      "desc": "Resets rand for when selecting voxels",
+      "cli": {
+        "argstr": "--initrand"
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "Interpolation model for estimation step",
+      "default": "spline",
+      "choices": [
+        "spline",
+        "trilinear"
+      ],
+      "cli": {
+        "argstr": "--interp=%s"
+      }
+    },
+    "is_shelled": {
+      "type": "flag",
+      "desc": "Override internal check to ensure that date are acquired on a set of b-value shells",
+      "cli": {
+        "argstr": "--data_is_shelled"
+      }
+    },
+    "json": {
+      "type": "file",
+      "desc": "Name of .json text file with information about slice timing",
+      "cli": {
+        "argstr": "--json=%s"
+      },
+      "constraints": {
+        "xor": [
+          "slice_order"
+        ],
+        "requires": [
+          "mporder"
+        ]
+      }
+    },
+    "mbs_ksp": {
+      "type": "int",
+      "desc": "Knot-spacing for MBS field estimation",
+      "cli": {
+        "argstr": "--mbs_ksp=%smm"
+      },
+      "constraints": {
+        "requires": [
+          "estimate_move_by_susceptibility"
+        ]
+      }
+    },
+    "mbs_lambda": {
+      "type": "int",
+      "desc": "Weighting of regularisation for MBS estimation",
+      "cli": {
+        "argstr": "--mbs_lambda=%s"
+      },
+      "constraints": {
+        "requires": [
+          "estimate_move_by_susceptibility"
+        ]
+      }
+    },
+    "mbs_niter": {
+      "type": "int",
+      "desc": "Number of iterations for MBS estimation",
+      "cli": {
+        "argstr": "--mbs_niter=%s"
+      },
+      "constraints": {
+        "requires": [
+          "estimate_move_by_susceptibility"
+        ]
+      }
+    },
+    "method": {
+      "type": "enum",
+      "desc": "Final resampling method (jacobian/least squares)",
+      "default": "jac",
+      "choices": [
+        "jac",
+        "lsr"
+      ],
+      "cli": {
+        "argstr": "--resamp=%s"
+      }
+    },
+    "mporder": {
+      "type": "int",
+      "desc": "Order of slice-to-vol movement model",
+      "cli": {
+        "argstr": "--mporder=%s"
+      },
+      "constraints": {
+        "requires": [
+          "use_cuda"
+        ]
+      }
+    },
+    "multiband_factor": {
+      "type": "int",
+      "desc": "Multi-band factor",
+      "cli": {
+        "argstr": "--mb=%s"
+      }
+    },
+    "multiband_offset": {
+      "type": "enum",
+      "desc": "Multi-band offset (-1 if bottom slice removed, 1 if top slice removed",
+      "choices": [
+        0,
+        1,
+        -1
+      ],
+      "cli": {
+        "argstr": "--mb_offs=%d"
+      },
+      "constraints": {
+        "requires": [
+          "multiband_factor"
+        ]
+      }
+    },
+    "niter": {
+      "type": "int",
+      "desc": "Number of iterations",
+      "default": 5,
+      "cli": {
+        "argstr": "--niter=%s"
+      }
+    },
+    "nvoxhp": {
+      "type": "int",
+      "desc": "# of voxels used to estimate the hyperparameters",
+      "default": 1000,
+      "cli": {
+        "argstr": "--nvoxhp=%s"
+      }
+    },
+    "out_base": {
+      "type": "string",
+      "desc": "Basename for output image",
+      "default": "eddy_corrected",
+      "cli": {
+        "argstr": "--out=%s"
+      }
+    },
+    "outlier_nstd": {
+      "type": "int",
+      "desc": "Number of std off to qualify as outlier",
+      "cli": {
+        "argstr": "--ol_nstd"
+      },
+      "constraints": {
+        "requires": [
+          "repol"
+        ]
+      }
+    },
+    "outlier_nvox": {
+      "type": "int",
+      "desc": "Min # of voxels in a slice for inclusion in outlier detection",
+      "cli": {
+        "argstr": "--ol_nvox"
+      },
+      "constraints": {
+        "requires": [
+          "repol"
+        ]
+      }
+    },
+    "outlier_pos": {
+      "type": "flag",
+      "desc": "Consider both positive and negative outliers if set",
+      "cli": {
+        "argstr": "--ol_pos"
+      },
+      "constraints": {
+        "requires": [
+          "repol"
+        ]
+      }
+    },
+    "outlier_sqr": {
+      "type": "flag",
+      "desc": "Consider outliers among sums-of-squared differences if set",
+      "cli": {
+        "argstr": "--ol_sqr"
+      },
+      "constraints": {
+        "requires": [
+          "repol"
+        ]
+      }
+    },
+    "outlier_type": {
+      "type": "enum",
+      "desc": "Type of outliers, slicewise (sw), groupwise (gw) or both (both)",
+      "choices": [
+        "sw",
+        "gw",
+        "both"
+      ],
+      "cli": {
+        "argstr": "--ol_type"
+      },
+      "constraints": {
+        "requires": [
+          "repol"
+        ]
+      }
+    },
+    "repol": {
+      "type": "flag",
+      "desc": "Detect and replace outlier slices",
+      "cli": {
+        "argstr": "--repol"
+      }
+    },
+    "residuals": {
+      "type": "flag",
+      "desc": "Output Residuals",
+      "cli": {
+        "argstr": "--residuals"
+      }
+    },
+    "session": {
+      "type": "file",
+      "desc": "File containing session indices for all volumes in --imain",
+      "cli": {
+        "argstr": "--session=%s"
+      }
+    },
+    "slice2vol_interp": {
+      "type": "enum",
+      "desc": "Slice-to-vol interpolation model for estimation step",
+      "choices": [
+        "trilinear",
+        "spline"
+      ],
+      "cli": {
+        "argstr": "--s2v_interp=%s"
+      },
+      "constraints": {
+        "requires": [
+          "mporder"
+        ]
+      }
+    },
+    "slice2vol_lambda": {
+      "type": "int",
+      "desc": "Regularisation weight for slice-to-vol movement (reasonable range 1-10)",
+      "cli": {
+        "argstr": "--s2v_lambda=%d"
+      },
+      "constraints": {
+        "requires": [
+          "mporder"
+        ]
+      }
+    },
+    "slice2vol_niter": {
+      "type": "int",
+      "desc": "Number of iterations for slice-to-vol",
+      "cli": {
+        "argstr": "--s2v_niter=%d"
+      },
+      "constraints": {
+        "requires": [
+          "mporder"
+        ]
+      }
+    },
+    "slice_order": {
+      "type": "file",
+      "desc": "Name of text file completely specifying slice/group acquisition",
+      "cli": {
+        "argstr": "--slspec=%s"
+      },
+      "constraints": {
+        "xor": [
+          "json"
+        ],
+        "requires": [
+          "mporder"
+        ]
+      }
+    },
+    "slm": {
+      "type": "enum",
+      "desc": "Second level EC model",
+      "default": "none",
+      "choices": [
+        "none",
+        "linear",
+        "quadratic"
+      ],
+      "cli": {
+        "argstr": "--slm=%s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.Eddy",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Interface for FSL eddy, a tool for estimating and correcting eddy"
+}

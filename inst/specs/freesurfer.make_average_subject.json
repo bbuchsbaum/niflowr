@@ -1,0 +1,44 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.make_average_subject",
+  "title": "FREESURFER MakeAverageSubject",
+  "command": "make_average_subject",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "out_name": {
+      "type": "file",
+      "desc": "name for the average subject",
+      "default": "average",
+      "cli": {
+        "argstr": "--out %s"
+      }
+    },
+    "subjects_ids": {
+      "type": "list",
+      "desc": "freesurfer subjects ids to average",
+      "required": true,
+      "cli": {
+        "argstr": "--subjects %s",
+        "sep": " "
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.MakeAverageSubject",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Make an average freesurfer subject"
+}

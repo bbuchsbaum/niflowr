@@ -1,0 +1,73 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.normalize",
+  "title": "FREESURFER Normalize",
+  "command": "mri_normalize",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "gradient": {
+      "type": "int",
+      "desc": "use max intensity/mm gradient g (default=1)",
+      "cli": {
+        "argstr": "-g %d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "The input file for Normalize",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "The input mask file for Normalize",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "The output file for Normalize",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "segmentation": {
+      "type": "file",
+      "desc": "The input segmentation for Normalize",
+      "cli": {
+        "argstr": "-aseg %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.Normalize",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Normalize the white-matter, optionally based on control points. The"
+}

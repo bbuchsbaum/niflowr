@@ -1,0 +1,116 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.align_epi_anat_py",
+  "title": "AFNI AlignEpiAnatPy",
+  "command": "align_epi_anat.py",
+  "inputs": {
+    "anat": {
+      "type": "file",
+      "desc": "name of structural dataset",
+      "required": true,
+      "cli": {
+        "argstr": "-anat %s"
+      }
+    },
+    "anat2epi": {
+      "type": "flag",
+      "desc": "align anatomical to EPI dataset (default)",
+      "cli": {
+        "argstr": "-anat2epi"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "epi2anat": {
+      "type": "flag",
+      "desc": "align EPI to anatomical dataset",
+      "cli": {
+        "argstr": "-epi2anat"
+      }
+    },
+    "epi_base": {
+      "type": "list",
+      "desc": "the epi base used in alignmentshould be one of (0/mean/median/max/subbrick#)",
+      "required": true,
+      "cli": {
+        "argstr": "-epi_base %s"
+      }
+    },
+    "epi_strip": {
+      "type": "enum",
+      "desc": "method to mask brain in EPI datashould be one of[3dSkullStrip]/3dAutomask/None)",
+      "choices": [
+        "3dSkullStrip",
+        "3dAutomask",
+        "None"
+      ],
+      "cli": {
+        "argstr": "-epi_strip %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "EPI dataset to align",
+      "required": true,
+      "cli": {
+        "argstr": "-epi %s"
+      }
+    },
+    "save_skullstrip": {
+      "type": "flag",
+      "desc": "save skull-stripped (not aligned)",
+      "cli": {
+        "argstr": "-save_skullstrip"
+      }
+    },
+    "suffix": {
+      "type": "string",
+      "desc": "append suffix to the original anat/epi dataset to usein the resulting dataset names (default is \"_al\")",
+      "default": "_al",
+      "cli": {
+        "argstr": "-suffix %s"
+      }
+    },
+    "tshift": {
+      "type": "enum",
+      "desc": "do time shifting of EPI dataset before alignmentshould be 'on' or 'off', defaults to 'on'",
+      "default": "on",
+      "choices": [
+        "on",
+        "off"
+      ],
+      "cli": {
+        "argstr": "-tshift %s"
+      }
+    },
+    "volreg": {
+      "type": "enum",
+      "desc": "do volume registration on EPI dataset before alignmentshould be 'on' or 'off', defaults to 'on'",
+      "default": "on",
+      "choices": [
+        "on",
+        "off"
+      ],
+      "cli": {
+        "argstr": "-volreg %s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.AlignEpiAnatPy",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Align EPI to anatomical datasets or vice versa."
+}

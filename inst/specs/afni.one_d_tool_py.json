@@ -1,0 +1,137 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.one_d_tool_py",
+  "title": "AFNI OneDToolPy",
+  "command": "1d_tool.py",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "censor_motion": {
+      "type": "list",
+      "desc": "Tuple of motion limit and outfile prefix. need to also set set_nruns -r set_run_lengths",
+      "cli": {
+        "argstr": "-censor_motion %f %s"
+      }
+    },
+    "censor_prev_TR": {
+      "type": "flag",
+      "desc": "for each censored TR, also censor previous",
+      "cli": {
+        "argstr": "-censor_prev_TR"
+      }
+    },
+    "demean": {
+      "type": "flag",
+      "desc": "demean each run (new mean of each run = 0.0)",
+      "cli": {
+        "argstr": "-demean"
+      }
+    },
+    "derivative": {
+      "type": "flag",
+      "desc": "take the temporal derivative of each vector (done as first backward difference)",
+      "cli": {
+        "argstr": "-derivative"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to OneDTool",
+      "required": true,
+      "cli": {
+        "argstr": "-infile %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "write the current 1D data to FILE",
+      "cli": {
+        "argstr": "-write %s"
+      },
+      "constraints": {
+        "xor": [
+          "show_cormat_warnings"
+        ]
+      }
+    },
+    "set_nruns": {
+      "type": "int",
+      "desc": "treat the input data as if it has nruns",
+      "cli": {
+        "argstr": "-set_nruns %d"
+      }
+    },
+    "show_censor_count": {
+      "type": "flag",
+      "desc": "display the total number of censored TRs  Note : if input is a valid xmat.1D dataset, then the count will come from the header.  Otherwise the input is assumed to be a binary censorfile, and zeros are simply counted.",
+      "cli": {
+        "argstr": "-show_censor_count"
+      }
+    },
+    "show_cormat_warnings": {
+      "type": "file",
+      "desc": "Write cormat warnings to a file",
+      "cli": {
+        "argstr": "-show_cormat_warnings |& tee %s",
+        "position": -1
+      },
+      "constraints": {
+        "xor": [
+          "out_file"
+        ]
+      }
+    },
+    "show_indices_interest": {
+      "type": "flag",
+      "desc": "display column indices for regs of interest",
+      "cli": {
+        "argstr": "-show_indices_interest"
+      }
+    },
+    "show_trs_run": {
+      "type": "int",
+      "desc": "restrict -show_trs_[un]censored to the given 1-based run",
+      "cli": {
+        "argstr": "-show_trs_run %d"
+      }
+    },
+    "show_trs_uncensored": {
+      "type": "enum",
+      "desc": "display a list of TRs which were not censored in the specified style",
+      "choices": [
+        "comma",
+        "space",
+        "encoded",
+        "verbose"
+      ],
+      "cli": {
+        "argstr": "-show_trs_uncensored %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.OneDToolPy",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program is meant to read/manipulate/write/diagnose 1D datasets."
+}

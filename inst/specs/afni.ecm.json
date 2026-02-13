@@ -1,0 +1,141 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.ecm",
+  "title": "AFNI ECM",
+  "command": "3dECM",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "autoclip": {
+      "type": "flag",
+      "desc": "Clip off low-intensity regions in the dataset",
+      "cli": {
+        "argstr": "-autoclip"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Mask the dataset to target brain-only voxels",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "eps": {
+      "type": "double",
+      "desc": "sets the stopping criterion for the power iteration; :math:`l2\\|v_\\text{old} - v_\\text{new}\\| < eps\\|v_\\text{old}\\|`; default = 0.001",
+      "cli": {
+        "argstr": "-eps %f"
+      }
+    },
+    "fecm": {
+      "type": "flag",
+      "desc": "Fast centrality method; substantial speed increase but cannot accommodate thresholding; automatically selected if -thresh or -sparsity are not set",
+      "cli": {
+        "argstr": "-fecm"
+      }
+    },
+    "full": {
+      "type": "flag",
+      "desc": "Full power method; enables thresholding; automatically selected if -thresh or -sparsity are set",
+      "cli": {
+        "argstr": "-full"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dECM",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask file to mask input data",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "max_iter": {
+      "type": "int",
+      "desc": "sets the maximum number of iterations to use in the power iteration; default = 1000",
+      "cli": {
+        "argstr": "-max_iter %d"
+      }
+    },
+    "memory": {
+      "type": "double",
+      "desc": "Limit memory consumption on system by setting the amount of GB to limit the algorithm to; default = 2GB",
+      "cli": {
+        "argstr": "-memory %f"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    },
+    "scale": {
+      "type": "double",
+      "desc": "scale correlation coefficients in similarity matrix to after shifting, x >= 0.0; default = 1.0 for -full, 0.5 for -fecm",
+      "cli": {
+        "argstr": "-scale %f"
+      }
+    },
+    "shift": {
+      "type": "double",
+      "desc": "shift correlation coefficients in similarity matrix to enforce non-negativity, s >= 0.0; default = 0.0 for -full, 1.0 for -fecm",
+      "cli": {
+        "argstr": "-shift %f"
+      }
+    },
+    "sparsity": {
+      "type": "double",
+      "desc": "only take the top percent of connections",
+      "cli": {
+        "argstr": "-sparsity %f"
+      }
+    },
+    "thresh": {
+      "type": "double",
+      "desc": "threshold to exclude connections where corr <= thresh",
+      "cli": {
+        "argstr": "-thresh %f"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.ECM",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Performs degree centrality on a dataset using a given maskfile"
+}

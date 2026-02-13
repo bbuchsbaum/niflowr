@@ -1,0 +1,142 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.surface2_vol_transform",
+  "title": "FREESURFER Surface2VolTransform",
+  "command": "mri_surf2vol",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "hemi": {
+      "type": "string",
+      "desc": "hemisphere of data",
+      "required": true,
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "mkmask": {
+      "type": "flag",
+      "desc": "make a mask instead of loading surface values",
+      "cli": {
+        "argstr": "--mkmask"
+      },
+      "constraints": {
+        "xor": [
+          "source_file"
+        ]
+      }
+    },
+    "projfrac": {
+      "type": "double",
+      "desc": "thickness fraction",
+      "cli": {
+        "argstr": "--projfrac %s"
+      }
+    },
+    "reg_file": {
+      "type": "file",
+      "desc": "tkRAS-to-tkRAS matrix   (tkregister2 format)",
+      "required": true,
+      "cli": {
+        "argstr": "--volreg %s"
+      },
+      "constraints": {
+        "xor": [
+          "subject_id"
+        ]
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "desc": "This is the source of the surface values",
+      "required": true,
+      "cli": {
+        "argstr": "--surfval %s"
+      },
+      "constraints": {
+        "xor": [
+          "mkmask"
+        ]
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "subject id",
+      "cli": {
+        "argstr": "--identity %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file"
+        ]
+      }
+    },
+    "subjects_dir": {
+      "type": "string",
+      "desc": "freesurfer subjects directory defaults to $SUBJECTS_DIR",
+      "cli": {
+        "argstr": "--sd %s"
+      }
+    },
+    "surf_name": {
+      "type": "string",
+      "desc": "surfname (default is white)",
+      "cli": {
+        "argstr": "--surf %s"
+      }
+    },
+    "template_file": {
+      "type": "file",
+      "desc": "Output template volume",
+      "cli": {
+        "argstr": "--template %s"
+      }
+    },
+    "transformed_file": {
+      "type": "file",
+      "desc": "Output volume",
+      "cli": {
+        "argstr": "--outvol %s"
+      }
+    },
+    "vertexvol_file": {
+      "type": "file",
+      "desc": "Path name of the vertex output volume, which is the same as output volume except that the value of each voxel is the vertex-id that is mapped to that voxel.",
+      "cli": {
+        "argstr": "--vtxvol %s"
+      }
+    }
+  },
+  "outputs": {
+    "transformed_file": {
+      "type": "file",
+      "path": {
+        "from_input": "transformed_file"
+      },
+      "must_exist": false
+    },
+    "vertexvol_file": {
+      "type": "file",
+      "path": {
+        "from_input": "vertexvol_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.Surface2VolTransform",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer mri_surf2vol to apply a transform."
+}

@@ -1,0 +1,80 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.contrast_mgr",
+  "title": "FSL ContrastMgr",
+  "command": "contrast_mgr",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "contrast_num": {
+      "type": "string",
+      "desc": "contrast number to start labeling copes from",
+      "cli": {
+        "argstr": "-cope"
+      }
+    },
+    "corrections": {
+      "type": "file",
+      "desc": "statistical corrections used within FILM modelling",
+      "required": true
+    },
+    "dof_file": {
+      "type": "file",
+      "desc": "degrees of freedom",
+      "required": true
+    },
+    "fcon_file": {
+      "type": "file",
+      "desc": "contrast file containing F-contrasts",
+      "cli": {
+        "argstr": "-f %s"
+      }
+    },
+    "param_estimates": {
+      "type": "list",
+      "desc": "Parameter estimates for each column of the design matrix",
+      "required": true
+    },
+    "sigmasquareds": {
+      "type": "file",
+      "desc": "summary of residuals, See Woolrich, et. al., 2001",
+      "required": true,
+      "cli": {
+        "position": -2
+      }
+    },
+    "suffix": {
+      "type": "string",
+      "desc": "suffix to put on the end of the cope filename before the contrast number, default is nothing",
+      "cli": {
+        "argstr": "-suffix %s"
+      }
+    },
+    "tcon_file": {
+      "type": "file",
+      "desc": "contrast file containing T-contrasts",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.ContrastMgr",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL contrast_mgr command to evaluate contrasts"
+}

@@ -1,0 +1,74 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.fourier",
+  "title": "AFNI Fourier",
+  "command": "3dFourier",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "highpass": {
+      "type": "double",
+      "desc": "highpass",
+      "required": true,
+      "cli": {
+        "argstr": "-highpass %f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dFourier",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "lowpass": {
+      "type": "double",
+      "desc": "lowpass",
+      "required": true,
+      "cli": {
+        "argstr": "-lowpass %f"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "retrend": {
+      "type": "flag",
+      "desc": "Any mean and linear trend are removed before filtering. This will restore the trend after filtering.",
+      "cli": {
+        "argstr": "-retrend"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Fourier",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Program to lowpass and/or highpass each voxel time series in a"
+}

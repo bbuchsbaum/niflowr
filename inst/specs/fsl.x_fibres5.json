@@ -1,0 +1,258 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.x_fibres5",
+  "title": "FSL XFibres5",
+  "command": "xfibres",
+  "inputs": {
+    "all_ard": {
+      "type": "flag",
+      "desc": "Turn ARD on on all fibres",
+      "cli": {
+        "argstr": "--allard"
+      },
+      "constraints": {
+        "xor": [
+          "no_ard",
+          "all_ard"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "burn_in": {
+      "type": "string",
+      "desc": "Total num of jumps at start of MCMC to be discarded",
+      "default": 0,
+      "cli": {
+        "argstr": "--burnin=%d"
+      }
+    },
+    "burn_in_no_ard": {
+      "type": "string",
+      "desc": "num of burnin jumps before the ard is imposed",
+      "default": 0,
+      "cli": {
+        "argstr": "--burnin_noard=%d"
+      }
+    },
+    "bvals": {
+      "type": "file",
+      "desc": "b values file",
+      "required": true,
+      "cli": {
+        "argstr": "--bvals=%s"
+      }
+    },
+    "bvecs": {
+      "type": "file",
+      "desc": "b vectors file",
+      "required": true,
+      "cli": {
+        "argstr": "--bvecs=%s"
+      }
+    },
+    "cnlinear": {
+      "type": "flag",
+      "desc": "Initialise with constrained nonlinear fitting",
+      "cli": {
+        "argstr": "--cnonlinear"
+      },
+      "constraints": {
+        "xor": [
+          "no_spat",
+          "non_linear",
+          "cnlinear"
+        ]
+      }
+    },
+    "dwi": {
+      "type": "file",
+      "desc": "diffusion weighted image data file",
+      "required": true,
+      "cli": {
+        "argstr": "--data=%s"
+      }
+    },
+    "f0_ard": {
+      "type": "flag",
+      "desc": "Noise floor model: add to the model an unattenuated signal compartment f0",
+      "cli": {
+        "argstr": "--f0 --ardf0"
+      },
+      "constraints": {
+        "xor": [
+          "f0_noard",
+          "f0_ard",
+          "all_ard"
+        ]
+      }
+    },
+    "f0_noard": {
+      "type": "flag",
+      "desc": "Noise floor model: add to the model an unattenuated signal compartment f0",
+      "cli": {
+        "argstr": "--f0"
+      },
+      "constraints": {
+        "xor": [
+          "f0_noard",
+          "f0_ard"
+        ]
+      }
+    },
+    "force_dir": {
+      "type": "flag",
+      "desc": "use the actual directory name given (do not add + to make a new directory)",
+      "default": true,
+      "cli": {
+        "argstr": "--forcedir"
+      }
+    },
+    "fudge": {
+      "type": "int",
+      "desc": "ARD fudge factor",
+      "cli": {
+        "argstr": "--fudge=%d"
+      }
+    },
+    "gradnonlin": {
+      "type": "file",
+      "desc": "gradient file corresponding to slice",
+      "cli": {
+        "argstr": "--gradnonlin=%s"
+      }
+    },
+    "logdir": {
+      "type": "dir",
+      "default": ".",
+      "cli": {
+        "argstr": "--logdir=%s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "brain binary mask file (i.e. from BET)",
+      "required": true,
+      "cli": {
+        "argstr": "--mask=%s"
+      }
+    },
+    "model": {
+      "type": "enum",
+      "desc": "use monoexponential (1, default, required for single-shell) or multiexponential (2, multi-shell) model",
+      "choices": [
+        1,
+        2,
+        3
+      ],
+      "cli": {
+        "argstr": "--model=%d"
+      }
+    },
+    "n_fibres": {
+      "type": "string",
+      "desc": "Maximum number of fibres to fit in each voxel",
+      "required": true,
+      "default": 2,
+      "cli": {
+        "argstr": "--nfibres=%d"
+      }
+    },
+    "n_jumps": {
+      "type": "int",
+      "desc": "Num of jumps to be made by MCMC",
+      "default": 5000,
+      "cli": {
+        "argstr": "--njumps=%d"
+      }
+    },
+    "no_ard": {
+      "type": "flag",
+      "desc": "Turn ARD off on all fibres",
+      "cli": {
+        "argstr": "--noard"
+      },
+      "constraints": {
+        "xor": [
+          "no_ard",
+          "all_ard"
+        ]
+      }
+    },
+    "no_spat": {
+      "type": "flag",
+      "desc": "Initialise with tensor, not spatially",
+      "cli": {
+        "argstr": "--nospat"
+      },
+      "constraints": {
+        "xor": [
+          "no_spat",
+          "non_linear",
+          "cnlinear"
+        ]
+      }
+    },
+    "non_linear": {
+      "type": "flag",
+      "desc": "Initialise with nonlinear fitting",
+      "cli": {
+        "argstr": "--nonlinear"
+      },
+      "constraints": {
+        "xor": [
+          "no_spat",
+          "non_linear",
+          "cnlinear"
+        ]
+      }
+    },
+    "rician": {
+      "type": "flag",
+      "desc": "use Rician noise modeling",
+      "cli": {
+        "argstr": "--rician"
+      }
+    },
+    "sample_every": {
+      "type": "string",
+      "desc": "Num of jumps for each sample (MCMC)",
+      "default": 1,
+      "cli": {
+        "argstr": "--sampleevery=%d"
+      }
+    },
+    "seed": {
+      "type": "int",
+      "desc": "seed for pseudo random number generator",
+      "cli": {
+        "argstr": "--seed=%d"
+      }
+    },
+    "update_proposal_every": {
+      "type": "string",
+      "desc": "Num of jumps for each update to the proposal density std (MCMC)",
+      "default": 40,
+      "cli": {
+        "argstr": "--updateproposalevery=%d"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.XFibres5",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Perform model parameters estimation for local (voxelwise) diffusion"
+}

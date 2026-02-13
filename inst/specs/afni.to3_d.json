@@ -1,0 +1,118 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.to3_d",
+  "title": "AFNI To3D",
+  "command": "to3d",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "assumemosaic": {
+      "type": "flag",
+      "desc": "assume that Siemens image is mosaic",
+      "cli": {
+        "argstr": "-assume_dicom_mosaic"
+      }
+    },
+    "datatype": {
+      "type": "enum",
+      "desc": "set output file datatype",
+      "choices": [
+        "short",
+        "float",
+        "byte",
+        "complex"
+      ],
+      "cli": {
+        "argstr": "-datum %s"
+      }
+    },
+    "filetype": {
+      "type": "enum",
+      "desc": "type of datafile being converted",
+      "choices": [
+        "spgr",
+        "fse",
+        "epan",
+        "anat",
+        "ct",
+        "spct",
+        "pet",
+        "mra",
+        "bmap",
+        "diff",
+        "omri",
+        "abuc",
+        "fim",
+        "fith",
+        "fico",
+        "fitt",
+        "fift",
+        "fizt",
+        "fict",
+        "fibt",
+        "fibn",
+        "figt",
+        "fipt",
+        "fbuc"
+      ],
+      "cli": {
+        "argstr": "-%s"
+      }
+    },
+    "funcparams": {
+      "type": "string",
+      "desc": "parameters for functional data",
+      "cli": {
+        "argstr": "-time:zt %s alt+z2"
+      }
+    },
+    "in_folder": {
+      "type": "dir",
+      "desc": "folder with DICOM images to convert",
+      "required": true,
+      "cli": {
+        "argstr": "%s/*.dcm",
+        "position": -1
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "skipoutliers": {
+      "type": "flag",
+      "desc": "skip the outliers check",
+      "cli": {
+        "argstr": "-skip_outliers"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.To3D",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Create a 3D dataset from 2D image files using AFNI to3d command"
+}

@@ -1,0 +1,142 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.nwarp_apply",
+  "title": "AFNI NwarpApply",
+  "command": "3dNwarpApply",
+  "inputs": {
+    "ainterp": {
+      "type": "enum",
+      "desc": "specify a different interpolation method than might be used for the warp",
+      "choices": [
+        "NN",
+        "nearestneighbour",
+        "nearestneighbor",
+        "linear",
+        "trilinear",
+        "cubic",
+        "tricubic",
+        "quintic",
+        "triquintic",
+        "wsinc5"
+      ],
+      "cli": {
+        "argstr": "-ainterp %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "list",
+      "desc": "the name of the dataset to be warped can be multiple datasets",
+      "required": true,
+      "cli": {
+        "argstr": "-source %s"
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "defines interpolation method to use during warp",
+      "default": "wsinc5",
+      "choices": [
+        "wsinc5",
+        "NN",
+        "nearestneighbour",
+        "nearestneighbor",
+        "linear",
+        "trilinear",
+        "cubic",
+        "tricubic",
+        "quintic",
+        "triquintic"
+      ],
+      "cli": {
+        "argstr": "-interp %s"
+      }
+    },
+    "inv_warp": {
+      "type": "flag",
+      "desc": "After the warp specified in '-nwarp' is computed, invert it",
+      "cli": {
+        "argstr": "-iwarp"
+      }
+    },
+    "master": {
+      "type": "file",
+      "desc": "the name of the master dataset, which defines the output grid",
+      "cli": {
+        "argstr": "-master %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "quiet": {
+      "type": "flag",
+      "desc": "don't be verbose :(",
+      "cli": {
+        "argstr": "-quiet"
+      },
+      "constraints": {
+        "xor": [
+          "verb"
+        ]
+      }
+    },
+    "short": {
+      "type": "flag",
+      "desc": "Write output dataset using 16-bit short integers, rather than the usual 32-bit floats.",
+      "cli": {
+        "argstr": "-short"
+      }
+    },
+    "verb": {
+      "type": "flag",
+      "desc": "be extra verbose :)",
+      "cli": {
+        "argstr": "-verb"
+      },
+      "constraints": {
+        "xor": [
+          "quiet"
+        ]
+      }
+    },
+    "warp": {
+      "type": "string",
+      "desc": "the name of the warp dataset. multiple warps can be concatenated (make sure they exist)",
+      "required": true,
+      "cli": {
+        "argstr": "-nwarp %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.NwarpApply",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Program to apply a nonlinear 3D warp saved from 3dQwarp"
+}

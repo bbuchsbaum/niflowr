@@ -1,0 +1,74 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.convert_dset",
+  "title": "AFNI ConvertDset",
+  "command": "ConvertDset",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to ConvertDset",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s",
+        "position": -2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output file for ConvertDset",
+      "required": true,
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": -1
+      }
+    },
+    "out_type": {
+      "type": "enum",
+      "desc": "output type",
+      "required": true,
+      "choices": [
+        "niml",
+        "niml_asc",
+        "niml_bi",
+        "1D",
+        "1Dp",
+        "1Dpt",
+        "gii",
+        "gii_asc",
+        "gii_b64",
+        "gii_b64gz"
+      ],
+      "cli": {
+        "argstr": "-o_%s",
+        "position": 0
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.ConvertDset",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Converts a surface dataset from one format to another."
+}

@@ -1,0 +1,92 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.nwarp_cat",
+  "title": "AFNI NwarpCat",
+  "command": "3dNwarpCat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "expad": {
+      "type": "int",
+      "desc": "Pad the nonlinear warps by the given number of voxels in all directions. The warp displacements are extended by linear extrapolation from the faces of the input grid..",
+      "cli": {
+        "argstr": "-expad %d"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "list of tuples of 3D warps and associated functions",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "specify a different interpolation method than might be used for the warp",
+      "default": "wsinc5",
+      "choices": [
+        "wsinc5",
+        "linear",
+        "quintic"
+      ],
+      "cli": {
+        "argstr": "-interp %s"
+      }
+    },
+    "inv_warp": {
+      "type": "flag",
+      "desc": "invert the final warp before output",
+      "cli": {
+        "argstr": "-iwarp"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "space": {
+      "type": "string",
+      "desc": "string to attach to the output dataset as its atlas space marker.",
+      "cli": {
+        "argstr": "-space %s"
+      }
+    },
+    "verb": {
+      "type": "flag",
+      "desc": "be verbose",
+      "cli": {
+        "argstr": "-verb"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.NwarpCat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Catenates (composes) 3D warps defined on a grid, OR via a matrix."
+}

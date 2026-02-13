@@ -1,0 +1,74 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.merge",
+  "title": "FSL Merge",
+  "command": "fslmerge",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "dimension along which to merge, optionally set tr input when dimension is t",
+      "required": true,
+      "choices": [
+        "t",
+        "x",
+        "y",
+        "z",
+        "a"
+      ],
+      "cli": {
+        "argstr": "-%s",
+        "position": 0
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "merged_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "tr": {
+      "type": "double",
+      "desc": "use to specify TR in seconds (default is 1.00 sec), overrides dimension and sets it to tr",
+      "cli": {
+        "argstr": "%.2f",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "merged_file": {
+      "type": "file",
+      "path": {
+        "from_input": "merged_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.Merge",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use fslmerge to concatenate images"
+}

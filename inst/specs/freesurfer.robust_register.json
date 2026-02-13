@@ -1,0 +1,302 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.robust_register",
+  "title": "FREESURFER RobustRegister",
+  "command": "mri_robust_register",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "auto_sens": {
+      "type": "flag",
+      "desc": "auto-detect good sensitivity",
+      "required": true,
+      "cli": {
+        "argstr": "--satit"
+      },
+      "constraints": {
+        "xor": [
+          "outlier_sens"
+        ]
+      }
+    },
+    "est_int_scale": {
+      "type": "flag",
+      "desc": "estimate intensity scale (recommended for unnormalized images)",
+      "cli": {
+        "argstr": "--iscale"
+      }
+    },
+    "force_double": {
+      "type": "flag",
+      "desc": "use double-precision intensities",
+      "cli": {
+        "argstr": "--doubleprec"
+      }
+    },
+    "force_float": {
+      "type": "flag",
+      "desc": "use float intensities",
+      "cli": {
+        "argstr": "--floattype"
+      }
+    },
+    "half_source": {
+      "type": "list",
+      "desc": "write source volume mapped to halfway space",
+      "cli": {
+        "argstr": "--halfmov %s"
+      }
+    },
+    "half_source_xfm": {
+      "type": "list",
+      "desc": "write transform from source to halfway space",
+      "cli": {
+        "argstr": "--halfmovlta %s"
+      }
+    },
+    "half_targ": {
+      "type": "list",
+      "desc": "write target volume mapped to halfway space",
+      "cli": {
+        "argstr": "--halfdst %s"
+      }
+    },
+    "half_targ_xfm": {
+      "type": "list",
+      "desc": "write transform from target to halfway space",
+      "cli": {
+        "argstr": "--halfdstlta %s"
+      }
+    },
+    "half_weights": {
+      "type": "list",
+      "desc": "write weights volume mapped to halfway space",
+      "cli": {
+        "argstr": "--halfweights %s"
+      }
+    },
+    "high_iterations": {
+      "type": "int",
+      "desc": "max # of times on highest resolution",
+      "cli": {
+        "argstr": "--highit %d"
+      }
+    },
+    "in_xfm_file": {
+      "type": "file",
+      "desc": "use initial transform on source",
+      "cli": {
+        "argstr": "--transform"
+      }
+    },
+    "init_orient": {
+      "type": "flag",
+      "desc": "use moments for initial orient (recommended for stripped brains)",
+      "cli": {
+        "argstr": "--initorient"
+      }
+    },
+    "iteration_thresh": {
+      "type": "double",
+      "desc": "stop iterations when below threshold",
+      "cli": {
+        "argstr": "--epsit %.3f"
+      }
+    },
+    "least_squares": {
+      "type": "flag",
+      "desc": "use least squares instead of robust estimator",
+      "cli": {
+        "argstr": "--leastsquares"
+      }
+    },
+    "mask_source": {
+      "type": "file",
+      "desc": "image to mask source volume with",
+      "cli": {
+        "argstr": "--maskmov %s"
+      }
+    },
+    "mask_target": {
+      "type": "file",
+      "desc": "image to mask target volume with",
+      "cli": {
+        "argstr": "--maskdst %s"
+      }
+    },
+    "max_iterations": {
+      "type": "int",
+      "desc": "maximum # of times on each resolution",
+      "cli": {
+        "argstr": "--maxit %d"
+      }
+    },
+    "no_init": {
+      "type": "flag",
+      "desc": "skip transform init",
+      "cli": {
+        "argstr": "--noinit"
+      }
+    },
+    "no_multi": {
+      "type": "flag",
+      "desc": "work on highest resolution",
+      "cli": {
+        "argstr": "--nomulti"
+      }
+    },
+    "out_reg_file": {
+      "type": "list",
+      "desc": "registration file; either True or filename",
+      "default": true,
+      "cli": {
+        "argstr": "--lta %s"
+      }
+    },
+    "outlier_limit": {
+      "type": "double",
+      "desc": "set maximal outlier limit in satit",
+      "cli": {
+        "argstr": "--wlimit %.3f"
+      }
+    },
+    "outlier_sens": {
+      "type": "double",
+      "desc": "set outlier sensitivity explicitly",
+      "required": true,
+      "cli": {
+        "argstr": "--sat %.4f"
+      },
+      "constraints": {
+        "xor": [
+          "auto_sens"
+        ]
+      }
+    },
+    "registered_file": {
+      "type": "list",
+      "desc": "registered image; either True or filename",
+      "cli": {
+        "argstr": "--warp %s"
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "desc": "volume to be registered",
+      "required": true,
+      "cli": {
+        "argstr": "--mov %s"
+      }
+    },
+    "subsample_thresh": {
+      "type": "int",
+      "desc": "subsample if dimension is above threshold size",
+      "cli": {
+        "argstr": "--subsample %d"
+      }
+    },
+    "target_file": {
+      "type": "file",
+      "desc": "target volume for the registration",
+      "required": true,
+      "cli": {
+        "argstr": "--dst %s"
+      }
+    },
+    "trans_only": {
+      "type": "flag",
+      "desc": "find 3 parameter translation only",
+      "cli": {
+        "argstr": "--transonly"
+      }
+    },
+    "weights_file": {
+      "type": "list",
+      "desc": "weights image to write; either True or filename",
+      "cli": {
+        "argstr": "--weights %s"
+      }
+    },
+    "write_vo2vox": {
+      "type": "flag",
+      "desc": "output vox2vox matrix (default is RAS2RAS)",
+      "cli": {
+        "argstr": "--vox2vox"
+      }
+    }
+  },
+  "outputs": {
+    "half_source": {
+      "type": "file",
+      "path": {
+        "from_input": "half_source"
+      },
+      "must_exist": false
+    },
+    "half_source_xfm": {
+      "type": "file",
+      "path": {
+        "from_input": "half_source_xfm"
+      },
+      "must_exist": false
+    },
+    "half_targ": {
+      "type": "file",
+      "path": {
+        "from_input": "half_targ"
+      },
+      "must_exist": false
+    },
+    "half_targ_xfm": {
+      "type": "file",
+      "path": {
+        "from_input": "half_targ_xfm"
+      },
+      "must_exist": false
+    },
+    "half_weights": {
+      "type": "file",
+      "path": {
+        "from_input": "half_weights"
+      },
+      "must_exist": false
+    },
+    "out_reg_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_reg_file"
+      },
+      "must_exist": false
+    },
+    "registered_file": {
+      "type": "file",
+      "path": {
+        "from_input": "registered_file"
+      },
+      "must_exist": false
+    },
+    "weights_file": {
+      "type": "file",
+      "path": {
+        "from_input": "weights_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.RobustRegister",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Perform intramodal linear registration (translation and rotation) using"
+}

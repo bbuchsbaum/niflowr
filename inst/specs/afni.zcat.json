@@ -1,0 +1,93 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.zcat",
+  "title": "AFNI Zcat",
+  "command": "3dZcat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "datum": {
+      "type": "enum",
+      "desc": "specify data type for output. Valid types are 'byte', 'short' and 'float'.",
+      "choices": [
+        "byte",
+        "short",
+        "float"
+      ],
+      "cli": {
+        "argstr": "-datum %s"
+      }
+    },
+    "fscale": {
+      "type": "flag",
+      "desc": "Force scaling of the output to the maximum integer range.  This only has effect if the output datum is byte or short (either forced or defaulted). This option is sometimes necessary to eliminate unpleasant truncation artifacts.",
+      "cli": {
+        "argstr": "-fscale"
+      },
+      "constraints": {
+        "xor": [
+          "nscale"
+        ]
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "nscale": {
+      "type": "flag",
+      "desc": "Don't do any scaling on output to byte or short datasets. This may be especially useful when operating on mask datasets whose output values are only 0's and 1's.",
+      "cli": {
+        "argstr": "-nscale"
+      },
+      "constraints": {
+        "xor": [
+          "fscale"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output dataset prefix name (default 'zcat')",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "verb": {
+      "type": "flag",
+      "desc": "print out some verbositiness as the program proceeds.",
+      "cli": {
+        "argstr": "-verb"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Zcat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Copies an image of one type to an image of the same"
+}

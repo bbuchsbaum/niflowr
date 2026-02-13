@@ -1,0 +1,289 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.topup",
+  "title": "FSL TOPUP",
+  "command": "topup",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "config": {
+      "type": "string",
+      "desc": "Name of config file specifying command line arguments",
+      "default": "b02b0.cnf",
+      "cli": {
+        "argstr": "--config=%s"
+      }
+    },
+    "encoding_direction": {
+      "type": "list",
+      "desc": "encoding direction for automatic generation of encoding_file",
+      "required": true,
+      "cli": {
+        "argstr": "--datain=%s"
+      },
+      "constraints": {
+        "xor": [
+          "encoding_file"
+        ],
+        "requires": [
+          "readout_times"
+        ]
+      }
+    },
+    "encoding_file": {
+      "type": "file",
+      "desc": "name of text file with PE directions/times",
+      "required": true,
+      "cli": {
+        "argstr": "--datain=%s"
+      },
+      "constraints": {
+        "xor": [
+          "encoding_direction"
+        ]
+      }
+    },
+    "estmov": {
+      "type": "enum",
+      "desc": "estimate movements if set",
+      "choices": [
+        1,
+        0
+      ],
+      "cli": {
+        "argstr": "--estmov=%d"
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "FWHM (in mm) of gaussian smoothing kernel",
+      "cli": {
+        "argstr": "--fwhm=%f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "name of 4D file with images",
+      "required": true,
+      "cli": {
+        "argstr": "--imain=%s"
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "Image interpolation model, linear or spline.",
+      "choices": [
+        "spline",
+        "linear"
+      ],
+      "cli": {
+        "argstr": "--interp=%s"
+      }
+    },
+    "max_iter": {
+      "type": "int",
+      "desc": "max # of non-linear iterations",
+      "cli": {
+        "argstr": "--miter=%d"
+      }
+    },
+    "minmet": {
+      "type": "enum",
+      "desc": "Minimisation method 0=Levenberg-Marquardt, 1=Scaled Conjugate Gradient",
+      "choices": [
+        0,
+        1
+      ],
+      "cli": {
+        "argstr": "--minmet=%d"
+      }
+    },
+    "numprec": {
+      "type": "enum",
+      "desc": "Precision for representing Hessian, double or float.",
+      "choices": [
+        "double",
+        "float"
+      ],
+      "cli": {
+        "argstr": "--numprec=%s"
+      }
+    },
+    "out_base": {
+      "type": "file",
+      "desc": "base-name of output files (spline coefficients (Hz) and movement parameters)",
+      "cli": {
+        "argstr": "--out=%s"
+      }
+    },
+    "out_corrected": {
+      "type": "file",
+      "desc": "name of 4D image file with unwarped images",
+      "cli": {
+        "argstr": "--iout=%s"
+      }
+    },
+    "out_field": {
+      "type": "file",
+      "desc": "name of image file with field (Hz)",
+      "cli": {
+        "argstr": "--fout=%s"
+      }
+    },
+    "out_jac_prefix": {
+      "type": "string",
+      "desc": "prefix for the warpfield images",
+      "default": "jac",
+      "cli": {
+        "argstr": "--jacout=%s"
+      }
+    },
+    "out_logfile": {
+      "type": "file",
+      "desc": "name of log-file",
+      "cli": {
+        "argstr": "--logout=%s"
+      }
+    },
+    "out_mat_prefix": {
+      "type": "string",
+      "desc": "prefix for the realignment matrices",
+      "default": "xfm",
+      "cli": {
+        "argstr": "--rbmout=%s"
+      }
+    },
+    "out_warp_prefix": {
+      "type": "string",
+      "desc": "prefix for the warpfield images (in mm)",
+      "default": "warpfield",
+      "cli": {
+        "argstr": "--dfout=%s"
+      }
+    },
+    "readout_times": {
+      "type": "list",
+      "desc": "readout times (dwell times by # phase-encode steps minus 1)",
+      "required": true,
+      "constraints": {
+        "xor": [
+          "encoding_file"
+        ],
+        "requires": [
+          "encoding_direction"
+        ]
+      }
+    },
+    "reg_lambda": {
+      "type": "double",
+      "desc": "Weight of regularisation, default depending on --ssqlambda and --regmod switches.",
+      "cli": {
+        "argstr": "--lambda=%0.f"
+      }
+    },
+    "regmod": {
+      "type": "enum",
+      "desc": "Regularisation term implementation. Defaults to bending_energy. Note that the two functions have vastly different scales. The membrane energy is based on the first derivatives and the bending energy on the second derivatives. The second derivatives will typically be much smaller than the first derivatives, so input lambda will have to be larger for bending_energy to yield approximately the same level of regularisation.",
+      "choices": [
+        "bending_energy",
+        "membrane_energy"
+      ],
+      "cli": {
+        "argstr": "--regmod=%s"
+      }
+    },
+    "regrid": {
+      "type": "enum",
+      "desc": "If set (=1), the calculations are done in a different grid",
+      "choices": [
+        1,
+        0
+      ],
+      "cli": {
+        "argstr": "--regrid=%d"
+      }
+    },
+    "scale": {
+      "type": "enum",
+      "desc": "If set (=1), the images are individually scaled to a common mean",
+      "choices": [
+        0,
+        1
+      ],
+      "cli": {
+        "argstr": "--scale=%d"
+      }
+    },
+    "splineorder": {
+      "type": "int",
+      "desc": "order of spline, 2->Qadratic spline, 3->Cubic spline",
+      "cli": {
+        "argstr": "--splineorder=%d"
+      }
+    },
+    "ssqlambda": {
+      "type": "enum",
+      "desc": "Weight lambda by the current value of the ssd. If used (=1), the effective weight of regularisation term becomes higher for the initial iterations, therefore initial steps are a little smoother than they would without weighting. This reduces the risk of finding a local minimum.",
+      "choices": [
+        1,
+        0
+      ],
+      "cli": {
+        "argstr": "--ssqlambda=%d"
+      }
+    },
+    "subsamp": {
+      "type": "int",
+      "desc": "sub-sampling scheme",
+      "cli": {
+        "argstr": "--subsamp=%d"
+      }
+    },
+    "warp_res": {
+      "type": "double",
+      "desc": "(approximate) resolution (in mm) of warp basis for the different sub-sampling levels",
+      "cli": {
+        "argstr": "--warpres=%f"
+      }
+    }
+  },
+  "outputs": {
+    "out_corrected": {
+      "type": "file",
+      "path": {
+        "from_input": "out_corrected"
+      },
+      "must_exist": false
+    },
+    "out_field": {
+      "type": "file",
+      "path": {
+        "from_input": "out_field"
+      },
+      "must_exist": false
+    },
+    "out_logfile": {
+      "type": "file",
+      "path": {
+        "from_input": "out_logfile"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.TOPUP",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Interface for FSL topup, a tool for estimating and correcting"
+}

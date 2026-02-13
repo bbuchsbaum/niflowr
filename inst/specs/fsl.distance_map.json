@@ -1,0 +1,78 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.distance_map",
+  "title": "FSL DistanceMap",
+  "command": "distancemap",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "distance_map": {
+      "type": "file",
+      "desc": "distance map to write",
+      "cli": {
+        "argstr": "--out=%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "image to calculate distance values for",
+      "required": true,
+      "cli": {
+        "argstr": "--in=%s"
+      }
+    },
+    "invert_input": {
+      "type": "flag",
+      "desc": "invert input image",
+      "cli": {
+        "argstr": "--invert"
+      }
+    },
+    "local_max_file": {
+      "type": "list",
+      "desc": "write an image of the local maxima",
+      "cli": {
+        "argstr": "--localmax=%s"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "binary mask to constrain calculations",
+      "cli": {
+        "argstr": "--mask=%s"
+      }
+    }
+  },
+  "outputs": {
+    "distance_map": {
+      "type": "file",
+      "path": {
+        "from_input": "distance_map"
+      },
+      "must_exist": false
+    },
+    "local_max_file": {
+      "type": "file",
+      "path": {
+        "from_input": "local_max_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.DistanceMap",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL's distancemap to generate a map of the distance to the nearest"
+}

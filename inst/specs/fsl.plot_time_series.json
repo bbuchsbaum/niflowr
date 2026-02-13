@@ -1,0 +1,175 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.plot_time_series",
+  "title": "FSL PlotTimeSeries",
+  "command": "fsl_tsplot",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "list",
+      "desc": "file or list of files with columns of timecourse information",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "labels": {
+      "type": "list",
+      "desc": "label or list of labels",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "legend_file": {
+      "type": "file",
+      "desc": "legend file",
+      "cli": {
+        "argstr": "--legend=%s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "image to write",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "plot_finish": {
+      "type": "int",
+      "desc": "final column from in-file to plot",
+      "cli": {
+        "argstr": "--finish=%d"
+      },
+      "constraints": {
+        "xor": [
+          "plot_range"
+        ]
+      }
+    },
+    "plot_range": {
+      "type": "list",
+      "desc": "first and last columns from the in-file to plot",
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "xor": [
+          "plot_start",
+          "plot_finish"
+        ]
+      }
+    },
+    "plot_size": {
+      "type": "list",
+      "desc": "plot image height and width",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "plot_start": {
+      "type": "int",
+      "desc": "first column from in-file to plot",
+      "cli": {
+        "argstr": "--start=%d"
+      },
+      "constraints": {
+        "xor": [
+          "plot_range"
+        ]
+      }
+    },
+    "sci_notation": {
+      "type": "flag",
+      "desc": "switch on scientific notation",
+      "cli": {
+        "argstr": "--sci"
+      }
+    },
+    "title": {
+      "type": "string",
+      "desc": "plot title",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "x_precision": {
+      "type": "int",
+      "desc": "precision of x-axis labels",
+      "cli": {
+        "argstr": "--precision=%d"
+      }
+    },
+    "x_units": {
+      "type": "int",
+      "desc": "scaling units for x-axis (between 1 and length of in file)",
+      "default": 1,
+      "cli": {
+        "argstr": "-u %d"
+      }
+    },
+    "y_max": {
+      "type": "double",
+      "desc": "maximum y value",
+      "cli": {
+        "argstr": "--ymax=%.2f"
+      },
+      "constraints": {
+        "xor": [
+          "y_range"
+        ]
+      }
+    },
+    "y_min": {
+      "type": "double",
+      "desc": "minimum y value",
+      "cli": {
+        "argstr": "--ymin=%.2f"
+      },
+      "constraints": {
+        "xor": [
+          "y_range"
+        ]
+      }
+    },
+    "y_range": {
+      "type": "list",
+      "desc": "min and max y axis values",
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "xor": [
+          "y_min",
+          "y_max"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.PlotTimeSeries",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use fsl_tsplot to create images of time course plots."
+}

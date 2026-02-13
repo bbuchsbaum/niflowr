@@ -1,0 +1,65 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.parse_dicom_dir",
+  "title": "FREESURFER ParseDICOMDir",
+  "command": "mri_parse_sdcmdir",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dicom_dir": {
+      "type": "dir",
+      "desc": "path to siemens dicom directory",
+      "required": true,
+      "cli": {
+        "argstr": "--d %s"
+      }
+    },
+    "dicom_info_file": {
+      "type": "file",
+      "desc": "file to which results are written",
+      "default": "dicominfo.txt",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "sortbyrun": {
+      "type": "flag",
+      "desc": "assign run numbers",
+      "cli": {
+        "argstr": "--sortbyrun"
+      }
+    },
+    "summarize": {
+      "type": "flag",
+      "desc": "only print out info for run leaders",
+      "cli": {
+        "argstr": "--summarize"
+      }
+    }
+  },
+  "outputs": {
+    "dicom_info_file": {
+      "type": "file",
+      "path": {
+        "from_input": "dicom_info_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.ParseDICOMDir",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Uses mri_parse_sdcmdir to get information from dicom directories"
+}

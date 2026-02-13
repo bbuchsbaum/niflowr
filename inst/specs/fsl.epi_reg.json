@@ -1,0 +1,143 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.epi_reg",
+  "title": "FSL EpiReg",
+  "command": "epi_reg",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "echospacing": {
+      "type": "double",
+      "desc": "Effective EPI echo spacing                                 (sometimes called dwell time) - in seconds",
+      "cli": {
+        "argstr": "--echospacing=%f"
+      }
+    },
+    "epi": {
+      "type": "file",
+      "desc": "EPI image",
+      "required": true,
+      "cli": {
+        "argstr": "--epi=%s",
+        "position": -4
+      }
+    },
+    "fmap": {
+      "type": "file",
+      "desc": "fieldmap image (in rad/s)",
+      "cli": {
+        "argstr": "--fmap=%s"
+      }
+    },
+    "fmapmag": {
+      "type": "file",
+      "desc": "fieldmap magnitude image - wholehead",
+      "cli": {
+        "argstr": "--fmapmag=%s"
+      }
+    },
+    "fmapmagbrain": {
+      "type": "file",
+      "desc": "fieldmap magnitude image - brain extracted",
+      "cli": {
+        "argstr": "--fmapmagbrain=%s"
+      }
+    },
+    "no_clean": {
+      "type": "flag",
+      "desc": "do not clean up intermediate files",
+      "default": true,
+      "cli": {
+        "argstr": "--noclean"
+      }
+    },
+    "no_fmapreg": {
+      "type": "flag",
+      "desc": "do not perform registration of fmap to T1                         (use if fmap already registered)",
+      "cli": {
+        "argstr": "--nofmapreg"
+      }
+    },
+    "out_base": {
+      "type": "string",
+      "desc": "output base name",
+      "default": "epi2struct",
+      "cli": {
+        "argstr": "--out=%s",
+        "position": -1
+      }
+    },
+    "pedir": {
+      "type": "enum",
+      "desc": "phase encoding direction, dir = x/y/z/-x/-y/-z",
+      "choices": [
+        "x",
+        "y",
+        "z",
+        "-x",
+        "-y",
+        "-z"
+      ],
+      "cli": {
+        "argstr": "--pedir=%s"
+      }
+    },
+    "t1_brain": {
+      "type": "file",
+      "desc": "brain extracted T1 image",
+      "required": true,
+      "cli": {
+        "argstr": "--t1brain=%s",
+        "position": -2
+      }
+    },
+    "t1_head": {
+      "type": "file",
+      "desc": "wholehead T1 image",
+      "required": true,
+      "cli": {
+        "argstr": "--t1=%s",
+        "position": -3
+      }
+    },
+    "weight_image": {
+      "type": "file",
+      "desc": "weighting image (in T1 space)",
+      "cli": {
+        "argstr": "--weight=%s"
+      }
+    },
+    "wmseg": {
+      "type": "file",
+      "desc": "white matter segmentation of T1 image, has to be named                  like the t1brain and end on _wmseg",
+      "cli": {
+        "argstr": "--wmseg=%s"
+      }
+    }
+  },
+  "outputs": {
+    "wmseg": {
+      "type": "file",
+      "path": {
+        "from_input": "wmseg"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.EpiReg",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Runs FSL epi_reg script for simultaneous coregistration and fieldmap"
+}

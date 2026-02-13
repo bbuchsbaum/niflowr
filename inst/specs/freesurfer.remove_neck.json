@@ -1,0 +1,77 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.remove_neck",
+  "title": "FREESURFER RemoveNeck",
+  "command": "mri_remove_neck",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input file for RemoveNeck",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output file for RemoveNeck",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "radius": {
+      "type": "int",
+      "desc": "Radius",
+      "cli": {
+        "argstr": "-radius %d"
+      }
+    },
+    "template": {
+      "type": "file",
+      "desc": "Input template file for RemoveNeck",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "Input transform file for RemoveNeck",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.RemoveNeck",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Crops the neck out of the mri image"
+}

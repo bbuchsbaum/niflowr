@@ -1,0 +1,176 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.concatenate",
+  "title": "FREESURFER Concatenate",
+  "command": "mri_concat",
+  "inputs": {
+    "add_val": {
+      "type": "double",
+      "desc": "Add some amount to the input volume",
+      "cli": {
+        "argstr": "--add %f"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "combine": {
+      "type": "flag",
+      "desc": "Combine non-zero values into single frame volume",
+      "cli": {
+        "argstr": "--combine"
+      }
+    },
+    "concatenated_file": {
+      "type": "file",
+      "desc": "Output volume",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "gmean": {
+      "type": "int",
+      "desc": "create matrix to average Ng groups, Nper=Ntot/Ng",
+      "cli": {
+        "argstr": "--gmean %d"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "Individual volumes to be concatenated",
+      "required": true,
+      "cli": {
+        "argstr": "--i %s..."
+      }
+    },
+    "keep_dtype": {
+      "type": "flag",
+      "desc": "Keep voxelwise precision type (default is float",
+      "cli": {
+        "argstr": "--keep-datatype"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "Mask input with a volume",
+      "cli": {
+        "argstr": "--mask %s"
+      }
+    },
+    "max_bonfcor": {
+      "type": "flag",
+      "desc": "Compute max and bonferroni correct (assumes -log10(ps))",
+      "cli": {
+        "argstr": "--max-bonfcor"
+      }
+    },
+    "max_index": {
+      "type": "flag",
+      "desc": "Compute the index of max voxel in concatenated volumes",
+      "cli": {
+        "argstr": "--max-index"
+      }
+    },
+    "mean_div_n": {
+      "type": "flag",
+      "desc": "compute mean/nframes (good for var)",
+      "cli": {
+        "argstr": "--mean-div-n"
+      }
+    },
+    "multiply_by": {
+      "type": "double",
+      "desc": "Multiply input volume by some amount",
+      "cli": {
+        "argstr": "--mul %f"
+      }
+    },
+    "multiply_matrix_file": {
+      "type": "file",
+      "desc": "Multiply input by an ascii matrix in file",
+      "cli": {
+        "argstr": "--mtx %s"
+      }
+    },
+    "paired_stats": {
+      "type": "enum",
+      "desc": "Compute paired sum, avg, or diff",
+      "choices": [
+        "sum",
+        "avg",
+        "diff",
+        "diff-norm",
+        "diff-norm1",
+        "diff-norm2"
+      ],
+      "cli": {
+        "argstr": "--paired-%s"
+      }
+    },
+    "sign": {
+      "type": "enum",
+      "desc": "Take only pos or neg voxles from input, or take abs",
+      "choices": [
+        "abs",
+        "pos",
+        "neg"
+      ],
+      "cli": {
+        "argstr": "--%s"
+      }
+    },
+    "sort": {
+      "type": "flag",
+      "desc": "Sort each voxel by ascending frame value",
+      "cli": {
+        "argstr": "--sort"
+      }
+    },
+    "stats": {
+      "type": "enum",
+      "desc": "Compute the sum, var, std, max, min or mean of the input volumes",
+      "choices": [
+        "sum",
+        "var",
+        "std",
+        "max",
+        "min",
+        "mean"
+      ],
+      "cli": {
+        "argstr": "--%s"
+      }
+    },
+    "vote": {
+      "type": "flag",
+      "desc": "Most frequent value at each voxel and fraction of occurrences",
+      "cli": {
+        "argstr": "--vote"
+      }
+    }
+  },
+  "outputs": {
+    "concatenated_file": {
+      "type": "file",
+      "path": {
+        "from_input": "concatenated_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.Concatenate",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use Freesurfer mri_concat to combine several input volumes"
+}

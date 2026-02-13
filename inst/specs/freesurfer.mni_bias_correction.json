@@ -1,0 +1,107 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mni_bias_correction",
+  "title": "FREESURFER MNIBiasCorrection",
+  "command": "mri_nu_correct.mni",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "distance": {
+      "type": "int",
+      "desc": "N3 -distance option",
+      "cli": {
+        "argstr": "--distance %d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input volume. Input can be any format accepted by mri_convert.",
+      "required": true,
+      "cli": {
+        "argstr": "--i %s"
+      }
+    },
+    "iterations": {
+      "type": "int",
+      "desc": "Number of iterations to run nu_correct. Default is 4. This is the number of times that nu_correct is repeated (ie, using the output from the previous run as the input for the next). This is different than the -iterations option to nu_correct.",
+      "default": 4,
+      "cli": {
+        "argstr": "--n %d"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "brainmask volume. Input can be any format accepted by mri_convert.",
+      "cli": {
+        "argstr": "--mask %s"
+      }
+    },
+    "no_rescale": {
+      "type": "flag",
+      "desc": "do not rescale so that global mean of output == input global mean",
+      "cli": {
+        "argstr": "--no-rescale"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output volume. Output can be any format accepted by mri_convert. If the output format is COR, then the directory must exist.",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "protocol_iterations": {
+      "type": "int",
+      "desc": "Passes Np as argument of the -iterations flag of nu_correct. This is different than the --n flag above. Default is not to pass nu_correct the -iterations flag.",
+      "cli": {
+        "argstr": "--proto-iters %d"
+      }
+    },
+    "shrink": {
+      "type": "int",
+      "desc": "Shrink parameter for finer sampling (default is 4)",
+      "cli": {
+        "argstr": "--shrink %d"
+      }
+    },
+    "stop": {
+      "type": "double",
+      "desc": "Convergence threshold below which iteration stops (suggest 0.01 to 0.0001)",
+      "cli": {
+        "argstr": "--stop %f"
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "tal.xfm. Use mri_make_uchar instead of conforming",
+      "cli": {
+        "argstr": "--uchar %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.MNIBiasCorrection",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Wrapper for nu_correct, a program from the Montreal Neurological Institute (MNI)"
+}

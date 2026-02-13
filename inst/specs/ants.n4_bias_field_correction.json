@@ -1,0 +1,127 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.n4_bias_field_correction",
+  "title": "ANTS N4BiasFieldCorrection",
+  "command": "N4BiasFieldCorrection",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bspline_fitting_distance": {
+      "type": "double",
+      "cli": {
+        "argstr": "--bspline-fitting %s"
+      }
+    },
+    "copy_header": {
+      "type": "bool",
+      "desc": "copy headers of the original image into the output (corrected) file",
+      "required": true,
+      "default": false
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2, 3 or 4)",
+      "default": 3,
+      "choices": [
+        3,
+        2,
+        4
+      ],
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "histogram_sharpening": {
+      "type": "list",
+      "desc": "Three-values tuple of histogram sharpening parameters (FWHM, wienerNose, numberOfHistogramBins).\nThese options describe the histogram sharpening parameters, i.e. the deconvolution step parameters described in the original N3 algorithm.\nThe default values have been shown to work fairly well.",
+      "cli": {
+        "argstr": "--histogram-sharpening [%g,%g,%d]"
+      }
+    },
+    "input_image": {
+      "type": "file",
+      "desc": "input for bias correction. Negative values or values close to zero should be processed prior to correction",
+      "required": true,
+      "cli": {
+        "argstr": "--input-image %s"
+      }
+    },
+    "mask_image": {
+      "type": "file",
+      "desc": "image to specify region to perform final bias correction in",
+      "cli": {
+        "argstr": "--mask-image %s"
+      }
+    },
+    "n_iterations": {
+      "type": "list",
+      "cli": {
+        "argstr": "--convergence %s"
+      }
+    },
+    "output_image": {
+      "type": "string",
+      "desc": "output file name",
+      "cli": {
+        "argstr": "--output %s"
+      }
+    },
+    "rescale_intensities": {
+      "type": "flag",
+      "desc": "[NOTE: Only ANTs>=2.1.0]\nAt each iteration, a new intensity mapping is calculated and applied but there\nis nothing which constrains the new intensity range to be within certain values.\nThe result is that the range can \"drift\" from the original at each iteration.\nThis option rescales to the [min,max] range of the original image intensities\nwithin the user-specified mask.",
+      "default": false,
+      "cli": {
+        "argstr": "-r"
+      }
+    },
+    "save_bias": {
+      "type": "bool",
+      "desc": "True if the estimated bias should be saved to file.",
+      "required": true,
+      "default": false,
+      "constraints": {
+        "xor": [
+          "bias_image"
+        ]
+      }
+    },
+    "shrink_factor": {
+      "type": "int",
+      "cli": {
+        "argstr": "--shrink-factor %d"
+      }
+    },
+    "weight_image": {
+      "type": "file",
+      "desc": "image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting.",
+      "cli": {
+        "argstr": "--weight-image %s"
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.segmentation.N4BiasFieldCorrection",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Bias field correction."
+}

@@ -1,0 +1,73 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.compose_multi_transform",
+  "title": "ANTS ComposeMultiTransform",
+  "command": "ComposeMultiTransform",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 0
+      }
+    },
+    "output_transform": {
+      "type": "file",
+      "desc": "the name of the resulting transform.",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "reference_image": {
+      "type": "file",
+      "desc": "Reference image (only necessary when output is warpfield)",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "transforms": {
+      "type": "list",
+      "desc": "transforms to average",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    }
+  },
+  "outputs": {
+    "output_transform": {
+      "type": "file",
+      "path": {
+        "from_input": "output_transform"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.ComposeMultiTransform",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Take a set of transformations and convert them to a single transformation matrix/warpfield."
+}

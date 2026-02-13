@@ -1,0 +1,157 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.dti_fit",
+  "title": "FSL DTIFit",
+  "command": "dtifit",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "base_name": {
+      "type": "string",
+      "desc": "base_name that all output files will start with",
+      "default": "dtifit_",
+      "cli": {
+        "argstr": "-o %s",
+        "position": 1
+      }
+    },
+    "bvals": {
+      "type": "file",
+      "desc": "b values file",
+      "required": true,
+      "cli": {
+        "argstr": "-b %s",
+        "position": 4
+      }
+    },
+    "bvecs": {
+      "type": "file",
+      "desc": "b vectors file",
+      "required": true,
+      "cli": {
+        "argstr": "-r %s",
+        "position": 3
+      }
+    },
+    "cni": {
+      "type": "file",
+      "desc": "input counfound regressors",
+      "cli": {
+        "argstr": "--cni=%s"
+      }
+    },
+    "dwi": {
+      "type": "file",
+      "desc": "diffusion weighted image data file",
+      "required": true,
+      "cli": {
+        "argstr": "-k %s",
+        "position": 0
+      }
+    },
+    "gradnonlin": {
+      "type": "file",
+      "desc": "gradient non linearities",
+      "cli": {
+        "argstr": "--gradnonlin=%s"
+      }
+    },
+    "little_bit": {
+      "type": "flag",
+      "desc": "only process small area of brain",
+      "cli": {
+        "argstr": "--littlebit"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "bet binary mask file",
+      "required": true,
+      "cli": {
+        "argstr": "-m %s",
+        "position": 2
+      }
+    },
+    "max_x": {
+      "type": "int",
+      "desc": "max x",
+      "cli": {
+        "argstr": "-X %d"
+      }
+    },
+    "max_y": {
+      "type": "int",
+      "desc": "max y",
+      "cli": {
+        "argstr": "-Y %d"
+      }
+    },
+    "max_z": {
+      "type": "int",
+      "desc": "max z",
+      "cli": {
+        "argstr": "-Z %d"
+      }
+    },
+    "min_x": {
+      "type": "int",
+      "desc": "min x",
+      "cli": {
+        "argstr": "-x %d"
+      }
+    },
+    "min_y": {
+      "type": "int",
+      "desc": "min y",
+      "cli": {
+        "argstr": "-y %d"
+      }
+    },
+    "min_z": {
+      "type": "int",
+      "desc": "min z",
+      "cli": {
+        "argstr": "-z %d"
+      }
+    },
+    "save_tensor": {
+      "type": "flag",
+      "desc": "save the elements of the tensor",
+      "cli": {
+        "argstr": "--save_tensor"
+      }
+    },
+    "sse": {
+      "type": "flag",
+      "desc": "output sum of squared errors",
+      "cli": {
+        "argstr": "--sse"
+      }
+    }
+  },
+  "outputs": {
+    "sse": {
+      "type": "file",
+      "path": {
+        "from_input": "sse"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.DTIFit",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL  dtifit command for fitting a diffusion tensor model at each"
+}

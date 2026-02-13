@@ -1,0 +1,183 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.convert_warp",
+  "title": "FSL ConvertWarp",
+  "command": "convertwarp",
+  "inputs": {
+    "abswarp": {
+      "type": "flag",
+      "desc": "If set it indicates that the warps in --warp1 and --warp2 should be interpreted as absolute. I.e. the values in --warp1/2 are the coordinates in the next space, rather than displacements. This flag is ignored if --warp1/2 was created by fnirt, which always creates relative displacements.",
+      "cli": {
+        "argstr": "--abs"
+      },
+      "constraints": {
+        "xor": [
+          "relwarp"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "cons_jacobian": {
+      "type": "flag",
+      "desc": "Constrain the Jacobian of the warpfield to lie within specified min/max limits.",
+      "cli": {
+        "argstr": "--constrainj"
+      }
+    },
+    "jacobian_max": {
+      "type": "double",
+      "desc": "Maximum acceptable Jacobian value for constraint (default 100.0)",
+      "cli": {
+        "argstr": "--jmax=%f"
+      }
+    },
+    "jacobian_min": {
+      "type": "double",
+      "desc": "Minimum acceptable Jacobian value for constraint (default 0.01)",
+      "cli": {
+        "argstr": "--jmin=%f"
+      }
+    },
+    "midmat": {
+      "type": "file",
+      "desc": "Name of file containing mid-warp-affine transform",
+      "cli": {
+        "argstr": "--midmat=%s"
+      }
+    },
+    "out_abswarp": {
+      "type": "flag",
+      "desc": "If set it indicates that the warps in --out should be absolute, i.e. the values in --out are displacements from the coordinates in --ref.",
+      "cli": {
+        "argstr": "--absout"
+      },
+      "constraints": {
+        "xor": [
+          "out_relwarp"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Name of output file, containing warps that are the combination of all those given as arguments. The format of this will be a field-file (rather than spline coefficients) with any affine components included.",
+      "cli": {
+        "argstr": "--out=%s",
+        "position": -1
+      }
+    },
+    "out_relwarp": {
+      "type": "flag",
+      "desc": "If set it indicates that the warps in --out should be relative, i.e. the values in --out are displacements from the coordinates in --ref.",
+      "cli": {
+        "argstr": "--relout"
+      },
+      "constraints": {
+        "xor": [
+          "out_abswarp"
+        ]
+      }
+    },
+    "postmat": {
+      "type": "file",
+      "desc": "Name of file containing an affine transform (applied last). It could e.g. be an affine transform that maps the MNI152-space into a better approximation to the Talairach-space (if indeed there is one).",
+      "cli": {
+        "argstr": "--postmat=%s"
+      }
+    },
+    "premat": {
+      "type": "file",
+      "desc": "filename for pre-transform (affine matrix)",
+      "cli": {
+        "argstr": "--premat=%s"
+      }
+    },
+    "reference": {
+      "type": "file",
+      "desc": "Name of a file in target space of the full transform.",
+      "required": true,
+      "cli": {
+        "argstr": "--ref=%s",
+        "position": 1
+      }
+    },
+    "relwarp": {
+      "type": "flag",
+      "desc": "If set it indicates that the warps in --warp1/2 should be interpreted as relative. I.e. the values in --warp1/2 are displacements from the coordinates in the next space.",
+      "cli": {
+        "argstr": "--rel"
+      },
+      "constraints": {
+        "xor": [
+          "abswarp"
+        ]
+      }
+    },
+    "shift_direction": {
+      "type": "enum",
+      "desc": "Indicates the direction that the distortions from --shiftmap goes. It depends on the direction and polarity of the phase-encoding in the EPI sequence.",
+      "choices": [
+        "y-",
+        "y",
+        "x",
+        "x-",
+        "z",
+        "z-"
+      ],
+      "cli": {
+        "argstr": "--shiftdir=%s"
+      },
+      "constraints": {
+        "requires": [
+          "shift_in_file"
+        ]
+      }
+    },
+    "shift_in_file": {
+      "type": "file",
+      "desc": "Name of file containing a \"shiftmap\", a non-linear transform with displacements only in one direction (applied first, before premat). This would typically be a fieldmap that has been pre-processed using fugue that maps a subjects functional (EPI) data onto an undistorted space (i.e. a space that corresponds to his/her true anatomy).",
+      "cli": {
+        "argstr": "--shiftmap=%s"
+      }
+    },
+    "warp1": {
+      "type": "file",
+      "desc": "Name of file containing initial warp-fields/coefficients (follows premat). This could e.g. be a fnirt-transform from a subjects structural scan to an average of a group of subjects.",
+      "cli": {
+        "argstr": "--warp1=%s"
+      }
+    },
+    "warp2": {
+      "type": "file",
+      "desc": "Name of file containing secondary warp-fields/coefficients (after warp1/midmat but before postmat). This could e.g. be a fnirt-transform from the average of a group of subjects to some standard space (e.g. MNI152).",
+      "cli": {
+        "argstr": "--warp2=%s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.ConvertWarp",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL `convertwarp <http://fsl.fmrib.ox.ac.uk/fsl/fsl-4.1.9/fnirt/warp_utils.html>`_"
+}

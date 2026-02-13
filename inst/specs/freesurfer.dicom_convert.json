@@ -1,0 +1,37 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.dicom_convert",
+  "title": "FREESURFER DICOMConvert",
+  "command": "mri_convert",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "base_output_dir": {
+      "type": "dir",
+      "desc": "directory in which subject directories are created",
+      "required": true
+    },
+    "dicom_dir": {
+      "type": "dir",
+      "desc": "dicom directory from which to convert dicom files",
+      "required": true
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.DICOMConvert",
+    "nipype_version": "1.10.0"
+  },
+  "description": "use fs mri_convert to convert dicom files"
+}

@@ -1,0 +1,177 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.prelude",
+  "title": "FSL PRELUDE",
+  "command": "prelude",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "complex_phase_file": {
+      "type": "file",
+      "desc": "complex phase input volume",
+      "required": true,
+      "cli": {
+        "argstr": "--complex=%s"
+      },
+      "constraints": {
+        "xor": [
+          "magnitude_file",
+          "phase_file"
+        ]
+      }
+    },
+    "end": {
+      "type": "int",
+      "desc": "final image number to process (default Inf)",
+      "cli": {
+        "argstr": "--end=%d"
+      }
+    },
+    "label_file": {
+      "type": "file",
+      "desc": "saving the area labels output",
+      "cli": {
+        "argstr": "--labels=%s"
+      }
+    },
+    "labelprocess2d": {
+      "type": "flag",
+      "desc": "does label processing in 2D (slice at a time)",
+      "cli": {
+        "argstr": "--labelslices"
+      }
+    },
+    "magnitude_file": {
+      "type": "file",
+      "desc": "file containing magnitude image",
+      "required": true,
+      "cli": {
+        "argstr": "--abs=%s"
+      },
+      "constraints": {
+        "xor": [
+          "complex_phase_file"
+        ]
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "filename of mask input volume",
+      "cli": {
+        "argstr": "--mask=%s"
+      }
+    },
+    "num_partitions": {
+      "type": "int",
+      "desc": "number of phase partitions to use",
+      "cli": {
+        "argstr": "--numphasesplit=%d"
+      }
+    },
+    "phase_file": {
+      "type": "file",
+      "desc": "raw phase file",
+      "required": true,
+      "cli": {
+        "argstr": "--phase=%s"
+      },
+      "constraints": {
+        "xor": [
+          "complex_phase_file"
+        ]
+      }
+    },
+    "process2d": {
+      "type": "flag",
+      "desc": "does all processing in 2D (slice at a time)",
+      "cli": {
+        "argstr": "--slices"
+      },
+      "constraints": {
+        "xor": [
+          "labelprocess2d"
+        ]
+      }
+    },
+    "process3d": {
+      "type": "flag",
+      "desc": "forces all processing to be full 3D",
+      "cli": {
+        "argstr": "--force3D"
+      },
+      "constraints": {
+        "xor": [
+          "labelprocess2d",
+          "process2d"
+        ]
+      }
+    },
+    "rawphase_file": {
+      "type": "file",
+      "desc": "saving the raw phase output",
+      "cli": {
+        "argstr": "--rawphase=%s"
+      }
+    },
+    "removeramps": {
+      "type": "flag",
+      "desc": "remove phase ramps during unwrapping",
+      "cli": {
+        "argstr": "--removeramps"
+      }
+    },
+    "savemask_file": {
+      "type": "file",
+      "desc": "saving the mask volume",
+      "cli": {
+        "argstr": "--savemask=%s"
+      }
+    },
+    "start": {
+      "type": "int",
+      "desc": "first image number to process (default 0)",
+      "cli": {
+        "argstr": "--start=%d"
+      }
+    },
+    "threshold": {
+      "type": "double",
+      "desc": "intensity threshold for masking",
+      "cli": {
+        "argstr": "--thresh=%.10f"
+      }
+    },
+    "unwrapped_phase_file": {
+      "type": "file",
+      "desc": "file containing unwrapepd phase",
+      "cli": {
+        "argstr": "--unwrap=%s"
+      }
+    }
+  },
+  "outputs": {
+    "unwrapped_phase_file": {
+      "type": "file",
+      "path": {
+        "from_input": "unwrapped_phase_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.PRELUDE",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL prelude wrapper for phase unwrapping"
+}

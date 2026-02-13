@@ -1,0 +1,53 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.segment_wm",
+  "title": "FREESURFER SegmentWM",
+  "command": "mri_segment",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input file for SegmentWM",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "File to be written as output for SegmentWM",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.SegmentWM",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program segments white matter from the input volume.  The input"
+}

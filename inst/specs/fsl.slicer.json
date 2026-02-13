@@ -1,0 +1,220 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.slicer",
+  "title": "FSL Slicer",
+  "command": "slicer",
+  "inputs": {
+    "all_axial": {
+      "type": "flag",
+      "desc": "output all axial slices into one picture",
+      "cli": {
+        "argstr": "-A",
+        "position": 10
+      },
+      "constraints": {
+        "xor": [
+          "single_slice",
+          "middle_slices",
+          "all_axial",
+          "sample_axial"
+        ],
+        "requires": [
+          "image_width"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "colour_map": {
+      "type": "file",
+      "desc": "use different colour map from that stored in nifti header",
+      "cli": {
+        "argstr": "-l %s",
+        "position": 4
+      }
+    },
+    "dither_edges": {
+      "type": "flag",
+      "desc": "produce semi-transparent (dithered) edges",
+      "cli": {
+        "argstr": "-t",
+        "position": 7
+      }
+    },
+    "image_edges": {
+      "type": "file",
+      "desc": "volume to display edge overlay for (useful for checking registration",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "image_width": {
+      "type": "int",
+      "desc": "max picture width",
+      "cli": {
+        "argstr": "%d",
+        "position": -2
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input volume",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "intensity_range": {
+      "type": "list",
+      "desc": "min and max intensities to display",
+      "cli": {
+        "argstr": "-i %.3f %.3f",
+        "position": 5
+      }
+    },
+    "label_slices": {
+      "type": "flag",
+      "desc": "display slice number",
+      "default": true,
+      "cli": {
+        "argstr": "-L",
+        "position": 3
+      }
+    },
+    "middle_slices": {
+      "type": "flag",
+      "desc": "output picture of mid-sagittal, axial, and coronal slices",
+      "cli": {
+        "argstr": "-a",
+        "position": 10
+      },
+      "constraints": {
+        "xor": [
+          "single_slice",
+          "middle_slices",
+          "all_axial",
+          "sample_axial"
+        ]
+      }
+    },
+    "nearest_neighbour": {
+      "type": "flag",
+      "desc": "use nearest neighbor interpolation for output",
+      "cli": {
+        "argstr": "-n",
+        "position": 8
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "picture to write",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "sample_axial": {
+      "type": "int",
+      "desc": "output every n axial slices into one picture",
+      "cli": {
+        "argstr": "-S %d",
+        "position": 10
+      },
+      "constraints": {
+        "xor": [
+          "single_slice",
+          "middle_slices",
+          "all_axial",
+          "sample_axial"
+        ],
+        "requires": [
+          "image_width"
+        ]
+      }
+    },
+    "scaling": {
+      "type": "double",
+      "desc": "image scale",
+      "cli": {
+        "argstr": "-s %f",
+        "position": 0
+      }
+    },
+    "show_orientation": {
+      "type": "bool",
+      "desc": "label left-right orientation",
+      "default": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 9
+      }
+    },
+    "single_slice": {
+      "type": "enum",
+      "desc": "output picture of single slice in the x, y, or z plane",
+      "choices": [
+        "x",
+        "y",
+        "z"
+      ],
+      "cli": {
+        "argstr": "-%s",
+        "position": 10
+      },
+      "constraints": {
+        "xor": [
+          "single_slice",
+          "middle_slices",
+          "all_axial",
+          "sample_axial"
+        ],
+        "requires": [
+          "slice_number"
+        ]
+      }
+    },
+    "slice_number": {
+      "type": "int",
+      "desc": "slice number to save in picture",
+      "cli": {
+        "argstr": "-%d",
+        "position": 11
+      }
+    },
+    "threshold_edges": {
+      "type": "double",
+      "desc": "use threshold for edges",
+      "cli": {
+        "argstr": "-e %.3f",
+        "position": 6
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.Slicer",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL's slicer command to output a png image from a volume."
+}

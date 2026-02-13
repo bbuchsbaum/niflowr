@@ -1,0 +1,169 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.b0_calc",
+  "title": "FSL B0Calc",
+  "command": "b0calc",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "chi_air": {
+      "type": "double",
+      "desc": "susceptibility of air",
+      "default": 4e-07,
+      "cli": {
+        "argstr": "--chi0=%e"
+      }
+    },
+    "compute_xyz": {
+      "type": "flag",
+      "desc": "calculate and save all 3 field components (i.e. x,y,z)",
+      "default": false,
+      "cli": {
+        "argstr": "--xyz"
+      }
+    },
+    "delta": {
+      "type": "double",
+      "desc": "Delta value (chi_tissue - chi_air)",
+      "default": -9.45e-06,
+      "cli": {
+        "argstr": "-d %e"
+      }
+    },
+    "directconv": {
+      "type": "flag",
+      "desc": "use direct (image space) convolution, not FFT",
+      "default": false,
+      "cli": {
+        "argstr": "--directconv"
+      }
+    },
+    "extendboundary": {
+      "type": "double",
+      "desc": "Relative proportion to extend voxels at boundary",
+      "default": 1.0,
+      "cli": {
+        "argstr": "--extendboundary=%0.2f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "filename of input image (usually a tissue/air segmentation)",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": 0
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "filename of B0 output volume",
+      "cli": {
+        "argstr": "-o %s",
+        "position": 1
+      }
+    },
+    "x_b0": {
+      "type": "double",
+      "desc": "Value for zeroth-order b0 field (x-component), in Tesla",
+      "default": 0.0,
+      "cli": {
+        "argstr": "--b0x=%0.2f"
+      },
+      "constraints": {
+        "xor": [
+          "xyz_b0"
+        ]
+      }
+    },
+    "x_grad": {
+      "type": "double",
+      "desc": "Value for zeroth-order x-gradient field (per mm)",
+      "default": 0.0,
+      "cli": {
+        "argstr": "--gx=%0.4f"
+      }
+    },
+    "xyz_b0": {
+      "type": "list",
+      "desc": "Zeroth-order B0 field in Tesla",
+      "cli": {
+        "argstr": "--b0x=%0.2f --b0y=%0.2f --b0=%0.2f"
+      },
+      "constraints": {
+        "xor": [
+          "x_b0",
+          "y_b0",
+          "z_b0"
+        ]
+      }
+    },
+    "y_b0": {
+      "type": "double",
+      "desc": "Value for zeroth-order b0 field (y-component), in Tesla",
+      "default": 0.0,
+      "cli": {
+        "argstr": "--b0y=%0.2f"
+      },
+      "constraints": {
+        "xor": [
+          "xyz_b0"
+        ]
+      }
+    },
+    "y_grad": {
+      "type": "double",
+      "desc": "Value for zeroth-order y-gradient field (per mm)",
+      "default": 0.0,
+      "cli": {
+        "argstr": "--gy=%0.4f"
+      }
+    },
+    "z_b0": {
+      "type": "double",
+      "desc": "Value for zeroth-order b0 field (z-component), in Tesla",
+      "default": 1.0,
+      "cli": {
+        "argstr": "--b0=%0.2f"
+      },
+      "constraints": {
+        "xor": [
+          "xyz_b0"
+        ]
+      }
+    },
+    "z_grad": {
+      "type": "double",
+      "desc": "Value for zeroth-order z-gradient field (per mm)",
+      "default": 0.0,
+      "cli": {
+        "argstr": "--gz=%0.4f"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.possum.B0Calc",
+    "nipype_version": "1.10.0"
+  },
+  "description": "B0 inhomogeneities occur at interfaces of materials with different magnetic susceptibilities,"
+}

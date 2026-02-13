@@ -1,0 +1,194 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.glm",
+  "title": "FSL GLM",
+  "command": "fsl_glm",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "contrasts": {
+      "type": "file",
+      "desc": "matrix of t-statics contrasts",
+      "cli": {
+        "argstr": "-c %s"
+      }
+    },
+    "dat_norm": {
+      "type": "flag",
+      "desc": "switch on normalization of the data time series to unit std deviation",
+      "cli": {
+        "argstr": "--dat_norm"
+      }
+    },
+    "demean": {
+      "type": "flag",
+      "desc": "switch on demeaining of design and data",
+      "cli": {
+        "argstr": "--demean"
+      }
+    },
+    "des_norm": {
+      "type": "flag",
+      "desc": "switch on normalization of the design matrix columns to unit std deviation",
+      "cli": {
+        "argstr": "--des_norm"
+      }
+    },
+    "design": {
+      "type": "file",
+      "desc": "file name of the GLM design matrix (text time courses for temporal regression or an image file for spatial regression)",
+      "required": true,
+      "cli": {
+        "argstr": "-d %s",
+        "position": 2
+      }
+    },
+    "dof": {
+      "type": "int",
+      "desc": "set degrees of freedom explicitly",
+      "cli": {
+        "argstr": "--dof=%d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file name (text matrix or 3D/4D image file)",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": 1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask image file name if input is image",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "out_cope": {
+      "type": "file",
+      "desc": "output file name for COPE (either as txt or image",
+      "cli": {
+        "argstr": "--out_cope=%s"
+      }
+    },
+    "out_data_name": {
+      "type": "file",
+      "desc": "output file name for pre-processed data",
+      "cli": {
+        "argstr": "--out_data=%s"
+      }
+    },
+    "out_f_name": {
+      "type": "file",
+      "desc": "output file name for F-value of full model fit",
+      "cli": {
+        "argstr": "--out_f=%s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "filename for GLM parameter estimates (GLM betas)",
+      "cli": {
+        "argstr": "-o %s",
+        "position": 3
+      }
+    },
+    "out_p_name": {
+      "type": "file",
+      "desc": "output file name for p-values of Z-stats (either as text file or image)",
+      "cli": {
+        "argstr": "--out_p=%s"
+      }
+    },
+    "out_pf_name": {
+      "type": "file",
+      "desc": "output file name for p-value for full model fit",
+      "cli": {
+        "argstr": "--out_pf=%s"
+      }
+    },
+    "out_res_name": {
+      "type": "file",
+      "desc": "output file name for residuals",
+      "cli": {
+        "argstr": "--out_res=%s"
+      }
+    },
+    "out_sigsq_name": {
+      "type": "file",
+      "desc": "output file name for residual noise variance sigma-square",
+      "cli": {
+        "argstr": "--out_sigsq=%s"
+      }
+    },
+    "out_t_name": {
+      "type": "file",
+      "desc": "output file name for t-stats (either as txt or image",
+      "cli": {
+        "argstr": "--out_t=%s"
+      }
+    },
+    "out_varcb_name": {
+      "type": "file",
+      "desc": "output file name for variance of COPEs",
+      "cli": {
+        "argstr": "--out_varcb=%s"
+      }
+    },
+    "out_vnscales_name": {
+      "type": "file",
+      "desc": "output file name for scaling factors for variance normalisation",
+      "cli": {
+        "argstr": "--out_vnscales=%s"
+      }
+    },
+    "out_z_name": {
+      "type": "file",
+      "desc": "output file name for Z-stats (either as txt or image",
+      "cli": {
+        "argstr": "--out_z=%s"
+      }
+    },
+    "var_norm": {
+      "type": "flag",
+      "desc": "perform MELODIC variance-normalisation on data",
+      "cli": {
+        "argstr": "--vn"
+      }
+    }
+  },
+  "outputs": {
+    "out_cope": {
+      "type": "text",
+      "path": {
+        "from_input": "out_cope"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.GLM",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL GLM:"
+}

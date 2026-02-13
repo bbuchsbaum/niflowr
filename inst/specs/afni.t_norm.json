@@ -1,0 +1,93 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.t_norm",
+  "title": "AFNI TNorm",
+  "command": "3dTnorm",
+  "inputs": {
+    "L1fit": {
+      "type": "flag",
+      "desc": "Detrend with L1 regression (L2 is the default)\nThis option is here just for the hell of it",
+      "cli": {
+        "argstr": "-L1fit"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dTNorm",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "norm1": {
+      "type": "flag",
+      "desc": "L1 normalize (sum of absolute values = 1)",
+      "cli": {
+        "argstr": "-norm1"
+      }
+    },
+    "norm2": {
+      "type": "flag",
+      "desc": "L2 normalize (sum of squares = 1) [DEFAULT]",
+      "cli": {
+        "argstr": "-norm2"
+      }
+    },
+    "normR": {
+      "type": "flag",
+      "desc": "normalize so sum of squares = number of time points \\* e.g., so RMS = 1.",
+      "cli": {
+        "argstr": "-normR"
+      }
+    },
+    "normx": {
+      "type": "flag",
+      "desc": "Scale so max absolute value = 1 (L_infinity norm)",
+      "cli": {
+        "argstr": "-normx"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "desc": "Detrend with polynomials of order p before normalizing [DEFAULT = don't do this].\nUse '-polort 0' to remove the mean, for example",
+      "cli": {
+        "argstr": "-polort %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.TNorm",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Shifts voxel time series from input so that separate slices are aligned"
+}

@@ -1,0 +1,141 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.t_shift",
+  "title": "AFNI TShift",
+  "command": "3dTshift",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "ignore": {
+      "type": "int",
+      "desc": "ignore the first set of points specified",
+      "cli": {
+        "argstr": "-ignore %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dTshift",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "different interpolation methods (see 3dTshift for details) default = Fourier",
+      "choices": [
+        "Fourier",
+        "linear",
+        "cubic",
+        "quintic",
+        "heptic"
+      ],
+      "cli": {
+        "argstr": "-%s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "rlt": {
+      "type": "flag",
+      "desc": "Before shifting, remove the mean and linear trend",
+      "cli": {
+        "argstr": "-rlt"
+      }
+    },
+    "rltplus": {
+      "type": "flag",
+      "desc": "Before shifting, remove the mean and linear trend and later put back the mean",
+      "cli": {
+        "argstr": "-rlt+"
+      }
+    },
+    "slice_timing": {
+      "type": "list",
+      "desc": "time offsets from the volume acquisition onset for each slice",
+      "cli": {
+        "argstr": "-tpattern @%s"
+      },
+      "constraints": {
+        "xor": [
+          "tpattern"
+        ]
+      }
+    },
+    "tpattern": {
+      "type": "list",
+      "desc": "use specified slice time pattern rather than one in header",
+      "cli": {
+        "argstr": "-tpattern %s"
+      },
+      "constraints": {
+        "xor": [
+          "slice_timing"
+        ]
+      }
+    },
+    "tr": {
+      "type": "string",
+      "desc": "manually set the TR. You can attach suffix \"s\" for seconds or \"ms\" for milliseconds.",
+      "cli": {
+        "argstr": "-TR %s"
+      }
+    },
+    "tslice": {
+      "type": "int",
+      "desc": "align each slice to time offset of given slice",
+      "cli": {
+        "argstr": "-slice %s"
+      },
+      "constraints": {
+        "xor": [
+          "tzero"
+        ]
+      }
+    },
+    "tzero": {
+      "type": "double",
+      "desc": "align each slice to given time offset",
+      "cli": {
+        "argstr": "-tzero %s"
+      },
+      "constraints": {
+        "xor": [
+          "tslice"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.TShift",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Shifts voxel time series from input so that separate slices are aligned"
+}

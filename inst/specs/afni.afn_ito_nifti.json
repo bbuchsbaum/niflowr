@@ -1,0 +1,89 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.afn_ito_nifti",
+  "title": "AFNI AFNItoNIFTI",
+  "command": "3dAFNItoNIFTI",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "denote": {
+      "type": "flag",
+      "desc": "When writing the AFNI extension field, remove text notes that might contain subject identifying information.",
+      "cli": {
+        "argstr": "-denote"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dAFNItoNIFTI",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "newid": {
+      "type": "flag",
+      "desc": "Give the new dataset a new AFNI ID code, to distinguish it from the input dataset.",
+      "cli": {
+        "argstr": "-newid"
+      },
+      "constraints": {
+        "xor": [
+          "oldid"
+        ]
+      }
+    },
+    "oldid": {
+      "type": "flag",
+      "desc": "Give the new dataset the input datasets AFNI ID code.",
+      "cli": {
+        "argstr": "-oldid"
+      },
+      "constraints": {
+        "xor": [
+          "newid"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "pure": {
+      "type": "flag",
+      "desc": "Do NOT write an AFNI extension field into the output file. Only use this option if needed. You can also use the 'nifti_tool' program to strip extensions from a file.",
+      "cli": {
+        "argstr": "-pure"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.AFNItoNIFTI",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Converts AFNI format files to NIFTI format. This can also convert 2D or"
+}

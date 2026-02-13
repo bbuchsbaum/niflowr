@@ -1,0 +1,234 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.binarize",
+  "title": "FREESURFER Binarize",
+  "command": "mri_binarize",
+  "inputs": {
+    "abs": {
+      "type": "flag",
+      "desc": "take abs of invol first (ie, make unsigned)",
+      "cli": {
+        "argstr": "--abs"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bin_col_num": {
+      "type": "flag",
+      "desc": "set binarized voxel value to its column number",
+      "cli": {
+        "argstr": "--bincol"
+      }
+    },
+    "bin_val": {
+      "type": "int",
+      "desc": "set vox within thresh to val (default is 1)",
+      "cli": {
+        "argstr": "--binval %d"
+      }
+    },
+    "bin_val_not": {
+      "type": "int",
+      "desc": "set vox outside range to val (default is 0)",
+      "cli": {
+        "argstr": "--binvalnot %d"
+      }
+    },
+    "binary_file": {
+      "type": "file",
+      "desc": "binary output volume",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "count_file": {
+      "type": "list",
+      "desc": "save number of hits in ascii file (hits, ntotvox, pct)",
+      "cli": {
+        "argstr": "--count %s"
+      }
+    },
+    "dilate": {
+      "type": "int",
+      "desc": "niters: dilate binarization in 3D",
+      "cli": {
+        "argstr": "--dilate %d"
+      }
+    },
+    "erode": {
+      "type": "int",
+      "desc": "nerode: erode binarization in 3D (after any dilation)",
+      "cli": {
+        "argstr": "--erode  %d"
+      }
+    },
+    "erode2d": {
+      "type": "int",
+      "desc": "nerode2d: erode binarization in 2D (after any 3D erosion)",
+      "cli": {
+        "argstr": "--erode2d %d"
+      }
+    },
+    "frame_no": {
+      "type": "int",
+      "desc": "use 0-based frame of input (default is 0)",
+      "cli": {
+        "argstr": "--frame %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input volume",
+      "required": true,
+      "cli": {
+        "argstr": "--i %s"
+      }
+    },
+    "invert": {
+      "type": "flag",
+      "desc": "set binval=0, binvalnot=1",
+      "cli": {
+        "argstr": "--inv"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "must be within mask",
+      "cli": {
+        "argstr": "--mask maskvol"
+      }
+    },
+    "mask_thresh": {
+      "type": "double",
+      "desc": "set thresh for mask",
+      "cli": {
+        "argstr": "--mask-thresh %f"
+      }
+    },
+    "match": {
+      "type": "list",
+      "desc": "match instead of threshold",
+      "cli": {
+        "argstr": "--match %d..."
+      }
+    },
+    "max": {
+      "type": "double",
+      "desc": "max thresh",
+      "cli": {
+        "argstr": "--max %f"
+      },
+      "constraints": {
+        "xor": [
+          "wm_ven_csf"
+        ]
+      }
+    },
+    "merge_file": {
+      "type": "file",
+      "desc": "merge with mergevol",
+      "cli": {
+        "argstr": "--merge %s"
+      }
+    },
+    "min": {
+      "type": "double",
+      "desc": "min thresh",
+      "cli": {
+        "argstr": "--min %f"
+      },
+      "constraints": {
+        "xor": [
+          "wm_ven_csf"
+        ]
+      }
+    },
+    "rmax": {
+      "type": "double",
+      "desc": "compute max based on rmax*globalmean",
+      "cli": {
+        "argstr": "--rmax %f"
+      }
+    },
+    "rmin": {
+      "type": "double",
+      "desc": "compute min based on rmin*globalmean",
+      "cli": {
+        "argstr": "--rmin %f"
+      }
+    },
+    "ventricles": {
+      "type": "flag",
+      "desc": "set match vals those for aseg ventricles+choroid (not 4th)",
+      "cli": {
+        "argstr": "--ventricles"
+      }
+    },
+    "wm": {
+      "type": "flag",
+      "desc": "set match vals to 2 and 41 (aseg for cerebral WM)",
+      "cli": {
+        "argstr": "--wm"
+      }
+    },
+    "wm_ven_csf": {
+      "type": "flag",
+      "desc": "WM and ventricular CSF, including choroid (not 4th)",
+      "cli": {
+        "argstr": "--wm+vcsf"
+      },
+      "constraints": {
+        "xor": [
+          "min",
+          "max"
+        ]
+      }
+    },
+    "zero_edges": {
+      "type": "flag",
+      "desc": "zero the edge voxels",
+      "cli": {
+        "argstr": "--zero-edges"
+      }
+    },
+    "zero_slice_edge": {
+      "type": "flag",
+      "desc": "zero the edge slice voxels",
+      "cli": {
+        "argstr": "--zero-slice-edges"
+      }
+    }
+  },
+  "outputs": {
+    "binary_file": {
+      "type": "file",
+      "path": {
+        "from_input": "binary_file"
+      },
+      "must_exist": false
+    },
+    "count_file": {
+      "type": "file",
+      "path": {
+        "from_input": "count_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.Binarize",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer mri_binarize to threshold an input volume"
+}

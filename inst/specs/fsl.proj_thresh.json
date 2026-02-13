@@ -1,0 +1,45 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.proj_thresh",
+  "title": "FSL ProjThresh",
+  "command": "proj_thresh",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "a list of input volumes",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "threshold": {
+      "type": "int",
+      "desc": "threshold indicating minimum number of seed voxels entering this mask region",
+      "required": true,
+      "cli": {
+        "argstr": "%d",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.ProjThresh",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL proj_thresh for thresholding some outputs of probtrack"
+}

@@ -1,0 +1,90 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.label2_annot",
+  "title": "FREESURFER Label2Annot",
+  "command": "mris_label2annot",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "color_table": {
+      "type": "file",
+      "desc": "File that defines the structure names, their indices, and their color",
+      "cli": {
+        "argstr": "--ctab %s"
+      }
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Input hemisphere",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "in_labels": {
+      "type": "list",
+      "desc": "List of input label files",
+      "required": true,
+      "cli": {
+        "argstr": "--l %s..."
+      }
+    },
+    "keep_max": {
+      "type": "flag",
+      "desc": "Keep label with highest 'stat' value",
+      "cli": {
+        "argstr": "--maxstatwinner"
+      }
+    },
+    "orig": {
+      "type": "file",
+      "desc": "implicit {hemisphere}.orig",
+      "required": true
+    },
+    "out_annot": {
+      "type": "string",
+      "desc": "Name of the annotation to create",
+      "required": true,
+      "cli": {
+        "argstr": "--a %s"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject name/ID",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "--s %s"
+      }
+    },
+    "verbose_off": {
+      "type": "flag",
+      "desc": "Turn off overlap and stat override messages",
+      "cli": {
+        "argstr": "--noverbose"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.Label2Annot",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Converts a set of surface labels to an annotation file"
+}

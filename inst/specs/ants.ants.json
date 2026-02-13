@@ -1,0 +1,159 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.ants",
+  "title": "ANTS ANTS",
+  "command": "ANTS",
+  "inputs": {
+    "affine_gradient_descent_option": {
+      "type": "list",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 1
+      }
+    },
+    "fixed_image": {
+      "type": "list",
+      "desc": "image to which the moving image is warped",
+      "required": true
+    },
+    "metric": {
+      "type": "list",
+      "required": true
+    },
+    "metric_weight": {
+      "type": "list",
+      "desc": "the metric weight(s) for each stage. The weights must sum to 1 per stage.",
+      "required": true,
+      "default": [
+        1.0
+      ],
+      "constraints": {
+        "requires": [
+          "metric"
+        ]
+      }
+    },
+    "mi_option": {
+      "type": "list",
+      "cli": {
+        "argstr": "--MI-option %s",
+        "sep": "x"
+      }
+    },
+    "moving_image": {
+      "type": "list",
+      "desc": "image to apply transformation to (generally a coregisteredfunctional)",
+      "required": true,
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "number_of_affine_iterations": {
+      "type": "list",
+      "cli": {
+        "argstr": "--number-of-affine-iterations %s",
+        "sep": "x"
+      }
+    },
+    "number_of_iterations": {
+      "type": "list",
+      "cli": {
+        "argstr": "--number-of-iterations %s",
+        "sep": "x"
+      }
+    },
+    "output_transform_prefix": {
+      "type": "string",
+      "required": true,
+      "default": "out",
+      "cli": {
+        "argstr": "--output-naming %s"
+      }
+    },
+    "radius": {
+      "type": "list",
+      "desc": "radius of the region (i.e. number of layers around a voxel/pixel) that is used for computing cross correlation",
+      "required": true,
+      "constraints": {
+        "requires": [
+          "metric"
+        ]
+      }
+    },
+    "regularization": {
+      "type": "enum",
+      "choices": [
+        "Gauss",
+        "DMFFD"
+      ],
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "smoothing_sigmas": {
+      "type": "list",
+      "cli": {
+        "argstr": "--gaussian-smoothing-sigmas %s",
+        "sep": "x"
+      }
+    },
+    "subsampling_factors": {
+      "type": "list",
+      "cli": {
+        "argstr": "--subsampling-factors %s",
+        "sep": "x"
+      }
+    },
+    "transformation_model": {
+      "type": "enum",
+      "required": true,
+      "choices": [
+        "Diff",
+        "Elast",
+        "Exp",
+        "Greedy Exp",
+        "SyN"
+      ],
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "use_histogram_matching": {
+      "type": "bool",
+      "default": true,
+      "cli": {
+        "argstr": "%s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.registration.ANTS",
+    "nipype_version": "1.10.0"
+  },
+  "description": "ANTS wrapper for registration of images"
+}

@@ -1,0 +1,120 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.t_corr1_d",
+  "title": "AFNI TCorr1D",
+  "command": "3dTcorr1D",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "ktaub": {
+      "type": "flag",
+      "desc": "Correlation is the Kendall's tau_b correlation coefficient",
+      "cli": {
+        "argstr": "-ktaub",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "pearson",
+          "spearman",
+          "quadrant"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output filename prefix",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "pearson": {
+      "type": "flag",
+      "desc": "Correlation is the normal Pearson correlation coefficient",
+      "cli": {
+        "argstr": "-pearson",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "spearman",
+          "quadrant",
+          "ktaub"
+        ]
+      }
+    },
+    "quadrant": {
+      "type": "flag",
+      "desc": "Correlation is the quadrant correlation coefficient",
+      "cli": {
+        "argstr": "-quadrant",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "pearson",
+          "spearman",
+          "ktaub"
+        ]
+      }
+    },
+    "spearman": {
+      "type": "flag",
+      "desc": "Correlation is the Spearman (rank) correlation coefficient",
+      "cli": {
+        "argstr": "-spearman",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "pearson",
+          "quadrant",
+          "ktaub"
+        ]
+      }
+    },
+    "xset": {
+      "type": "file",
+      "desc": "3d+time dataset input",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "y_1d": {
+      "type": "file",
+      "desc": "1D time series file input",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.TCorr1D",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes the correlation coefficient between each voxel time series"
+}

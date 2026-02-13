@@ -1,0 +1,61 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.image_stats",
+  "title": "FSL ImageStats",
+  "command": "fslstats",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to generate stats of",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "index_mask_file": {
+      "type": "file",
+      "desc": "generate separate n submasks from indexMask, for indexvalues 1..n where n is the maximum index value in indexMask, and generate statistics for each submask",
+      "cli": {
+        "argstr": "-K %s",
+        "position": 2
+      }
+    },
+    "op_string": {
+      "type": "string",
+      "desc": "string defining the operation, options are applied in order, e.g. -M -l 10 -M will report the non-zero mean, apply a threshold and then report the new nonzero mean",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 4
+      }
+    },
+    "split_4d": {
+      "type": "flag",
+      "desc": "give a separate output line for each 3D volume of a 4D timeseries",
+      "cli": {
+        "argstr": "-t",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.ImageStats",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL fslstats command to calculate stats from images"
+}

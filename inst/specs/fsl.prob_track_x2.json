@@ -1,0 +1,406 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.prob_track_x2",
+  "title": "FSL ProbTrackX2",
+  "command": "probtrackx2",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "avoid_mp": {
+      "type": "file",
+      "desc": "reject pathways passing through locations given by this mask",
+      "cli": {
+        "argstr": "--avoid=%s"
+      }
+    },
+    "c_thresh": {
+      "type": "double",
+      "desc": "curvature threshold - default=0.2",
+      "cli": {
+        "argstr": "--cthr=%.3f"
+      }
+    },
+    "colmask4": {
+      "type": "file",
+      "desc": "Mask for columns of matrix4 (default=seed mask)",
+      "cli": {
+        "argstr": "--colmask4=%s"
+      }
+    },
+    "correct_path_distribution": {
+      "type": "flag",
+      "desc": "correct path distribution for the length of the pathways",
+      "cli": {
+        "argstr": "--pd"
+      }
+    },
+    "dist_thresh": {
+      "type": "double",
+      "desc": "discards samples shorter than this threshold (in mm - default=0)",
+      "cli": {
+        "argstr": "--distthresh=%.3f"
+      }
+    },
+    "distthresh1": {
+      "type": "double",
+      "desc": "Discards samples (in matrix1) shorter than this threshold (in mm - default=0)",
+      "cli": {
+        "argstr": "--distthresh1=%.3f"
+      }
+    },
+    "distthresh3": {
+      "type": "double",
+      "desc": "Discards samples (in matrix3) shorter than this threshold (in mm - default=0)",
+      "cli": {
+        "argstr": "--distthresh3=%.3f"
+      }
+    },
+    "fibst": {
+      "type": "int",
+      "desc": "force a starting fibre for tracking - default=1, i.e. first fibre orientation. Only works if randfib==0",
+      "cli": {
+        "argstr": "--fibst=%d"
+      }
+    },
+    "fopd": {
+      "type": "file",
+      "desc": "Other mask for binning tract distribution",
+      "cli": {
+        "argstr": "--fopd=%s"
+      }
+    },
+    "force_dir": {
+      "type": "flag",
+      "desc": "use the actual directory name given - i.e. do not add + to make a new directory",
+      "default": true,
+      "cli": {
+        "argstr": "--forcedir"
+      }
+    },
+    "fsamples": {
+      "type": "list",
+      "required": true
+    },
+    "inv_xfm": {
+      "type": "file",
+      "desc": "transformation matrix taking DTI space to seed space (compulsory when using a warp_field for seeds_to_dti)",
+      "cli": {
+        "argstr": "--invxfm=%s"
+      }
+    },
+    "loop_check": {
+      "type": "flag",
+      "desc": "perform loop_checks on paths - slower, but allows lower curvature threshold",
+      "cli": {
+        "argstr": "--loopcheck"
+      }
+    },
+    "lrtarget3": {
+      "type": "file",
+      "desc": "Column-space mask used for Nxn connectivity matrix",
+      "cli": {
+        "argstr": "--lrtarget3=%s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "bet binary mask file in diffusion space",
+      "required": true,
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "meshspace": {
+      "type": "enum",
+      "desc": "Mesh reference space - either \"caret\" (default) or \"freesurfer\" or \"first\" or \"vox\"",
+      "choices": [
+        "caret",
+        "freesurfer",
+        "first",
+        "vox"
+      ],
+      "cli": {
+        "argstr": "--meshspace=%s"
+      }
+    },
+    "mod_euler": {
+      "type": "flag",
+      "desc": "use modified euler streamlining",
+      "cli": {
+        "argstr": "--modeuler"
+      }
+    },
+    "n_samples": {
+      "type": "int",
+      "desc": "number of samples - default=5000",
+      "default": 5000,
+      "cli": {
+        "argstr": "--nsamples=%d"
+      }
+    },
+    "n_steps": {
+      "type": "int",
+      "desc": "number of steps per sample - default=2000",
+      "cli": {
+        "argstr": "--nsteps=%d"
+      }
+    },
+    "network": {
+      "type": "flag",
+      "desc": "activate network mode - only keep paths going through at least one seed mask (required if multiple seed masks)",
+      "cli": {
+        "argstr": "--network"
+      }
+    },
+    "omatrix1": {
+      "type": "flag",
+      "desc": "Output matrix1 - SeedToSeed Connectivity",
+      "cli": {
+        "argstr": "--omatrix1"
+      }
+    },
+    "omatrix2": {
+      "type": "flag",
+      "desc": "Output matrix2 - SeedToLowResMask",
+      "cli": {
+        "argstr": "--omatrix2"
+      },
+      "constraints": {
+        "requires": [
+          "target2"
+        ]
+      }
+    },
+    "omatrix3": {
+      "type": "flag",
+      "desc": "Output matrix3 (NxN connectivity matrix)",
+      "cli": {
+        "argstr": "--omatrix3"
+      },
+      "constraints": {
+        "requires": [
+          "target3",
+          "lrtarget3"
+        ]
+      }
+    },
+    "omatrix4": {
+      "type": "flag",
+      "desc": "Output matrix4 - DtiMaskToSeed (special Oxford Sparse Format)",
+      "cli": {
+        "argstr": "--omatrix4"
+      }
+    },
+    "onewaycondition": {
+      "type": "flag",
+      "desc": "Apply waypoint conditions to each half tract separately",
+      "cli": {
+        "argstr": "--onewaycondition"
+      }
+    },
+    "opd": {
+      "type": "flag",
+      "desc": "outputs path distributions",
+      "default": true,
+      "cli": {
+        "argstr": "--opd"
+      }
+    },
+    "os2t": {
+      "type": "flag",
+      "desc": "Outputs seeds to targets",
+      "cli": {
+        "argstr": "--os2t"
+      }
+    },
+    "out_dir": {
+      "type": "dir",
+      "desc": "directory to put the final volumes in",
+      "cli": {
+        "argstr": "--dir=%s"
+      }
+    },
+    "phsamples": {
+      "type": "list",
+      "required": true
+    },
+    "rand_fib": {
+      "type": "enum",
+      "desc": "options: 0 - default, 1 - to randomly sample initial fibres (with f > fibthresh), 2 - to sample in proportion fibres (with f>fibthresh) to f, 3 - to sample ALL populations at random (even if f<fibthresh)",
+      "choices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "cli": {
+        "argstr": "--randfib=%d"
+      }
+    },
+    "random_seed": {
+      "type": "int",
+      "desc": "random seed",
+      "cli": {
+        "argstr": "--rseed=%d"
+      }
+    },
+    "s2tastext": {
+      "type": "flag",
+      "desc": "output seed-to-target counts as a text file (useful when seeding from a mesh)",
+      "cli": {
+        "argstr": "--s2tastext"
+      }
+    },
+    "sample_random_points": {
+      "type": "double",
+      "desc": "sample random points within seed voxels",
+      "cli": {
+        "argstr": "--sampvox=%.3f"
+      }
+    },
+    "samples_base_name": {
+      "type": "string",
+      "desc": "the rootname/base_name for samples files",
+      "default": "merged",
+      "cli": {
+        "argstr": "--samples=%s"
+      }
+    },
+    "seed": {
+      "type": "list",
+      "desc": "seed volume(s), or voxel(s) or freesurfer label file",
+      "required": true,
+      "cli": {
+        "argstr": "--seed=%s"
+      }
+    },
+    "seed_ref": {
+      "type": "file",
+      "desc": "reference vol to define seed space in simple mode - diffusion space assumed if absent",
+      "cli": {
+        "argstr": "--seedref=%s"
+      }
+    },
+    "simple": {
+      "type": "flag",
+      "desc": "rack from a list of voxels (seed must be a ASCII list of coordinates)",
+      "cli": {
+        "argstr": "--simple"
+      }
+    },
+    "step_length": {
+      "type": "double",
+      "desc": "step_length in mm - default=0.5",
+      "cli": {
+        "argstr": "--steplength=%.3f"
+      }
+    },
+    "stop_mask": {
+      "type": "file",
+      "desc": "stop tracking at locations given by this mask file",
+      "cli": {
+        "argstr": "--stop=%s"
+      }
+    },
+    "target2": {
+      "type": "file",
+      "desc": "Low resolution binary brain mask for storing connectivity distribution in matrix2 mode",
+      "cli": {
+        "argstr": "--target2=%s"
+      }
+    },
+    "target3": {
+      "type": "file",
+      "desc": "Mask used for NxN connectivity matrix (or Nxn if lrtarget3 is set)",
+      "cli": {
+        "argstr": "--target3=%s"
+      }
+    },
+    "target4": {
+      "type": "file",
+      "desc": "Brain mask in DTI space",
+      "cli": {
+        "argstr": "--target4=%s"
+      }
+    },
+    "target_masks": {
+      "type": "list",
+      "desc": "list of target masks - required for seeds_to_targets classification",
+      "cli": {
+        "argstr": "--targetmasks=%s"
+      }
+    },
+    "thsamples": {
+      "type": "list",
+      "required": true
+    },
+    "use_anisotropy": {
+      "type": "flag",
+      "desc": "use anisotropy to constrain tracking",
+      "cli": {
+        "argstr": "--usef"
+      }
+    },
+    "verbose": {
+      "type": "enum",
+      "desc": "Verbose level, [0-2]. Level 2 is required to output particle files.",
+      "choices": [
+        0,
+        1,
+        2
+      ],
+      "cli": {
+        "argstr": "--verbose=%d"
+      }
+    },
+    "waycond": {
+      "type": "enum",
+      "desc": "Waypoint condition. Either \"AND\" (default) or \"OR\"",
+      "choices": [
+        "OR",
+        "AND"
+      ],
+      "cli": {
+        "argstr": "--waycond=%s"
+      }
+    },
+    "wayorder": {
+      "type": "flag",
+      "desc": "Reject streamlines that do not hit waypoints in given order. Only valid if waycond=AND",
+      "cli": {
+        "argstr": "--wayorder"
+      }
+    },
+    "waypoints": {
+      "type": "file",
+      "desc": "waypoint mask or ascii list of waypoint masks - only keep paths going through ALL the masks",
+      "cli": {
+        "argstr": "--waypoints=%s"
+      }
+    },
+    "xfm": {
+      "type": "file",
+      "desc": "transformation matrix taking seed space to DTI space (either FLIRT matrix or FNIRT warp_field) - default is identity",
+      "cli": {
+        "argstr": "--xfm=%s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.ProbTrackX2",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL  probtrackx2 for tractography on bedpostx results"
+}

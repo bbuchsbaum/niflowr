@@ -1,0 +1,155 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.bandpass",
+  "title": "AFNI Bandpass",
+  "command": "3dBandpass",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Create a mask from the input dataset.",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "blur": {
+      "type": "double",
+      "desc": "Blur (inside the mask only) with a filter width (FWHM) of 'fff' millimeters.",
+      "cli": {
+        "argstr": "-blur %f"
+      }
+    },
+    "despike": {
+      "type": "flag",
+      "desc": "Despike each time series before other processing. Hopefully, you don't actually need to do this, which is why it is optional.",
+      "cli": {
+        "argstr": "-despike"
+      }
+    },
+    "highpass": {
+      "type": "double",
+      "desc": "highpass",
+      "required": true,
+      "cli": {
+        "argstr": "%f",
+        "position": -3
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dBandpass",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "localPV": {
+      "type": "double",
+      "desc": "Replace each vector by the local Principal Vector (AKA first singular vector) from a neighborhood of radius 'rrr' millimeters. Note that the PV time series is L2 normalized. This option is mostly for Bob Cox to have fun with.",
+      "cli": {
+        "argstr": "-localPV %f"
+      }
+    },
+    "lowpass": {
+      "type": "double",
+      "desc": "lowpass",
+      "required": true,
+      "cli": {
+        "argstr": "%f",
+        "position": -2
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask file",
+      "cli": {
+        "argstr": "-mask %s",
+        "position": 2
+      }
+    },
+    "nfft": {
+      "type": "int",
+      "desc": "Set the FFT length [must be a legal value].",
+      "cli": {
+        "argstr": "-nfft %d"
+      }
+    },
+    "no_detrend": {
+      "type": "flag",
+      "desc": "Skip the quadratic detrending of the input that occurs before the FFT-based bandpassing. You would only want to do this if the dataset had been detrended already in some other program.",
+      "cli": {
+        "argstr": "-nodetrend"
+      }
+    },
+    "normalize": {
+      "type": "flag",
+      "desc": "Make all output time series have L2 norm = 1 (i.e., sum of squares = 1).",
+      "cli": {
+        "argstr": "-norm"
+      }
+    },
+    "notrans": {
+      "type": "flag",
+      "desc": "Don't check for initial positive transients in the data. The test is a little slow, so skipping it is OK, if you KNOW the data time series are transient-free.",
+      "cli": {
+        "argstr": "-notrans"
+      }
+    },
+    "orthogonalize_dset": {
+      "type": "file",
+      "desc": "Orthogonalize each voxel to the corresponding voxel time series in dataset 'fset', which must have the same spatial and temporal grid structure as the main input dataset. At present, only one '-dsort' option is allowed.",
+      "cli": {
+        "argstr": "-dsort %s"
+      }
+    },
+    "orthogonalize_file": {
+      "type": "list",
+      "desc": "Also orthogonalize input to columns in f.1D. Multiple '-ort' options are allowed.",
+      "cli": {
+        "argstr": "-ort %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output file from 3dBandpass",
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": 1
+      }
+    },
+    "tr": {
+      "type": "double",
+      "desc": "Set time step (TR) in sec [default=from dataset header].",
+      "cli": {
+        "argstr": "-dt %f"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Bandpass",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Program to lowpass and/or highpass each voxel time series in a"
+}

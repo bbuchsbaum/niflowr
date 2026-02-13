@@ -1,0 +1,75 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.average_images",
+  "title": "ANTS AverageImages",
+  "command": "AverageImages",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "required": true,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 0
+      }
+    },
+    "images": {
+      "type": "list",
+      "desc": "image to apply transformation to (generally a coregistered functional)",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "normalize": {
+      "type": "bool",
+      "desc": "Normalize: if true, the 2nd image is divided by its mean. This will select the largest image to average into.",
+      "required": true,
+      "cli": {
+        "argstr": "%d",
+        "position": 2
+      }
+    },
+    "output_average_image": {
+      "type": "file",
+      "desc": "the name of the resulting image.",
+      "default": "average.nii",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {
+    "output_average_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_average_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.AverageImages",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Examples"
+}

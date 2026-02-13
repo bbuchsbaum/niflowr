@@ -1,0 +1,292 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mri_coreg",
+  "title": "FREESURFER MRICoreg",
+  "command": "mri_coreg",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "brute_force_limit": {
+      "type": "double",
+      "desc": "constrain brute force search to +/- lim",
+      "cli": {
+        "argstr": "--bf-lim %g"
+      },
+      "constraints": {
+        "xor": [
+          "no_brute_force"
+        ]
+      }
+    },
+    "brute_force_samples": {
+      "type": "int",
+      "desc": "number of samples in brute force search",
+      "cli": {
+        "argstr": "--bf-nsamp %d"
+      },
+      "constraints": {
+        "xor": [
+          "no_brute_force"
+        ]
+      }
+    },
+    "conform_reference": {
+      "type": "flag",
+      "desc": "conform reference without rescaling",
+      "cli": {
+        "argstr": "--conf-ref"
+      }
+    },
+    "dof": {
+      "type": "enum",
+      "desc": "number of transform degrees of freedom",
+      "choices": [
+        6,
+        9,
+        12
+      ],
+      "cli": {
+        "argstr": "--dof %d"
+      }
+    },
+    "ftol": {
+      "type": "double",
+      "desc": "floating-point tolerance (default=1e-7)",
+      "cli": {
+        "argstr": "--ftol %e"
+      }
+    },
+    "initial_rotation": {
+      "type": "list",
+      "desc": "initial rotation in degrees",
+      "cli": {
+        "argstr": "--rot %g %g %g"
+      }
+    },
+    "initial_scale": {
+      "type": "list",
+      "desc": "initial scale",
+      "cli": {
+        "argstr": "--scale %g %g %g"
+      }
+    },
+    "initial_shear": {
+      "type": "list",
+      "desc": "initial shear (Hxy, Hxz, Hyz)",
+      "cli": {
+        "argstr": "--shear %g %g %g"
+      }
+    },
+    "initial_translation": {
+      "type": "list",
+      "desc": "initial translation in mm (implies no_cras0)",
+      "cli": {
+        "argstr": "--trans %g %g %g"
+      }
+    },
+    "linmintol": {
+      "type": "double",
+      "cli": {
+        "argstr": "--linmintol %e"
+      }
+    },
+    "max_iters": {
+      "type": "string",
+      "desc": "maximum iterations (default: 4)",
+      "cli": {
+        "argstr": "--nitersmax %d"
+      }
+    },
+    "no_brute_force": {
+      "type": "flag",
+      "desc": "do not brute force search",
+      "cli": {
+        "argstr": "--no-bf"
+      }
+    },
+    "no_coord_dithering": {
+      "type": "flag",
+      "desc": "turn off coordinate dithering",
+      "cli": {
+        "argstr": "--no-coord-dither"
+      }
+    },
+    "no_cras0": {
+      "type": "flag",
+      "desc": "do not set translation parameters to align centers of source and reference files",
+      "cli": {
+        "argstr": "--no-cras0"
+      }
+    },
+    "no_intensity_dithering": {
+      "type": "flag",
+      "desc": "turn off intensity dithering",
+      "cli": {
+        "argstr": "--no-intensity-dither"
+      }
+    },
+    "no_smooth": {
+      "type": "flag",
+      "desc": "do not apply smoothing to either reference or source file",
+      "cli": {
+        "argstr": "--no-smooth"
+      }
+    },
+    "num_threads": {
+      "type": "int",
+      "desc": "number of OpenMP threads",
+      "cli": {
+        "argstr": "--threads %d"
+      }
+    },
+    "out_lta_file": {
+      "type": "list",
+      "desc": "output registration file (LTA format)",
+      "default": true,
+      "cli": {
+        "argstr": "--lta %s"
+      }
+    },
+    "out_params_file": {
+      "type": "list",
+      "desc": "output parameters file",
+      "cli": {
+        "argstr": "--params %s"
+      }
+    },
+    "out_reg_file": {
+      "type": "list",
+      "desc": "output registration file (REG format)",
+      "cli": {
+        "argstr": "--regdat %s"
+      }
+    },
+    "ref_fwhm": {
+      "type": "double",
+      "desc": "apply smoothing to reference file",
+      "cli": {
+        "argstr": "--ref-fwhm"
+      }
+    },
+    "reference_file": {
+      "type": "file",
+      "desc": "reference (target) file",
+      "required": true,
+      "cli": {
+        "argstr": "--ref %s"
+      },
+      "constraints": {
+        "xor": [
+          "subject_id"
+        ]
+      }
+    },
+    "reference_mask": {
+      "type": "list",
+      "desc": "mask reference volume with given mask, or None if ``False``",
+      "cli": {
+        "argstr": "--ref-mask %s",
+        "position": 2
+      }
+    },
+    "saturation_threshold": {
+      "type": "string",
+      "desc": "saturation threshold (default=9.999)",
+      "cli": {
+        "argstr": "--sat %g"
+      }
+    },
+    "sep": {
+      "type": "list",
+      "desc": "set spatial scales, in voxels (default [2, 4])",
+      "cli": {
+        "argstr": "--sep %s..."
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "desc": "source file to be registered",
+      "required": true,
+      "cli": {
+        "argstr": "--mov %s"
+      }
+    },
+    "source_mask": {
+      "type": "string",
+      "desc": "mask source file with given mask",
+      "cli": {
+        "argstr": "--mov-mask"
+      }
+    },
+    "source_oob": {
+      "type": "flag",
+      "desc": "count source voxels that are out-of-bounds as 0",
+      "cli": {
+        "argstr": "--mov-oob"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "freesurfer subject ID (implies ``reference_mask == aparc+aseg.mgz`` unless otherwise specified)",
+      "required": true,
+      "cli": {
+        "argstr": "--s %s",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "reference_file"
+        ],
+        "requires": [
+          "subjects_dir"
+        ]
+      }
+    },
+    "subjects_dir": {
+      "type": "dir",
+      "desc": "FreeSurfer SUBJECTS_DIR",
+      "cli": {
+        "argstr": "--sd %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_lta_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_lta_file"
+      },
+      "must_exist": false
+    },
+    "out_params_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_params_file"
+      },
+      "must_exist": false
+    },
+    "out_reg_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_reg_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.registration.MRICoreg",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program registers one volume to another"
+}

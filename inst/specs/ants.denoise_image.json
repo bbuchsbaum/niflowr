@@ -1,0 +1,100 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.denoise_image",
+  "title": "ANTS DenoiseImage",
+  "command": "DenoiseImage",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.",
+      "choices": [
+        2,
+        3,
+        4
+      ],
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "input_image": {
+      "type": "file",
+      "desc": "A scalar image is expected as input for noise correction.",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s"
+      }
+    },
+    "noise_model": {
+      "type": "enum",
+      "desc": "Employ a Rician or Gaussian noise model.",
+      "default": "Gaussian",
+      "choices": [
+        "Gaussian",
+        "Rician"
+      ],
+      "cli": {
+        "argstr": "-n %s"
+      }
+    },
+    "output_image": {
+      "type": "file",
+      "desc": "The output consists of the noise corrected version of the input image.",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "save_noise": {
+      "type": "bool",
+      "desc": "True if the estimated noise should be saved to file.",
+      "required": true,
+      "default": false,
+      "constraints": {
+        "xor": [
+          "noise_image"
+        ]
+      }
+    },
+    "shrink_factor": {
+      "type": "int",
+      "desc": "Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.",
+      "default": 1,
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Verbose output.",
+      "cli": {
+        "argstr": "-v"
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.segmentation.DenoiseImage",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Examples"
+}

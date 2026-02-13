@@ -1,0 +1,130 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.registration_syn_quick",
+  "title": "ANTS RegistrationSynQuick",
+  "command": "antsRegistrationSyNQuick.sh",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "fixed_image": {
+      "type": "list",
+      "desc": "Fixed image or source image or reference image",
+      "required": true,
+      "cli": {
+        "argstr": "-f %s..."
+      }
+    },
+    "histogram_bins": {
+      "type": "int",
+      "desc": "histogram bins for mutual information in SyN stage                                  (default = 32)",
+      "default": 32,
+      "cli": {
+        "argstr": "-r %d"
+      }
+    },
+    "moving_image": {
+      "type": "list",
+      "desc": "Moving image or target image",
+      "required": true,
+      "cli": {
+        "argstr": "-m %s..."
+      }
+    },
+    "num_threads": {
+      "type": "int",
+      "desc": "Number of threads (default = 1)",
+      "default": 1,
+      "cli": {
+        "argstr": "-n %d"
+      }
+    },
+    "output_prefix": {
+      "type": "string",
+      "desc": "A prefix that is prepended to all output files",
+      "default": "transform",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "precision_type": {
+      "type": "enum",
+      "desc": "precision type (default = double)",
+      "default": "double",
+      "choices": [
+        "double",
+        "float"
+      ],
+      "cli": {
+        "argstr": "-p %s"
+      }
+    },
+    "random_seed": {
+      "type": "int",
+      "desc": "fixed random seed",
+      "cli": {
+        "argstr": "-e %d"
+      }
+    },
+    "spline_distance": {
+      "type": "int",
+      "desc": "spline distance for deformable B-spline SyN transform                                  (default = 26)",
+      "default": 26,
+      "cli": {
+        "argstr": "-s %d"
+      }
+    },
+    "transform_type": {
+      "type": "enum",
+      "desc": "Transform type\n\n  * t:  translation\n  * r:  rigid\n  * a:  rigid + affine\n  * s:  rigid + affine + deformable syn (default)\n  * sr: rigid + deformable syn\n  * b:  rigid + affine + deformable b-spline syn\n  * br: rigid + deformable b-spline syn",
+      "default": "s",
+      "choices": [
+        "s",
+        "t",
+        "r",
+        "a",
+        "sr",
+        "b",
+        "br"
+      ],
+      "cli": {
+        "argstr": "-t %s"
+      }
+    },
+    "use_histogram_matching": {
+      "type": "bool",
+      "desc": "use histogram matching",
+      "cli": {
+        "argstr": "-j %d"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.registration.RegistrationSynQuick",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Registration using a symmetric image normalization method (SyN)."
+}

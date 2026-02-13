@@ -1,0 +1,224 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.bb_register",
+  "title": "FREESURFER BBRegister",
+  "command": "bbregister",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "contrast_type": {
+      "type": "enum",
+      "desc": "contrast type of image",
+      "required": true,
+      "choices": [
+        "t1",
+        "t2",
+        "bold",
+        "dti"
+      ],
+      "cli": {
+        "argstr": "--%s"
+      }
+    },
+    "dof": {
+      "type": "enum",
+      "desc": "number of transform degrees of freedom",
+      "choices": [
+        6,
+        9,
+        12
+      ],
+      "cli": {
+        "argstr": "--%d"
+      }
+    },
+    "epi_mask": {
+      "type": "flag",
+      "desc": "mask out B0 regions in stages 1 and 2",
+      "cli": {
+        "argstr": "--epi-mask"
+      }
+    },
+    "fsldof": {
+      "type": "int",
+      "desc": "degrees of freedom for initial registration (FSL)",
+      "cli": {
+        "argstr": "--fsl-dof %d"
+      }
+    },
+    "init": {
+      "type": "enum",
+      "desc": "initialize registration with mri_coreg, spm, fsl, or header",
+      "choices": [
+        "coreg",
+        "rr",
+        "spm",
+        "fsl",
+        "header",
+        "best"
+      ],
+      "cli": {
+        "argstr": "--init-%s"
+      },
+      "constraints": {
+        "xor": [
+          "init_reg_file"
+        ]
+      }
+    },
+    "init_cost_file": {
+      "type": "list",
+      "desc": "output initial registration cost file",
+      "cli": {
+        "argstr": "--initcost %s"
+      }
+    },
+    "init_reg_file": {
+      "type": "file",
+      "desc": "existing registration file",
+      "cli": {
+        "argstr": "--init-reg %s"
+      },
+      "constraints": {
+        "xor": [
+          "init"
+        ]
+      }
+    },
+    "intermediate_file": {
+      "type": "file",
+      "desc": "Intermediate image, e.g. in case of partial FOV",
+      "cli": {
+        "argstr": "--int %s"
+      }
+    },
+    "out_fsl_file": {
+      "type": "list",
+      "desc": "write the transformation matrix in FSL FLIRT format",
+      "cli": {
+        "argstr": "--fslmat %s"
+      }
+    },
+    "out_lta_file": {
+      "type": "list",
+      "desc": "write the transformation matrix in LTA format",
+      "cli": {
+        "argstr": "--lta %s"
+      }
+    },
+    "out_reg_file": {
+      "type": "file",
+      "desc": "output registration file",
+      "cli": {
+        "argstr": "--reg %s"
+      }
+    },
+    "reg_frame": {
+      "type": "int",
+      "desc": "0-based frame index for 4D source file",
+      "cli": {
+        "argstr": "--frame %d"
+      },
+      "constraints": {
+        "xor": [
+          "reg_middle_frame"
+        ]
+      }
+    },
+    "reg_middle_frame": {
+      "type": "flag",
+      "desc": "Register middle frame of 4D source file",
+      "cli": {
+        "argstr": "--mid-frame"
+      },
+      "constraints": {
+        "xor": [
+          "reg_frame"
+        ]
+      }
+    },
+    "registered_file": {
+      "type": "list",
+      "desc": "output warped sourcefile either True or filename",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "desc": "source file to be registered",
+      "required": true,
+      "cli": {
+        "argstr": "--mov %s"
+      }
+    },
+    "spm_nifti": {
+      "type": "flag",
+      "desc": "force use of nifti rather than analyze with SPM",
+      "cli": {
+        "argstr": "--spm-nii"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "freesurfer subject id",
+      "required": true,
+      "cli": {
+        "argstr": "--s %s"
+      }
+    }
+  },
+  "outputs": {
+    "init_cost_file": {
+      "type": "file",
+      "path": {
+        "from_input": "init_cost_file"
+      },
+      "must_exist": false
+    },
+    "out_fsl_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_fsl_file"
+      },
+      "must_exist": false
+    },
+    "out_lta_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_lta_file"
+      },
+      "must_exist": false
+    },
+    "out_reg_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_reg_file"
+      },
+      "must_exist": false
+    },
+    "registered_file": {
+      "type": "file",
+      "path": {
+        "from_input": "registered_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.BBRegister",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer bbregister to register a volume to the Freesurfer anatomical."
+}

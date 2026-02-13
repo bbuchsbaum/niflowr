@@ -1,0 +1,85 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.lfcd",
+  "title": "AFNI LFCD",
+  "command": "3dLFCD",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "autoclip": {
+      "type": "flag",
+      "desc": "Clip off low-intensity regions in the dataset",
+      "cli": {
+        "argstr": "-autoclip"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Mask the dataset to target brain-only voxels",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dLFCD",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask file to mask input data",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    },
+    "thresh": {
+      "type": "double",
+      "desc": "threshold to exclude connections where corr <= thresh",
+      "cli": {
+        "argstr": "-thresh %f"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.LFCD",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Performs degree centrality on a dataset using a given maskfile"
+}

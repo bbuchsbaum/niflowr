@@ -1,0 +1,109 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.hist",
+  "title": "AFNI Hist",
+  "command": "3dHist",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bin_width": {
+      "type": "double",
+      "desc": "bin width",
+      "cli": {
+        "argstr": "-binwidth %f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dHist",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s",
+        "position": 1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "matrix to align input file",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "max_value": {
+      "type": "double",
+      "desc": "maximum intensity value",
+      "cli": {
+        "argstr": "-max %f"
+      }
+    },
+    "min_value": {
+      "type": "double",
+      "desc": "minimum intensity value",
+      "cli": {
+        "argstr": "-min %f"
+      }
+    },
+    "nbin": {
+      "type": "int",
+      "desc": "number of bins",
+      "cli": {
+        "argstr": "-nbin %d"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Write histogram to niml file with this prefix",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "out_show": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "> %s",
+        "position": -1
+      }
+    },
+    "showhist": {
+      "type": "flag",
+      "desc": "write a text visual histogram",
+      "default": false,
+      "cli": {
+        "argstr": "-showhist"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_show": {
+      "type": "file",
+      "path": {
+        "from_input": "out_show"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Hist",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes average of all voxels in the input dataset"
+}

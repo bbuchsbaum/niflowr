@@ -1,0 +1,62 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.nwarp_adjust",
+  "title": "AFNI NwarpAdjust",
+  "command": "3dNwarpAdjust",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "List of input 3D datasets to be warped by the adjusted warp datasets.  There must be exactly as many of these datasets as there are input warps.",
+      "cli": {
+        "argstr": "-source %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output mean dataset, only needed if in_files are also given. The output dataset will be on the common grid shared by the source datasets.",
+      "cli": {
+        "argstr": "-prefix %s"
+      },
+      "constraints": {
+        "requires": [
+          "in_files"
+        ]
+      }
+    },
+    "warps": {
+      "type": "list",
+      "desc": "List of input 3D warp datasets",
+      "required": true,
+      "cli": {
+        "argstr": "-nwarp %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.NwarpAdjust",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program takes as input a bunch of 3D warps, averages them,"
+}

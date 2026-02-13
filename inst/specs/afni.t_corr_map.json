@@ -1,0 +1,311 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.t_corr_map",
+  "title": "AFNI TCorrMap",
+  "command": "3dTcorrMap",
+  "inputs": {
+    "absolute_threshold": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Thresh %f %s"
+      },
+      "constraints": {
+        "xor": [
+          "absolute_threshold",
+          "var_absolute_threshold",
+          "var_absolute_threshold_normalize"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "average_expr": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Aexpr %s %s"
+      },
+      "constraints": {
+        "xor": [
+          "average_expr",
+          "average_expr_nonzero",
+          "sum_expr"
+        ]
+      }
+    },
+    "average_expr_nonzero": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Cexpr %s %s"
+      },
+      "constraints": {
+        "xor": [
+          "average_expr",
+          "average_expr_nonzero",
+          "sum_expr"
+        ]
+      }
+    },
+    "bandpass": {
+      "type": "list",
+      "cli": {
+        "argstr": "-bpass %f %f"
+      }
+    },
+    "blur_fwhm": {
+      "type": "double",
+      "cli": {
+        "argstr": "-Gblur %f"
+      }
+    },
+    "correlation_maps": {
+      "type": "file",
+      "cli": {
+        "argstr": "-CorrMap %s"
+      }
+    },
+    "correlation_maps_masked": {
+      "type": "file",
+      "cli": {
+        "argstr": "-CorrMask %s"
+      }
+    },
+    "histogram": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Hist %d %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "mean_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Mean %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "pmean": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Pmean %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    },
+    "qmean": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Qmean %s"
+      }
+    },
+    "regress_out_timeseries": {
+      "type": "file",
+      "cli": {
+        "argstr": "-ort %s"
+      }
+    },
+    "seeds": {
+      "type": "file",
+      "cli": {
+        "argstr": "-seed %s"
+      },
+      "constraints": {
+        "xor": [
+          "seeds_width"
+        ]
+      }
+    },
+    "seeds_width": {
+      "type": "double",
+      "cli": {
+        "argstr": "-Mseed %f"
+      },
+      "constraints": {
+        "xor": [
+          "seeds"
+        ]
+      }
+    },
+    "sum_expr": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Sexpr %s %s"
+      },
+      "constraints": {
+        "xor": [
+          "average_expr",
+          "average_expr_nonzero",
+          "sum_expr"
+        ]
+      }
+    },
+    "var_absolute_threshold": {
+      "type": "file",
+      "cli": {
+        "argstr": "-VarThresh %f %f %f %s"
+      },
+      "constraints": {
+        "xor": [
+          "absolute_threshold",
+          "var_absolute_threshold",
+          "var_absolute_threshold_normalize"
+        ]
+      }
+    },
+    "var_absolute_threshold_normalize": {
+      "type": "file",
+      "cli": {
+        "argstr": "-VarThreshN %f %f %f %s"
+      },
+      "constraints": {
+        "xor": [
+          "absolute_threshold",
+          "var_absolute_threshold",
+          "var_absolute_threshold_normalize"
+        ]
+      }
+    },
+    "zmean": {
+      "type": "file",
+      "cli": {
+        "argstr": "-Zmean %s"
+      }
+    }
+  },
+  "outputs": {
+    "absolute_threshold": {
+      "type": "file",
+      "path": {
+        "from_input": "absolute_threshold"
+      },
+      "must_exist": false
+    },
+    "average_expr": {
+      "type": "file",
+      "path": {
+        "from_input": "average_expr"
+      },
+      "must_exist": false
+    },
+    "average_expr_nonzero": {
+      "type": "file",
+      "path": {
+        "from_input": "average_expr_nonzero"
+      },
+      "must_exist": false
+    },
+    "correlation_maps": {
+      "type": "file",
+      "path": {
+        "from_input": "correlation_maps"
+      },
+      "must_exist": false
+    },
+    "correlation_maps_masked": {
+      "type": "file",
+      "path": {
+        "from_input": "correlation_maps_masked"
+      },
+      "must_exist": false
+    },
+    "histogram": {
+      "type": "file",
+      "path": {
+        "from_input": "histogram"
+      },
+      "must_exist": false
+    },
+    "mean_file": {
+      "type": "file",
+      "path": {
+        "from_input": "mean_file"
+      },
+      "must_exist": false
+    },
+    "pmean": {
+      "type": "file",
+      "path": {
+        "from_input": "pmean"
+      },
+      "must_exist": false
+    },
+    "qmean": {
+      "type": "file",
+      "path": {
+        "from_input": "qmean"
+      },
+      "must_exist": false
+    },
+    "sum_expr": {
+      "type": "file",
+      "path": {
+        "from_input": "sum_expr"
+      },
+      "must_exist": false
+    },
+    "var_absolute_threshold": {
+      "type": "file",
+      "path": {
+        "from_input": "var_absolute_threshold"
+      },
+      "must_exist": false
+    },
+    "var_absolute_threshold_normalize": {
+      "type": "file",
+      "path": {
+        "from_input": "var_absolute_threshold_normalize"
+      },
+      "must_exist": false
+    },
+    "zmean": {
+      "type": "file",
+      "path": {
+        "from_input": "zmean"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.TCorrMap",
+    "nipype_version": "1.10.0"
+  },
+  "description": "For each voxel time series, computes the correlation between it"
+}

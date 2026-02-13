@@ -1,0 +1,111 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.ms_lda",
+  "title": "FREESURFER MS_LDA",
+  "command": "mri_ms_LDA",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "conform": {
+      "type": "flag",
+      "desc": "Conform the input volumes (brain mask typically already conformed)",
+      "cli": {
+        "argstr": "-conform"
+      }
+    },
+    "images": {
+      "type": "list",
+      "desc": "list of input FLASH images",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "label_file": {
+      "type": "file",
+      "desc": "filename of the label volume",
+      "cli": {
+        "argstr": "-label %s"
+      }
+    },
+    "lda_labels": {
+      "type": "list",
+      "desc": "pair of class labels to optimize",
+      "required": true,
+      "cli": {
+        "argstr": "-lda %s",
+        "sep": " "
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "filename of the brain mask volume",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "shift": {
+      "type": "int",
+      "desc": "shift all values equal to the given value to zero",
+      "cli": {
+        "argstr": "-shift %d"
+      }
+    },
+    "use_weights": {
+      "type": "flag",
+      "desc": "Use the weights from a previously generated weight file",
+      "cli": {
+        "argstr": "-W"
+      }
+    },
+    "vol_synth_file": {
+      "type": "file",
+      "desc": "filename for the synthesized output volume",
+      "required": true,
+      "cli": {
+        "argstr": "-synth %s"
+      }
+    },
+    "weight_file": {
+      "type": "file",
+      "desc": "filename for the LDA weights (input or output)",
+      "required": true,
+      "cli": {
+        "argstr": "-weight %s"
+      }
+    }
+  },
+  "outputs": {
+    "vol_synth_file": {
+      "type": "file",
+      "path": {
+        "from_input": "vol_synth_file"
+      },
+      "must_exist": false
+    },
+    "weight_file": {
+      "type": "file",
+      "path": {
+        "from_input": "weight_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.MS_LDA",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Perform LDA reduction on the intensity space of an arbitrary # of FLASH images"
+}

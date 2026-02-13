@@ -1,0 +1,92 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.synthesize",
+  "title": "AFNI Synthesize",
+  "command": "3dSynthesize",
+  "inputs": {
+    "TR": {
+      "type": "double",
+      "desc": "TR to set in the output.  The default value of TR is read from the header of the matrix file.",
+      "cli": {
+        "argstr": "-TR %f"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "cbucket": {
+      "type": "file",
+      "desc": "Read the dataset output from 3dDeconvolve via the '-cbucket' option.",
+      "required": true,
+      "cli": {
+        "argstr": "-cbucket %s"
+      }
+    },
+    "cenfill": {
+      "type": "enum",
+      "desc": "Determines how censored time points from the 3dDeconvolve run will be filled. Valid types are 'zero', 'nbhr' and 'none'.",
+      "choices": [
+        "zero",
+        "nbhr",
+        "none"
+      ],
+      "cli": {
+        "argstr": "-cenfill %s"
+      }
+    },
+    "dry_run": {
+      "type": "flag",
+      "desc": "Don't compute the output, just check the inputs.",
+      "cli": {
+        "argstr": "-dry"
+      }
+    },
+    "matrix": {
+      "type": "file",
+      "desc": "Read the matrix output from 3dDeconvolve via the '-x1D' option.",
+      "required": true,
+      "cli": {
+        "argstr": "-matrix %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output dataset prefix name (default 'syn')",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "select": {
+      "type": "list",
+      "desc": "A list of selected columns from the matrix (and the corresponding coefficient sub-bricks from the cbucket). Valid types include 'baseline',  'polort', 'allfunc', 'allstim', 'all', Can also provide 'something' where something matches a stim_label from 3dDeconvolve, and 'digits' where digits are the numbers of the select matrix columns by numbers (starting at 0), or number ranges of the form '3..7' and '3-7'.",
+      "required": true,
+      "cli": {
+        "argstr": "-select %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.model.Synthesize",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Reads a '-cbucket' dataset and a '.xmat.1D' matrix from 3dDeconvolve,"
+}

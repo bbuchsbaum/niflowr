@@ -1,0 +1,67 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mri_tessellate",
+  "title": "FREESURFER MRITessellate",
+  "command": "mri_tessellate",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input volume to tessellate voxels from.",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "label_value": {
+      "type": "int",
+      "desc": "Label value which to tessellate from the input volume. (integer, if input is \"filled.mgz\" volume, 127 is rh, 255 is lh)",
+      "required": true,
+      "cli": {
+        "argstr": "%d",
+        "position": -2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output filename or True to generate one",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "tesselate_all_voxels": {
+      "type": "flag",
+      "desc": "Tessellate the surface of all voxels with different labels",
+      "cli": {
+        "argstr": "-a"
+      }
+    },
+    "use_real_RAS_coordinates": {
+      "type": "flag",
+      "desc": "Saves surface with real RAS coordinates where c_(r,a,s) != 0",
+      "cli": {
+        "argstr": "-n"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.MRITessellate",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Uses Freesurfer's mri_tessellate to create surfaces by tessellating a given input volume"
+}

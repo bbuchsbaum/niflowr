@@ -1,0 +1,88 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.image_maths",
+  "title": "FSL ImageMaths",
+  "command": "fslmaths",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "in_file2": {
+      "type": "file",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "use (following image>0) to mask current image",
+      "cli": {
+        "argstr": "-mas %s"
+      }
+    },
+    "op_string": {
+      "type": "string",
+      "desc": "string defining the operation, i. e. -add",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "out_data_type": {
+      "type": "enum",
+      "desc": "output datatype, one of (char, short, int, float, double, input)",
+      "choices": [
+        "char",
+        "short",
+        "int",
+        "float",
+        "double",
+        "input"
+      ],
+      "cli": {
+        "argstr": "-odt %s",
+        "position": -1
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.ImageMaths",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL fslmaths command to allow mathematical manipulation of images"
+}

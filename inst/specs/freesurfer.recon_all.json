@@ -307,8 +307,7 @@
   "origin": {
     "source": "nipype",
     "nipype_class": "nipype.interfaces.freesurfer.preprocess.ReconAll",
-    "nipype_version": "1.10.0",
-    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+    "nipype_version": "1.10.0"
   },
   "description": "Uses recon-all to generate surfaces and parcellations of structural data"
 }

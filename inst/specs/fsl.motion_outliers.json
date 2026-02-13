@@ -1,0 +1,120 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.motion_outliers",
+  "title": "FSL MotionOutliers",
+  "command": "fsl_motion_outliers",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dummy": {
+      "type": "int",
+      "desc": "number of dummy scans to delete (before running anything and creating EVs)",
+      "cli": {
+        "argstr": "--dummy=%d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "unfiltered 4D image",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask image for calculating metric",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "metric": {
+      "type": "enum",
+      "desc": "metrics: refrms - RMS intensity difference to reference volume as metric [default metric], refmse - Mean Square Error version of refrms (used in original version of fsl_motion_outliers), dvars - DVARS, fd - frame displacement, fdrms - FD with RMS matrix calculation",
+      "choices": [
+        "refrms",
+        "dvars",
+        "refmse",
+        "fd",
+        "fdrms"
+      ],
+      "cli": {
+        "argstr": "--%s"
+      }
+    },
+    "no_motion_correction": {
+      "type": "flag",
+      "desc": "do not run motion correction (assumed already done)",
+      "cli": {
+        "argstr": "--nomoco"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output outlier file name",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "out_metric_plot": {
+      "type": "file",
+      "desc": "output metric values plot (DVARS etc.) file name",
+      "cli": {
+        "argstr": "-p %s"
+      }
+    },
+    "out_metric_values": {
+      "type": "file",
+      "desc": "output metric values (DVARS etc.) file name",
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "threshold": {
+      "type": "double",
+      "desc": "specify absolute threshold value (otherwise use box-plot cutoff = P75 + 1.5*IQR)",
+      "cli": {
+        "argstr": "--thresh=%g"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_metric_plot": {
+      "type": "file",
+      "path": {
+        "from_input": "out_metric_plot"
+      },
+      "must_exist": false
+    },
+    "out_metric_values": {
+      "type": "file",
+      "path": {
+        "from_input": "out_metric_values"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.MotionOutliers",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL fsl_motion_outliers`http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSLMotionOutliers`_ to find outliers in timeseries (4d) data."
+}

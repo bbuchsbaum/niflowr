@@ -1,0 +1,196 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.fast",
+  "title": "FSL FAST",
+  "command": "fast",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bias_iters": {
+      "type": "string",
+      "desc": "number of main-loop iterations during bias-field removal",
+      "cli": {
+        "argstr": "-I %d"
+      }
+    },
+    "bias_lowpass": {
+      "type": "string",
+      "desc": "bias field smoothing extent (FWHM) in mm",
+      "cli": {
+        "argstr": "-l %d"
+      }
+    },
+    "hyper": {
+      "type": "string",
+      "desc": "segmentation spatial smoothness",
+      "cli": {
+        "argstr": "-H %.2f"
+      }
+    },
+    "img_type": {
+      "type": "enum",
+      "desc": "int specifying type of image: (1 = T1, 2 = T2, 3 = PD)",
+      "choices": [
+        1,
+        2,
+        3
+      ],
+      "cli": {
+        "argstr": "-t %d"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "image, or multi-channel set of images, to be segmented",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "init_seg_smooth": {
+      "type": "string",
+      "desc": "initial segmentation spatial smoothness (during bias field estimation)",
+      "cli": {
+        "argstr": "-f %.3f"
+      }
+    },
+    "init_transform": {
+      "type": "file",
+      "desc": "<standard2input.mat> initialise using priors",
+      "cli": {
+        "argstr": "-a %s"
+      }
+    },
+    "iters_afterbias": {
+      "type": "string",
+      "desc": "number of main-loop iterations after bias-field removal",
+      "cli": {
+        "argstr": "-O %d"
+      }
+    },
+    "manual_seg": {
+      "type": "file",
+      "desc": "Filename containing intensities",
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "mixel_smooth": {
+      "type": "string",
+      "desc": "spatial smoothness for mixeltype",
+      "cli": {
+        "argstr": "-R %.2f"
+      }
+    },
+    "no_bias": {
+      "type": "flag",
+      "desc": "do not remove bias field",
+      "cli": {
+        "argstr": "-N"
+      }
+    },
+    "no_pve": {
+      "type": "flag",
+      "desc": "turn off PVE (partial volume estimation)",
+      "cli": {
+        "argstr": "--nopve"
+      }
+    },
+    "number_classes": {
+      "type": "string",
+      "desc": "number of tissue-type classes",
+      "cli": {
+        "argstr": "-n %d"
+      }
+    },
+    "other_priors": {
+      "type": "list",
+      "desc": "alternative prior images",
+      "cli": {
+        "argstr": "-A %s"
+      }
+    },
+    "out_basename": {
+      "type": "file",
+      "desc": "base name of output files",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "output_biascorrected": {
+      "type": "flag",
+      "desc": "output restored image (bias-corrected image)",
+      "cli": {
+        "argstr": "-B"
+      }
+    },
+    "output_biasfield": {
+      "type": "flag",
+      "desc": "output estimated bias field",
+      "cli": {
+        "argstr": "-b"
+      }
+    },
+    "probability_maps": {
+      "type": "flag",
+      "desc": "outputs individual probability maps",
+      "cli": {
+        "argstr": "-p"
+      }
+    },
+    "segment_iters": {
+      "type": "string",
+      "desc": "number of segmentation-initialisation iterations",
+      "cli": {
+        "argstr": "-W %d"
+      }
+    },
+    "segments": {
+      "type": "flag",
+      "desc": "outputs a separate binary image for each tissue type",
+      "cli": {
+        "argstr": "-g"
+      }
+    },
+    "use_priors": {
+      "type": "flag",
+      "desc": "use priors throughout",
+      "cli": {
+        "argstr": "-P"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "switch on diagnostic messages",
+      "cli": {
+        "argstr": "-v"
+      }
+    }
+  },
+  "outputs": {
+    "probability_maps": {
+      "type": "text",
+      "path": {
+        "from_input": "probability_maps"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.FAST",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL FAST wrapper for segmentation and bias correction"
+}

@@ -1,0 +1,68 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.paint",
+  "title": "FREESURFER Paint",
+  "command": "mrisp_paint",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "averages": {
+      "type": "int",
+      "desc": "Average curvature patterns",
+      "cli": {
+        "argstr": "-a %d"
+      }
+    },
+    "in_surf": {
+      "type": "file",
+      "desc": "Surface file with grid (vertices) onto which the template data is to be sampled or 'painted'",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "File containing a surface-worth of per-vertex values, saved in 'curvature' format.",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "template": {
+      "type": "file",
+      "desc": "Template file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.registration.Paint",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program is useful for extracting one of the arrays (\"a variable\")"
+}

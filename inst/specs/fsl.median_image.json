@@ -1,0 +1,107 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.median_image",
+  "title": "FSL MedianImage",
+  "command": "fslmaths",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "dimension to median across",
+      "default": "T",
+      "choices": [
+        "T",
+        "X",
+        "Y",
+        "Z"
+      ],
+      "cli": {
+        "argstr": "-%smedian",
+        "position": 4
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "image to operate on",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "internal_datatype": {
+      "type": "enum",
+      "desc": "datatype to use for calculations (default is float)",
+      "choices": [
+        "float",
+        "char",
+        "int",
+        "short",
+        "double",
+        "input"
+      ],
+      "cli": {
+        "argstr": "-dt %s",
+        "position": 1
+      }
+    },
+    "nan2zeros": {
+      "type": "flag",
+      "desc": "change NaNs to zeros before doing anything",
+      "cli": {
+        "argstr": "-nan",
+        "position": 3
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "image to write",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "output_datatype": {
+      "type": "enum",
+      "desc": "datatype to use for output (default uses input type)",
+      "choices": [
+        "float",
+        "char",
+        "int",
+        "short",
+        "double",
+        "input"
+      ],
+      "cli": {
+        "argstr": "-odt %s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.maths.MedianImage",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use fslmaths to generate a median image across a given dimension."
+}

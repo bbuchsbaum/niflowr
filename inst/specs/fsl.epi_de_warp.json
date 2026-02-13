@@ -1,0 +1,133 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.epi_de_warp",
+  "title": "FSL EPIDeWarp",
+  "command": "epidewarp.fsl",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "cleanup": {
+      "type": "flag",
+      "desc": "cleanup",
+      "cli": {
+        "argstr": "--cleanup"
+      }
+    },
+    "dph_file": {
+      "type": "file",
+      "desc": "Phase file assumed to be scaled from 0 to 4095",
+      "required": true,
+      "cli": {
+        "argstr": "--dph %s"
+      }
+    },
+    "epi_file": {
+      "type": "file",
+      "desc": "EPI volume to unwarp",
+      "cli": {
+        "argstr": "--epi %s"
+      }
+    },
+    "epidw": {
+      "type": "string",
+      "desc": "dewarped epi volume",
+      "cli": {
+        "argstr": "--epidw %s"
+      }
+    },
+    "esp": {
+      "type": "double",
+      "desc": "EPI echo spacing",
+      "default": 0.58,
+      "cli": {
+        "argstr": "--esp %s"
+      }
+    },
+    "exf_file": {
+      "type": "file",
+      "desc": "example func volume (or use epi)",
+      "cli": {
+        "argstr": "--exf %s"
+      }
+    },
+    "exfdw": {
+      "type": "string",
+      "desc": "dewarped example func volume",
+      "cli": {
+        "argstr": "--exfdw %s"
+      }
+    },
+    "mag_file": {
+      "type": "file",
+      "desc": "Magnitude file",
+      "required": true,
+      "cli": {
+        "argstr": "--mag %s",
+        "position": 0
+      }
+    },
+    "nocleanup": {
+      "type": "flag",
+      "desc": "no cleanup",
+      "default": true,
+      "cli": {
+        "argstr": "--nocleanup"
+      }
+    },
+    "sigma": {
+      "type": "int",
+      "desc": "2D spatial gaussing smoothing                        stdev (default = 2mm)",
+      "default": 2,
+      "cli": {
+        "argstr": "--sigma %s"
+      }
+    },
+    "tediff": {
+      "type": "double",
+      "desc": "difference in B0 field map TEs",
+      "default": 2.46,
+      "cli": {
+        "argstr": "--tediff %s"
+      }
+    },
+    "tmpdir": {
+      "type": "string",
+      "desc": "tmpdir",
+      "cli": {
+        "argstr": "--tmpdir %s"
+      }
+    },
+    "vsm": {
+      "type": "string",
+      "desc": "voxel shift map",
+      "cli": {
+        "argstr": "--vsm %s"
+      }
+    }
+  },
+  "outputs": {
+    "exfdw": {
+      "type": "file",
+      "path": {
+        "from_input": "exfdw"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.EPIDeWarp",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Wraps the unwarping script `epidewarp.fsl"
+}

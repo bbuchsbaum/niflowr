@@ -1,0 +1,44 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mp_rto_mni305",
+  "title": "FREESURFER MPRtoMNI305",
+  "command": "mpr2mni305",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "the input file prefix for MPRtoMNI305",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "reference_dir": {
+      "type": "dir",
+      "desc": "TODO",
+      "required": true
+    },
+    "target": {
+      "type": "string",
+      "desc": "input atlas file",
+      "required": true
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.registration.MPRtoMNI305",
+    "nipype_version": "1.10.0"
+  },
+  "description": "For complete details, see FreeSurfer documentation"
+}

@@ -1,0 +1,76 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.add_x_form_to_header",
+  "title": "FREESURFER AddXFormToHeader",
+  "command": "mri_add_xform_to_header",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "copy_name": {
+      "type": "flag",
+      "desc": "do not try to load the xfmfile, just copy name",
+      "cli": {
+        "argstr": "-c"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input volume",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output volume",
+      "default": "output.mgz",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "xfm file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "be verbose",
+      "cli": {
+        "argstr": "-v"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.AddXFormToHeader",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Just adds specified xform to the volume header."
+}

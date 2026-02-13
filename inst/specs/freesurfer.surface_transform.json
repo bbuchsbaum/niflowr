@@ -1,0 +1,186 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.surface_transform",
+  "title": "FREESURFER SurfaceTransform",
+  "command": "mri_surf2surf",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "hemi": {
+      "type": "enum",
+      "desc": "hemisphere to transform",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "surface file to write",
+      "cli": {
+        "argstr": "--tval %s"
+      }
+    },
+    "reshape": {
+      "type": "flag",
+      "desc": "reshape output surface to conform with Nifti",
+      "cli": {
+        "argstr": "--reshape"
+      }
+    },
+    "reshape_factor": {
+      "type": "int",
+      "desc": "number of slices in reshaped image",
+      "cli": {
+        "argstr": "--reshape-factor"
+      }
+    },
+    "source_annot_file": {
+      "type": "file",
+      "desc": "surface annotation file",
+      "required": true,
+      "cli": {
+        "argstr": "--sval-annot %s"
+      },
+      "constraints": {
+        "xor": [
+          "source_file"
+        ]
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "desc": "surface file with source values",
+      "required": true,
+      "cli": {
+        "argstr": "--sval %s"
+      },
+      "constraints": {
+        "xor": [
+          "source_annot_file"
+        ]
+      }
+    },
+    "source_subject": {
+      "type": "string",
+      "desc": "subject id for source surface",
+      "required": true,
+      "cli": {
+        "argstr": "--srcsubject %s"
+      }
+    },
+    "source_type": {
+      "type": "enum",
+      "desc": "source file format",
+      "choices": [
+        "cor",
+        "mgh",
+        "mgz",
+        "minc",
+        "analyze",
+        "analyze4d",
+        "spm",
+        "afni",
+        "brik",
+        "bshort",
+        "bfloat",
+        "sdt",
+        "outline",
+        "otl",
+        "gdf",
+        "nifti1",
+        "nii",
+        "niigz"
+      ],
+      "cli": {
+        "argstr": "--sfmt %s"
+      },
+      "constraints": {
+        "requires": [
+          "source_file"
+        ]
+      }
+    },
+    "target_ico_order": {
+      "type": "enum",
+      "desc": "order of the icosahedron if target_subject is 'ico'",
+      "choices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "cli": {
+        "argstr": "--trgicoorder %d"
+      }
+    },
+    "target_subject": {
+      "type": "string",
+      "desc": "subject id of target surface",
+      "required": true,
+      "cli": {
+        "argstr": "--trgsubject %s"
+      }
+    },
+    "target_type": {
+      "type": "enum",
+      "desc": "output format",
+      "choices": [
+        "cor",
+        "mgh",
+        "mgz",
+        "minc",
+        "analyze",
+        "analyze4d",
+        "spm",
+        "afni",
+        "brik",
+        "bshort",
+        "bfloat",
+        "sdt",
+        "outline",
+        "otl",
+        "gdf",
+        "nifti1",
+        "nii",
+        "niigz",
+        "gii"
+      ],
+      "cli": {
+        "argstr": "--tfmt %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.SurfaceTransform",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Transform a surface file from one subject to another via a spherical registration."
+}

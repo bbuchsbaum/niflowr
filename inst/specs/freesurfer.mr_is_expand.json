@@ -1,0 +1,110 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mr_is_expand",
+  "title": "FREESURFER MRIsExpand",
+  "command": "mris_expand",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "distance": {
+      "type": "double",
+      "desc": "Distance in mm or fraction of cortical thickness",
+      "required": true,
+      "cli": {
+        "argstr": "%g",
+        "position": -2
+      }
+    },
+    "dt": {
+      "type": "double",
+      "desc": "dt (implicit: 0.25)",
+      "cli": {
+        "argstr": "-T %g"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Surface to expand",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "nsurfaces": {
+      "type": "int",
+      "desc": "Number of surfacces to write during expansion",
+      "cli": {
+        "argstr": "-N %d"
+      }
+    },
+    "out_name": {
+      "type": "string",
+      "desc": "Output surface file. If no path, uses directory of ``in_file``. If no path AND missing \"lh.\" or \"rh.\", derive from ``in_file``",
+      "default": "expanded",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "pial": {
+      "type": "string",
+      "desc": "Name of pial file (implicit: \"pial\")\nIf no path, uses directory of ``in_file``\nIf no path AND missing \"lh.\" or \"rh.\", derive from ``in_file``",
+      "cli": {
+        "argstr": "-pial %s"
+      }
+    },
+    "smooth_averages": {
+      "type": "int",
+      "desc": "Smooth surface with N iterations after expansion",
+      "cli": {
+        "argstr": "-A %d"
+      }
+    },
+    "spring": {
+      "type": "double",
+      "desc": "Spring term (implicit: 0.05)",
+      "cli": {
+        "argstr": "-S %g"
+      }
+    },
+    "thickness": {
+      "type": "flag",
+      "desc": "Expand by fraction of cortical thickness, not mm",
+      "cli": {
+        "argstr": "-thickness"
+      }
+    },
+    "thickness_name": {
+      "type": "string",
+      "desc": "Name of thickness file (implicit: \"thickness\")\nIf no path, uses directory of ``in_file``\nIf no path AND missing \"lh.\" or \"rh.\", derive from `in_file`",
+      "cli": {
+        "argstr": "-thickness_name %s"
+      }
+    },
+    "write_iterations": {
+      "type": "int",
+      "desc": "Write snapshots of expansion every N iterations",
+      "cli": {
+        "argstr": "-W %d"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.MRIsExpand",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Expands a surface (typically ?h.white) outwards while maintaining"
+}

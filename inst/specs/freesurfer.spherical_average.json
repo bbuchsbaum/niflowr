@@ -1,0 +1,127 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.spherical_average",
+  "title": "FREESURFER SphericalAverage",
+  "command": "mris_spherical_average",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "erode": {
+      "type": "int",
+      "desc": "Undocumented",
+      "cli": {
+        "argstr": "-erode %d"
+      }
+    },
+    "fname": {
+      "type": "string",
+      "desc": "Filename from the average subject directory.\nExample: to use rh.entorhinal.label as the input label filename, set fname to 'rh.entorhinal'\nand which to 'label'. The program will then search for\n``<in_average>/label/rh.entorhinal.label``",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -5
+      }
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Input hemisphere",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      }
+    },
+    "in_average": {
+      "type": "dir",
+      "desc": "Average subject",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "in_orig": {
+      "type": "file",
+      "desc": "Original surface filename",
+      "cli": {
+        "argstr": "-orig %s"
+      }
+    },
+    "in_surf": {
+      "type": "file",
+      "desc": "Input surface file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output filename",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Output subject id",
+      "required": true,
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "threshold": {
+      "type": "double",
+      "desc": "Undocumented",
+      "cli": {
+        "argstr": "-t %.1f"
+      }
+    },
+    "which": {
+      "type": "enum",
+      "desc": "No documentation",
+      "required": true,
+      "choices": [
+        "coords",
+        "label",
+        "vals",
+        "curv",
+        "area"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": -6
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.SphericalAverage",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program will add a template into an average surface."
+}

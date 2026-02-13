@@ -1,0 +1,534 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.glm_fit",
+  "title": "FREESURFER GLMFit",
+  "command": "mri_glmfit",
+  "inputs": {
+    "allow_ill_cond": {
+      "type": "flag",
+      "desc": "allow ill-conditioned design matrices",
+      "cli": {
+        "argstr": "--illcond"
+      }
+    },
+    "allow_repeated_subjects": {
+      "type": "flag",
+      "desc": "allow subject names to repeat in the fsgd file (must appear before --fsgd",
+      "cli": {
+        "argstr": "--allowsubjrep"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bp_clip_max": {
+      "type": "double",
+      "desc": "set BP voxels above max to max",
+      "cli": {
+        "argstr": "--bp-clip-max %f"
+      }
+    },
+    "bp_clip_neg": {
+      "type": "flag",
+      "desc": "set negative BP voxels to zero",
+      "cli": {
+        "argstr": "--bp-clip-neg"
+      }
+    },
+    "calc_AR1": {
+      "type": "flag",
+      "desc": "compute and save temporal AR1 of residual",
+      "cli": {
+        "argstr": "--tar1"
+      }
+    },
+    "check_opts": {
+      "type": "flag",
+      "desc": "don't run anything, just check options and exit",
+      "cli": {
+        "argstr": "--checkopts"
+      }
+    },
+    "compute_log_y": {
+      "type": "flag",
+      "desc": "compute natural log of y prior to analysis",
+      "cli": {
+        "argstr": "--logy"
+      }
+    },
+    "contrast": {
+      "type": "list",
+      "desc": "contrast file",
+      "cli": {
+        "argstr": "--C %s..."
+      }
+    },
+    "cortex": {
+      "type": "flag",
+      "desc": "use subjects ?h.cortex.label as label",
+      "cli": {
+        "argstr": "--cortex"
+      },
+      "constraints": {
+        "xor": [
+          "label_file"
+        ]
+      }
+    },
+    "debug": {
+      "type": "flag",
+      "desc": "turn on debugging",
+      "cli": {
+        "argstr": "--debug"
+      }
+    },
+    "design": {
+      "type": "file",
+      "desc": "design matrix file",
+      "cli": {
+        "argstr": "--X %s"
+      },
+      "constraints": {
+        "xor": [
+          "fsgd",
+          "design",
+          "one_sample"
+        ]
+      }
+    },
+    "diag": {
+      "type": "int",
+      "desc": "Gdiag_no : set diagnostic level",
+      "cli": {
+        "argstr": "--diag %d"
+      }
+    },
+    "diag_cluster": {
+      "type": "flag",
+      "desc": "save sig volume and exit from first sim loop",
+      "cli": {
+        "argstr": "--diag-cluster"
+      }
+    },
+    "fixed_fx_dof": {
+      "type": "int",
+      "desc": "dof for fixed effects analysis",
+      "cli": {
+        "argstr": "--ffxdof %d"
+      },
+      "constraints": {
+        "xor": [
+          "fixed_fx_dof_file"
+        ]
+      }
+    },
+    "fixed_fx_dof_file": {
+      "type": "file",
+      "desc": "text file with dof for fixed effects analysis",
+      "cli": {
+        "argstr": "--ffxdofdat %d"
+      },
+      "constraints": {
+        "xor": [
+          "fixed_fx_dof"
+        ]
+      }
+    },
+    "fixed_fx_var": {
+      "type": "file",
+      "desc": "for fixed effects analysis",
+      "cli": {
+        "argstr": "--yffxvar %s"
+      }
+    },
+    "force_perm": {
+      "type": "flag",
+      "desc": "force perumtation test, even when design matrix is not orthog",
+      "cli": {
+        "argstr": "--perm-force"
+      }
+    },
+    "fsgd": {
+      "type": "list",
+      "desc": "freesurfer descriptor file",
+      "cli": {
+        "argstr": "--fsgd %s %s"
+      },
+      "constraints": {
+        "xor": [
+          "fsgd",
+          "design",
+          "one_sample"
+        ]
+      }
+    },
+    "fwhm": {
+      "type": "string",
+      "desc": "smooth input by fwhm",
+      "cli": {
+        "argstr": "--fwhm %f"
+      }
+    },
+    "glm_dir": {
+      "type": "string",
+      "desc": "save outputs to dir",
+      "cli": {
+        "argstr": "--glmdir %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input 4D file",
+      "required": true,
+      "cli": {
+        "argstr": "--y %s"
+      }
+    },
+    "invert_mask": {
+      "type": "flag",
+      "desc": "invert mask",
+      "cli": {
+        "argstr": "--mask-inv"
+      }
+    },
+    "label_file": {
+      "type": "file",
+      "desc": "use label as mask, surfaces only",
+      "cli": {
+        "argstr": "--label %s"
+      },
+      "constraints": {
+        "xor": [
+          "cortex"
+        ]
+      }
+    },
+    "logan": {
+      "type": "list",
+      "desc": "RefTac TimeSec tstar   : perform Logan kinetic modeling",
+      "cli": {
+        "argstr": "--logan %s %s %f"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "binary mask",
+      "cli": {
+        "argstr": "--mask %s"
+      }
+    },
+    "mrtm1": {
+      "type": "list",
+      "desc": "RefTac TimeSec : perform MRTM1 kinetic modeling",
+      "cli": {
+        "argstr": "--mrtm1 %s %s"
+      }
+    },
+    "mrtm2": {
+      "type": "list",
+      "desc": "RefTac TimeSec k2prime : perform MRTM2 kinetic modeling",
+      "cli": {
+        "argstr": "--mrtm2 %s %s %f"
+      }
+    },
+    "nii": {
+      "type": "flag",
+      "desc": "save outputs as nii",
+      "cli": {
+        "argstr": "--nii"
+      },
+      "constraints": {
+        "xor": [
+          "nii",
+          "nii_gz"
+        ]
+      }
+    },
+    "nii_gz": {
+      "type": "flag",
+      "desc": "save outputs as nii.gz",
+      "cli": {
+        "argstr": "--nii.gz"
+      },
+      "constraints": {
+        "xor": [
+          "nii",
+          "nii_gz"
+        ]
+      }
+    },
+    "no_contrast_ok": {
+      "type": "flag",
+      "desc": "do not fail if no contrasts specified",
+      "cli": {
+        "argstr": "--no-contrasts-ok"
+      }
+    },
+    "no_est_fwhm": {
+      "type": "flag",
+      "desc": "turn off FWHM output estimation",
+      "cli": {
+        "argstr": "--no-est-fwhm"
+      }
+    },
+    "no_mask_smooth": {
+      "type": "flag",
+      "desc": "do not mask when smoothing",
+      "cli": {
+        "argstr": "--no-mask-smooth"
+      }
+    },
+    "no_prune": {
+      "type": "flag",
+      "desc": "do not prune",
+      "cli": {
+        "argstr": "--no-prune"
+      },
+      "constraints": {
+        "xor": [
+          "prunethresh"
+        ]
+      }
+    },
+    "one_sample": {
+      "type": "flag",
+      "desc": "construct X and C as a one-sample group mean",
+      "cli": {
+        "argstr": "--osgm"
+      },
+      "constraints": {
+        "xor": [
+          "one_sample",
+          "fsgd",
+          "design",
+          "contrast"
+        ]
+      }
+    },
+    "pca": {
+      "type": "flag",
+      "desc": "perform pca/svd analysis on residual",
+      "cli": {
+        "argstr": "--pca"
+      }
+    },
+    "per_voxel_reg": {
+      "type": "list",
+      "desc": "per-voxel regressors",
+      "cli": {
+        "argstr": "--pvr %s..."
+      }
+    },
+    "profile": {
+      "type": "int",
+      "desc": "niters : test speed",
+      "cli": {
+        "argstr": "--profile %d"
+      }
+    },
+    "prune": {
+      "type": "flag",
+      "desc": "remove voxels that do not have a non-zero value at each frame (def)",
+      "cli": {
+        "argstr": "--prune"
+      }
+    },
+    "prune_thresh": {
+      "type": "double",
+      "desc": "prune threshold. Default is FLT_MIN",
+      "cli": {
+        "argstr": "--prune_thr %f"
+      },
+      "constraints": {
+        "xor": [
+          "noprune"
+        ]
+      }
+    },
+    "resynth_test": {
+      "type": "int",
+      "desc": "test GLM by resynthsis",
+      "cli": {
+        "argstr": "--resynthtest %d"
+      }
+    },
+    "save_cond": {
+      "type": "flag",
+      "desc": "flag to save design matrix condition at each voxel",
+      "cli": {
+        "argstr": "--save-cond"
+      }
+    },
+    "save_estimate": {
+      "type": "flag",
+      "desc": "save signal estimate (yhat)",
+      "cli": {
+        "argstr": "--yhat-save"
+      }
+    },
+    "save_res_corr_mtx": {
+      "type": "flag",
+      "desc": "save residual error spatial correlation matrix (eres.scm). Big!",
+      "cli": {
+        "argstr": "--eres-scm"
+      }
+    },
+    "save_residual": {
+      "type": "flag",
+      "desc": "save residual error (eres)",
+      "cli": {
+        "argstr": "--eres-save"
+      }
+    },
+    "seed": {
+      "type": "int",
+      "desc": "used for synthesizing noise",
+      "cli": {
+        "argstr": "--seed %d"
+      }
+    },
+    "self_reg": {
+      "type": "list",
+      "desc": "self-regressor from index col row slice",
+      "cli": {
+        "argstr": "--selfreg %d %d %d"
+      }
+    },
+    "sim_done_file": {
+      "type": "file",
+      "desc": "create file when simulation finished",
+      "cli": {
+        "argstr": "--sim-done %s"
+      }
+    },
+    "sim_sign": {
+      "type": "enum",
+      "desc": "abs, pos, or neg",
+      "choices": [
+        "abs",
+        "pos",
+        "neg"
+      ],
+      "cli": {
+        "argstr": "--sim-sign %s"
+      }
+    },
+    "simulation": {
+      "type": "list",
+      "desc": "nulltype nsim thresh csdbasename",
+      "cli": {
+        "argstr": "--sim %s %d %f %s"
+      }
+    },
+    "surf": {
+      "type": "bool",
+      "desc": "analysis is on a surface mesh",
+      "cli": {
+        "argstr": "--surf %s %s %s"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id",
+          "hemi"
+        ]
+      }
+    },
+    "synth": {
+      "type": "flag",
+      "desc": "replace input with gaussian",
+      "cli": {
+        "argstr": "--synth"
+      }
+    },
+    "uniform": {
+      "type": "list",
+      "desc": "use uniform distribution instead of gaussian",
+      "cli": {
+        "argstr": "--uniform %f %f"
+      }
+    },
+    "var_fwhm": {
+      "type": "string",
+      "desc": "smooth variance by fwhm",
+      "cli": {
+        "argstr": "--var-fwhm %f"
+      }
+    },
+    "vox_dump": {
+      "type": "list",
+      "desc": "dump voxel GLM and exit",
+      "cli": {
+        "argstr": "--voxdump %d %d %d"
+      }
+    },
+    "weight_inv": {
+      "type": "flag",
+      "desc": "invert weights",
+      "cli": {
+        "argstr": "--w-inv"
+      },
+      "constraints": {
+        "xor": [
+          "weighted_ls"
+        ]
+      }
+    },
+    "weight_sqrt": {
+      "type": "flag",
+      "desc": "sqrt of weights",
+      "cli": {
+        "argstr": "--w-sqrt"
+      },
+      "constraints": {
+        "xor": [
+          "weighted_ls"
+        ]
+      }
+    },
+    "weighted_ls": {
+      "type": "file",
+      "desc": "weighted least squares",
+      "cli": {
+        "argstr": "--wls %s"
+      },
+      "constraints": {
+        "xor": [
+          "weight_file",
+          "weight_inv",
+          "weight_sqrt"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "glm_dir": {
+      "type": "dir",
+      "path": {
+        "from_input": "glm_dir"
+      },
+      "must_exist": false
+    },
+    "mask_file": {
+      "type": "file",
+      "path": {
+        "from_input": "mask_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.GLMFit",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer's mri_glmfit to specify and estimate a general linear model."
+}

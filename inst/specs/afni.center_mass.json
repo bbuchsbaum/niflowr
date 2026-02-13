@@ -1,0 +1,94 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.center_mass",
+  "title": "AFNI CenterMass",
+  "command": "3dCM",
+  "inputs": {
+    "all_rois": {
+      "type": "flag",
+      "desc": "Don't bother listing the values of ROIs you want: The program will find all of them and produce a full list",
+      "cli": {
+        "argstr": "-all_rois"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Generate the mask automatically",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "cm_file": {
+      "type": "file",
+      "desc": "File to write center of mass to",
+      "cli": {
+        "argstr": "> %s",
+        "position": -1
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dCM",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "local_ijk": {
+      "type": "flag",
+      "desc": "Output values as (i,j,k) in local orientation",
+      "cli": {
+        "argstr": "-local_ijk"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "Only voxels with nonzero values in the provided mask will be averaged.",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "roi_vals": {
+      "type": "list",
+      "desc": "Compute center of mass for each blob with voxel value of v0, v1, v2, etc. This option is handy for getting ROI centers of mass.",
+      "cli": {
+        "argstr": "-roi_vals %s"
+      }
+    },
+    "set_cm": {
+      "type": "list",
+      "desc": "After computing the center of mass, set the origin fields in the header so that the center of mass will be at (x,y,z) in DICOM coords.",
+      "cli": {
+        "argstr": "-set %f %f %f"
+      }
+    }
+  },
+  "outputs": {
+    "cm_file": {
+      "type": "file",
+      "path": {
+        "from_input": "cm_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.CenterMass",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes center of mass using 3dCM command"
+}

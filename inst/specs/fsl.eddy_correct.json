@@ -1,0 +1,54 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.eddy_correct",
+  "title": "FSL EddyCorrect",
+  "command": "eddy_correct",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "4D input file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "4D output file",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "ref_num": {
+      "type": "int",
+      "desc": "reference number",
+      "required": true,
+      "default": 0,
+      "cli": {
+        "argstr": "%d",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.EddyCorrect",
+    "nipype_version": "1.10.0"
+  },
+  "description": ".. warning:: Deprecated in FSL. Please use"
+}

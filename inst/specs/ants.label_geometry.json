@@ -1,0 +1,75 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.label_geometry",
+  "title": "ANTS LabelGeometry",
+  "command": "LabelGeometryMeasures",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 0
+      }
+    },
+    "intensity_image": {
+      "type": "file",
+      "desc": "Intensity image to extract values from. This is an optional input",
+      "required": true,
+      "default": "[]",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "label_image": {
+      "type": "file",
+      "desc": "label image to use for extracting geometry measures",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "output_file": {
+      "type": "string",
+      "desc": "name of output file",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    }
+  },
+  "outputs": {
+    "output_file": {
+      "type": "file",
+      "path": {
+        "from_input": "output_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.LabelGeometry",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Extracts geometry measures using a label file and an optional image file"
+}

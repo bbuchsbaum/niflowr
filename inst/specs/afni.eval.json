@@ -1,0 +1,83 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.eval",
+  "title": "AFNI Eval",
+  "command": "1deval",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "expr": {
+      "type": "string",
+      "desc": "expr",
+      "required": true,
+      "cli": {
+        "argstr": "-expr \"%s\"",
+        "position": 3
+      }
+    },
+    "in_file_a": {
+      "type": "file",
+      "desc": "input file to 1deval",
+      "required": true,
+      "cli": {
+        "argstr": "-a %s",
+        "position": 0
+      }
+    },
+    "in_file_b": {
+      "type": "file",
+      "desc": "operand file to 1deval",
+      "cli": {
+        "argstr": "-b %s",
+        "position": 1
+      }
+    },
+    "in_file_c": {
+      "type": "file",
+      "desc": "operand file to 1deval",
+      "cli": {
+        "argstr": "-c %s",
+        "position": 2
+      }
+    },
+    "out1D": {
+      "type": "flag",
+      "desc": "output in 1D",
+      "cli": {
+        "argstr": "-1D"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Eval",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Evaluates an expression that may include columns of data from one or"
+}

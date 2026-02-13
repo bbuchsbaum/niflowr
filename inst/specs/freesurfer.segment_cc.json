@@ -1,0 +1,80 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.segment_cc",
+  "title": "FREESURFER SegmentCC",
+  "command": "mri_cc",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input aseg file to read from subjects directory",
+      "required": true,
+      "cli": {
+        "argstr": "-aseg %s"
+      }
+    },
+    "in_norm": {
+      "type": "file",
+      "desc": "Required undocumented input {subject}/mri/norm.mgz",
+      "required": true
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Filename to write aseg including CC",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "out_rotation": {
+      "type": "file",
+      "desc": "Global filepath for writing rotation lta",
+      "required": true,
+      "cli": {
+        "argstr": "-lta %s"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject name",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_rotation": {
+      "type": "file",
+      "path": {
+        "from_input": "out_rotation"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.SegmentCC",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program segments the corpus callosum into five separate labels in"
+}

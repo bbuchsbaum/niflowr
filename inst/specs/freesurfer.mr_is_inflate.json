@@ -1,0 +1,64 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mr_is_inflate",
+  "title": "FREESURFER MRIsInflate",
+  "command": "mris_inflate",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input file for MRIsInflate",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "no_save_sulc": {
+      "type": "flag",
+      "desc": "Do not save sulc file as output",
+      "cli": {
+        "argstr": "-no-save-sulc"
+      },
+      "constraints": {
+        "xor": [
+          "out_sulc"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output file for MRIsInflate",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.MRIsInflate",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program will inflate a cortical surface."
+}

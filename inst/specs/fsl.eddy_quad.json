@@ -1,0 +1,103 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.eddy_quad",
+  "title": "FSL EddyQuad",
+  "command": "eddy_quad",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "base_name": {
+      "type": "string",
+      "desc": "Basename (including path) for EDDY output files, i.e., corrected images and QC files",
+      "default": "eddy_corrected",
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "bval_file": {
+      "type": "file",
+      "desc": "b-values file",
+      "required": true,
+      "cli": {
+        "argstr": "--bvals %s"
+      }
+    },
+    "bvec_file": {
+      "type": "file",
+      "desc": "b-vectors file - only used when <base_name>.eddy_residuals file is present",
+      "cli": {
+        "argstr": "--bvecs %s"
+      }
+    },
+    "field": {
+      "type": "file",
+      "desc": "TOPUP estimated field (in Hz)",
+      "cli": {
+        "argstr": "--field %s"
+      }
+    },
+    "idx_file": {
+      "type": "file",
+      "desc": "File containing indices for all volumes into acquisition parameters",
+      "required": true,
+      "cli": {
+        "argstr": "--eddyIdx %s"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "Binary mask file",
+      "required": true,
+      "cli": {
+        "argstr": "--mask %s"
+      }
+    },
+    "output_dir": {
+      "type": "string",
+      "desc": "Output directory - default = '<base_name>.qc'",
+      "cli": {
+        "argstr": "--output-dir %s"
+      }
+    },
+    "param_file": {
+      "type": "file",
+      "desc": "File containing acquisition parameters",
+      "required": true,
+      "cli": {
+        "argstr": "--eddyParams %s"
+      }
+    },
+    "slice_spec": {
+      "type": "file",
+      "desc": "Text file specifying slice/group acquisition",
+      "cli": {
+        "argstr": "--slspec %s"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Display debug messages",
+      "cli": {
+        "argstr": "--verbose"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.EddyQuad",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Interface for FSL eddy_quad, a tool for generating single subject reports"
+}

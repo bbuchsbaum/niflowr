@@ -1,0 +1,397 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.remlfit",
+  "title": "AFNI Remlfit",
+  "command": "3dREMLfit",
+  "inputs": {
+    "STATmask": {
+      "type": "file",
+      "desc": "filename of 3D mask dataset to be used for the purpose of reporting truncation-to float issues AND for computing the FDR curves. The actual results ARE not masked with this option (only with 'mask' or 'automask' options).",
+      "cli": {
+        "argstr": "-STATmask %s"
+      }
+    },
+    "addbase": {
+      "type": "list",
+      "desc": "file(s) to add baseline model columns to the matrix with this option. Each column in the specified file(s) will be appended to the matrix. File(s) must have at least as many rows as the matrix does.",
+      "cli": {
+        "argstr": "-addbase %s",
+        "sep": " "
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "build a mask automatically from input data (will be slow for long time series datasets)",
+      "default": false,
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "dsort": {
+      "type": "file",
+      "desc": "4D dataset to be used as voxelwise baseline regressor",
+      "cli": {
+        "argstr": "-dsort %s"
+      }
+    },
+    "dsort_nods": {
+      "type": "flag",
+      "desc": "if 'dsort' option is used, this command will output additional results files excluding the 'dsort' file",
+      "cli": {
+        "argstr": "-dsort_nods"
+      },
+      "constraints": {
+        "requires": [
+          "dsort"
+        ]
+      }
+    },
+    "errts_file": {
+      "type": "file",
+      "desc": "output dataset for REML residuals = data - fitted model",
+      "cli": {
+        "argstr": "-Rerrts %s"
+      }
+    },
+    "fitts_file": {
+      "type": "file",
+      "desc": "output dataset for REML fitted model",
+      "cli": {
+        "argstr": "-Rfitts %s"
+      }
+    },
+    "fout": {
+      "type": "flag",
+      "desc": "output F-statistic for each stimulus",
+      "cli": {
+        "argstr": "-fout"
+      }
+    },
+    "glt_file": {
+      "type": "file",
+      "desc": "output dataset for beta + statistics from the REML estimation, but ONLY for the GLTs added on the REMLfit command line itself via 'gltsym'; GLTs from Deconvolve's command line will NOT be included.",
+      "cli": {
+        "argstr": "-Rglt %s"
+      }
+    },
+    "gltsym": {
+      "type": "list",
+      "desc": "read a symbolic GLT from input file and associate it with a label. As in Deconvolve, you can also use the 'SYM:' method to provide the definition of the GLT directly as a string (e.g., with 'SYM: +Label1 -Label2'). Unlike Deconvolve, you MUST specify 'SYM: ' if providing the GLT directly as a string instead of from a file",
+      "cli": {
+        "argstr": "-gltsym \"%s\" %s..."
+      }
+    },
+    "goforit": {
+      "type": "flag",
+      "desc": "With potential issues flagged in the design matrix, an attempt will nevertheless be made to fit the model",
+      "cli": {
+        "argstr": "-GOFORIT"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "Read time series dataset",
+      "required": true,
+      "cli": {
+        "argstr": "-input \"%s\"",
+        "sep": " "
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "filename of 3D mask dataset; only data time series from within the mask will be analyzed; results for voxels outside the mask will be set to zero.",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "matim": {
+      "type": "file",
+      "desc": "read a standard file as the matrix. You can use only Col as a name in GLTs with these nonstandard matrix input methods, since the other names come from the 'matrix' file. These mutually exclusive options are ignored if 'matrix' is used.",
+      "cli": {
+        "argstr": "-matim %s"
+      },
+      "constraints": {
+        "xor": [
+          "matrix"
+        ]
+      }
+    },
+    "matrix": {
+      "type": "file",
+      "desc": "the design matrix file, which should have been output from Deconvolve via the 'x1D' option",
+      "required": true,
+      "cli": {
+        "argstr": "-matrix %s"
+      }
+    },
+    "nobout": {
+      "type": "flag",
+      "desc": "do NOT add baseline (null hypothesis) regressor betas to the 'rbeta_file' and/or 'obeta_file' output datasets.",
+      "cli": {
+        "argstr": "-nobout"
+      }
+    },
+    "nodmbase": {
+      "type": "flag",
+      "desc": "by default, baseline columns added to the matrix via 'addbase' or 'slibase' or 'dsort' will each have their mean removed (as is done in Deconvolve); this option turns this centering off",
+      "cli": {
+        "argstr": "-nodmbase"
+      },
+      "constraints": {
+        "requires": [
+          "addbase",
+          "dsort"
+        ]
+      }
+    },
+    "nofdr": {
+      "type": "flag",
+      "desc": "do NOT add FDR curve data to bucket datasets; FDR curves can take a long time if 'tout' is used",
+      "cli": {
+        "argstr": "-noFDR"
+      }
+    },
+    "obeta": {
+      "type": "file",
+      "desc": "dataset for beta weights from the OLSQ estimation",
+      "cli": {
+        "argstr": "-Obeta %s"
+      }
+    },
+    "obuck": {
+      "type": "file",
+      "desc": "dataset for beta + statistics from the OLSQ estimation",
+      "cli": {
+        "argstr": "-Obuck %s"
+      }
+    },
+    "oerrts": {
+      "type": "file",
+      "desc": "dataset for OLSQ residuals (data - fitted model)",
+      "cli": {
+        "argstr": "-Oerrts %s"
+      }
+    },
+    "ofitts": {
+      "type": "file",
+      "desc": "dataset for OLSQ fitted model",
+      "cli": {
+        "argstr": "-Ofitts %s"
+      }
+    },
+    "oglt": {
+      "type": "file",
+      "desc": "dataset for beta + statistics from 'gltsym' options",
+      "cli": {
+        "argstr": "-Oglt %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output dataset for beta + statistics from the REML estimation; also contains the results of any GLT analysis requested in the Deconvolve setup, similar to the 'bucket' output from Deconvolve. This dataset does NOT get the betas (or statistics) of those regressors marked as 'baseline' in the matrix file.",
+      "cli": {
+        "argstr": "-Rbuck %s"
+      }
+    },
+    "ovar": {
+      "type": "file",
+      "desc": "dataset for OLSQ st.dev. parameter (kind of boring)",
+      "cli": {
+        "argstr": "-Ovar %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "desc": "if no 'matrix' option is given, AND no 'matim' option, create a matrix with Legendre polynomial regressorsup to the specified order. The default value is 0, whichproduces a matrix with a single column of all ones",
+      "cli": {
+        "argstr": "-polort %d"
+      },
+      "constraints": {
+        "xor": [
+          "matrix"
+        ]
+      }
+    },
+    "quiet": {
+      "type": "flag",
+      "desc": "turn off most progress messages",
+      "cli": {
+        "argstr": "-quiet"
+      }
+    },
+    "rbeta_file": {
+      "type": "file",
+      "desc": "output dataset for beta weights from the REML estimation, similar to the 'cbucket' output from Deconvolve. This dataset will contain all the beta weights, for baseline and stimulus regressors alike, unless the '-nobout' option is given -- in that case, this dataset will only get the betas for the stimulus regressors.",
+      "cli": {
+        "argstr": "-Rbeta %s"
+      }
+    },
+    "rout": {
+      "type": "flag",
+      "desc": "output the R^2 statistic for each stimulus",
+      "cli": {
+        "argstr": "-rout"
+      }
+    },
+    "slibase": {
+      "type": "list",
+      "desc": "similar to 'addbase' in concept, BUT each specified file must have an integer multiple of the number of slices in the input dataset(s); then, separate regression matrices are generated for each slice, with the first column of the file appended to the matrix for the first slice of the dataset, the second column of the file appended to the matrix for the first slice of the dataset, and so on. Intended to help model physiological noise in FMRI, or other effects you want to regress out that might change significantly in the inter-slice time intervals. This will slow the program down, and make it use a lot more memory (to hold all the matrix stuff).",
+      "cli": {
+        "argstr": "-slibase %s"
+      }
+    },
+    "slibase_sm": {
+      "type": "list",
+      "desc": "similar to 'slibase', BUT each file much be in slice major order (i.e. all slice0 columns come first, then all slice1 columns, etc).",
+      "cli": {
+        "argstr": "-slibase_sm %s"
+      }
+    },
+    "tout": {
+      "type": "flag",
+      "desc": "output the T-statistic for each stimulus; if you use 'out_file' and do not give any of 'fout', 'tout',or 'rout', then the program assumes 'fout' is activated.",
+      "cli": {
+        "argstr": "-tout"
+      }
+    },
+    "usetemp": {
+      "type": "flag",
+      "desc": "write intermediate stuff to disk, to economize on RAM. Using this option might be necessary to run with 'slibase' and with 'Grid' values above the default, since the program has to store a large number of matrices for such a problem: two for every slice and for every (a,b) pair in the ARMA parameter grid. Temporary files are written to the directory given in environment variable TMPDIR, or in /tmp, or in ./ (preference is in that order)",
+      "cli": {
+        "argstr": "-usetemp"
+      }
+    },
+    "var_file": {
+      "type": "file",
+      "desc": "output dataset for REML variance parameters",
+      "cli": {
+        "argstr": "-Rvar %s"
+      }
+    },
+    "verb": {
+      "type": "flag",
+      "desc": "turns on more progress messages, including memory usage progress reports at various stages",
+      "cli": {
+        "argstr": "-verb"
+      }
+    },
+    "wherr_file": {
+      "type": "file",
+      "desc": "dataset for REML residual, whitened using the estimated ARMA(1,1) correlation matrix of the noise",
+      "cli": {
+        "argstr": "-Rwherr %s"
+      }
+    }
+  },
+  "outputs": {
+    "errts_file": {
+      "type": "file",
+      "path": {
+        "from_input": "errts_file"
+      },
+      "must_exist": false
+    },
+    "fitts_file": {
+      "type": "file",
+      "path": {
+        "from_input": "fitts_file"
+      },
+      "must_exist": false
+    },
+    "glt_file": {
+      "type": "file",
+      "path": {
+        "from_input": "glt_file"
+      },
+      "must_exist": false
+    },
+    "obeta": {
+      "type": "file",
+      "path": {
+        "from_input": "obeta"
+      },
+      "must_exist": false
+    },
+    "obuck": {
+      "type": "file",
+      "path": {
+        "from_input": "obuck"
+      },
+      "must_exist": false
+    },
+    "oerrts": {
+      "type": "file",
+      "path": {
+        "from_input": "oerrts"
+      },
+      "must_exist": false
+    },
+    "ofitts": {
+      "type": "file",
+      "path": {
+        "from_input": "ofitts"
+      },
+      "must_exist": false
+    },
+    "oglt": {
+      "type": "file",
+      "path": {
+        "from_input": "oglt"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "ovar": {
+      "type": "file",
+      "path": {
+        "from_input": "ovar"
+      },
+      "must_exist": false
+    },
+    "rbeta_file": {
+      "type": "file",
+      "path": {
+        "from_input": "rbeta_file"
+      },
+      "must_exist": false
+    },
+    "var_file": {
+      "type": "file",
+      "path": {
+        "from_input": "var_file"
+      },
+      "must_exist": false
+    },
+    "wherr_file": {
+      "type": "file",
+      "path": {
+        "from_input": "wherr_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.model.Remlfit",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Performs Generalized least squares time series fit with Restricted"
+}

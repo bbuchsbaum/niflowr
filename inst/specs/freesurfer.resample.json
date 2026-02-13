@@ -1,0 +1,60 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.resample",
+  "title": "FREESURFER Resample",
+  "command": "mri_convert",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "file to resample",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": -2
+      }
+    },
+    "resampled_file": {
+      "type": "file",
+      "desc": "output filename",
+      "cli": {
+        "argstr": "-o %s",
+        "position": -1
+      }
+    },
+    "voxel_size": {
+      "type": "list",
+      "desc": "triplet of output voxel sizes",
+      "required": true,
+      "cli": {
+        "argstr": "-vs %.2f %.2f %.2f"
+      }
+    }
+  },
+  "outputs": {
+    "resampled_file": {
+      "type": "file",
+      "path": {
+        "from_input": "resampled_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.Resample",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer mri_convert to up or down-sample image files"
+}

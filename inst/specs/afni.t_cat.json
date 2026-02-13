@@ -1,0 +1,71 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.t_cat",
+  "title": "AFNI TCat",
+  "command": "3dTcat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "input file to 3dTcat",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "rlt": {
+      "type": "enum",
+      "desc": "Remove linear trends in each voxel time series loaded from each input dataset, SEPARATELY. Option -rlt removes the least squares fit of 'a+b*t' to each voxel time series. Option -rlt+ adds dataset mean back in. Option -rlt++ adds overall mean of all dataset timeseries back in.",
+      "choices": [
+        "",
+        "+",
+        "++"
+      ],
+      "cli": {
+        "argstr": "-rlt%s",
+        "position": 1
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Print out some verbose output as the program",
+      "cli": {
+        "argstr": "-verb"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.TCat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Concatenate sub-bricks from input datasets into one big 3D+time dataset."
+}

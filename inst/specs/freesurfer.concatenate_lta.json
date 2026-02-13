@@ -1,0 +1,126 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.concatenate_lta",
+  "title": "FREESURFER ConcatenateLTA",
+  "command": "mri_concatenate_lta",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_lta1": {
+      "type": "file",
+      "desc": "maps some src1 to dst1",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "in_lta2": {
+      "type": "list",
+      "desc": "maps dst1(src2) to dst2",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "invert_1": {
+      "type": "flag",
+      "desc": "invert in_lta1 before applying it",
+      "cli": {
+        "argstr": "-invert1"
+      }
+    },
+    "invert_2": {
+      "type": "flag",
+      "desc": "invert in_lta2 before applying it",
+      "cli": {
+        "argstr": "-invert2"
+      }
+    },
+    "invert_out": {
+      "type": "flag",
+      "desc": "invert output LTA",
+      "cli": {
+        "argstr": "-invertout"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "the combined LTA maps: src1 to dst2 = LTA2*LTA1",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "out_type": {
+      "type": "enum",
+      "desc": "set final LTA type",
+      "choices": [
+        "VOX2VOX",
+        "RAS2RAS"
+      ],
+      "cli": {
+        "argstr": "-out_type %d"
+      }
+    },
+    "subject": {
+      "type": "string",
+      "desc": "set subject in output LTA",
+      "cli": {
+        "argstr": "-subject %s"
+      }
+    },
+    "tal_source_file": {
+      "type": "file",
+      "desc": "if in_lta2 is talairach.xfm, specify source for talairach",
+      "cli": {
+        "argstr": "-tal %s",
+        "position": -5
+      },
+      "constraints": {
+        "requires": [
+          "tal_template_file"
+        ]
+      }
+    },
+    "tal_template_file": {
+      "type": "file",
+      "desc": "if in_lta2 is talairach.xfm, specify template for talairach",
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      },
+      "constraints": {
+        "requires": [
+          "tal_source_file"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.ConcatenateLTA",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Concatenates two consecutive LTA transformations into one overall"
+}

@@ -1,0 +1,52 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.copy_geom",
+  "title": "FSL CopyGeom",
+  "command": "fslcpgeom",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dest_file": {
+      "type": "file",
+      "desc": "destination image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "ignore_dims": {
+      "type": "flag",
+      "desc": "Do not copy image dimensions",
+      "cli": {
+        "argstr": "-d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "source image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.CopyGeom",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use fslcpgeom to copy the header geometry information to another image."
+}

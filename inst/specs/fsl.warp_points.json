@@ -1,0 +1,100 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.warp_points",
+  "title": "FSL WarpPoints",
+  "command": "img2imgcoord",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "coord_mm": {
+      "type": "flag",
+      "desc": "all coordinates in mm",
+      "cli": {
+        "argstr": "-mm"
+      },
+      "constraints": {
+        "xor": [
+          "coord_vox"
+        ]
+      }
+    },
+    "coord_vox": {
+      "type": "flag",
+      "desc": "all coordinates in voxels - default",
+      "cli": {
+        "argstr": "-vox"
+      },
+      "constraints": {
+        "xor": [
+          "coord_mm"
+        ]
+      }
+    },
+    "dest_file": {
+      "type": "file",
+      "desc": "filename of destination image",
+      "required": true,
+      "cli": {
+        "argstr": "-dest %s"
+      }
+    },
+    "in_coords": {
+      "type": "file",
+      "desc": "filename of file containing coordinates",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "src_file": {
+      "type": "file",
+      "desc": "filename of source image",
+      "required": true,
+      "cli": {
+        "argstr": "-src %s"
+      }
+    },
+    "warp_file": {
+      "type": "file",
+      "desc": "filename of warpfield (e.g. intermediate2dest_warp.nii.gz)",
+      "cli": {
+        "argstr": "-warp %s"
+      },
+      "constraints": {
+        "xor": [
+          "xfm_file"
+        ]
+      }
+    },
+    "xfm_file": {
+      "type": "file",
+      "desc": "filename of affine transform (e.g. source2dest.mat)",
+      "cli": {
+        "argstr": "-xfm %s"
+      },
+      "constraints": {
+        "xor": [
+          "warp_file"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.WarpPoints",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL `img2imgcoord <http://fsl.fmrib.ox.ac.uk/fsl/fsl-4.1.9/flirt/overview.html>`_"
+}

@@ -1,0 +1,122 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.quality_index",
+  "title": "AFNI QualityIndex",
+  "command": "3dTqual",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "autoclip": {
+      "type": "flag",
+      "desc": "clip off small voxels",
+      "default": false,
+      "cli": {
+        "argstr": "-autoclip"
+      },
+      "constraints": {
+        "xor": [
+          "mask"
+        ]
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "clip off small voxels",
+      "default": false,
+      "cli": {
+        "argstr": "-automask"
+      },
+      "constraints": {
+        "xor": [
+          "mask"
+        ]
+      }
+    },
+    "clip": {
+      "type": "double",
+      "desc": "clip off values below",
+      "cli": {
+        "argstr": "-clip %f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input dataset",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "interval": {
+      "type": "flag",
+      "desc": "write out the median + 3.5 MAD of outlier count with each timepoint",
+      "default": false,
+      "cli": {
+        "argstr": "-range"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "compute correlation only across masked voxels",
+      "cli": {
+        "argstr": "-mask %s"
+      },
+      "constraints": {
+        "xor": [
+          "autoclip",
+          "automask"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "capture standard output",
+      "cli": {
+        "argstr": "> %s",
+        "position": -1
+      }
+    },
+    "quadrant": {
+      "type": "flag",
+      "desc": "Similar to -spearman, but using 1 minus the quadrant correlation coefficient as the quality index.",
+      "default": false,
+      "cli": {
+        "argstr": "-quadrant"
+      }
+    },
+    "spearman": {
+      "type": "flag",
+      "desc": "Quality index is 1 minus the Spearman (rank) correlation coefficient of each sub-brick with the median sub-brick. (default).",
+      "default": false,
+      "cli": {
+        "argstr": "-spearman"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.QualityIndex",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes a quality index for each sub-brick in a 3D+time dataset."
+}

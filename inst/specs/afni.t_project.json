@@ -1,0 +1,167 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.t_project",
+  "title": "AFNI TProject",
+  "command": "3dTproject",
+  "inputs": {
+    "TR": {
+      "type": "double",
+      "desc": "Use time step dd for the frequency calculations,\nrather than the value stored in the dataset header.",
+      "cli": {
+        "argstr": "-TR %g"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Generate a mask automatically",
+      "cli": {
+        "argstr": "-automask"
+      },
+      "constraints": {
+        "xor": [
+          "mask"
+        ]
+      }
+    },
+    "bandpass": {
+      "type": "list",
+      "desc": "Remove all frequencies EXCEPT those in the range",
+      "cli": {
+        "argstr": "-bandpass %g %g"
+      }
+    },
+    "blur": {
+      "type": "double",
+      "desc": "Blur (inside the mask only) with a filter that has\nwidth (FWHM) of fff millimeters.\nSpatial blurring (if done) is after the time\nseries filtering.",
+      "cli": {
+        "argstr": "-blur %g"
+      }
+    },
+    "cenmode": {
+      "type": "enum",
+      "desc": "Specifies how censored time points are treated in\nthe output dataset:\n\n* mode = ZERO -- put zero values in their place;\n  output dataset is same length as input\n* mode = KILL -- remove those time points;\n  output dataset is shorter than input\n* mode = NTRP -- censored values are replaced by interpolated\n  neighboring (in time) non-censored values,\n  BEFORE any projections, and then the\n  analysis proceeds without actual removal\n  of any time points -- this feature is to\n  keep the Spanish Inquisition happy.\n* The default mode is KILL !!!",
+      "choices": [
+        "KILL",
+        "ZERO",
+        "NTRP"
+      ],
+      "cli": {
+        "argstr": "-cenmode %s"
+      }
+    },
+    "censor": {
+      "type": "file",
+      "desc": "Filename of censor .1D time series.\nThis is a file of 1s and 0s, indicating which\ntime points are to be included (1) and which are\nto be excluded (0).",
+      "cli": {
+        "argstr": "-censor %s"
+      }
+    },
+    "censortr": {
+      "type": "list",
+      "desc": "List of strings that specify time indexes\nto be removed from the analysis.  Each string is\nof one of the following forms:\n\n* ``37`` => remove global time index #37\n* ``2:37`` => remove time index #37 in run #2\n* ``37..47`` => remove global time indexes #37-47\n* ``37-47`` => same as above\n* ``2:37..47`` => remove time indexes #37-47 in run #2\n* ``*:0-2`` => remove time indexes #0-2 in all runs\n\n  * Time indexes within each run start at 0.\n  * Run indexes start at 1 (just be to confusing).\n  * N.B.: 2:37,47 means index #37 in run #2 and\n    global time index 47; it does NOT mean\n    index #37 in run #2 AND index #47 in run #2.",
+      "cli": {
+        "argstr": "-CENSORTR %s"
+      }
+    },
+    "concat": {
+      "type": "file",
+      "desc": "The catenation file, as in 3dDeconvolve, containing the\nTR indexes of the start points for each contiguous run\nwithin the input dataset (the first entry should be 0).\n\n* Also as in 3dDeconvolve, if the input dataset is\n  automatically catenated from a collection of datasets,\n  then the run start indexes are determined directly,\n  and '-concat' is not needed (and will be ignored).\n* Each run must have at least 9 time points AFTER\n  censoring, or the program will not work!\n* The only use made of this input is in setting up\n  the bandpass/stopband regressors.\n* '-ort' and '-dsort' regressors run through all time\n  points, as read in.  If you want separate projections\n  in each run, then you must either break these ort files\n  into appropriate components, OR you must run 3dTproject\n  for each run separately, using the appropriate pieces\n  from the ort files via the ``{...}`` selector for the\n  1D files and the ``[...]`` selector for the datasets.",
+      "cli": {
+        "argstr": "-concat %s"
+      }
+    },
+    "dsort": {
+      "type": "list",
+      "desc": "Remove the 3D+time time series in dataset fset.\n\n* That is, 'fset' contains a different nuisance time\n  series for each voxel (e.g., from AnatICOR).\n* Multiple -dsort options are allowed.",
+      "cli": {
+        "argstr": "-dsort %s..."
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dTproject",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s",
+        "position": 1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "Only operate on voxels nonzero in the mset dataset.\n\n* Voxels outside the mask will be filled with zeros.\n* If no masking option is given, then all voxels\n  will be processed.",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "noblock": {
+      "type": "flag",
+      "desc": "Also as in 3dDeconvolve, if you want the program to treat\nan auto-catenated dataset as one long run, use this option.\nHowever, '-noblock' will not affect catenation if you use\nthe '-concat' option.",
+      "cli": {
+        "argstr": "-noblock"
+      }
+    },
+    "norm": {
+      "type": "flag",
+      "desc": "Normalize each output time series to have sum of\nsquares = 1. This is the LAST operation.",
+      "cli": {
+        "argstr": "-norm"
+      }
+    },
+    "ort": {
+      "type": "file",
+      "desc": "Remove each column in file.\nEach column will have its mean removed.",
+      "cli": {
+        "argstr": "-ort %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": -1
+      }
+    },
+    "polort": {
+      "type": "int",
+      "desc": "Remove polynomials up to and including degree pp.\n\n* Default value is 2.\n* It makes no sense to use a value of pp greater than\n  2, if you are bandpassing out the lower frequencies!\n* For catenated datasets, each run gets a separate set\n  set of pp+1 Legendre polynomial regressors.\n* Use of -polort -1 is not advised (if data mean != 0),\n  even if -ort contains constant terms, as all means are\n  removed.",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    },
+    "stopband": {
+      "type": "list",
+      "desc": "Remove all frequencies in the range",
+      "cli": {
+        "argstr": "-stopband %g %g"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.TProject",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program projects (detrends) out various 'nuisance' time series from"
+}

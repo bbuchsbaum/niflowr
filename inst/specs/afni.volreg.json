@@ -1,0 +1,152 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.volreg",
+  "title": "AFNI Volreg",
+  "command": "3dvolreg",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "basefile": {
+      "type": "file",
+      "desc": "base file for registration",
+      "cli": {
+        "argstr": "-base %s",
+        "position": -6
+      }
+    },
+    "copyorigin": {
+      "type": "flag",
+      "desc": "copy base file origin coords to output",
+      "cli": {
+        "argstr": "-twodup"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dvolreg",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "in_weight_volume": {
+      "type": "list",
+      "desc": "weights for each voxel specified by a file with an optional volume number (defaults to 0)",
+      "cli": {
+        "argstr": "-weight '%s[%d]'"
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "spatial interpolation methods [default = heptic]",
+      "choices": [
+        "Fourier",
+        "cubic",
+        "heptic",
+        "quintic",
+        "linear"
+      ],
+      "cli": {
+        "argstr": "-%s"
+      }
+    },
+    "md1d_file": {
+      "type": "file",
+      "desc": "max displacement output file",
+      "cli": {
+        "argstr": "-maxdisp1D %s",
+        "position": -4
+      }
+    },
+    "oned_file": {
+      "type": "file",
+      "desc": "1D movement parameters output file",
+      "cli": {
+        "argstr": "-1Dfile %s"
+      }
+    },
+    "oned_matrix_save": {
+      "type": "file",
+      "desc": "Save the matrix transformation",
+      "cli": {
+        "argstr": "-1Dmatrix_save %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "timeshift": {
+      "type": "flag",
+      "desc": "time shift to mean slice time offset",
+      "cli": {
+        "argstr": "-tshift 0"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "more detailed description of the process",
+      "cli": {
+        "argstr": "-verbose"
+      }
+    },
+    "zpad": {
+      "type": "int",
+      "desc": "Zeropad around the edges by 'n' voxels during rotations",
+      "cli": {
+        "argstr": "-zpad %d",
+        "position": -5
+      }
+    }
+  },
+  "outputs": {
+    "md1d_file": {
+      "type": "file",
+      "path": {
+        "from_input": "md1d_file"
+      },
+      "must_exist": false
+    },
+    "oned_file": {
+      "type": "file",
+      "path": {
+        "from_input": "oned_file"
+      },
+      "must_exist": false
+    },
+    "oned_matrix_save": {
+      "type": "file",
+      "path": {
+        "from_input": "oned_matrix_save"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Volreg",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Register input volumes to a base volume using AFNI 3dvolreg command"
+}

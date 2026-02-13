@@ -1,0 +1,98 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.ca_normalize",
+  "title": "FREESURFER CANormalize",
+  "command": "mri_ca_normalize",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "atlas": {
+      "type": "file",
+      "desc": "The atlas file in gca format",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "control_points": {
+      "type": "file",
+      "desc": "File name for the output control points",
+      "cli": {
+        "argstr": "-c %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "The input file for CANormalize",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      }
+    },
+    "long_file": {
+      "type": "file",
+      "desc": "undocumented flag used in longitudinal processing",
+      "cli": {
+        "argstr": "-long %s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "Specifies volume to use as mask",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "The output file for CANormalize",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "The transform file in lta format",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    }
+  },
+  "outputs": {
+    "control_points": {
+      "type": "file",
+      "path": {
+        "from_input": "control_points"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.CANormalize",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program creates a normalized volume using the brain volume and an"
+}

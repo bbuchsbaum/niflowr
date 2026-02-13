@@ -1,0 +1,117 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.apply_mask",
+  "title": "FREESURFER ApplyMask",
+  "command": "mri_mask",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input image (will be masked)",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "invert_xfm": {
+      "type": "flag",
+      "desc": "invert transformation",
+      "cli": {
+        "argstr": "-invert"
+      }
+    },
+    "keep_mask_deletion_edits": {
+      "type": "flag",
+      "desc": "transfer voxel-deletion edits (voxels=1) from mask to out vol",
+      "cli": {
+        "argstr": "-keep_mask_deletion_edits"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "image defining mask space",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "mask_thresh": {
+      "type": "double",
+      "desc": "threshold mask before applying",
+      "cli": {
+        "argstr": "-T %.4f"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "final image to write",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "transfer": {
+      "type": "int",
+      "desc": "transfer only voxel value # from mask to out",
+      "cli": {
+        "argstr": "-transfer %d"
+      }
+    },
+    "use_abs": {
+      "type": "flag",
+      "desc": "take absolute value of mask before applying",
+      "cli": {
+        "argstr": "-abs"
+      }
+    },
+    "xfm_file": {
+      "type": "file",
+      "desc": "LTA-format transformation matrix to align mask with input",
+      "cli": {
+        "argstr": "-xform %s"
+      }
+    },
+    "xfm_source": {
+      "type": "file",
+      "desc": "image defining transform source space",
+      "cli": {
+        "argstr": "-lta_src %s"
+      }
+    },
+    "xfm_target": {
+      "type": "file",
+      "desc": "image defining transform target space",
+      "cli": {
+        "argstr": "-lta_dst %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.ApplyMask",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use Freesurfer's mri_mask to apply a mask to an image."
+}

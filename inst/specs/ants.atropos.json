@@ -1,0 +1,121 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.atropos",
+  "title": "ANTS Atropos",
+  "command": "Atropos",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2, 3, or 4)",
+      "default": 3,
+      "choices": [
+        3,
+        2,
+        4
+      ],
+      "cli": {
+        "argstr": "--image-dimensionality %d"
+      }
+    },
+    "icm_use_synchronous_update": {
+      "type": "bool",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "initialization": {
+      "type": "enum",
+      "required": true,
+      "choices": [
+        "Random",
+        "Otsu",
+        "KMeans",
+        "PriorProbabilityImages",
+        "PriorLabelImage"
+      ],
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "requires": [
+          "number_of_tissue_classes"
+        ]
+      }
+    },
+    "intensity_images": {
+      "type": "list",
+      "required": true,
+      "cli": {
+        "argstr": "--intensity-image %s..."
+      }
+    },
+    "likelihood_model": {
+      "type": "string",
+      "cli": {
+        "argstr": "--likelihood-model %s"
+      }
+    },
+    "mask_image": {
+      "type": "file",
+      "required": true,
+      "cli": {
+        "argstr": "--mask-image %s"
+      }
+    },
+    "mrf_smoothing_factor": {
+      "type": "double",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "n_iterations": {
+      "type": "int",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "number_of_tissue_classes": {
+      "type": "int",
+      "required": true
+    },
+    "out_classified_image_name": {
+      "type": "file",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "posterior_formulation": {
+      "type": "string",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "use_random_seed": {
+      "type": "bool",
+      "desc": "use random seed value over constant",
+      "default": true,
+      "cli": {
+        "argstr": "--use-random-seed %d"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.segmentation.Atropos",
+    "nipype_version": "1.10.0"
+  },
+  "description": "A multivariate n-class segmentation algorithm."
+}

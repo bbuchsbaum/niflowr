@@ -1,0 +1,71 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.relabel_hypointensities",
+  "title": "FREESURFER RelabelHypointensities",
+  "command": "mri_relabel_hypointensities",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "aseg": {
+      "type": "file",
+      "desc": "Input aseg file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "lh_white": {
+      "type": "file",
+      "desc": "Implicit input file must be lh.white",
+      "required": true
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output aseg file",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "rh_white": {
+      "type": "file",
+      "desc": "Implicit input file must be rh.white",
+      "required": true
+    },
+    "surf_directory": {
+      "type": "dir",
+      "desc": "Directory containing lh.white and rh.white",
+      "default": ".",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.RelabelHypointensities",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Relabel Hypointensities"
+}

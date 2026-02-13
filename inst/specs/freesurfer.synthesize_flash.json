@@ -1,0 +1,95 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.synthesize_flash",
+  "title": "FREESURFER SynthesizeFLASH",
+  "command": "mri_synthesize",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fixed_weighting": {
+      "type": "flag",
+      "desc": "use a fixed weighting to generate optimal gray/white contrast",
+      "cli": {
+        "argstr": "-w",
+        "position": 1
+      }
+    },
+    "flip_angle": {
+      "type": "double",
+      "desc": "flip angle (in degrees)",
+      "required": true,
+      "cli": {
+        "argstr": "%.2f",
+        "position": 3
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "image to write",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "pd_image": {
+      "type": "file",
+      "desc": "image of proton density values",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 6
+      }
+    },
+    "t1_image": {
+      "type": "file",
+      "desc": "image of T1 values",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 5
+      }
+    },
+    "te": {
+      "type": "double",
+      "desc": "echo time (in msec)",
+      "required": true,
+      "cli": {
+        "argstr": "%.3f",
+        "position": 4
+      }
+    },
+    "tr": {
+      "type": "double",
+      "desc": "repetition time (in msec)",
+      "required": true,
+      "cli": {
+        "argstr": "%.2f",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.SynthesizeFLASH",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Synthesize a FLASH acquisition from T1 and proton density maps."
+}

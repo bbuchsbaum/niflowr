@@ -1,0 +1,121 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.laplacian_thickness",
+  "title": "ANTS LaplacianThickness",
+  "command": "LaplacianThickness",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dT": {
+      "type": "double",
+      "desc": "Time delta used during integration (defaults to 0.01)",
+      "cli": {
+        "argstr": "%s",
+        "position": 6
+      },
+      "constraints": {
+        "requires": [
+          "prior_thickness"
+        ]
+      }
+    },
+    "input_gm": {
+      "type": "file",
+      "desc": "gray matter segmentation image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "input_wm": {
+      "type": "file",
+      "desc": "white matter segmentation image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "output_image": {
+      "type": "string",
+      "desc": "name of output file",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "prior_thickness": {
+      "type": "double",
+      "desc": "Prior thickness (defaults to 500)",
+      "cli": {
+        "argstr": "%s",
+        "position": 5
+      },
+      "constraints": {
+        "requires": [
+          "smooth_param"
+        ]
+      }
+    },
+    "smooth_param": {
+      "type": "double",
+      "desc": "Sigma of the Laplacian Recursive Image Filter (defaults to 1)",
+      "cli": {
+        "argstr": "%s",
+        "position": 4
+      }
+    },
+    "sulcus_prior": {
+      "type": "double",
+      "desc": "Positive floating point number for sulcus prior. Authors said that 0.15 might be a reasonable value",
+      "cli": {
+        "argstr": "%s",
+        "position": 7
+      },
+      "constraints": {
+        "requires": [
+          "dT"
+        ]
+      }
+    },
+    "tolerance": {
+      "type": "double",
+      "desc": "Tolerance to reach during optimization (defaults to 0.001)",
+      "cli": {
+        "argstr": "%s",
+        "position": 8
+      },
+      "constraints": {
+        "requires": [
+          "sulcus_prior"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.segmentation.LaplacianThickness",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Calculates the cortical thickness from an anatomical image"
+}

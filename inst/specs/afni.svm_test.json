@@ -1,0 +1,100 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.svm_test",
+  "title": "AFNI SVMTest",
+  "command": "3dsvm",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "classout": {
+      "type": "flag",
+      "desc": "Flag to specify that pname files should be integer-valued, corresponding to class category decisions.",
+      "cli": {
+        "argstr": "-classout"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "A 3D or 3D+t AFNI brik dataset to be used for testing.",
+      "required": true,
+      "cli": {
+        "argstr": "-testvol %s"
+      }
+    },
+    "model": {
+      "type": "string",
+      "desc": "modname is the basename for the brik containing the SVM model",
+      "required": true,
+      "cli": {
+        "argstr": "-model %s"
+      }
+    },
+    "multiclass": {
+      "type": "bool",
+      "desc": "Specifies multiclass algorithm for classification",
+      "cli": {
+        "argstr": "-multiclass %s"
+      }
+    },
+    "nodetrend": {
+      "type": "flag",
+      "desc": "Flag to specify that pname files should not be linearly detrended",
+      "cli": {
+        "argstr": "-nodetrend"
+      }
+    },
+    "nopredcensord": {
+      "type": "flag",
+      "desc": "Flag to prevent writing predicted values for censored time-points",
+      "cli": {
+        "argstr": "-nopredcensord"
+      }
+    },
+    "options": {
+      "type": "string",
+      "desc": "additional options for SVM-light",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "filename for .1D prediction file(s).",
+      "cli": {
+        "argstr": "-predictions %s"
+      }
+    },
+    "testlabels": {
+      "type": "file",
+      "desc": "*true* class category .1D labels for the test dataset. It is used to calculate the prediction accuracy performance",
+      "cli": {
+        "argstr": "-testlabels %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.svm.SVMTest",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Temporally predictive modeling with the support vector machine"
+}

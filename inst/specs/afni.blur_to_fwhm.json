@@ -1,0 +1,85 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.blur_to_fwhm",
+  "title": "AFNI BlurToFWHM",
+  "command": "3dBlurToFWHM",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Create an automask from the input dataset.",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "blurmaster": {
+      "type": "file",
+      "desc": "The dataset whose smoothness controls the process.",
+      "cli": {
+        "argstr": "-blurmaster %s"
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "Blur until the 3D FWHM reaches this value (in mm)",
+      "cli": {
+        "argstr": "-FWHM %f"
+      }
+    },
+    "fwhmxy": {
+      "type": "double",
+      "desc": "Blur until the 2D (x,y)-plane FWHM reaches this value (in mm)",
+      "cli": {
+        "argstr": "-FWHMxy %f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "The dataset that will be smoothed",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "Mask dataset, if desired. Voxels NOT in mask will be set to zero in output.",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.BlurToFWHM",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Blurs a 'master' dataset until it reaches a specified FWHM smoothness"
+}

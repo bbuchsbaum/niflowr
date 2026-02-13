@@ -1,0 +1,128 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.extract_roi",
+  "title": "FSL ExtractROI",
+  "command": "fslroi",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "crop_list": {
+      "type": "list",
+      "desc": "list of two tuples specifying crop options",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      },
+      "constraints": {
+        "xor": [
+          "x_min",
+          "x_size",
+          "y_min",
+          "y_size",
+          "z_min",
+          "z_size",
+          "t_min",
+          "t_size"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "roi_file": {
+      "type": "file",
+      "desc": "output file",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "t_min": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 8
+      }
+    },
+    "t_size": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 9
+      }
+    },
+    "x_min": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 2
+      }
+    },
+    "x_size": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 3
+      }
+    },
+    "y_min": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 4
+      }
+    },
+    "y_size": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 5
+      }
+    },
+    "z_min": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 6
+      }
+    },
+    "z_size": {
+      "type": "int",
+      "cli": {
+        "argstr": "%d",
+        "position": 7
+      }
+    }
+  },
+  "outputs": {
+    "roi_file": {
+      "type": "file",
+      "path": {
+        "from_input": "roi_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.ExtractROI",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Uses FSL Fslroi command to extract region of interest (ROI)"
+}

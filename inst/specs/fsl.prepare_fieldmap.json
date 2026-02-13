@@ -1,0 +1,89 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.prepare_fieldmap",
+  "title": "FSL PrepareFieldmap",
+  "command": "fsl_prepare_fieldmap",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "delta_TE": {
+      "type": "double",
+      "desc": "echo time difference of the fieldmap sequence in ms. (usually 2.46ms in Siemens)",
+      "required": true,
+      "default": 2.46,
+      "cli": {
+        "argstr": "%f",
+        "position": -2
+      }
+    },
+    "in_magnitude": {
+      "type": "file",
+      "desc": "Magnitude difference map, brain extracted",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "in_phase": {
+      "type": "file",
+      "desc": "Phase difference map, in SIEMENS format range from 0-4096 or 0-8192)",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "nocheck": {
+      "type": "flag",
+      "desc": "do not perform sanity checks for image size/range/dimensions",
+      "default": false,
+      "cli": {
+        "argstr": "--nocheck",
+        "position": -1
+      }
+    },
+    "out_fieldmap": {
+      "type": "file",
+      "desc": "output name for prepared fieldmap",
+      "cli": {
+        "argstr": "%s",
+        "position": 4
+      }
+    },
+    "scanner": {
+      "type": "string",
+      "desc": "must be SIEMENS",
+      "default": "SIEMENS",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {
+    "out_fieldmap": {
+      "type": "file",
+      "path": {
+        "from_input": "out_fieldmap"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.epi.PrepareFieldmap",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Interface for the fsl_prepare_fieldmap script (FSL 5.0)"
+}

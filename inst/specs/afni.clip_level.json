@@ -1,0 +1,70 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.clip_level",
+  "title": "AFNI ClipLevel",
+  "command": "3dClipLevel",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "doall": {
+      "type": "flag",
+      "desc": "Apply the algorithm to each sub-brick separately.",
+      "cli": {
+        "argstr": "-doall",
+        "position": 3
+      },
+      "constraints": {
+        "xor": [
+          "grad"
+        ]
+      }
+    },
+    "grad": {
+      "type": "file",
+      "desc": "Also compute a 'gradual' clip level as a function of voxel position, and output that to a dataset.",
+      "cli": {
+        "argstr": "-grad %s",
+        "position": 3
+      },
+      "constraints": {
+        "xor": [
+          "doall"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dClipLevel",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mfrac": {
+      "type": "double",
+      "desc": "Use the number ff instead of 0.50 in the algorithm",
+      "cli": {
+        "argstr": "-mfrac %s",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.ClipLevel",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Estimates the value at which to clip the anatomical dataset so"
+}

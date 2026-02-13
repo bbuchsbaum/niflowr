@@ -1,0 +1,110 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.temporal_filter",
+  "title": "FSL TemporalFilter",
+  "command": "fslmaths",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "highpass_sigma": {
+      "type": "double",
+      "desc": "highpass filter sigma (in volumes)",
+      "default": -1,
+      "cli": {
+        "argstr": "-bptf %.6f",
+        "position": 4
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "image to operate on",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "internal_datatype": {
+      "type": "enum",
+      "desc": "datatype to use for calculations (default is float)",
+      "choices": [
+        "float",
+        "char",
+        "int",
+        "short",
+        "double",
+        "input"
+      ],
+      "cli": {
+        "argstr": "-dt %s",
+        "position": 1
+      }
+    },
+    "lowpass_sigma": {
+      "type": "double",
+      "desc": "lowpass filter sigma (in volumes)",
+      "default": -1,
+      "cli": {
+        "argstr": "%.6f",
+        "position": 5
+      }
+    },
+    "nan2zeros": {
+      "type": "flag",
+      "desc": "change NaNs to zeros before doing anything",
+      "cli": {
+        "argstr": "-nan",
+        "position": 3
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "image to write",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "output_datatype": {
+      "type": "enum",
+      "desc": "datatype to use for output (default uses input type)",
+      "choices": [
+        "float",
+        "char",
+        "int",
+        "short",
+        "double",
+        "input"
+      ],
+      "cli": {
+        "argstr": "-odt %s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.maths.TemporalFilter",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use fslmaths to apply a low, high, or bandpass temporal filter to a"
+}

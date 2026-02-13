@@ -1,0 +1,222 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.randomise",
+  "title": "FSL Randomise",
+  "command": "randomise",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "base_name": {
+      "type": "string",
+      "desc": "the rootname that all generated files will have",
+      "default": "randomise",
+      "cli": {
+        "argstr": "-o \"%s\"",
+        "position": 1
+      }
+    },
+    "c_thresh": {
+      "type": "double",
+      "desc": "carry out cluster-based thresholding",
+      "cli": {
+        "argstr": "-c %.1f"
+      }
+    },
+    "cm_thresh": {
+      "type": "double",
+      "desc": "carry out cluster-mass-based thresholding",
+      "cli": {
+        "argstr": "-C %.1f"
+      }
+    },
+    "demean": {
+      "type": "flag",
+      "desc": "demean data temporally before model fitting",
+      "cli": {
+        "argstr": "-D"
+      }
+    },
+    "design_mat": {
+      "type": "file",
+      "desc": "design matrix file",
+      "cli": {
+        "argstr": "-d %s",
+        "position": 2
+      }
+    },
+    "f_c_thresh": {
+      "type": "double",
+      "desc": "carry out f cluster thresholding",
+      "cli": {
+        "argstr": "-F %.2f"
+      }
+    },
+    "f_cm_thresh": {
+      "type": "double",
+      "desc": "carry out f cluster-mass thresholding",
+      "cli": {
+        "argstr": "-S %.2f"
+      }
+    },
+    "f_only": {
+      "type": "flag",
+      "desc": "calculate f-statistics only",
+      "cli": {
+        "argstr": "--fonly"
+      }
+    },
+    "fcon": {
+      "type": "file",
+      "desc": "f contrasts file",
+      "cli": {
+        "argstr": "-f %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "4D input file",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": 0
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask image",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "num_perm": {
+      "type": "int",
+      "desc": "number of permutations (default 5000, set to 0 for exhaustive)",
+      "cli": {
+        "argstr": "-n %d"
+      }
+    },
+    "one_sample_group_mean": {
+      "type": "flag",
+      "desc": "perform 1-sample group-mean test instead of generic permutation test",
+      "cli": {
+        "argstr": "-1"
+      }
+    },
+    "p_vec_n_dist_files": {
+      "type": "flag",
+      "desc": "output permutation vector and null distribution text files",
+      "cli": {
+        "argstr": "-P"
+      }
+    },
+    "raw_stats_imgs": {
+      "type": "flag",
+      "desc": "output raw ( unpermuted ) statistic images",
+      "cli": {
+        "argstr": "-R"
+      }
+    },
+    "seed": {
+      "type": "int",
+      "desc": "specific integer seed for random number generator",
+      "cli": {
+        "argstr": "--seed=%d"
+      }
+    },
+    "show_info_parallel_mode": {
+      "type": "flag",
+      "desc": "print out information required for parallel mode and exit",
+      "cli": {
+        "argstr": "-Q"
+      }
+    },
+    "show_total_perms": {
+      "type": "flag",
+      "desc": "print out how many unique permutations would be generated and exit",
+      "cli": {
+        "argstr": "-q"
+      }
+    },
+    "tcon": {
+      "type": "file",
+      "desc": "t contrasts file",
+      "cli": {
+        "argstr": "-t %s",
+        "position": 3
+      }
+    },
+    "tfce": {
+      "type": "flag",
+      "desc": "carry out Threshold-Free Cluster Enhancement",
+      "cli": {
+        "argstr": "-T"
+      }
+    },
+    "tfce2D": {
+      "type": "flag",
+      "desc": "carry out Threshold-Free Cluster Enhancement with 2D optimisation",
+      "cli": {
+        "argstr": "--T2"
+      }
+    },
+    "tfce_C": {
+      "type": "double",
+      "desc": "TFCE connectivity (6 or 26; default=6)",
+      "cli": {
+        "argstr": "--tfce_C=%.2f"
+      }
+    },
+    "tfce_E": {
+      "type": "double",
+      "desc": "TFCE extent parameter (default=0.5)",
+      "cli": {
+        "argstr": "--tfce_E=%.2f"
+      }
+    },
+    "tfce_H": {
+      "type": "double",
+      "desc": "TFCE height parameter (default=2)",
+      "cli": {
+        "argstr": "--tfce_H=%.2f"
+      }
+    },
+    "var_smooth": {
+      "type": "int",
+      "desc": "use variance smoothing (std is in mm)",
+      "cli": {
+        "argstr": "-v %d"
+      }
+    },
+    "vox_p_values": {
+      "type": "flag",
+      "desc": "output voxelwise (corrected and uncorrected) p-value images",
+      "cli": {
+        "argstr": "-x"
+      }
+    },
+    "x_block_labels": {
+      "type": "file",
+      "desc": "exchangeability block labels file",
+      "cli": {
+        "argstr": "-e %s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.Randomise",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL Randomise: feeds the 4D projected FA data into GLM"
+}

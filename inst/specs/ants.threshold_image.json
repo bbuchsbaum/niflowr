@@ -1,0 +1,160 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.threshold_image",
+  "title": "ANTS ThresholdImage",
+  "command": "ThresholdImage",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "copy_header": {
+      "type": "bool",
+      "desc": "copy headers of the original image into the output (corrected) file",
+      "required": true,
+      "default": true
+    },
+    "dimension": {
+      "type": "int",
+      "desc": "dimension of output image",
+      "default": 3,
+      "cli": {
+        "argstr": "%d",
+        "position": 1
+      }
+    },
+    "input_image": {
+      "type": "file",
+      "desc": "input image file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "input_mask": {
+      "type": "file",
+      "desc": "input mask for Otsu, Kmeans",
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "requires": [
+          "num_thresholds"
+        ]
+      }
+    },
+    "inside_value": {
+      "type": "double",
+      "desc": "inside value",
+      "cli": {
+        "argstr": "%f",
+        "position": 6
+      },
+      "constraints": {
+        "requires": [
+          "th_low"
+        ]
+      }
+    },
+    "mode": {
+      "type": "enum",
+      "desc": "whether to run Otsu / Kmeans thresholding",
+      "choices": [
+        "Otsu",
+        "Kmeans"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": 4
+      },
+      "constraints": {
+        "xor": [
+          "th_low",
+          "th_high"
+        ],
+        "requires": [
+          "num_thresholds"
+        ]
+      }
+    },
+    "num_thresholds": {
+      "type": "int",
+      "desc": "number of thresholds",
+      "cli": {
+        "argstr": "%d",
+        "position": 5
+      }
+    },
+    "output_image": {
+      "type": "file",
+      "desc": "output image file",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "outside_value": {
+      "type": "double",
+      "desc": "outside value",
+      "cli": {
+        "argstr": "%f",
+        "position": 7
+      },
+      "constraints": {
+        "requires": [
+          "th_low"
+        ]
+      }
+    },
+    "th_high": {
+      "type": "double",
+      "desc": "upper threshold",
+      "cli": {
+        "argstr": "%f",
+        "position": 5
+      },
+      "constraints": {
+        "xor": [
+          "mode"
+        ]
+      }
+    },
+    "th_low": {
+      "type": "double",
+      "desc": "lower threshold",
+      "cli": {
+        "argstr": "%f",
+        "position": 4
+      },
+      "constraints": {
+        "xor": [
+          "mode"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.ThresholdImage",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Apply thresholds on images."
+}

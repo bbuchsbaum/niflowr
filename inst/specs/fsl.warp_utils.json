@@ -1,0 +1,111 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.warp_utils",
+  "title": "FSL WarpUtils",
+  "command": "fnirtfileutils",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Name of file containing warp-coefficients/fields. This would typically be the output from the --cout switch of fnirt (but can also use fields, like the output from --fout).",
+      "required": true,
+      "cli": {
+        "argstr": "--in=%s"
+      }
+    },
+    "knot_space": {
+      "type": "list",
+      "desc": "Alternative (to --warpres) specification of the resolution of the output spline-field.",
+      "cli": {
+        "argstr": "--knotspace=%d,%d,%d"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Name of output file. The format of the output depends on what other parameters are set. The default format is a (4D) field-file. If the --outformat is set to spline the format will be a (4D) file of spline coefficients.",
+      "cli": {
+        "argstr": "--out=%s",
+        "position": -1
+      }
+    },
+    "out_format": {
+      "type": "enum",
+      "desc": "Specifies the output format. If set to field (default) the output will be a (4D) field-file. If set to spline the format will be a (4D) file of spline coefficients.",
+      "choices": [
+        "spline",
+        "field"
+      ],
+      "cli": {
+        "argstr": "--outformat=%s"
+      }
+    },
+    "out_jacobian": {
+      "type": "file",
+      "desc": "Specifies that a (3D) file of Jacobian determinants corresponding to --in should be produced and written to filename.",
+      "cli": {
+        "argstr": "--jac=%s"
+      }
+    },
+    "reference": {
+      "type": "file",
+      "desc": "Name of a file in target space. Note that the target space is now different from the target space that was used to create the --warp file. It would typically be the file that was specified with the --in argument when running fnirt.",
+      "required": true,
+      "cli": {
+        "argstr": "--ref=%s"
+      }
+    },
+    "warp_resolution": {
+      "type": "list",
+      "desc": "Specifies the resolution/knot-spacing of the splines pertaining to the coefficients in the --out file. This parameter is only relevant if --outformat is set to spline. It should be noted that if the --in file has a higher resolution, the resulting coefficients will pertain to the closest (in a least-squares sense) file in the space of fields with the --warpres resolution. It should also be noted that the resolution will always be an integer multiple of the voxel size.",
+      "cli": {
+        "argstr": "--warpres=%0.4f,%0.4f,%0.4f"
+      }
+    },
+    "with_affine": {
+      "type": "flag",
+      "desc": "Specifies that the affine transform (i.e. that which was specified for the --aff parameter in fnirt) should be included as displacements in the --out file. That can be useful for interfacing with software that cannot decode FSL/fnirt coefficient-files (where the affine transform is stored separately from the displacements).",
+      "cli": {
+        "argstr": "--withaff"
+      }
+    },
+    "write_jacobian": {
+      "type": "bool",
+      "desc": "Switch on --jac flag with automatically generated filename",
+      "required": true,
+      "default": false
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_jacobian": {
+      "type": "file",
+      "path": {
+        "from_input": "out_jacobian"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.WarpUtils",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL `fnirtfileutils <http://fsl.fmrib.ox.ac.uk/fsl/fsl-4.1.9/fnirt/warp_utils.html>`_"
+}

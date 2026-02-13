@@ -1,0 +1,229 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mris_preproc",
+  "title": "FREESURFER MRISPreproc",
+  "command": "mris_preproc",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fsgd_file": {
+      "type": "file",
+      "desc": "specify subjects using fsgd file",
+      "cli": {
+        "argstr": "--fsgd %s"
+      },
+      "constraints": {
+        "xor": [
+          "subjects",
+          "fsgd_file",
+          "subject_file"
+        ]
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "smooth by fwhm mm on the target surface",
+      "cli": {
+        "argstr": "--fwhm %f"
+      },
+      "constraints": {
+        "xor": [
+          "num_iters"
+        ]
+      }
+    },
+    "fwhm_source": {
+      "type": "double",
+      "desc": "smooth by fwhm mm on the source surface",
+      "cli": {
+        "argstr": "--fwhm-src %f"
+      },
+      "constraints": {
+        "xor": [
+          "num_iters_source"
+        ]
+      }
+    },
+    "hemi": {
+      "type": "enum",
+      "desc": "hemisphere for source and target",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "num_iters": {
+      "type": "int",
+      "desc": "niters : smooth by niters on the target surface",
+      "cli": {
+        "argstr": "--niters %d"
+      },
+      "constraints": {
+        "xor": [
+          "fwhm"
+        ]
+      }
+    },
+    "num_iters_source": {
+      "type": "int",
+      "desc": "niters : smooth by niters on the source surface",
+      "cli": {
+        "argstr": "--niterssrc %d"
+      },
+      "constraints": {
+        "xor": [
+          "fwhm_source"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output filename",
+      "cli": {
+        "argstr": "--out %s"
+      }
+    },
+    "proj_frac": {
+      "type": "double",
+      "desc": "projection fraction for vol2surf",
+      "cli": {
+        "argstr": "--projfrac %s"
+      }
+    },
+    "smooth_cortex_only": {
+      "type": "flag",
+      "desc": "only smooth cortex (ie, exclude medial wall)",
+      "cli": {
+        "argstr": "--smooth-cortex-only"
+      }
+    },
+    "source_format": {
+      "type": "string",
+      "desc": "source format",
+      "cli": {
+        "argstr": "--srcfmt %s"
+      }
+    },
+    "subject_file": {
+      "type": "file",
+      "desc": "file specifying subjects separated by white space",
+      "cli": {
+        "argstr": "--f %s"
+      },
+      "constraints": {
+        "xor": [
+          "subjects",
+          "fsgd_file",
+          "subject_file"
+        ]
+      }
+    },
+    "subjects": {
+      "type": "list",
+      "desc": "subjects from who measures are calculated",
+      "cli": {
+        "argstr": "--s %s..."
+      },
+      "constraints": {
+        "xor": [
+          "subjects",
+          "fsgd_file",
+          "subject_file"
+        ]
+      }
+    },
+    "surf_area": {
+      "type": "string",
+      "desc": "Extract vertex area from subject/surf/hemi.surfname to use as input.",
+      "cli": {
+        "argstr": "--area %s"
+      },
+      "constraints": {
+        "xor": [
+          "surf_measure",
+          "surf_measure_file",
+          "surf_area"
+        ]
+      }
+    },
+    "surf_dir": {
+      "type": "string",
+      "desc": "alternative directory (instead of surf)",
+      "cli": {
+        "argstr": "--surfdir %s"
+      }
+    },
+    "surf_measure": {
+      "type": "string",
+      "desc": "Use subject/surf/hemi.surf_measure as input",
+      "cli": {
+        "argstr": "--meas %s"
+      },
+      "constraints": {
+        "xor": [
+          "surf_measure",
+          "surf_measure_file",
+          "surf_area"
+        ]
+      }
+    },
+    "surf_measure_file": {
+      "type": "list",
+      "desc": "file alternative to surfmeas, still requires list of subjects",
+      "cli": {
+        "argstr": "--is %s..."
+      },
+      "constraints": {
+        "xor": [
+          "surf_measure",
+          "surf_measure_file",
+          "surf_area"
+        ]
+      }
+    },
+    "target": {
+      "type": "string",
+      "desc": "target subject name",
+      "required": true,
+      "cli": {
+        "argstr": "--target %s"
+      }
+    },
+    "vol_measure_file": {
+      "type": "list",
+      "desc": "list of volume measure and reg file tuples",
+      "cli": {
+        "argstr": "--iv %s %s..."
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.MRISPreproc",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer mris_preproc to prepare a group of contrasts for"
+}

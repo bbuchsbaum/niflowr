@@ -1,0 +1,89 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.em_register",
+  "title": "FREESURFER EMRegister",
+  "command": "mri_em_register",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "in brain volume",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "use volume as a mask",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "nbrspacing": {
+      "type": "int",
+      "desc": "align to atlas containing skull setting unknown_nbr_spacing = nbrspacing",
+      "cli": {
+        "argstr": "-uns %d"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output transform",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "skull": {
+      "type": "flag",
+      "desc": "align to atlas containing skull (uns=5)",
+      "cli": {
+        "argstr": "-skull"
+      }
+    },
+    "template": {
+      "type": "file",
+      "desc": "template gca",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "Previously computed transform",
+      "cli": {
+        "argstr": "-t %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.registration.EMRegister",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program creates a transform in lta format"
+}

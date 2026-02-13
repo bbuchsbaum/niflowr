@@ -1,0 +1,145 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.convert_scalar_image_to_rgb",
+  "title": "ANTS ConvertScalarImageToRGB",
+  "command": "ConvertScalarImageToRGB",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "colormap": {
+      "type": "enum",
+      "desc": "Select a colormap",
+      "required": true,
+      "choices": [
+        "grey",
+        "red",
+        "green",
+        "blue",
+        "copper",
+        "jet",
+        "hsv",
+        "spring",
+        "summer",
+        "autumn",
+        "winter",
+        "hot",
+        "cool",
+        "overunder",
+        "custom"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": 4
+      }
+    },
+    "custom_color_map_file": {
+      "type": "string",
+      "desc": "custom color map file",
+      "default": "none",
+      "cli": {
+        "argstr": "%s",
+        "position": 5
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "required": true,
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 0
+      }
+    },
+    "input_image": {
+      "type": "file",
+      "desc": "Main input is a 3-D grayscale image.",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "mask_image": {
+      "type": "list",
+      "desc": "mask image",
+      "default": "none",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "maximum_RGB_output": {
+      "type": "int",
+      "default": 255,
+      "cli": {
+        "argstr": "%d",
+        "position": 9
+      }
+    },
+    "maximum_input": {
+      "type": "int",
+      "desc": "maximum input",
+      "required": true,
+      "cli": {
+        "argstr": "%d",
+        "position": 7
+      }
+    },
+    "minimum_RGB_output": {
+      "type": "int",
+      "default": 0,
+      "cli": {
+        "argstr": "%d",
+        "position": 8
+      }
+    },
+    "minimum_input": {
+      "type": "int",
+      "desc": "minimum input",
+      "required": true,
+      "cli": {
+        "argstr": "%d",
+        "position": 6
+      }
+    },
+    "output_image": {
+      "type": "string",
+      "desc": "rgb output image",
+      "default": "rgb.nii.gz",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.visualization.ConvertScalarImageToRGB",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Convert scalar images to RGB."
+}

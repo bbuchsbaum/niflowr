@@ -1,0 +1,108 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.volume_mask",
+  "title": "FREESURFER VolumeMask",
+  "command": "mris_volmask",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_aseg": {
+      "type": "file",
+      "desc": "Input aseg file for VolumeMask",
+      "cli": {
+        "argstr": "--aseg_name %s"
+      },
+      "constraints": {
+        "xor": [
+          "aseg"
+        ]
+      }
+    },
+    "left_ribbonlabel": {
+      "type": "int",
+      "desc": "Left cortical ribbon label",
+      "required": true,
+      "cli": {
+        "argstr": "--label_left_ribbon %d"
+      }
+    },
+    "left_whitelabel": {
+      "type": "int",
+      "desc": "Left white matter label",
+      "required": true,
+      "cli": {
+        "argstr": "--label_left_white %d"
+      }
+    },
+    "lh_pial": {
+      "type": "file",
+      "desc": "Implicit input left pial surface",
+      "required": true
+    },
+    "lh_white": {
+      "type": "file",
+      "desc": "Implicit input left white matter surface",
+      "required": true
+    },
+    "rh_pial": {
+      "type": "file",
+      "desc": "Implicit input right pial surface",
+      "required": true
+    },
+    "rh_white": {
+      "type": "file",
+      "desc": "Implicit input right white matter surface",
+      "required": true
+    },
+    "right_ribbonlabel": {
+      "type": "int",
+      "desc": "Right cortical ribbon label",
+      "required": true,
+      "cli": {
+        "argstr": "--label_right_ribbon %d"
+      }
+    },
+    "right_whitelabel": {
+      "type": "int",
+      "desc": "Right white matter label",
+      "required": true,
+      "cli": {
+        "argstr": "--label_right_white %d"
+      }
+    },
+    "save_ribbon": {
+      "type": "flag",
+      "desc": "option to save just the ribbon for the hemispheres in the format ?h.ribbon.mgz",
+      "cli": {
+        "argstr": "--save_ribbon"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.VolumeMask",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes a volume mask, at the same resolution as the"
+}

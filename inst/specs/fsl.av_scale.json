@@ -1,0 +1,49 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.av_scale",
+  "title": "FSL AvScale",
+  "command": "avscale",
+  "inputs": {
+    "all_param": {
+      "type": "flag",
+      "cli": {
+        "argstr": "--allparams"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "mat_file": {
+      "type": "file",
+      "desc": "mat file to read",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "ref_file": {
+      "type": "file",
+      "desc": "reference file to get center of rotation",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.AvScale",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL avscale command to extract info from mat file output of FLIRT"
+}

@@ -1,0 +1,426 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.seg_stats_recon_all",
+  "title": "FREESURFER SegStatsReconAll",
+  "command": "mri_segstats",
+  "inputs": {
+    "annot": {
+      "type": "list",
+      "desc": "subject hemi parc : use surface parcellation",
+      "required": true,
+      "cli": {
+        "argstr": "--annot %s %s %s"
+      },
+      "constraints": {
+        "xor": [
+          "segmentation_file",
+          "annot",
+          "surf_label"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "avgwf_file": {
+      "type": "list",
+      "desc": "Save as binary volume (bool or filename)",
+      "cli": {
+        "argstr": "--avgwfvol %s"
+      }
+    },
+    "avgwf_txt_file": {
+      "type": "list",
+      "desc": "Save average waveform into file (bool or filename)",
+      "cli": {
+        "argstr": "--avgwf %s"
+      }
+    },
+    "brain_vol": {
+      "type": "enum",
+      "desc": "Compute brain volume either with ``brainmask`` or ``brain-vol-from-seg``",
+      "choices": [
+        "brain-vol-from-seg",
+        "brainmask"
+      ],
+      "cli": {
+        "argstr": "--%s"
+      }
+    },
+    "brainmask_file": {
+      "type": "file",
+      "desc": "Load brain mask and compute the volume of the brain as the non-zero voxels in this volume",
+      "cli": {
+        "argstr": "--brainmask %s"
+      }
+    },
+    "calc_power": {
+      "type": "enum",
+      "desc": "Compute either the sqr or the sqrt of the input",
+      "choices": [
+        "sqr",
+        "sqrt"
+      ],
+      "cli": {
+        "argstr": "--%s"
+      }
+    },
+    "calc_snr": {
+      "type": "flag",
+      "desc": "save mean/std as extra column in output table",
+      "cli": {
+        "argstr": "--snr"
+      }
+    },
+    "color_table_file": {
+      "type": "file",
+      "desc": "color table file with seg id names",
+      "cli": {
+        "argstr": "--ctab %s"
+      },
+      "constraints": {
+        "xor": [
+          "color_table_file",
+          "default_color_table",
+          "gca_color_table"
+        ]
+      }
+    },
+    "cortex_vol_from_surf": {
+      "type": "flag",
+      "desc": "Compute cortex volume from surf",
+      "cli": {
+        "argstr": "--surf-ctx-vol"
+      }
+    },
+    "default_color_table": {
+      "type": "flag",
+      "desc": "use $FREESURFER_HOME/FreeSurferColorLUT.txt",
+      "cli": {
+        "argstr": "--ctab-default"
+      },
+      "constraints": {
+        "xor": [
+          "color_table_file",
+          "default_color_table",
+          "gca_color_table"
+        ]
+      }
+    },
+    "empty": {
+      "type": "flag",
+      "desc": "Report on segmentations listed in the color table",
+      "cli": {
+        "argstr": "--empty"
+      }
+    },
+    "etiv": {
+      "type": "flag",
+      "desc": "Compute ICV from talairach transform",
+      "cli": {
+        "argstr": "--etiv"
+      }
+    },
+    "euler": {
+      "type": "flag",
+      "desc": "Write out number of defect holes in orig.nofix based on the euler number",
+      "cli": {
+        "argstr": "--euler"
+      }
+    },
+    "exclude_ctx_gm_wm": {
+      "type": "flag",
+      "desc": "exclude cortical gray and white matter",
+      "cli": {
+        "argstr": "--excl-ctxgmwm"
+      }
+    },
+    "exclude_id": {
+      "type": "int",
+      "desc": "Exclude seg id from report",
+      "cli": {
+        "argstr": "--excludeid %d"
+      }
+    },
+    "frame": {
+      "type": "int",
+      "desc": "Report stats on nth frame of input volume",
+      "cli": {
+        "argstr": "--frame %d"
+      }
+    },
+    "gca_color_table": {
+      "type": "file",
+      "desc": "get color table from GCA (CMA)",
+      "cli": {
+        "argstr": "--ctab-gca %s"
+      },
+      "constraints": {
+        "xor": [
+          "color_table_file",
+          "default_color_table",
+          "gca_color_table"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Use the segmentation to report stats on this volume",
+      "cli": {
+        "argstr": "--i %s"
+      }
+    },
+    "in_intensity": {
+      "type": "file",
+      "desc": "Undocumented input norm.mgz file",
+      "cli": {
+        "argstr": "--in %s --in-intensity-name %s"
+      }
+    },
+    "intensity_units": {
+      "type": "enum",
+      "desc": "Intensity units",
+      "choices": [
+        "MR"
+      ],
+      "cli": {
+        "argstr": "--in-intensity-units %s"
+      },
+      "constraints": {
+        "requires": [
+          "in_intensity"
+        ]
+      }
+    },
+    "lh_orig_nofix": {
+      "type": "file",
+      "desc": "Input lh.orig.nofix",
+      "required": true
+    },
+    "lh_pial": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/lh.pial",
+      "required": true
+    },
+    "lh_white": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/lh.white",
+      "required": true
+    },
+    "mask_erode": {
+      "type": "int",
+      "desc": "Erode mask by some amount",
+      "cli": {
+        "argstr": "--maskerode %d"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "Mask volume (same size as seg",
+      "cli": {
+        "argstr": "--mask %s"
+      }
+    },
+    "mask_invert": {
+      "type": "flag",
+      "desc": "Invert binarized mask volume",
+      "cli": {
+        "argstr": "--maskinvert"
+      }
+    },
+    "mask_thresh": {
+      "type": "double",
+      "desc": "binarize mask with this threshold <0.5>",
+      "cli": {
+        "argstr": "--maskthresh %f"
+      }
+    },
+    "multiply": {
+      "type": "double",
+      "desc": "multiply input by val",
+      "cli": {
+        "argstr": "--mul %f"
+      }
+    },
+    "non_empty_only": {
+      "type": "flag",
+      "desc": "Only report nonempty segmentations",
+      "cli": {
+        "argstr": "--nonempty"
+      }
+    },
+    "partial_volume_file": {
+      "type": "file",
+      "desc": "Compensate for partial voluming",
+      "cli": {
+        "argstr": "--pv %s"
+      }
+    },
+    "rh_orig_nofix": {
+      "type": "file",
+      "desc": "Input rh.orig.nofix",
+      "required": true
+    },
+    "rh_pial": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/rh.pial",
+      "required": true
+    },
+    "rh_white": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/rh.white",
+      "required": true
+    },
+    "ribbon": {
+      "type": "file",
+      "desc": "Input file mri/ribbon.mgz",
+      "required": true
+    },
+    "segment_id": {
+      "type": "list",
+      "desc": "Manually specify segmentation ids",
+      "cli": {
+        "argstr": "--id %s..."
+      }
+    },
+    "segmentation_file": {
+      "type": "file",
+      "desc": "segmentation volume path",
+      "required": true,
+      "cli": {
+        "argstr": "--seg %s"
+      },
+      "constraints": {
+        "xor": [
+          "segmentation_file",
+          "annot",
+          "surf_label"
+        ]
+      }
+    },
+    "sf_avg_file": {
+      "type": "list",
+      "desc": "Save mean across space and time",
+      "cli": {
+        "argstr": "--sfavg %s"
+      }
+    },
+    "subcort_gm": {
+      "type": "flag",
+      "desc": "Compute volume of subcortical gray matter",
+      "cli": {
+        "argstr": "--subcortgray"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject id being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "--subject %s"
+      }
+    },
+    "summary_file": {
+      "type": "file",
+      "desc": "Segmentation stats summary table file",
+      "cli": {
+        "argstr": "--sum %s",
+        "position": -1
+      }
+    },
+    "supratent": {
+      "type": "flag",
+      "desc": "Undocumented input flag",
+      "cli": {
+        "argstr": "--supratent"
+      }
+    },
+    "surf_label": {
+      "type": "list",
+      "desc": "subject hemi label : use surface label",
+      "required": true,
+      "cli": {
+        "argstr": "--slabel %s %s %s"
+      },
+      "constraints": {
+        "xor": [
+          "segmentation_file",
+          "annot",
+          "surf_label"
+        ]
+      }
+    },
+    "total_gray": {
+      "type": "flag",
+      "desc": "Compute volume of total gray matter",
+      "cli": {
+        "argstr": "--totalgray"
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "Input transform file",
+      "required": true
+    },
+    "vox": {
+      "type": "list",
+      "desc": "Replace seg with all 0s except at C R S (three int inputs)",
+      "cli": {
+        "argstr": "--vox %s"
+      }
+    },
+    "wm_vol_from_surf": {
+      "type": "flag",
+      "desc": "Compute wm volume from surf",
+      "cli": {
+        "argstr": "--surf-wm-vol"
+      }
+    }
+  },
+  "outputs": {
+    "avgwf_file": {
+      "type": "file",
+      "path": {
+        "from_input": "avgwf_file"
+      },
+      "must_exist": false
+    },
+    "avgwf_txt_file": {
+      "type": "file",
+      "path": {
+        "from_input": "avgwf_txt_file"
+      },
+      "must_exist": false
+    },
+    "sf_avg_file": {
+      "type": "file",
+      "path": {
+        "from_input": "sf_avg_file"
+      },
+      "must_exist": false
+    },
+    "summary_file": {
+      "type": "file",
+      "path": {
+        "from_input": "summary_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.model.SegStatsReconAll",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This class inherits SegStats and modifies it for use in a recon-all workflow."
+}

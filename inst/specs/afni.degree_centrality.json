@@ -1,0 +1,106 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.degree_centrality",
+  "title": "AFNI DegreeCentrality",
+  "command": "3dDegreeCentrality",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "autoclip": {
+      "type": "flag",
+      "desc": "Clip off low-intensity regions in the dataset",
+      "cli": {
+        "argstr": "-autoclip"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Mask the dataset to target brain-only voxels",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dDegreeCentrality",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask file to mask input data",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "oned_file": {
+      "type": "string",
+      "desc": "output filepath to text dump of correlation matrix",
+      "cli": {
+        "argstr": "-out1D %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    },
+    "sparsity": {
+      "type": "double",
+      "desc": "only take the top percent of connections",
+      "cli": {
+        "argstr": "-sparsity %f"
+      }
+    },
+    "thresh": {
+      "type": "double",
+      "desc": "threshold to exclude connections where corr <= thresh",
+      "cli": {
+        "argstr": "-thresh %f"
+      }
+    }
+  },
+  "outputs": {
+    "oned_file": {
+      "type": "file",
+      "path": {
+        "from_input": "oned_file"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.DegreeCentrality",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Performs degree centrality on a dataset using a given maskfile"
+}

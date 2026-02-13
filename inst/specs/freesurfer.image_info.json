@@ -1,0 +1,35 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.image_info",
+  "title": "FREESURFER ImageInfo",
+  "command": "mri_info",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "image to query",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.ImageInfo",
+    "nipype_version": "1.10.0"
+  },
+  "description": "General support for FreeSurfer commands."
+}

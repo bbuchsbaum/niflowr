@@ -1,0 +1,58 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.average_affine_transform",
+  "title": "ANTS AverageAffineTransform",
+  "command": "AverageAffineTransform",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "required": true,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 0
+      }
+    },
+    "output_affine_transform": {
+      "type": "file",
+      "desc": "Outputfname.txt: the name of the resulting transform.",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "transforms": {
+      "type": "list",
+      "desc": "transforms to average",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.AverageAffineTransform",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Examples"
+}

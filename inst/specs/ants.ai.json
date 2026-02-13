@@ -1,0 +1,142 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.ai",
+  "title": "ANTS AI",
+  "command": "antsAI",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "convergence": {
+      "type": "list",
+      "desc": "convergence",
+      "default": [
+        10,
+        1e-06,
+        10
+      ],
+      "cli": {
+        "argstr": "-c [%d,%g,%d]"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "dimension of output image",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "fixed_image": {
+      "type": "file",
+      "desc": "Image to which the moving_image should be transformed",
+      "required": true
+    },
+    "fixed_image_mask": {
+      "type": "file",
+      "desc": "fixed mage mask",
+      "cli": {
+        "argstr": "-x %s"
+      }
+    },
+    "metric": {
+      "type": "list",
+      "desc": "the metric(s) to use.",
+      "required": true,
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "moving_image": {
+      "type": "file",
+      "desc": "Image that will be transformed to fixed_image",
+      "required": true
+    },
+    "output_transform": {
+      "type": "file",
+      "desc": "output file name",
+      "default": "initialization.mat",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "principal_axes": {
+      "type": "bool",
+      "desc": "align using principal axes",
+      "default": false,
+      "cli": {
+        "argstr": "-p %d"
+      },
+      "constraints": {
+        "xor": [
+          "blobs"
+        ]
+      }
+    },
+    "search_factor": {
+      "type": "list",
+      "desc": "search factor",
+      "default": [
+        20,
+        0.12
+      ],
+      "cli": {
+        "argstr": "-s [%g,%g]"
+      }
+    },
+    "search_grid": {
+      "type": "list",
+      "desc": "Translation search grid in mm",
+      "cli": {
+        "argstr": "-g %s"
+      }
+    },
+    "transform": {
+      "type": "list",
+      "desc": "Several transform options are available",
+      "default": [
+        "Affine",
+        0.1
+      ],
+      "cli": {
+        "argstr": "-t %s[%g]"
+      }
+    },
+    "verbose": {
+      "type": "bool",
+      "desc": "enable verbosity",
+      "default": false,
+      "cli": {
+        "argstr": "-v %d"
+      }
+    }
+  },
+  "outputs": {
+    "output_transform": {
+      "type": "file",
+      "path": {
+        "from_input": "output_transform"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.AI",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Calculate the optimal linear transform parameters for aligning two images."
+}

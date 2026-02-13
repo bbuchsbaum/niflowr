@@ -1,0 +1,104 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.resample_image_by_spacing",
+  "title": "ANTS ResampleImageBySpacing",
+  "command": "ResampleImageBySpacing",
+  "inputs": {
+    "addvox": {
+      "type": "int",
+      "desc": "addvox pads each dimension by addvox",
+      "cli": {
+        "argstr": "%d",
+        "position": 6
+      },
+      "constraints": {
+        "requires": [
+          "apply_smoothing"
+        ]
+      }
+    },
+    "apply_smoothing": {
+      "type": "bool",
+      "desc": "smooth before resampling",
+      "cli": {
+        "argstr": "%d",
+        "position": 5
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "int",
+      "desc": "dimension of output image",
+      "default": 3,
+      "cli": {
+        "argstr": "%d",
+        "position": 1
+      }
+    },
+    "input_image": {
+      "type": "file",
+      "desc": "input image file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "nn_interp": {
+      "type": "bool",
+      "desc": "nn interpolation",
+      "cli": {
+        "argstr": "%d",
+        "position": -1
+      },
+      "constraints": {
+        "requires": [
+          "addvox"
+        ]
+      }
+    },
+    "out_spacing": {
+      "type": "list",
+      "desc": "output spacing",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 4
+      }
+    },
+    "output_image": {
+      "type": "file",
+      "desc": "output image file",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.ResampleImageBySpacing",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Resample an image with a given spacing."
+}

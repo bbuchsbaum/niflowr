@@ -1,0 +1,414 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.apply_xfm",
+  "title": "FSL ApplyXFM",
+  "command": "flirt",
+  "inputs": {
+    "angle_rep": {
+      "type": "enum",
+      "desc": "representation of rotation angles",
+      "choices": [
+        "quaternion",
+        "euler"
+      ],
+      "cli": {
+        "argstr": "-anglerep %s"
+      }
+    },
+    "apply_isoxfm": {
+      "type": "double",
+      "desc": "as applyxfm but forces isotropic resampling",
+      "cli": {
+        "argstr": "-applyisoxfm %f"
+      },
+      "constraints": {
+        "xor": [
+          "apply_xfm"
+        ]
+      }
+    },
+    "apply_xfm": {
+      "type": "flag",
+      "desc": "apply transformation supplied by in_matrix_file or uses_qform to use the affine matrix stored in the reference header",
+      "default": true,
+      "cli": {
+        "argstr": "-applyxfm"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bbrslope": {
+      "type": "double",
+      "desc": "value of bbr slope",
+      "cli": {
+        "argstr": "-bbrslope %f"
+      }
+    },
+    "bbrtype": {
+      "type": "enum",
+      "desc": "type of bbr cost function: signed [default], global_abs, local_abs",
+      "choices": [
+        "signed",
+        "global_abs",
+        "local_abs"
+      ],
+      "cli": {
+        "argstr": "-bbrtype %s"
+      }
+    },
+    "bgvalue": {
+      "type": "double",
+      "desc": "use specified background value for points outside FOV",
+      "cli": {
+        "argstr": "-setbackground %f"
+      }
+    },
+    "bins": {
+      "type": "int",
+      "desc": "number of histogram bins",
+      "cli": {
+        "argstr": "-bins %d"
+      }
+    },
+    "coarse_search": {
+      "type": "int",
+      "desc": "coarse search delta angle",
+      "cli": {
+        "argstr": "-coarsesearch %d"
+      }
+    },
+    "cost": {
+      "type": "enum",
+      "desc": "cost function",
+      "choices": [
+        "mutualinfo",
+        "corratio",
+        "normcorr",
+        "normmi",
+        "leastsq",
+        "labeldiff",
+        "bbr"
+      ],
+      "cli": {
+        "argstr": "-cost %s"
+      }
+    },
+    "cost_func": {
+      "type": "enum",
+      "desc": "cost function",
+      "choices": [
+        "mutualinfo",
+        "corratio",
+        "normcorr",
+        "normmi",
+        "leastsq",
+        "labeldiff",
+        "bbr"
+      ],
+      "cli": {
+        "argstr": "-searchcost %s"
+      }
+    },
+    "datatype": {
+      "type": "enum",
+      "desc": "force output data type",
+      "choices": [
+        "char",
+        "short",
+        "int",
+        "float",
+        "double"
+      ],
+      "cli": {
+        "argstr": "-datatype %s"
+      }
+    },
+    "display_init": {
+      "type": "flag",
+      "desc": "display initial matrix",
+      "cli": {
+        "argstr": "-displayinit"
+      }
+    },
+    "dof": {
+      "type": "int",
+      "desc": "number of transform degrees of freedom",
+      "cli": {
+        "argstr": "-dof %d"
+      }
+    },
+    "echospacing": {
+      "type": "double",
+      "desc": "value of EPI echo spacing - units of seconds",
+      "cli": {
+        "argstr": "-echospacing %f"
+      }
+    },
+    "fieldmap": {
+      "type": "file",
+      "desc": "fieldmap image in rads/s - must be already registered to the reference image",
+      "cli": {
+        "argstr": "-fieldmap %s"
+      }
+    },
+    "fieldmapmask": {
+      "type": "file",
+      "desc": "mask for fieldmap image",
+      "cli": {
+        "argstr": "-fieldmapmask %s"
+      }
+    },
+    "fine_search": {
+      "type": "int",
+      "desc": "fine search delta angle",
+      "cli": {
+        "argstr": "-finesearch %d"
+      }
+    },
+    "force_scaling": {
+      "type": "flag",
+      "desc": "force rescaling even for low-res images",
+      "cli": {
+        "argstr": "-forcescaling"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file",
+      "required": true,
+      "cli": {
+        "argstr": "-in %s",
+        "position": 0
+      }
+    },
+    "in_matrix_file": {
+      "type": "file",
+      "desc": "input 4x4 affine matrix",
+      "cli": {
+        "argstr": "-init %s"
+      }
+    },
+    "in_weight": {
+      "type": "file",
+      "desc": "File for input weighting volume",
+      "cli": {
+        "argstr": "-inweight %s"
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "final interpolation method used in reslicing",
+      "choices": [
+        "trilinear",
+        "nearestneighbour",
+        "sinc",
+        "spline"
+      ],
+      "cli": {
+        "argstr": "-interp %s"
+      }
+    },
+    "min_sampling": {
+      "type": "double",
+      "desc": "set minimum voxel dimension for sampling",
+      "cli": {
+        "argstr": "-minsampling %f"
+      }
+    },
+    "no_clamp": {
+      "type": "flag",
+      "desc": "do not use intensity clamping",
+      "cli": {
+        "argstr": "-noclamp"
+      }
+    },
+    "no_resample": {
+      "type": "flag",
+      "desc": "do not change input sampling",
+      "cli": {
+        "argstr": "-noresample"
+      }
+    },
+    "no_resample_blur": {
+      "type": "flag",
+      "desc": "do not use blurring on downsampling",
+      "cli": {
+        "argstr": "-noresampblur"
+      }
+    },
+    "no_search": {
+      "type": "flag",
+      "desc": "set all angular searches to ranges 0 to 0",
+      "cli": {
+        "argstr": "-nosearch"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "registered output file",
+      "cli": {
+        "argstr": "-out %s",
+        "position": 2
+      }
+    },
+    "out_matrix_file": {
+      "type": "file",
+      "desc": "output affine matrix in 4x4 asciii format",
+      "cli": {
+        "argstr": "-omat %s",
+        "position": 3
+      }
+    },
+    "padding_size": {
+      "type": "int",
+      "desc": "for applyxfm: interpolates outside image by size",
+      "cli": {
+        "argstr": "-paddingsize %d"
+      }
+    },
+    "pedir": {
+      "type": "int",
+      "desc": "phase encode direction of EPI - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z",
+      "cli": {
+        "argstr": "-pedir %d"
+      }
+    },
+    "ref_weight": {
+      "type": "file",
+      "desc": "File for reference weighting volume",
+      "cli": {
+        "argstr": "-refweight %s"
+      }
+    },
+    "reference": {
+      "type": "file",
+      "desc": "reference file",
+      "required": true,
+      "cli": {
+        "argstr": "-ref %s",
+        "position": 1
+      }
+    },
+    "rigid2D": {
+      "type": "flag",
+      "desc": "use 2D rigid body mode - ignores dof",
+      "cli": {
+        "argstr": "-2D"
+      }
+    },
+    "schedule": {
+      "type": "file",
+      "desc": "replaces default schedule",
+      "cli": {
+        "argstr": "-schedule %s"
+      }
+    },
+    "searchr_x": {
+      "type": "list",
+      "desc": "search angles along x-axis, in degrees",
+      "cli": {
+        "argstr": "-searchrx %s"
+      }
+    },
+    "searchr_y": {
+      "type": "list",
+      "desc": "search angles along y-axis, in degrees",
+      "cli": {
+        "argstr": "-searchry %s"
+      }
+    },
+    "searchr_z": {
+      "type": "list",
+      "desc": "search angles along z-axis, in degrees",
+      "cli": {
+        "argstr": "-searchrz %s"
+      }
+    },
+    "sinc_width": {
+      "type": "int",
+      "desc": "full-width in voxels",
+      "cli": {
+        "argstr": "-sincwidth %d"
+      }
+    },
+    "sinc_window": {
+      "type": "enum",
+      "desc": "sinc window",
+      "choices": [
+        "rectangular",
+        "hanning",
+        "blackman"
+      ],
+      "cli": {
+        "argstr": "-sincwindow %s"
+      }
+    },
+    "uses_qform": {
+      "type": "flag",
+      "desc": "initialize using sform or qform",
+      "cli": {
+        "argstr": "-usesqform"
+      }
+    },
+    "verbose": {
+      "type": "int",
+      "desc": "verbose mode, 0 is least",
+      "cli": {
+        "argstr": "-verbose %d"
+      }
+    },
+    "wm_seg": {
+      "type": "file",
+      "desc": "white matter segmentation volume needed by BBR cost function",
+      "cli": {
+        "argstr": "-wmseg %s"
+      }
+    },
+    "wmcoords": {
+      "type": "file",
+      "desc": "white matter boundary coordinates for BBR cost function",
+      "cli": {
+        "argstr": "-wmcoords %s"
+      }
+    },
+    "wmnorms": {
+      "type": "file",
+      "desc": "white matter boundary normals for BBR cost function",
+      "cli": {
+        "argstr": "-wmnorms %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_matrix_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_matrix_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.ApplyXFM",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Currently just a light wrapper around FLIRT,"
+}

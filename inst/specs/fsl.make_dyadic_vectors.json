@@ -1,0 +1,66 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.make_dyadic_vectors",
+  "title": "FSL MakeDyadicVectors",
+  "command": "make_dyadic_vectors",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "output": {
+      "type": "file",
+      "default": "dyads",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "perc": {
+      "type": "double",
+      "desc": "the {perc}% angle of the output cone of uncertainty (output will be in degrees)",
+      "cli": {
+        "argstr": "%f",
+        "position": 4
+      }
+    },
+    "phi_vol": {
+      "type": "file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "theta_vol": {
+      "type": "file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.MakeDyadicVectors",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Create vector volume representing mean principal diffusion direction"
+}

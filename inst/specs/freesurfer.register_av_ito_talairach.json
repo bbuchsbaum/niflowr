@@ -1,0 +1,71 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.register_av_ito_talairach",
+  "title": "FREESURFER RegisterAVItoTalairach",
+  "command": "avi2talxfm",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "The input file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "The transform output",
+      "default": "talairach.auto.xfm",
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "target": {
+      "type": "file",
+      "desc": "The target file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "vox2vox": {
+      "type": "file",
+      "desc": "The vox2vox file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.registration.RegisterAVItoTalairach",
+    "nipype_version": "1.10.0"
+  },
+  "description": "converts the vox2vox from talairach_avi to a talairach.xfm file"
+}

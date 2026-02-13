@@ -1,0 +1,82 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.a_boverlap",
+  "title": "AFNI ABoverlap",
+  "command": "3dABoverlap",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file_a": {
+      "type": "file",
+      "desc": "input file A",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "in_file_b": {
+      "type": "file",
+      "desc": "input file B",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "no_automask": {
+      "type": "flag",
+      "desc": "consider input datasets as masks",
+      "cli": {
+        "argstr": "-no_automask"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "collect output to a file",
+      "cli": {
+        "argstr": "|& tee %s",
+        "position": -1
+      }
+    },
+    "quiet": {
+      "type": "flag",
+      "desc": "be as quiet as possible (without being entirely mute)",
+      "cli": {
+        "argstr": "-quiet"
+      }
+    },
+    "verb": {
+      "type": "flag",
+      "desc": "print out some progress reports (to stderr)",
+      "cli": {
+        "argstr": "-verb"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.ABoverlap",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Output (to screen) is a count of various things about how"
+}

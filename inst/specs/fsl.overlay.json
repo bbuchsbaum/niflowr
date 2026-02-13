@@ -1,0 +1,182 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.overlay",
+  "title": "FSL Overlay",
+  "command": "overlay",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "auto_thresh_bg": {
+      "type": "flag",
+      "desc": "automatically threshold the background image",
+      "required": true,
+      "cli": {
+        "argstr": "-a",
+        "position": 5
+      },
+      "constraints": {
+        "xor": [
+          "auto_thresh_bg",
+          "full_bg_range",
+          "bg_thresh"
+        ]
+      }
+    },
+    "background_image": {
+      "type": "file",
+      "desc": "image to use as background",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 4
+      }
+    },
+    "bg_thresh": {
+      "type": "list",
+      "desc": "min and max values for background intensity",
+      "required": true,
+      "cli": {
+        "argstr": "%.3f %.3f",
+        "position": 5
+      },
+      "constraints": {
+        "xor": [
+          "auto_thresh_bg",
+          "full_bg_range",
+          "bg_thresh"
+        ]
+      }
+    },
+    "full_bg_range": {
+      "type": "flag",
+      "desc": "use full range of background image",
+      "required": true,
+      "cli": {
+        "argstr": "-A",
+        "position": 5
+      },
+      "constraints": {
+        "xor": [
+          "auto_thresh_bg",
+          "full_bg_range",
+          "bg_thresh"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "combined image volume",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "out_type": {
+      "type": "enum",
+      "desc": "write output with float or int",
+      "default": "float",
+      "choices": [
+        "float",
+        "int"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "show_negative_stats": {
+      "type": "bool",
+      "desc": "display negative statistics in overlay",
+      "cli": {
+        "argstr": "%s",
+        "position": 8
+      },
+      "constraints": {
+        "xor": [
+          "stat_image2"
+        ]
+      }
+    },
+    "stat_image": {
+      "type": "file",
+      "desc": "statistical image to overlay in color",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 6
+      }
+    },
+    "stat_image2": {
+      "type": "file",
+      "desc": "second statistical image to overlay in color",
+      "cli": {
+        "argstr": "%s",
+        "position": 9
+      },
+      "constraints": {
+        "xor": [
+          "show_negative_stats"
+        ]
+      }
+    },
+    "stat_thresh": {
+      "type": "list",
+      "desc": "min and max values for the statistical overlay",
+      "required": true,
+      "cli": {
+        "argstr": "%.2f %.2f",
+        "position": 7
+      }
+    },
+    "stat_thresh2": {
+      "type": "list",
+      "desc": "min and max values for second statistical overlay",
+      "cli": {
+        "argstr": "%.2f %.2f",
+        "position": 10
+      }
+    },
+    "transparency": {
+      "type": "bool",
+      "desc": "make overlay colors semi-transparent",
+      "default": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "use_checkerboard": {
+      "type": "flag",
+      "desc": "use checkerboard mask for overlay",
+      "cli": {
+        "argstr": "-c",
+        "position": 3
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.Overlay",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL's overlay command to combine background and statistical images"
+}

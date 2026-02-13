@@ -1,0 +1,117 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.ca_register",
+  "title": "FREESURFER CARegister",
+  "command": "mri_ca_register",
+  "inputs": {
+    "A": {
+      "type": "int",
+      "desc": "undocumented flag used in longitudinal processing",
+      "cli": {
+        "argstr": "-A %d"
+      }
+    },
+    "align": {
+      "type": "string",
+      "desc": "Specifies when to perform alignment",
+      "cli": {
+        "argstr": "-align-%s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "The input volume for CARegister",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "invert_and_save": {
+      "type": "flag",
+      "desc": "Invert and save the .m3z multi-dimensional talaraich transform to x, y, and z .mgz files",
+      "cli": {
+        "argstr": "-invert-and-save",
+        "position": -4
+      }
+    },
+    "l_files": {
+      "type": "list",
+      "desc": "undocumented flag used in longitudinal processing",
+      "cli": {
+        "argstr": "-l %s"
+      }
+    },
+    "levels": {
+      "type": "int",
+      "desc": "defines how many surrounding voxels will be used in interpolations, default is 6",
+      "cli": {
+        "argstr": "-levels %d"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "Specifies volume to use as mask",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "no_big_ventricles": {
+      "type": "flag",
+      "desc": "No big ventricles",
+      "cli": {
+        "argstr": "-nobigventricles"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "The output volume for CARegister",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "template": {
+      "type": "file",
+      "desc": "The template file in gca format",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "Specifies transform in lta format",
+      "cli": {
+        "argstr": "-T %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.CARegister",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Generates a multi-dimensional talairach transform from a gca file and talairach.lta file"
+}

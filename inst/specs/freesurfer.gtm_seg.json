@@ -1,0 +1,156 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.gtm_seg",
+  "title": "FREESURFER GTMSeg",
+  "command": "gtmseg",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "colortable": {
+      "type": "file",
+      "desc": "colortable",
+      "cli": {
+        "argstr": "--ctab %s"
+      }
+    },
+    "ctx_annot": {
+      "type": "list",
+      "desc": "annot lhbase rhbase : annotation to use for cortical segmentation (default is aparc 1000 2000)",
+      "cli": {
+        "argstr": "--ctx-annot %s %i %i"
+      }
+    },
+    "dmax": {
+      "type": "double",
+      "desc": "distance threshold to use when subsegmenting WM (default is 5)",
+      "cli": {
+        "argstr": "--dmax %f"
+      }
+    },
+    "head": {
+      "type": "string",
+      "desc": "use headseg instead of apas+head.mgz",
+      "cli": {
+        "argstr": "--head %s"
+      }
+    },
+    "keep_cc": {
+      "type": "flag",
+      "desc": "do not relabel corpus callosum as WM",
+      "cli": {
+        "argstr": "--keep-cc"
+      }
+    },
+    "keep_hypo": {
+      "type": "flag",
+      "desc": "do not relabel hypointensities as WM when subsegmenting WM",
+      "cli": {
+        "argstr": "--keep-hypo"
+      }
+    },
+    "no_pons": {
+      "type": "flag",
+      "desc": "do not add pons segmentation when doing ---xcerseg",
+      "cli": {
+        "argstr": "--no-pons"
+      }
+    },
+    "no_seg_stats": {
+      "type": "flag",
+      "desc": "do not compute segmentation stats",
+      "cli": {
+        "argstr": "--no-seg-stats"
+      }
+    },
+    "no_vermis": {
+      "type": "flag",
+      "desc": "do not add vermis segmentation when doing ---xcerseg",
+      "cli": {
+        "argstr": "--no-vermis"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output volume relative to subject/mri",
+      "default": "gtmseg.mgz",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "output_upsampling_factor": {
+      "type": "int",
+      "desc": "set output USF different than USF, mostly for debugging",
+      "cli": {
+        "argstr": "--output-usf %i"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "subject id",
+      "required": true,
+      "cli": {
+        "argstr": "--s %s"
+      }
+    },
+    "subseg_cblum_wm": {
+      "type": "flag",
+      "desc": "subsegment cerebellum WM into core and gyri",
+      "cli": {
+        "argstr": "--subseg-cblum-wm"
+      }
+    },
+    "subsegwm": {
+      "type": "flag",
+      "desc": "subsegment WM into lobes (default)",
+      "cli": {
+        "argstr": "--subsegwm"
+      }
+    },
+    "upsampling_factor": {
+      "type": "int",
+      "desc": "upsampling factor (default is 2)",
+      "cli": {
+        "argstr": "--usf %i"
+      }
+    },
+    "wm_annot": {
+      "type": "list",
+      "desc": "annot lhbase rhbase : annotation to use for WM segmentation (with --subsegwm, default is lobes 3200 4200)",
+      "cli": {
+        "argstr": "--wm-annot %s %i %i"
+      }
+    },
+    "xcerseg": {
+      "type": "flag",
+      "desc": "run xcerebralseg on this subject to create apas+head.mgz",
+      "cli": {
+        "argstr": "--xcerseg"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.petsurfer.GTMSeg",
+    "nipype_version": "1.10.0"
+  },
+  "description": "create an anatomical segmentation for the geometric transfer matrix (GTM)."
+}

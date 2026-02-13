@@ -1,0 +1,48 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.reorient2_std",
+  "title": "FSL Reorient2Std",
+  "command": "fslreorient2std",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "required": true,
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "%s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.Reorient2Std",
+    "nipype_version": "1.10.0"
+  },
+  "description": "fslreorient2std is a tool for reorienting the image to match the"
+}

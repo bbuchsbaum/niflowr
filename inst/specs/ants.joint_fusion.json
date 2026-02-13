@@ -1,0 +1,179 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.joint_fusion",
+  "title": "ANTS JointFusion",
+  "command": "antsJointFusion",
+  "inputs": {
+    "alpha": {
+      "type": "double",
+      "desc": "Regularization term added to matrix Mx for calculating the inverse. Default = 0.1",
+      "default": 0.1,
+      "cli": {
+        "argstr": "-a %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "atlas_image": {
+      "type": "list",
+      "desc": "The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.",
+      "required": true,
+      "cli": {
+        "argstr": "-g %s..."
+      }
+    },
+    "atlas_segmentation_image": {
+      "type": "list",
+      "desc": "The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.",
+      "required": true,
+      "cli": {
+        "argstr": "-l %s..."
+      }
+    },
+    "beta": {
+      "type": "double",
+      "desc": "Exponent for mapping intensity difference to the joint error. Default = 2.0",
+      "default": 2.0,
+      "cli": {
+        "argstr": "-b %s"
+      }
+    },
+    "constrain_nonnegative": {
+      "type": "flag",
+      "desc": "Constrain solution to non-negative weights.",
+      "default": false,
+      "cli": {
+        "argstr": "-c"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.",
+      "choices": [
+        3,
+        2,
+        4
+      ],
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "exclusion_image_label": {
+      "type": "list",
+      "desc": "Specify a label for the exclusion region.",
+      "cli": {
+        "argstr": "-e %s"
+      },
+      "constraints": {
+        "requires": [
+          "exclusion_image"
+        ]
+      }
+    },
+    "mask_image": {
+      "type": "file",
+      "desc": "If a mask image is specified, fusion is only performed in the mask region.",
+      "cli": {
+        "argstr": "-x %s"
+      }
+    },
+    "out_label_fusion": {
+      "type": "file",
+      "desc": "The output label fusion image.",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "patch_metric": {
+      "type": "enum",
+      "desc": "Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).",
+      "choices": [
+        "PC",
+        "MSQ"
+      ],
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "patch_radius": {
+      "type": "list",
+      "desc": "Patch radius for similarity measures. Default: 2x2x2",
+      "cli": {
+        "argstr": "-p %s"
+      }
+    },
+    "retain_atlas_voting_images": {
+      "type": "flag",
+      "desc": "Retain atlas voting images. Default = false",
+      "default": false,
+      "cli": {
+        "argstr": "-f"
+      }
+    },
+    "retain_label_posterior_images": {
+      "type": "flag",
+      "desc": "Retain label posterior probability images. Requires atlas segmentations to be specified. Default = false",
+      "default": false,
+      "cli": {
+        "argstr": "-r"
+      },
+      "constraints": {
+        "requires": [
+          "atlas_segmentation_image"
+        ]
+      }
+    },
+    "search_radius": {
+      "type": "list",
+      "desc": "Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.",
+      "default": [
+        3,
+        3,
+        3
+      ],
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "target_image": {
+      "type": "list",
+      "desc": "The target image (or multimodal target images) assumed to be aligned to a common image domain.",
+      "required": true,
+      "cli": {
+        "argstr": "-t %s"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Verbose output.",
+      "cli": {
+        "argstr": "-v"
+      }
+    }
+  },
+  "outputs": {
+    "out_label_fusion": {
+      "type": "file",
+      "path": {
+        "from_input": "out_label_fusion"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.segmentation.JointFusion",
+    "nipype_version": "1.10.0"
+  },
+  "description": "An image fusion algorithm."
+}

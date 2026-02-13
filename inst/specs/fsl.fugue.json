@@ -1,0 +1,303 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.fugue",
+  "title": "FSL FUGUE",
+  "command": "fugue",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "asym_se_time": {
+      "type": "double",
+      "desc": "set the fieldmap asymmetric spin echo time (sec)",
+      "cli": {
+        "argstr": "--asym=%.10f"
+      }
+    },
+    "despike_2dfilter": {
+      "type": "flag",
+      "desc": "apply a 2D de-spiking filter",
+      "cli": {
+        "argstr": "--despike"
+      }
+    },
+    "despike_threshold": {
+      "type": "double",
+      "desc": "specify the threshold for de-spiking (default=3.0)",
+      "cli": {
+        "argstr": "--despikethreshold=%s"
+      }
+    },
+    "dwell_time": {
+      "type": "double",
+      "desc": "set the EPI dwell time per phase-encode line - same as echo spacing - (sec)",
+      "cli": {
+        "argstr": "--dwell=%.10f"
+      }
+    },
+    "dwell_to_asym_ratio": {
+      "type": "double",
+      "desc": "set the dwell to asym time ratio",
+      "cli": {
+        "argstr": "--dwelltoasym=%.10f"
+      }
+    },
+    "fmap_in_file": {
+      "type": "file",
+      "desc": "filename for loading fieldmap (rad/s)",
+      "cli": {
+        "argstr": "--loadfmap=%s"
+      }
+    },
+    "fmap_out_file": {
+      "type": "file",
+      "desc": "filename for saving fieldmap (rad/s)",
+      "cli": {
+        "argstr": "--savefmap=%s"
+      }
+    },
+    "fourier_order": {
+      "type": "int",
+      "desc": "apply Fourier (sinusoidal) fitting of order N",
+      "cli": {
+        "argstr": "--fourier=%d"
+      }
+    },
+    "icorr": {
+      "type": "flag",
+      "desc": "apply intensity correction to unwarping (pixel shift method only)",
+      "cli": {
+        "argstr": "--icorr"
+      },
+      "constraints": {
+        "requires": [
+          "shift_in_file"
+        ]
+      }
+    },
+    "icorr_only": {
+      "type": "flag",
+      "desc": "apply intensity correction only",
+      "cli": {
+        "argstr": "--icorronly"
+      },
+      "constraints": {
+        "requires": [
+          "unwarped_file"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "filename of input volume",
+      "cli": {
+        "argstr": "--in=%s"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "filename for loading valid mask",
+      "cli": {
+        "argstr": "--mask=%s"
+      }
+    },
+    "median_2dfilter": {
+      "type": "flag",
+      "desc": "apply 2D median filtering",
+      "cli": {
+        "argstr": "--median"
+      }
+    },
+    "no_extend": {
+      "type": "flag",
+      "desc": "do not apply rigid-body extrapolation to the fieldmap",
+      "cli": {
+        "argstr": "--noextend"
+      }
+    },
+    "no_gap_fill": {
+      "type": "flag",
+      "desc": "do not apply gap-filling measure to the fieldmap",
+      "cli": {
+        "argstr": "--nofill"
+      }
+    },
+    "nokspace": {
+      "type": "flag",
+      "desc": "do not use k-space forward warping",
+      "cli": {
+        "argstr": "--nokspace"
+      }
+    },
+    "pava": {
+      "type": "flag",
+      "desc": "apply monotonic enforcement via PAVA",
+      "cli": {
+        "argstr": "--pava"
+      }
+    },
+    "phase_conjugate": {
+      "type": "flag",
+      "desc": "apply phase conjugate method of unwarping",
+      "cli": {
+        "argstr": "--phaseconj"
+      }
+    },
+    "phasemap_in_file": {
+      "type": "file",
+      "desc": "filename for input phase image",
+      "cli": {
+        "argstr": "--phasemap=%s"
+      }
+    },
+    "poly_order": {
+      "type": "int",
+      "desc": "apply polynomial fitting of order N",
+      "cli": {
+        "argstr": "--poly=%d"
+      }
+    },
+    "save_unmasked_fmap": {
+      "type": "flag",
+      "desc": "saves the unmasked fieldmap when using --savefmap",
+      "cli": {
+        "argstr": "--unmaskfmap"
+      },
+      "constraints": {
+        "xor": [
+          "save_fmap"
+        ]
+      }
+    },
+    "save_unmasked_shift": {
+      "type": "flag",
+      "desc": "saves the unmasked shiftmap when using --saveshift",
+      "cli": {
+        "argstr": "--unmaskshift"
+      },
+      "constraints": {
+        "xor": [
+          "save_shift"
+        ]
+      }
+    },
+    "shift_in_file": {
+      "type": "file",
+      "desc": "filename for reading pixel shift volume",
+      "cli": {
+        "argstr": "--loadshift=%s"
+      }
+    },
+    "shift_out_file": {
+      "type": "file",
+      "desc": "filename for saving pixel shift volume",
+      "cli": {
+        "argstr": "--saveshift=%s"
+      }
+    },
+    "smooth2d": {
+      "type": "double",
+      "desc": "apply 2D Gaussian smoothing of sigma N (in mm)",
+      "cli": {
+        "argstr": "--smooth2=%.2f"
+      }
+    },
+    "smooth3d": {
+      "type": "double",
+      "desc": "apply 3D Gaussian smoothing of sigma N (in mm)",
+      "cli": {
+        "argstr": "--smooth3=%.2f"
+      }
+    },
+    "unwarp_direction": {
+      "type": "enum",
+      "desc": "specifies direction of warping (default y)",
+      "choices": [
+        "x",
+        "y",
+        "z",
+        "x-",
+        "y-",
+        "z-"
+      ],
+      "cli": {
+        "argstr": "--unwarpdir=%s"
+      }
+    },
+    "unwarped_file": {
+      "type": "file",
+      "desc": "apply unwarping and save as filename",
+      "cli": {
+        "argstr": "--unwarp=%s"
+      },
+      "constraints": {
+        "xor": [
+          "warped_file"
+        ],
+        "requires": [
+          "in_file"
+        ]
+      }
+    },
+    "warped_file": {
+      "type": "file",
+      "desc": "apply forward warping and save as filename",
+      "cli": {
+        "argstr": "--warp=%s"
+      },
+      "constraints": {
+        "xor": [
+          "unwarped_file"
+        ],
+        "requires": [
+          "in_file"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "fmap_out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "fmap_out_file"
+      },
+      "must_exist": false
+    },
+    "shift_out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "shift_out_file"
+      },
+      "must_exist": false
+    },
+    "unwarped_file": {
+      "type": "file",
+      "path": {
+        "from_input": "unwarped_file"
+      },
+      "must_exist": false
+    },
+    "warped_file": {
+      "type": "file",
+      "path": {
+        "from_input": "warped_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.FUGUE",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL FUGUE set of tools for EPI distortion correction"
+}

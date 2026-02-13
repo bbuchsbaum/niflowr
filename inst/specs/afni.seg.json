@@ -1,0 +1,112 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.seg",
+  "title": "AFNI Seg",
+  "command": "3dSeg",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bias_classes": {
+      "type": "string",
+      "desc": "A semicolon delimited string of classes that contribute to the estimation of the bias field",
+      "cli": {
+        "argstr": "-bias_classes %s"
+      }
+    },
+    "bias_fwhm": {
+      "type": "double",
+      "desc": "The amount of blurring used when estimating the field bias with the Wells method",
+      "cli": {
+        "argstr": "-bias_fwhm %f"
+      }
+    },
+    "blur_meth": {
+      "type": "enum",
+      "desc": "set the blurring method for bias field estimation",
+      "choices": [
+        "BFT",
+        "BIM"
+      ],
+      "cli": {
+        "argstr": "-blur_meth %s"
+      }
+    },
+    "bmrf": {
+      "type": "double",
+      "desc": "Weighting factor controlling spatial homogeneity of the classifications",
+      "cli": {
+        "argstr": "-bmrf %f"
+      }
+    },
+    "classes": {
+      "type": "string",
+      "desc": "CLASS_STRING is a semicolon delimited string of class labels",
+      "cli": {
+        "argstr": "-classes %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "ANAT is the volume to segment",
+      "required": true,
+      "cli": {
+        "argstr": "-anat %s",
+        "position": -1
+      }
+    },
+    "main_N": {
+      "type": "int",
+      "desc": "Number of iterations to perform.",
+      "cli": {
+        "argstr": "-main_N %d"
+      }
+    },
+    "mask": {
+      "type": "list",
+      "desc": "only non-zero voxels in mask are analyzed. mask can either be a dataset or the string \"AUTO\" which would use AFNI's automask function to create the mask.",
+      "required": true,
+      "cli": {
+        "argstr": "-mask %s",
+        "position": -2
+      }
+    },
+    "mixfloor": {
+      "type": "double",
+      "desc": "Set the minimum value for any class's mixing fraction",
+      "cli": {
+        "argstr": "-mixfloor %f"
+      }
+    },
+    "mixfrac": {
+      "type": "string",
+      "desc": "MIXFRAC sets up the volume-wide (within mask) tissue fractions while initializing the segmentation (see IGNORE for exception)",
+      "cli": {
+        "argstr": "-mixfrac %s"
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "desc": "the prefix for the output folder containing all output volumes",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Seg",
+    "nipype_version": "1.10.0"
+  },
+  "description": "3dSeg segments brain volumes into tissue classes. The program allows"
+}

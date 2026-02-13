@@ -1,0 +1,110 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.filter_regressor",
+  "title": "FSL FilterRegressor",
+  "command": "fsl_regfilt",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "design_file": {
+      "type": "file",
+      "desc": "name of the matrix with time courses (e.g. GLM design or MELODIC mixing matrix)",
+      "required": true,
+      "cli": {
+        "argstr": "-d %s",
+        "position": 3
+      }
+    },
+    "filter_all": {
+      "type": "bool",
+      "desc": "use all columns in the design file in denoising",
+      "required": true,
+      "cli": {
+        "argstr": "-f '%s'",
+        "position": 4
+      },
+      "constraints": {
+        "xor": [
+          "filter_columns"
+        ]
+      }
+    },
+    "filter_columns": {
+      "type": "list",
+      "desc": "(1-based) column indices to filter out of the data",
+      "required": true,
+      "cli": {
+        "argstr": "-f '%s'",
+        "position": 4
+      },
+      "constraints": {
+        "xor": [
+          "filter_all"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file name (4D image)",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": 1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask image file name",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output file name for the filtered data",
+      "cli": {
+        "argstr": "-o %s",
+        "position": 2
+      }
+    },
+    "out_vnscales": {
+      "type": "flag",
+      "desc": "output scaling factors for variance normalization",
+      "cli": {
+        "argstr": "--out_vnscales"
+      }
+    },
+    "var_norm": {
+      "type": "flag",
+      "desc": "perform variance-normalization on data",
+      "cli": {
+        "argstr": "--vn"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.FilterRegressor",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Data de-noising by regressing out part of a design matrix"
+}

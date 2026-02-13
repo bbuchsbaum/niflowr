@@ -1,0 +1,135 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.dot",
+  "title": "AFNI Dot",
+  "command": "3dDot",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "demean": {
+      "type": "flag",
+      "desc": "Remove the mean from each volume prior to computing the correlation",
+      "cli": {
+        "argstr": "-demean"
+      }
+    },
+    "docoef": {
+      "type": "flag",
+      "desc": "Return the least square fit coefficients {{a,b}} so that dset2 is approximately a + b\\*dset1",
+      "cli": {
+        "argstr": "-docoef"
+      }
+    },
+    "docor": {
+      "type": "flag",
+      "desc": "Return the correlation coefficient (default).",
+      "cli": {
+        "argstr": "-docor"
+      }
+    },
+    "dodice": {
+      "type": "flag",
+      "desc": "Return the Dice coefficient (the Sorensen-Dice index).",
+      "cli": {
+        "argstr": "-dodice"
+      }
+    },
+    "dodot": {
+      "type": "flag",
+      "desc": "Return the dot product (unscaled).",
+      "cli": {
+        "argstr": "-dodot"
+      }
+    },
+    "doeta2": {
+      "type": "flag",
+      "desc": "Return eta-squared (Cohen, NeuroImage 2008).",
+      "cli": {
+        "argstr": "-doeta2"
+      }
+    },
+    "dosums": {
+      "type": "flag",
+      "desc": "Return the 6 numbers xbar=<x> ybar=<y> <(x-xbar)^2> <(y-ybar)^2> <(x-xbar)(y-ybar)> and the correlation coefficient.",
+      "cli": {
+        "argstr": "-dosums"
+      }
+    },
+    "full": {
+      "type": "flag",
+      "desc": "Compute the whole matrix. A waste of time, but handy for parsing.",
+      "cli": {
+        "argstr": "-full"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "list of input files, possibly with subbrick selectors",
+      "cli": {
+        "argstr": "%s ...",
+        "position": -2
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "Use this dataset as a mask",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "mrange": {
+      "type": "list",
+      "desc": "Means to further restrict the voxels from 'mset' so thatonly those mask values within this range (inclusive) willbe used.",
+      "cli": {
+        "argstr": "-mrange %s %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "collect output to a file",
+      "cli": {
+        "argstr": "|& tee %s",
+        "position": -1
+      }
+    },
+    "show_labels": {
+      "type": "flag",
+      "desc": "Print sub-brick labels to help identify what is being correlated. This option is useful whenyou have more than 2 sub-bricks at input.",
+      "cli": {
+        "argstr": "-show_labels"
+      }
+    },
+    "upper": {
+      "type": "flag",
+      "desc": "Compute upper triangular matrix",
+      "cli": {
+        "argstr": "-upper"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Dot",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Correlation coefficient between sub-brick pairs."
+}

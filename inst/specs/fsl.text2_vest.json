@@ -1,0 +1,53 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.text2_vest",
+  "title": "FSL Text2Vest",
+  "command": "Text2Vest",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "plain text file representing your design, contrast, or f-test matrix",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "file name to store matrix data in the format used by FSL tools (e.g., design.mat, design.con design.fts)",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.Text2Vest",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL Text2Vest`https://web.mit.edu/fsl_v5.0.10/fsl/doc/wiki/GLM(2f)CreatingDesignMatricesByHand.html`_"
+}

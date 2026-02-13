@@ -1,0 +1,54 @@
+name: Nipype Spec Drift
+
+on:
+  pull_request:
+    paths:
+      - "inst/specs/**"
+      - "inst/schema/**"
+      - "tools/import_nipype_specs.py"
+      - "tools/nipype_manifest.json"
+      - ".github/workflows/nipype-spec-drift.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "inst/specs/**"
+      - "inst/schema/**"
+      - "tools/import_nipype_specs.py"
+      - "tools/nipype_manifest.json"
+      - ".github/workflows/nipype-spec-drift.yml"
+
+jobs:
+  check-spec-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install importer dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install nipype jsonschema
+
+      - name: Regenerate Nipype specs
+        run: |
+          python tools/import_nipype_specs.py \
+            --discover-root nipype.interfaces.fsl \
+            --discover-root nipype.interfaces.afni \
+            --discover-root nipype.interfaces.ants \
+            --discover-root nipype.interfaces.freesurfer \
+            --overwrite \
+            --omit-imported-at
+
+      - name: Fail on drift
+        run: |
+          if ! git diff --quiet -- inst/specs; then
+            echo "::error::Nipype-derived specs are out of date. Regenerate with tools/import_nipype_specs.py and commit."
+            git --no-pager diff -- inst/specs
+            exit 1
+          fi

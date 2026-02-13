@@ -1,0 +1,127 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.ca_label",
+  "title": "FREESURFER CALabel",
+  "command": "mri_ca_label",
+  "inputs": {
+    "align": {
+      "type": "flag",
+      "desc": "Align CALabel",
+      "cli": {
+        "argstr": "-align"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "aseg": {
+      "type": "file",
+      "desc": "Undocumented flag. Autorecon3 uses ../mri/aseg.presurf.mgz as input file",
+      "cli": {
+        "argstr": "-aseg %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input volume for CALabel",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      }
+    },
+    "in_vol": {
+      "type": "file",
+      "desc": "set input volume",
+      "cli": {
+        "argstr": "-r %s"
+      }
+    },
+    "intensities": {
+      "type": "file",
+      "desc": "input label intensities file(used in longitudinal processing)",
+      "cli": {
+        "argstr": "-r %s"
+      }
+    },
+    "label": {
+      "type": "file",
+      "desc": "Undocumented flag. Autorecon3 uses ../label/{hemisphere}.cortex.label as input file",
+      "cli": {
+        "argstr": "-l %s"
+      }
+    },
+    "no_big_ventricles": {
+      "type": "flag",
+      "desc": "No big ventricles",
+      "cli": {
+        "argstr": "-nobigventricles"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output file for CALabel",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "prior": {
+      "type": "double",
+      "desc": "Prior for CALabel",
+      "cli": {
+        "argstr": "-prior %.1f"
+      }
+    },
+    "relabel_unlikely": {
+      "type": "list",
+      "desc": "Reclassify voxels at least some std devs from the mean using some size Gaussian window",
+      "cli": {
+        "argstr": "-relabel_unlikely %d %.1f"
+      }
+    },
+    "template": {
+      "type": "file",
+      "desc": "Input template for CALabel",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "transform": {
+      "type": "file",
+      "desc": "Input transform for CALabel",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.CALabel",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Label subcortical structures based in GCA model."
+}

@@ -1,0 +1,408 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.sample_to_surface",
+  "title": "FREESURFER SampleToSurface",
+  "command": "mri_vol2surf",
+  "inputs": {
+    "apply_rot": {
+      "type": "list",
+      "desc": "rotation angles (in degrees) to apply to reg matrix",
+      "cli": {
+        "argstr": "--rot %.3f %.3f %.3f"
+      }
+    },
+    "apply_trans": {
+      "type": "list",
+      "desc": "translation (in mm) to apply to reg matrix",
+      "cli": {
+        "argstr": "--trans %.3f %.3f %.3f"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "cortex_mask": {
+      "type": "flag",
+      "desc": "mask the target surface with hemi.cortex.label",
+      "cli": {
+        "argstr": "--cortex"
+      },
+      "constraints": {
+        "xor": [
+          "mask_label"
+        ]
+      }
+    },
+    "fix_tk_reg": {
+      "type": "flag",
+      "desc": "make reg matrix round-compatible",
+      "cli": {
+        "argstr": "--fixtkreg"
+      }
+    },
+    "float2int_method": {
+      "type": "enum",
+      "desc": "method to convert reg matrix values (default is round)",
+      "choices": [
+        "round",
+        "tkregister"
+      ],
+      "cli": {
+        "argstr": "--float2int %s"
+      }
+    },
+    "frame": {
+      "type": "int",
+      "desc": "save only one frame (0-based)",
+      "cli": {
+        "argstr": "--frame %d"
+      }
+    },
+    "hemi": {
+      "type": "enum",
+      "desc": "target hemisphere",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "hits_file": {
+      "type": "list",
+      "desc": "save image with number of hits at each voxel",
+      "cli": {
+        "argstr": "--srchit %s"
+      }
+    },
+    "hits_type": {
+      "type": "enum",
+      "desc": "hits file type",
+      "choices": [
+        "cor",
+        "mgh",
+        "mgz",
+        "minc",
+        "analyze",
+        "analyze4d",
+        "spm",
+        "afni",
+        "brik",
+        "bshort",
+        "bfloat",
+        "sdt",
+        "outline",
+        "otl",
+        "gdf",
+        "nifti1",
+        "nii",
+        "niigz"
+      ],
+      "cli": {
+        "argstr": "--srchit_type"
+      }
+    },
+    "ico_order": {
+      "type": "int",
+      "desc": "icosahedron order when target_subject is 'ico'",
+      "cli": {
+        "argstr": "--icoorder %d"
+      },
+      "constraints": {
+        "requires": [
+          "target_subject"
+        ]
+      }
+    },
+    "interp_method": {
+      "type": "enum",
+      "desc": "interpolation method",
+      "choices": [
+        "nearest",
+        "trilinear"
+      ],
+      "cli": {
+        "argstr": "--interp %s"
+      }
+    },
+    "mask_label": {
+      "type": "file",
+      "desc": "label file to mask output with",
+      "cli": {
+        "argstr": "--mask %s"
+      },
+      "constraints": {
+        "xor": [
+          "cortex_mask"
+        ]
+      }
+    },
+    "mni152reg": {
+      "type": "flag",
+      "desc": "source volume is in MNI152 space",
+      "required": true,
+      "cli": {
+        "argstr": "--mni152reg"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "reg_header",
+          "mni152reg"
+        ]
+      }
+    },
+    "no_reshape": {
+      "type": "flag",
+      "desc": "do not reshape surface vector (default)",
+      "cli": {
+        "argstr": "--noreshape"
+      },
+      "constraints": {
+        "xor": [
+          "reshape"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "surface file to write",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "out_type": {
+      "type": "enum",
+      "desc": "output file type",
+      "choices": [
+        "cor",
+        "mgh",
+        "mgz",
+        "minc",
+        "analyze",
+        "analyze4d",
+        "spm",
+        "afni",
+        "brik",
+        "bshort",
+        "bfloat",
+        "sdt",
+        "outline",
+        "otl",
+        "gdf",
+        "nifti1",
+        "nii",
+        "niigz",
+        "gii"
+      ],
+      "cli": {
+        "argstr": "--out_type %s"
+      }
+    },
+    "override_reg_subj": {
+      "type": "bool",
+      "desc": "override the subject in the reg file header",
+      "cli": {
+        "argstr": "--srcsubject %s"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "projection_stem": {
+      "type": "string",
+      "desc": "stem for precomputed linear estimates and volume fractions",
+      "required": true,
+      "constraints": {
+        "xor": [
+          "sampling_method"
+        ]
+      }
+    },
+    "reference_file": {
+      "type": "file",
+      "desc": "reference volume (default is orig.mgz)",
+      "cli": {
+        "argstr": "--ref %s"
+      }
+    },
+    "reg_file": {
+      "type": "file",
+      "desc": "source-to-reference registration file",
+      "required": true,
+      "cli": {
+        "argstr": "--reg %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "reg_header",
+          "mni152reg"
+        ]
+      }
+    },
+    "reg_header": {
+      "type": "bool",
+      "desc": "register based on header geometry",
+      "required": true,
+      "cli": {
+        "argstr": "--regheader %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "reg_header",
+          "mni152reg"
+        ],
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "reshape": {
+      "type": "flag",
+      "desc": "reshape surface vector to fit in non-mgh format",
+      "cli": {
+        "argstr": "--reshape"
+      },
+      "constraints": {
+        "xor": [
+          "no_reshape"
+        ]
+      }
+    },
+    "reshape_slices": {
+      "type": "int",
+      "desc": "number of 'slices' for reshaping",
+      "cli": {
+        "argstr": "--rf %d"
+      }
+    },
+    "sampling_method": {
+      "type": "enum",
+      "desc": "how to sample -- at a point or at the max or average over a range",
+      "required": true,
+      "choices": [
+        "point",
+        "max",
+        "average"
+      ],
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "xor": [
+          "projection_stem"
+        ],
+        "requires": [
+          "sampling_range",
+          "sampling_units"
+        ]
+      }
+    },
+    "scale_input": {
+      "type": "double",
+      "desc": "multiple all intensities by scale factor",
+      "cli": {
+        "argstr": "--scale %.3f"
+      }
+    },
+    "smooth_surf": {
+      "type": "double",
+      "desc": "smooth output surface (mm fwhm)",
+      "cli": {
+        "argstr": "--surf-fwhm %.3f"
+      }
+    },
+    "smooth_vol": {
+      "type": "double",
+      "desc": "smooth input volume (mm fwhm)",
+      "cli": {
+        "argstr": "--fwhm %.3f"
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "desc": "volume to sample values from",
+      "required": true,
+      "cli": {
+        "argstr": "--mov %s"
+      }
+    },
+    "surf_reg": {
+      "type": "list",
+      "desc": "use surface registration to target subject",
+      "cli": {
+        "argstr": "--surfreg %s"
+      },
+      "constraints": {
+        "requires": [
+          "target_subject"
+        ]
+      }
+    },
+    "surface": {
+      "type": "string",
+      "desc": "target surface (default is white)",
+      "cli": {
+        "argstr": "--surf %s"
+      }
+    },
+    "target_subject": {
+      "type": "string",
+      "desc": "sample to surface of different subject than source",
+      "cli": {
+        "argstr": "--trgsubject %s"
+      }
+    },
+    "vox_file": {
+      "type": "list",
+      "desc": "text file with the number of voxels intersecting the surface",
+      "cli": {
+        "argstr": "--nvox %s"
+      }
+    }
+  },
+  "outputs": {
+    "hits_file": {
+      "type": "file",
+      "path": {
+        "from_input": "hits_file"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "vox_file": {
+      "type": "file",
+      "path": {
+        "from_input": "vox_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.SampleToSurface",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Sample a volume to the cortical surface using Freesurfer's mri_vol2surf."
+}

@@ -1,0 +1,165 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.flameo",
+  "title": "FSL FLAMEO",
+  "command": "flameo",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "burnin": {
+      "type": "int",
+      "desc": "number of jumps at start of mcmc to be discarded",
+      "cli": {
+        "argstr": "--burnin=%d"
+      }
+    },
+    "cope_file": {
+      "type": "file",
+      "desc": "cope regressor data file",
+      "required": true,
+      "cli": {
+        "argstr": "--copefile=%s"
+      }
+    },
+    "cov_split_file": {
+      "type": "file",
+      "desc": "ascii matrix specifying the groups the covariance is split into",
+      "required": true,
+      "cli": {
+        "argstr": "--covsplitfile=%s"
+      }
+    },
+    "design_file": {
+      "type": "file",
+      "desc": "design matrix file",
+      "required": true,
+      "cli": {
+        "argstr": "--designfile=%s"
+      }
+    },
+    "dof_var_cope_file": {
+      "type": "file",
+      "desc": "dof data file for varcope data",
+      "cli": {
+        "argstr": "--dofvarcopefile=%s"
+      }
+    },
+    "f_con_file": {
+      "type": "file",
+      "desc": "ascii matrix specifying f-contrasts",
+      "cli": {
+        "argstr": "--fcontrastsfile=%s"
+      }
+    },
+    "fix_mean": {
+      "type": "flag",
+      "desc": "fix mean for tfit",
+      "cli": {
+        "argstr": "--fixmean"
+      }
+    },
+    "infer_outliers": {
+      "type": "flag",
+      "desc": "infer outliers - not for fe",
+      "cli": {
+        "argstr": "--inferoutliers"
+      }
+    },
+    "log_dir": {
+      "type": "dir",
+      "default": "stats",
+      "cli": {
+        "argstr": "--ld=%s"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "mask file",
+      "required": true,
+      "cli": {
+        "argstr": "--maskfile=%s"
+      }
+    },
+    "n_jumps": {
+      "type": "int",
+      "desc": "number of jumps made by mcmc",
+      "cli": {
+        "argstr": "--njumps=%d"
+      }
+    },
+    "no_pe_outputs": {
+      "type": "flag",
+      "desc": "do not output pe files",
+      "cli": {
+        "argstr": "--nopeoutput"
+      }
+    },
+    "outlier_iter": {
+      "type": "int",
+      "desc": "Number of max iterations to use when inferring outliers. Default is 12.",
+      "cli": {
+        "argstr": "--ioni=%d"
+      }
+    },
+    "run_mode": {
+      "type": "enum",
+      "desc": "inference to perform",
+      "required": true,
+      "choices": [
+        "fe",
+        "ols",
+        "flame1",
+        "flame12"
+      ],
+      "cli": {
+        "argstr": "--runmode=%s"
+      }
+    },
+    "sample_every": {
+      "type": "int",
+      "desc": "number of jumps for each sample",
+      "cli": {
+        "argstr": "--sampleevery=%d"
+      }
+    },
+    "sigma_dofs": {
+      "type": "int",
+      "desc": "sigma (in mm) to use for Gaussian smoothing the DOFs in FLAME 2. Default is 1mm, -1 indicates no smoothing",
+      "cli": {
+        "argstr": "--sigma_dofs=%d"
+      }
+    },
+    "t_con_file": {
+      "type": "file",
+      "desc": "ascii matrix specifying t-contrasts",
+      "required": true,
+      "cli": {
+        "argstr": "--tcontrastsfile=%s"
+      }
+    },
+    "var_cope_file": {
+      "type": "file",
+      "desc": "varcope weightings data file",
+      "cli": {
+        "argstr": "--varcopefile=%s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.FLAMEO",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL flameo command to perform higher level model fits"
+}

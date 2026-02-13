@@ -1,0 +1,61 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.jacobian",
+  "title": "FREESURFER Jacobian",
+  "command": "mris_jacobian",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_mappedsurf": {
+      "type": "file",
+      "desc": "Mapped surface",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "in_origsurf": {
+      "type": "file",
+      "desc": "Original surface",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output Jacobian of the surface mapping",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.Jacobian",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program computes the Jacobian of a surface mapping."
+}

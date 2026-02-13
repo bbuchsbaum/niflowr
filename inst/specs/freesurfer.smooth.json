@@ -1,0 +1,118 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.smooth",
+  "title": "FREESURFER Smooth",
+  "command": "mris_volsmooth",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "source volume",
+      "required": true,
+      "cli": {
+        "argstr": "--i %s"
+      }
+    },
+    "num_iters": {
+      "type": "string",
+      "desc": "number of iterations instead of fwhm",
+      "required": true,
+      "cli": {
+        "argstr": "--niters %d"
+      },
+      "constraints": {
+        "xor": [
+          "surface_fwhm"
+        ]
+      }
+    },
+    "proj_frac": {
+      "type": "double",
+      "desc": "project frac of thickness a long surface normal",
+      "cli": {
+        "argstr": "--projfrac %s"
+      },
+      "constraints": {
+        "xor": [
+          "proj_frac_avg"
+        ]
+      }
+    },
+    "proj_frac_avg": {
+      "type": "list",
+      "desc": "average a long normal min max delta",
+      "cli": {
+        "argstr": "--projfrac-avg %.2f %.2f %.2f"
+      },
+      "constraints": {
+        "xor": [
+          "proj_frac"
+        ]
+      }
+    },
+    "reg_file": {
+      "type": "file",
+      "desc": "registers volume to surface anatomical",
+      "required": true,
+      "cli": {
+        "argstr": "--reg %s"
+      }
+    },
+    "smoothed_file": {
+      "type": "file",
+      "desc": "output volume",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "surface_fwhm": {
+      "type": "string",
+      "desc": "surface FWHM in mm",
+      "required": true,
+      "cli": {
+        "argstr": "--fwhm %f"
+      },
+      "constraints": {
+        "xor": [
+          "num_iters"
+        ],
+        "requires": [
+          "reg_file"
+        ]
+      }
+    },
+    "vol_fwhm": {
+      "type": "string",
+      "desc": "volume smoothing outside of surface",
+      "cli": {
+        "argstr": "--vol-fwhm %f"
+      }
+    }
+  },
+  "outputs": {
+    "smoothed_file": {
+      "type": "file",
+      "path": {
+        "from_input": "smoothed_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.Smooth",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer mris_volsmooth to smooth a volume"
+}

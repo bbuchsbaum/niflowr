@@ -1,0 +1,490 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.gtmpvc",
+  "title": "FREESURFER GTMPVC",
+  "command": "mri_gtmpvc",
+  "inputs": {
+    "X": {
+      "type": "flag",
+      "desc": "save X matrix in matlab4 format as X.mat (it will be big)",
+      "cli": {
+        "argstr": "--X"
+      }
+    },
+    "X0": {
+      "type": "flag",
+      "desc": "save X0 matrix in matlab4 format as X0.mat (it will be big)",
+      "cli": {
+        "argstr": "--X0"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "auto_mask": {
+      "type": "list",
+      "desc": "FWHM thresh : automatically compute mask",
+      "cli": {
+        "argstr": "--auto-mask %f %f"
+      }
+    },
+    "beta": {
+      "type": "flag",
+      "desc": "save beta matrix in matlab4 format as beta.mat",
+      "cli": {
+        "argstr": "--beta"
+      }
+    },
+    "color_table_file": {
+      "type": "file",
+      "desc": "color table file with seg id names",
+      "cli": {
+        "argstr": "--ctab %s"
+      },
+      "constraints": {
+        "xor": [
+          "color_table_file",
+          "default_color_table"
+        ]
+      }
+    },
+    "contrast": {
+      "type": "list",
+      "desc": "contrast file",
+      "cli": {
+        "argstr": "--C %s..."
+      }
+    },
+    "default_color_table": {
+      "type": "flag",
+      "desc": "use $FREESURFER_HOME/FreeSurferColorLUT.txt",
+      "cli": {
+        "argstr": "--ctab-default"
+      },
+      "constraints": {
+        "xor": [
+          "color_table_file",
+          "default_color_table"
+        ]
+      }
+    },
+    "default_seg_merge": {
+      "type": "flag",
+      "desc": "default schema for merging ROIs",
+      "cli": {
+        "argstr": "--default-seg-merge"
+      }
+    },
+    "frame": {
+      "type": "int",
+      "desc": "only process 0-based frame F from inputvol",
+      "cli": {
+        "argstr": "--frame %i"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input volume - source data to pvc",
+      "required": true,
+      "cli": {
+        "argstr": "--i %s"
+      }
+    },
+    "km_hb": {
+      "type": "list",
+      "desc": "RefId1 RefId2 ... : compute HiBinding TAC for KM as mean of given RefIds",
+      "cli": {
+        "argstr": "--km-hb %s..."
+      }
+    },
+    "km_ref": {
+      "type": "list",
+      "desc": "RefId1 RefId2 ... : compute reference TAC for KM as mean of given RefIds",
+      "cli": {
+        "argstr": "--km-ref %s..."
+      }
+    },
+    "lat": {
+      "type": "flag",
+      "desc": "lateralize tissue types",
+      "cli": {
+        "argstr": "--lat"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "ignore areas outside of the mask (in input vol space)",
+      "cli": {
+        "argstr": "--mask %s"
+      }
+    },
+    "merge_cblum_wm_gyri": {
+      "type": "flag",
+      "desc": "cerebellum WM gyri back into cerebellum WM",
+      "cli": {
+        "argstr": "--merge-cblum-wm-gyri"
+      }
+    },
+    "merge_hypos": {
+      "type": "flag",
+      "desc": "merge left and right hypointensites into to ROI",
+      "cli": {
+        "argstr": "--merge-hypos"
+      }
+    },
+    "mg": {
+      "type": "list",
+      "desc": "gmthresh RefId1 RefId2 ...: perform Mueller-Gaertner PVC, gmthresh is min gm pvf bet 0 and 1",
+      "cli": {
+        "argstr": "--mg %g %s"
+      }
+    },
+    "mg_ref_cerebral_wm": {
+      "type": "flag",
+      "desc": "set MG RefIds to 2 and 41",
+      "cli": {
+        "argstr": "--mg-ref-cerebral-wm"
+      }
+    },
+    "mg_ref_lobes_wm": {
+      "type": "flag",
+      "desc": "set MG RefIds to those for lobes when using wm subseg",
+      "cli": {
+        "argstr": "--mg-ref-lobes-wm"
+      }
+    },
+    "mgx": {
+      "type": "double",
+      "desc": "gmxthresh : GLM-based Mueller-Gaertner PVC, gmxthresh is min gm pvf bet 0 and 1",
+      "cli": {
+        "argstr": "--mgx %f"
+      }
+    },
+    "no_pvc": {
+      "type": "flag",
+      "desc": "turns off PVC entirely (both PSF and TFE)",
+      "cli": {
+        "argstr": "--no-pvc"
+      }
+    },
+    "no_reduce_fov": {
+      "type": "flag",
+      "desc": "do not reduce FoV to encompass mask",
+      "cli": {
+        "argstr": "--no-reduce-fov"
+      }
+    },
+    "no_rescale": {
+      "type": "flag",
+      "desc": "do not global rescale such that mean of reference region is scaleref",
+      "cli": {
+        "argstr": "--no-rescale"
+      }
+    },
+    "no_tfe": {
+      "type": "flag",
+      "desc": "do not correct for tissue fraction effect (with --psf 0 turns off PVC entirely)",
+      "cli": {
+        "argstr": "--no-tfe"
+      }
+    },
+    "num_threads": {
+      "type": "int",
+      "desc": "threads : number of threads to use",
+      "cli": {
+        "argstr": "--threads %i"
+      }
+    },
+    "opt_brain": {
+      "type": "flag",
+      "desc": "apply adaptive GTM",
+      "cli": {
+        "argstr": "--opt-brain"
+      }
+    },
+    "opt_seg_merge": {
+      "type": "flag",
+      "desc": "optimal schema for merging ROIs when applying adaptive GTM",
+      "cli": {
+        "argstr": "--opt-seg-merge"
+      }
+    },
+    "opt_tol": {
+      "type": "list",
+      "desc": "n_iters_max ftol lin_min_tol : optimization parameters for adaptive gtm using fminsearch",
+      "cli": {
+        "argstr": "--opt-tol %i %f %f"
+      }
+    },
+    "optimization_schema": {
+      "type": "enum",
+      "desc": "opt : optimization schema for applying adaptive GTM",
+      "choices": [
+        "3D",
+        "2D",
+        "1D",
+        "3D_MB",
+        "2D_MB",
+        "1D_MB",
+        "MBZ",
+        "MB3"
+      ],
+      "cli": {
+        "argstr": "--opt %s"
+      }
+    },
+    "psf": {
+      "type": "double",
+      "desc": "scanner PSF FWHM in mm",
+      "cli": {
+        "argstr": "--psf %f"
+      }
+    },
+    "psf_col": {
+      "type": "double",
+      "desc": "xFWHM : full-width-half-maximum in the x-direction",
+      "cli": {
+        "argstr": "--psf-col %f"
+      }
+    },
+    "psf_row": {
+      "type": "double",
+      "desc": "yFWHM : full-width-half-maximum in the y-direction",
+      "cli": {
+        "argstr": "--psf-row %f"
+      }
+    },
+    "psf_slice": {
+      "type": "double",
+      "desc": "zFWHM : full-width-half-maximum in the z-direction",
+      "cli": {
+        "argstr": "--psf-slice %f"
+      }
+    },
+    "pvc_dir": {
+      "type": "string",
+      "desc": "save outputs to dir",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "rbv": {
+      "type": "flag",
+      "desc": "perform Region-based Voxelwise (RBV) PVC",
+      "cli": {
+        "argstr": "--rbv"
+      },
+      "constraints": {
+        "requires": [
+          "subjects_dir"
+        ]
+      }
+    },
+    "rbv_res": {
+      "type": "double",
+      "desc": "voxsize : set RBV voxel resolution (good for when standard res takes too much memory)",
+      "cli": {
+        "argstr": "--rbv-res %f"
+      }
+    },
+    "reduce_fox_eqodd": {
+      "type": "flag",
+      "desc": "reduce FoV to encompass mask but force nc=nr and ns to be odd",
+      "cli": {
+        "argstr": "--reduce-fox-eqodd"
+      }
+    },
+    "reg_file": {
+      "type": "file",
+      "desc": "LTA registration file that maps PET to anatomical",
+      "required": true,
+      "cli": {
+        "argstr": "--reg %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "regheader",
+          "reg_identity"
+        ]
+      }
+    },
+    "reg_identity": {
+      "type": "flag",
+      "desc": "assume that input is in anatomical space",
+      "required": true,
+      "cli": {
+        "argstr": "--reg-identity"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "regheader",
+          "reg_identity"
+        ]
+      }
+    },
+    "regheader": {
+      "type": "flag",
+      "desc": "assume input and seg share scanner space",
+      "required": true,
+      "cli": {
+        "argstr": "--regheader"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "regheader",
+          "reg_identity"
+        ]
+      }
+    },
+    "replace": {
+      "type": "list",
+      "desc": "Id1 Id2 : replace seg Id1 with seg Id2",
+      "cli": {
+        "argstr": "--replace %i %i"
+      }
+    },
+    "rescale": {
+      "type": "list",
+      "desc": "Id1 <Id2...>  : specify reference region(s) used to rescale (default is pons)",
+      "cli": {
+        "argstr": "--rescale %s..."
+      }
+    },
+    "save_eres": {
+      "type": "flag",
+      "desc": "saves residual error",
+      "cli": {
+        "argstr": "--save-eres"
+      }
+    },
+    "save_input": {
+      "type": "flag",
+      "desc": "saves rescaled input as input.rescaled.nii.gz",
+      "cli": {
+        "argstr": "--save-input"
+      }
+    },
+    "save_yhat": {
+      "type": "flag",
+      "desc": "save signal estimate (yhat) smoothed with the PSF",
+      "cli": {
+        "argstr": "--save-yhat"
+      },
+      "constraints": {
+        "xor": [
+          "save_yhat_with_noise"
+        ]
+      }
+    },
+    "save_yhat0": {
+      "type": "flag",
+      "desc": "save signal estimate (yhat)",
+      "cli": {
+        "argstr": "--save-yhat0"
+      }
+    },
+    "save_yhat_full_fov": {
+      "type": "flag",
+      "desc": "save signal estimate (yhat)",
+      "cli": {
+        "argstr": "--save-yhat-full-fov"
+      }
+    },
+    "save_yhat_with_noise": {
+      "type": "list",
+      "desc": "seed nreps : save signal estimate (yhat) with noise",
+      "cli": {
+        "argstr": "--save-yhat-with-noise %i %i"
+      },
+      "constraints": {
+        "xor": [
+          "save_yhat"
+        ]
+      }
+    },
+    "scale_refval": {
+      "type": "double",
+      "desc": "refval : scale such that mean in reference region is refval",
+      "cli": {
+        "argstr": "--scale-refval %f"
+      }
+    },
+    "segmentation": {
+      "type": "file",
+      "desc": "segfile : anatomical segmentation to define regions for GTM",
+      "required": true,
+      "cli": {
+        "argstr": "--seg %s"
+      }
+    },
+    "steady_state_params": {
+      "type": "list",
+      "desc": "bpc scale dcf : steady-state analysis spec blood plasma concentration, unit scale and decay correction factor. You must also spec --km-ref. Turns off rescaling",
+      "cli": {
+        "argstr": "--ss %f %f %f"
+      }
+    },
+    "tissue_fraction_resolution": {
+      "type": "double",
+      "desc": "set the tissue fraction resolution parameter (def is 0.5)",
+      "cli": {
+        "argstr": "--segpvfres %f"
+      }
+    },
+    "tt_reduce": {
+      "type": "flag",
+      "desc": "reduce segmentation to that of a tissue type",
+      "cli": {
+        "argstr": "--tt-reduce"
+      }
+    },
+    "tt_update": {
+      "type": "flag",
+      "desc": "changes tissue type of VentralDC, BrainStem, and Pons to be SubcortGM",
+      "cli": {
+        "argstr": "--tt-update"
+      }
+    },
+    "y": {
+      "type": "flag",
+      "desc": "save y matrix in matlab4 format as y.mat",
+      "cli": {
+        "argstr": "--y"
+      }
+    }
+  },
+  "outputs": {
+    "pvc_dir": {
+      "type": "dir",
+      "path": {
+        "from_input": "pvc_dir"
+      },
+      "must_exist": false
+    },
+    "rbv": {
+      "type": "file",
+      "path": {
+        "from_input": "rbv"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.petsurfer.GTMPVC",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Perform Partial Volume Correction (PVC) to PET Data."
+}

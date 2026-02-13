@@ -1,0 +1,70 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.apply_transforms_to_points",
+  "title": "ANTS ApplyTransformsToPoints",
+  "command": "antsApplyTransformsToPoints",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.",
+      "choices": [
+        2,
+        3,
+        4
+      ],
+      "cli": {
+        "argstr": "--dimensionality %d"
+      }
+    },
+    "input_file": {
+      "type": "file",
+      "desc": "Currently, the only input supported is a csv file with columns including x,y (2D), x,y,z (3D) or x,y,z,t,label (4D) column headers. The points should be defined in physical space. If in doubt how to convert coordinates from your files to the space required by antsApplyTransformsToPoints try creating/drawing a simple label volume with only one voxel set to 1 and all others set to 0. Write down the voxel coordinates. Then use ImageMaths LabelStats to find out what coordinates for this voxel antsApplyTransformsToPoints is expecting.",
+      "required": true,
+      "cli": {
+        "argstr": "--input %s"
+      }
+    },
+    "output_file": {
+      "type": "string",
+      "desc": "Name of the output CSV file",
+      "cli": {
+        "argstr": "--output %s"
+      }
+    },
+    "transforms": {
+      "type": "list",
+      "desc": "transforms that will be applied to the points",
+      "required": true,
+      "cli": {
+        "argstr": "%s"
+      }
+    }
+  },
+  "outputs": {
+    "output_file": {
+      "type": "file",
+      "path": {
+        "from_input": "output_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.resampling.ApplyTransformsToPoints",
+    "nipype_version": "1.10.0"
+  },
+  "description": "ApplyTransformsToPoints, applied to an CSV file, transforms coordinates"
+}

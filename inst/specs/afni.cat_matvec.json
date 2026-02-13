@@ -1,0 +1,92 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.cat_matvec",
+  "title": "AFNI CatMatvec",
+  "command": "cat_matvec",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fourxfour": {
+      "type": "flag",
+      "desc": "Output matrix in augmented form (last row is 0 0 0 1)This option does not work with -MATRIX or -ONELINE",
+      "cli": {
+        "argstr": "-4x4"
+      },
+      "constraints": {
+        "xor": [
+          "matrix",
+          "oneline"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "list",
+      "desc": "list of tuples of mfiles and associated opkeys",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "matrix": {
+      "type": "flag",
+      "desc": "indicates that the resulting matrix willbe written to outfile in the 'MATRIX(...)' format (FORM 3).This feature could be used, with clever scripting, to inputa matrix directly on the command line to program 3dWarp.",
+      "cli": {
+        "argstr": "-MATRIX"
+      },
+      "constraints": {
+        "xor": [
+          "oneline",
+          "fourxfour"
+        ]
+      }
+    },
+    "oneline": {
+      "type": "flag",
+      "desc": "indicates that the resulting matrixwill simply be written as 12 numbers on one line.",
+      "cli": {
+        "argstr": "-ONELINE"
+      },
+      "constraints": {
+        "xor": [
+          "matrix",
+          "fourxfour"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "File to write concattenated matvecs to",
+      "required": true,
+      "cli": {
+        "argstr": "> %s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.CatMatvec",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Catenates 3D rotation+shift matrix+vector transformations."
+}

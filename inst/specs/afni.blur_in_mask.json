@@ -1,0 +1,103 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.blur_in_mask",
+  "title": "AFNI BlurInMask",
+  "command": "3dBlurInMask",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Create an automask from the input dataset.",
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "float_out": {
+      "type": "flag",
+      "desc": "Save dataset as floats, no matter what the input data type is.",
+      "cli": {
+        "argstr": "-float"
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "fwhm kernel size",
+      "required": true,
+      "cli": {
+        "argstr": "-FWHM %f"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dSkullStrip",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s",
+        "position": 1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "Mask dataset, if desired.  Blurring will occur only within the mask. Voxels NOT in the mask will be set to zero in the output.",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "multimask": {
+      "type": "file",
+      "desc": "Multi-mask dataset -- each distinct nonzero value in dataset will be treated as a separate mask for blurring purposes.",
+      "cli": {
+        "argstr": "-Mmask %s"
+      }
+    },
+    "options": {
+      "type": "string",
+      "desc": "options",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output to the file",
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": -1
+      }
+    },
+    "preserve": {
+      "type": "flag",
+      "desc": "Normally, voxels not in the mask will be set to zero in the output. If you want the original values in the dataset to be preserved in the output, use this option.",
+      "cli": {
+        "argstr": "-preserve"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.BlurInMask",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Blurs a dataset spatially inside a mask.  That's all.  Experimental."
+}

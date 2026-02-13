@@ -1,0 +1,108 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.local_bistat",
+  "title": "AFNI LocalBistat",
+  "command": "3dLocalBistat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "Compute the mask as in program 3dAutomask.",
+      "cli": {
+        "argstr": "-automask"
+      },
+      "constraints": {
+        "xor": [
+          "weight_file"
+        ]
+      }
+    },
+    "in_file1": {
+      "type": "file",
+      "desc": "Filename of the first image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "in_file2": {
+      "type": "file",
+      "desc": "Filename of the second image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "mask image file name. Voxels NOT in the mask will not be used in the neighborhood of any voxel. Also, a voxel NOT in the mask will have its statistic(s) computed as zero (0).",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "neighborhood": {
+      "type": "list",
+      "desc": "The region around each voxel that will be extracted for the statistics calculation. Possible regions are: 'SPHERE', 'RHDD' (rhombic dodecahedron), 'TOHD' (truncated octahedron) with a given radius in mm or 'RECT' (rectangular block) with dimensions to specify in mm.",
+      "required": true,
+      "cli": {
+        "argstr": "-nbhd '%s(%s)'"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output dataset.",
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": 0
+      }
+    },
+    "stat": {
+      "type": "list",
+      "desc": "Statistics to compute. Possible names are:\n\n  * pearson  = Pearson correlation coefficient\n  * spearman = Spearman correlation coefficient\n  * quadrant = Quadrant correlation coefficient\n  * mutinfo  = Mutual Information\n  * normuti  = Normalized Mutual Information\n  * jointent = Joint entropy\n  * hellinger= Hellinger metric\n  * crU      = Correlation ratio (Unsymmetric)\n  * crM      = Correlation ratio (symmetrized by Multiplication)\n  * crA      = Correlation ratio (symmetrized by Addition)\n  * L2slope  = slope of least-squares (L2) linear regression of\n               the data from dataset1 vs. the dataset2\n               (i.e., d2 = a + b*d1 ==> this is 'b')\n  * L1slope  = slope of least-absolute-sum (L1) linear\n               regression of the data from dataset1 vs.\n               the dataset2\n  * num      = number of the values in the region:\n               with the use of -mask or -automask,\n               the size of the region around any given\n               voxel will vary; this option lets you\n               map that size.\n  * ALL      = all of the above, in that order\n\nMore than one option can be used.",
+      "required": true,
+      "cli": {
+        "argstr": "-stat %s..."
+      }
+    },
+    "weight_file": {
+      "type": "file",
+      "desc": "File name of an image to use as a weight.  Only applies to 'pearson' statistics.",
+      "cli": {
+        "argstr": "-weight %s"
+      },
+      "constraints": {
+        "xor": [
+          "automask"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.LocalBistat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "3dLocalBistat - computes statistics between 2 datasets, at each voxel,"
+}

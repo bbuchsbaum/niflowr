@@ -1,0 +1,162 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.make_surfaces",
+  "title": "FREESURFER MakeSurfaces",
+  "command": "mris_make_surfaces",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fix_mtl": {
+      "type": "flag",
+      "desc": "Undocumented flag",
+      "cli": {
+        "argstr": "-fix_mtl"
+      }
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Hemisphere being processed",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "in_T1": {
+      "type": "file",
+      "desc": "Input brain or T1 file",
+      "cli": {
+        "argstr": "-T1 %s"
+      }
+    },
+    "in_aseg": {
+      "type": "file",
+      "desc": "Input segmentation file",
+      "cli": {
+        "argstr": "-aseg %s"
+      }
+    },
+    "in_filled": {
+      "type": "file",
+      "desc": "Implicit input file filled.mgz",
+      "required": true
+    },
+    "in_orig": {
+      "type": "file",
+      "desc": "Implicit input file <hemisphere>.orig",
+      "required": true,
+      "cli": {
+        "argstr": "-orig %s"
+      }
+    },
+    "in_wm": {
+      "type": "file",
+      "desc": "Implicit input file wm.mgz",
+      "required": true
+    },
+    "longitudinal": {
+      "type": "flag",
+      "desc": "No documentation (used for longitudinal processing)",
+      "cli": {
+        "argstr": "-long"
+      }
+    },
+    "maximum": {
+      "type": "double",
+      "desc": "No documentation (used for longitudinal processing)",
+      "cli": {
+        "argstr": "-max %.1f"
+      }
+    },
+    "mgz": {
+      "type": "flag",
+      "desc": "No documentation. Direct questions to analysis-bugs@nmr.mgh.harvard.edu",
+      "cli": {
+        "argstr": "-mgz"
+      }
+    },
+    "no_white": {
+      "type": "flag",
+      "desc": "Undocumented flag",
+      "cli": {
+        "argstr": "-nowhite"
+      }
+    },
+    "noaparc": {
+      "type": "flag",
+      "desc": "No documentation. Direct questions to analysis-bugs@nmr.mgh.harvard.edu",
+      "cli": {
+        "argstr": "-noaparc"
+      },
+      "constraints": {
+        "xor": [
+          "in_label"
+        ]
+      }
+    },
+    "orig_pial": {
+      "type": "file",
+      "desc": "Specify a pial surface to start with",
+      "cli": {
+        "argstr": "-orig_pial %s"
+      },
+      "constraints": {
+        "requires": [
+          "in_label"
+        ]
+      }
+    },
+    "orig_white": {
+      "type": "file",
+      "desc": "Specify a white surface to start with",
+      "cli": {
+        "argstr": "-orig_white %s"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "white": {
+      "type": "string",
+      "desc": "White surface name",
+      "cli": {
+        "argstr": "-white %s"
+      }
+    },
+    "white_only": {
+      "type": "flag",
+      "desc": "Undocumented flag",
+      "cli": {
+        "argstr": "-whiteonly"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.MakeSurfaces",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program positions the tessellation of the cortical surface at the"
+}

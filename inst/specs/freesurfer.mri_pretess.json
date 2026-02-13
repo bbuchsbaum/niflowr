@@ -1,0 +1,92 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mri_pretess",
+  "title": "FREESURFER MRIPretess",
+  "command": "mri_pretess",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_filled": {
+      "type": "file",
+      "desc": "filled volume, usually wm.mgz",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      }
+    },
+    "in_norm": {
+      "type": "file",
+      "desc": "the normalized, brain-extracted T1w image. Usually norm.mgz",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "keep": {
+      "type": "flag",
+      "desc": "keep WM edits",
+      "cli": {
+        "argstr": "-keep"
+      }
+    },
+    "label": {
+      "type": "list",
+      "desc": "label to be picked up, can be a Freesurfer's string like 'wm' or a label value (e.g. 127 for rh or 255 for lh)",
+      "required": true,
+      "default": "wm",
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "nocorners": {
+      "type": "flag",
+      "desc": "do not remove corner configurations in addition to edge ones.",
+      "cli": {
+        "argstr": "-nocorners"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "the output file after mri_pretess.",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "test": {
+      "type": "flag",
+      "desc": "adds a voxel that should be removed by mri_pretess. The value of the voxel is set to that of an ON-edited WM, so it should be kept with -keep. The output will NOT be saved.",
+      "cli": {
+        "argstr": "-test"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.MRIPretess",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Uses Freesurfer's mri_pretess to prepare volumes to be tessellated."
+}

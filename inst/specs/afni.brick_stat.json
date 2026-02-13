@@ -1,0 +1,94 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.brick_stat",
+  "title": "AFNI BrickStat",
+  "command": "3dBrickStat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dmaskave",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "-mask dset = use dset as mask to include/exclude voxels",
+      "cli": {
+        "argstr": "-mask %s",
+        "position": 2
+      }
+    },
+    "max": {
+      "type": "flag",
+      "desc": "print the maximum value in the dataset",
+      "cli": {
+        "argstr": "-max"
+      }
+    },
+    "mean": {
+      "type": "flag",
+      "desc": "print the mean value in the dataset",
+      "cli": {
+        "argstr": "-mean"
+      }
+    },
+    "min": {
+      "type": "flag",
+      "desc": "print the minimum value in dataset",
+      "cli": {
+        "argstr": "-min",
+        "position": 1
+      }
+    },
+    "percentile": {
+      "type": "list",
+      "desc": "p0 ps p1 write the percentile values starting at p0% and ending at p1% at a step of ps%. only one sub-brick is accepted.",
+      "cli": {
+        "argstr": "-percentile %.3f %.3f %.3f"
+      }
+    },
+    "slow": {
+      "type": "flag",
+      "desc": "read the whole dataset to find the min and max values",
+      "cli": {
+        "argstr": "-slow"
+      }
+    },
+    "sum": {
+      "type": "flag",
+      "desc": "print the sum of values in the dataset",
+      "cli": {
+        "argstr": "-sum"
+      }
+    },
+    "var": {
+      "type": "flag",
+      "desc": "print the variance in the dataset",
+      "cli": {
+        "argstr": "-var"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.BrickStat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes maximum and/or minimum voxel values of an input dataset."
+}

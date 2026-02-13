@@ -1,0 +1,292 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.prob_track_x",
+  "title": "FSL ProbTrackX",
+  "command": "probtrackx",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "avoid_mp": {
+      "type": "file",
+      "desc": "reject pathways passing through locations given by this mask",
+      "cli": {
+        "argstr": "--avoid=%s"
+      }
+    },
+    "c_thresh": {
+      "type": "double",
+      "desc": "curvature threshold - default=0.2",
+      "cli": {
+        "argstr": "--cthr=%.3f"
+      }
+    },
+    "correct_path_distribution": {
+      "type": "flag",
+      "desc": "correct path distribution for the length of the pathways",
+      "cli": {
+        "argstr": "--pd"
+      }
+    },
+    "dist_thresh": {
+      "type": "double",
+      "desc": "discards samples shorter than this threshold (in mm - default=0)",
+      "cli": {
+        "argstr": "--distthresh=%.3f"
+      }
+    },
+    "fibst": {
+      "type": "int",
+      "desc": "force a starting fibre for tracking - default=1, i.e. first fibre orientation. Only works if randfib==0",
+      "cli": {
+        "argstr": "--fibst=%d"
+      }
+    },
+    "force_dir": {
+      "type": "flag",
+      "desc": "use the actual directory name given - i.e. do not add + to make a new directory",
+      "default": true,
+      "cli": {
+        "argstr": "--forcedir"
+      }
+    },
+    "fsamples": {
+      "type": "list",
+      "required": true
+    },
+    "inv_xfm": {
+      "type": "file",
+      "desc": "transformation matrix taking DTI space to seed space (compulsory when using a warp_field for seeds_to_dti)",
+      "cli": {
+        "argstr": "--invxfm=%s"
+      }
+    },
+    "loop_check": {
+      "type": "flag",
+      "desc": "perform loop_checks on paths - slower, but allows lower curvature threshold",
+      "cli": {
+        "argstr": "--loopcheck"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "bet binary mask file in diffusion space",
+      "required": true,
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "mask2": {
+      "type": "file",
+      "desc": "second bet binary mask (in diffusion space) in twomask_symm mode",
+      "cli": {
+        "argstr": "--mask2=%s"
+      }
+    },
+    "mesh": {
+      "type": "file",
+      "desc": "Freesurfer-type surface descriptor (in ascii format)",
+      "cli": {
+        "argstr": "--mesh=%s"
+      }
+    },
+    "mod_euler": {
+      "type": "flag",
+      "desc": "use modified euler streamlining",
+      "cli": {
+        "argstr": "--modeuler"
+      }
+    },
+    "mode": {
+      "type": "enum",
+      "desc": "options: simple (single seed voxel), seedmask (mask of seed voxels), twomask_symm (two bet binary masks)",
+      "choices": [
+        "simple",
+        "two_mask_symm",
+        "seedmask"
+      ],
+      "cli": {
+        "argstr": "--mode=%s"
+      }
+    },
+    "n_samples": {
+      "type": "int",
+      "desc": "number of samples - default=5000",
+      "default": 5000,
+      "cli": {
+        "argstr": "--nsamples=%d"
+      }
+    },
+    "n_steps": {
+      "type": "int",
+      "desc": "number of steps per sample - default=2000",
+      "cli": {
+        "argstr": "--nsteps=%d"
+      }
+    },
+    "network": {
+      "type": "flag",
+      "desc": "activate network mode - only keep paths going through at least one seed mask (required if multiple seed masks)",
+      "cli": {
+        "argstr": "--network"
+      }
+    },
+    "opd": {
+      "type": "flag",
+      "desc": "outputs path distributions",
+      "default": true,
+      "cli": {
+        "argstr": "--opd"
+      }
+    },
+    "os2t": {
+      "type": "flag",
+      "desc": "Outputs seeds to targets",
+      "cli": {
+        "argstr": "--os2t"
+      }
+    },
+    "out_dir": {
+      "type": "dir",
+      "desc": "directory to put the final volumes in",
+      "cli": {
+        "argstr": "--dir=%s"
+      }
+    },
+    "phsamples": {
+      "type": "list",
+      "required": true
+    },
+    "rand_fib": {
+      "type": "enum",
+      "desc": "options: 0 - default, 1 - to randomly sample initial fibres (with f > fibthresh), 2 - to sample in proportion fibres (with f>fibthresh) to f, 3 - to sample ALL populations at random (even if f<fibthresh)",
+      "choices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "cli": {
+        "argstr": "--randfib=%d"
+      }
+    },
+    "random_seed": {
+      "type": "int",
+      "desc": "random seed",
+      "cli": {
+        "argstr": "--rseed=%d"
+      }
+    },
+    "s2tastext": {
+      "type": "flag",
+      "desc": "output seed-to-target counts as a text file (useful when seeding from a mesh)",
+      "cli": {
+        "argstr": "--s2tastext"
+      }
+    },
+    "sample_random_points": {
+      "type": "double",
+      "desc": "sample random points within seed voxels",
+      "cli": {
+        "argstr": "--sampvox=%.3f"
+      }
+    },
+    "samples_base_name": {
+      "type": "string",
+      "desc": "the rootname/base_name for samples files",
+      "default": "merged",
+      "cli": {
+        "argstr": "--samples=%s"
+      }
+    },
+    "seed": {
+      "type": "list",
+      "desc": "seed volume(s), or voxel(s) or freesurfer label file",
+      "required": true,
+      "cli": {
+        "argstr": "--seed=%s"
+      }
+    },
+    "seed_ref": {
+      "type": "file",
+      "desc": "reference vol to define seed space in simple mode - diffusion space assumed if absent",
+      "cli": {
+        "argstr": "--seedref=%s"
+      }
+    },
+    "step_length": {
+      "type": "double",
+      "desc": "step_length in mm - default=0.5",
+      "cli": {
+        "argstr": "--steplength=%.3f"
+      }
+    },
+    "stop_mask": {
+      "type": "file",
+      "desc": "stop tracking at locations given by this mask file",
+      "cli": {
+        "argstr": "--stop=%s"
+      }
+    },
+    "target_masks": {
+      "type": "list",
+      "desc": "list of target masks - required for seeds_to_targets classification",
+      "cli": {
+        "argstr": "--targetmasks=%s"
+      }
+    },
+    "thsamples": {
+      "type": "list",
+      "required": true
+    },
+    "use_anisotropy": {
+      "type": "flag",
+      "desc": "use anisotropy to constrain tracking",
+      "cli": {
+        "argstr": "--usef"
+      }
+    },
+    "verbose": {
+      "type": "enum",
+      "desc": "Verbose level, [0-2]. Level 2 is required to output particle files.",
+      "choices": [
+        0,
+        1,
+        2
+      ],
+      "cli": {
+        "argstr": "--verbose=%d"
+      }
+    },
+    "waypoints": {
+      "type": "file",
+      "desc": "waypoint mask or ascii list of waypoint masks - only keep paths going through ALL the masks",
+      "cli": {
+        "argstr": "--waypoints=%s"
+      }
+    },
+    "xfm": {
+      "type": "file",
+      "desc": "transformation matrix taking seed space to DTI space (either FLIRT matrix or FNIRT warp_field) - default is identity",
+      "cli": {
+        "argstr": "--xfm=%s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.ProbTrackX",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL  probtrackx for tractography on bedpostx results"
+}

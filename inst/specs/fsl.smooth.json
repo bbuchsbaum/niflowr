@@ -1,0 +1,78 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.smooth",
+  "title": "FSL Smooth",
+  "command": "fslmaths",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "gaussian kernel fwhm, will be converted to sigma in mm (not voxels)",
+      "required": true,
+      "cli": {
+        "argstr": "-kernel gauss %.03f -fmean",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "sigma"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "sigma": {
+      "type": "double",
+      "desc": "gaussian kernel sigma in mm (not voxels)",
+      "required": true,
+      "cli": {
+        "argstr": "-kernel gauss %.03f -fmean",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "fwhm"
+        ]
+      }
+    },
+    "smoothed_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "smoothed_file": {
+      "type": "file",
+      "path": {
+        "from_input": "smoothed_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.Smooth",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use fslmaths to smooth the image"
+}

@@ -1,0 +1,92 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.measure_image_similarity",
+  "title": "ANTS MeasureImageSimilarity",
+  "command": "MeasureImageSimilarity",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "Dimensionality of the fixed/moving image pair",
+      "choices": [
+        2,
+        3,
+        4
+      ],
+      "cli": {
+        "argstr": "--dimensionality %d",
+        "position": 1
+      }
+    },
+    "fixed_image": {
+      "type": "file",
+      "desc": "Image to which the moving image is warped",
+      "required": true
+    },
+    "fixed_image_mask": {
+      "type": "file",
+      "desc": "mask used to limit metric sampling region of the fixed image",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "metric": {
+      "type": "enum",
+      "required": true,
+      "choices": [
+        "CC",
+        "MI",
+        "Mattes",
+        "MeanSquares",
+        "Demons",
+        "GC"
+      ],
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "moving_image": {
+      "type": "file",
+      "desc": "Image to apply transformation to (generally a coregistered functional)",
+      "required": true
+    },
+    "radius_or_number_of_bins": {
+      "type": "int",
+      "desc": "The number of bins in each stage for the MI and Mattes metric, or the radius for other metrics",
+      "required": true,
+      "constraints": {
+        "requires": [
+          "metric"
+        ]
+      }
+    },
+    "sampling_percentage": {
+      "type": "string",
+      "desc": "Percentage of points accessible to the sampling strategy over which to optimize the metric.",
+      "required": true,
+      "constraints": {
+        "requires": [
+          "metric"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.registration.MeasureImageSimilarity",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Examples"
+}

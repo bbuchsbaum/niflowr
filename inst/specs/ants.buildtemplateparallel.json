@@ -1,0 +1,149 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.buildtemplateparallel",
+  "title": "ANTS buildtemplateparallel",
+  "command": "buildtemplateparallel.sh",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bias_field_correction": {
+      "type": "flag",
+      "desc": "Applies bias field correction to moving image",
+      "cli": {
+        "argstr": "-n 1"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2, 3 or 4)",
+      "default": 3,
+      "choices": [
+        3,
+        2,
+        4
+      ],
+      "cli": {
+        "argstr": "-d %d",
+        "position": 1
+      }
+    },
+    "gradient_step_size": {
+      "type": "double",
+      "desc": "smaller magnitude results in more cautious steps (default = .25)",
+      "cli": {
+        "argstr": "-g %f"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "list of images to generate template from",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "iteration_limit": {
+      "type": "int",
+      "desc": "iterations of template construction",
+      "default": 4,
+      "cli": {
+        "argstr": "-i %d"
+      }
+    },
+    "max_iterations": {
+      "type": "list",
+      "desc": "maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations",
+      "cli": {
+        "argstr": "-m %s",
+        "sep": "x"
+      }
+    },
+    "num_cores": {
+      "type": "int",
+      "desc": "Requires parallelization = 2 (PEXEC). Sets number of cpu cores to use",
+      "cli": {
+        "argstr": "-j %d"
+      },
+      "constraints": {
+        "requires": [
+          "parallelization"
+        ]
+      }
+    },
+    "out_prefix": {
+      "type": "string",
+      "desc": "Prefix that is prepended to all output files (default = antsTMPL_)",
+      "default": "antsTMPL_",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "parallelization": {
+      "type": "enum",
+      "desc": "control for parallel processing (0 = serial, 1 = use PBS, 2 = use PEXEC, 3 = use Apple XGrid",
+      "default": 0,
+      "choices": [
+        0,
+        1,
+        2
+      ],
+      "cli": {
+        "argstr": "-c %d"
+      }
+    },
+    "rigid_body_registration": {
+      "type": "flag",
+      "desc": "registers inputs before creating template (useful if no initial template available)",
+      "cli": {
+        "argstr": "-r 1"
+      }
+    },
+    "similarity_metric": {
+      "type": "enum",
+      "desc": "Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)",
+      "choices": [
+        "PR",
+        "CC",
+        "MI",
+        "MSQ"
+      ],
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "transformation_model": {
+      "type": "enum",
+      "desc": "Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 =  SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping",
+      "default": "GR",
+      "choices": [
+        "GR",
+        "EL",
+        "SY",
+        "S2",
+        "EX",
+        "DD"
+      ],
+      "cli": {
+        "argstr": "-t %s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.legacy.buildtemplateparallel",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Generate a optimal average template"
+}

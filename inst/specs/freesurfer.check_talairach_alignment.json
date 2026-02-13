@@ -1,0 +1,63 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.check_talairach_alignment",
+  "title": "FREESURFER CheckTalairachAlignment",
+  "command": "talairach_afd",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "specify the talairach.xfm file to check",
+      "required": true,
+      "cli": {
+        "argstr": "-xfm %s",
+        "position": -1
+      },
+      "constraints": {
+        "xor": [
+          "subject"
+        ]
+      }
+    },
+    "subject": {
+      "type": "string",
+      "desc": "specify subject's name",
+      "required": true,
+      "cli": {
+        "argstr": "-subj %s",
+        "position": -1
+      },
+      "constraints": {
+        "xor": [
+          "in_file"
+        ]
+      }
+    },
+    "threshold": {
+      "type": "double",
+      "desc": "Talairach transforms for subjects with p-values <= T are considered as very unlikely default=0.010",
+      "default": 0.01,
+      "cli": {
+        "argstr": "-T %.3f"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.CheckTalairachAlignment",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program detects Talairach alignment failures"
+}

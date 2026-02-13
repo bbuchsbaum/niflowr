@@ -1,0 +1,65 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.t_stat",
+  "title": "AFNI TStat",
+  "command": "3dTstat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dTstat",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask file",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "options": {
+      "type": "string",
+      "desc": "selected statistical output",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.TStat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Compute voxel-wise statistics using AFNI 3dTstat command"
+}

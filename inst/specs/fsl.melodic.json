@@ -1,0 +1,374 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.melodic",
+  "title": "FSL MELODIC",
+  "command": "melodic",
+  "inputs": {
+    "ICs": {
+      "type": "file",
+      "desc": "filename of the IC components file for mixture modelling",
+      "cli": {
+        "argstr": "--ICs=%s"
+      }
+    },
+    "approach": {
+      "type": "string",
+      "desc": "approach for decomposition, 2D: defl, symm (default), 3D: tica (default), concat",
+      "cli": {
+        "argstr": "-a %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bg_image": {
+      "type": "file",
+      "desc": "specify background image for report (default: mean image)",
+      "cli": {
+        "argstr": "--bgimage=%s"
+      }
+    },
+    "bg_threshold": {
+      "type": "double",
+      "desc": "brain/non-brain threshold used to mask non-brain voxels, as a percentage (only if --nobet selected)",
+      "cli": {
+        "argstr": "--bgthreshold=%f"
+      }
+    },
+    "cov_weight": {
+      "type": "double",
+      "desc": "voxel-wise weights for the covariance matrix (e.g. segmentation information)",
+      "cli": {
+        "argstr": "--covarweight=%f"
+      }
+    },
+    "dim": {
+      "type": "int",
+      "desc": "dimensionality reduction into #num dimensions (default: automatic estimation)",
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "dim_est": {
+      "type": "string",
+      "desc": "use specific dim. estimation technique: lap, bic, mdl, aic, mean (default: lap)",
+      "cli": {
+        "argstr": "--dimest=%s"
+      }
+    },
+    "epsilon": {
+      "type": "double",
+      "desc": "minimum error change",
+      "cli": {
+        "argstr": "--eps=%f"
+      }
+    },
+    "epsilonS": {
+      "type": "double",
+      "desc": "minimum error change for rank-1 approximation in TICA",
+      "cli": {
+        "argstr": "--epsS=%f"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "input file names (either single file name or a list)",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": 0,
+        "sep": ","
+      }
+    },
+    "log_power": {
+      "type": "flag",
+      "desc": "calculate log of power for frequency spectrum",
+      "cli": {
+        "argstr": "--logPower"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "file name of mask for thresholding",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "max_restart": {
+      "type": "int",
+      "desc": "maximum number of restarts",
+      "cli": {
+        "argstr": "--maxrestart=%d"
+      }
+    },
+    "maxit": {
+      "type": "int",
+      "desc": "maximum number of iterations before restart",
+      "cli": {
+        "argstr": "--maxit=%d"
+      }
+    },
+    "migp": {
+      "type": "flag",
+      "desc": "switch on MIGP data reduction",
+      "cli": {
+        "argstr": "--migp"
+      }
+    },
+    "migpN": {
+      "type": "int",
+      "desc": "number of internal Eigenmaps",
+      "cli": {
+        "argstr": "--migpN %d"
+      }
+    },
+    "migp_factor": {
+      "type": "int",
+      "desc": "Internal Factor of mem-threshold relative to number of Eigenmaps (default: 2)",
+      "cli": {
+        "argstr": "--migp_factor %d"
+      }
+    },
+    "migp_shuffle": {
+      "type": "flag",
+      "desc": "randomise MIGP file order (default: TRUE)",
+      "cli": {
+        "argstr": "--migp_shuffle"
+      }
+    },
+    "mix": {
+      "type": "file",
+      "desc": "mixing matrix for mixture modelling / filtering",
+      "cli": {
+        "argstr": "--mix=%s"
+      }
+    },
+    "mm_thresh": {
+      "type": "double",
+      "desc": "threshold for Mixture Model based inference",
+      "cli": {
+        "argstr": "--mmthresh=%f"
+      }
+    },
+    "no_bet": {
+      "type": "flag",
+      "desc": "switch off BET",
+      "cli": {
+        "argstr": "--nobet"
+      }
+    },
+    "no_mask": {
+      "type": "flag",
+      "desc": "switch off masking",
+      "cli": {
+        "argstr": "--nomask"
+      }
+    },
+    "no_mm": {
+      "type": "flag",
+      "desc": "switch off mixture modelling on IC maps",
+      "cli": {
+        "argstr": "--no_mm"
+      }
+    },
+    "non_linearity": {
+      "type": "string",
+      "desc": "nonlinearity: gauss, tanh, pow3, pow4",
+      "cli": {
+        "argstr": "--nl=%s"
+      }
+    },
+    "num_ICs": {
+      "type": "int",
+      "desc": "number of IC's to extract (for deflation approach)",
+      "cli": {
+        "argstr": "-n %d"
+      }
+    },
+    "out_all": {
+      "type": "flag",
+      "desc": "output everything",
+      "cli": {
+        "argstr": "--Oall"
+      }
+    },
+    "out_dir": {
+      "type": "dir",
+      "desc": "output directory name",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "out_mean": {
+      "type": "flag",
+      "desc": "output mean volume",
+      "cli": {
+        "argstr": "--Omean"
+      }
+    },
+    "out_orig": {
+      "type": "flag",
+      "desc": "output the original ICs",
+      "cli": {
+        "argstr": "--Oorig"
+      }
+    },
+    "out_pca": {
+      "type": "flag",
+      "desc": "output PCA results",
+      "cli": {
+        "argstr": "--Opca"
+      }
+    },
+    "out_stats": {
+      "type": "flag",
+      "desc": "output thresholded maps and probability maps",
+      "cli": {
+        "argstr": "--Ostats"
+      }
+    },
+    "out_unmix": {
+      "type": "flag",
+      "desc": "output unmixing matrix",
+      "cli": {
+        "argstr": "--Ounmix"
+      }
+    },
+    "out_white": {
+      "type": "flag",
+      "desc": "output whitening/dewhitening matrices",
+      "cli": {
+        "argstr": "--Owhite"
+      }
+    },
+    "pbsc": {
+      "type": "flag",
+      "desc": "switch off conversion to percent BOLD signal change",
+      "cli": {
+        "argstr": "--pbsc"
+      }
+    },
+    "rem_cmp": {
+      "type": "list",
+      "desc": "component numbers to remove",
+      "cli": {
+        "argstr": "-f %d"
+      }
+    },
+    "remove_deriv": {
+      "type": "flag",
+      "desc": "removes every second entry in paradigm file (EV derivatives)",
+      "cli": {
+        "argstr": "--remove_deriv"
+      }
+    },
+    "report": {
+      "type": "flag",
+      "desc": "generate Melodic web report",
+      "cli": {
+        "argstr": "--report"
+      }
+    },
+    "report_maps": {
+      "type": "string",
+      "desc": "control string for spatial map images (see slicer)",
+      "cli": {
+        "argstr": "--report_maps=%s"
+      }
+    },
+    "s_con": {
+      "type": "file",
+      "desc": "t-contrast matrix across subject-domain",
+      "cli": {
+        "argstr": "--Scon=%s"
+      }
+    },
+    "s_des": {
+      "type": "file",
+      "desc": "design matrix across subject-domain",
+      "cli": {
+        "argstr": "--Sdes=%s"
+      }
+    },
+    "sep_vn": {
+      "type": "flag",
+      "desc": "switch off joined variance normalization",
+      "cli": {
+        "argstr": "--sep_vn"
+      }
+    },
+    "sep_whiten": {
+      "type": "flag",
+      "desc": "switch on separate whitening",
+      "cli": {
+        "argstr": "--sep_whiten"
+      }
+    },
+    "smode": {
+      "type": "file",
+      "desc": "matrix of session modes for report generation",
+      "cli": {
+        "argstr": "--smode=%s"
+      }
+    },
+    "t_con": {
+      "type": "file",
+      "desc": "t-contrast matrix across time-domain",
+      "cli": {
+        "argstr": "--Tcon=%s"
+      }
+    },
+    "t_des": {
+      "type": "file",
+      "desc": "design matrix across time-domain",
+      "cli": {
+        "argstr": "--Tdes=%s"
+      }
+    },
+    "tr_sec": {
+      "type": "double",
+      "desc": "TR in seconds",
+      "cli": {
+        "argstr": "--tr=%f"
+      }
+    },
+    "update_mask": {
+      "type": "flag",
+      "desc": "switch off mask updating",
+      "cli": {
+        "argstr": "--update_mask"
+      }
+    },
+    "var_norm": {
+      "type": "flag",
+      "desc": "switch off variance normalization",
+      "cli": {
+        "argstr": "--vn"
+      }
+    }
+  },
+  "outputs": {
+    "out_dir": {
+      "type": "dir",
+      "path": {
+        "from_input": "out_dir"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.MELODIC",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Multivariate Exploratory Linear Optimised Decomposition into Independent"
+}

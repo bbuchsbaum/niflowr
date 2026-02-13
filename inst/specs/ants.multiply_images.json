@@ -1,0 +1,75 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.multiply_images",
+  "title": "ANTS MultiplyImages",
+  "command": "MultiplyImages",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "required": true,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 0
+      }
+    },
+    "first_input": {
+      "type": "file",
+      "desc": "image 1",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "output_product_image": {
+      "type": "file",
+      "desc": "Outputfname.nii.gz: the name of the resulting image.",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "second_input": {
+      "type": "list",
+      "desc": "image 2 or multiplication weight",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "output_product_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_product_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.utils.MultiplyImages",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Examples"
+}

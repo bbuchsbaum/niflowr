@@ -1,0 +1,168 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.cat",
+  "title": "AFNI Cat",
+  "command": "1dcat",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "keepfree": {
+      "type": "flag",
+      "desc": "Keep only columns that are marked as 'free' in the 3dAllineate header from '-1Dparam_save'. If there is no such header, all columns are kept.",
+      "cli": {
+        "argstr": "-nonfixed"
+      }
+    },
+    "omitconst": {
+      "type": "flag",
+      "desc": "Omit columns that are identically constant from output.",
+      "cli": {
+        "argstr": "-nonconst"
+      }
+    },
+    "out_double": {
+      "type": "flag",
+      "desc": "specify double data type for output",
+      "cli": {
+        "argstr": "-d"
+      },
+      "constraints": {
+        "xor": [
+          "out_format",
+          "out_nice",
+          "out_int",
+          "out_fint",
+          "out_cint"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output (concatenated) file name",
+      "required": true,
+      "default": "catout.1d",
+      "cli": {
+        "argstr": "> %s",
+        "position": -1
+      }
+    },
+    "out_fint": {
+      "type": "flag",
+      "desc": "specify int, rounded down, data type for output",
+      "cli": {
+        "argstr": "-f"
+      },
+      "constraints": {
+        "xor": [
+          "out_format",
+          "out_nice",
+          "out_double",
+          "out_int",
+          "out_cint"
+        ]
+      }
+    },
+    "out_format": {
+      "type": "enum",
+      "desc": "specify data type for output.",
+      "choices": [
+        "int",
+        "nice",
+        "double",
+        "fint",
+        "cint"
+      ],
+      "cli": {
+        "argstr": "-form %s"
+      },
+      "constraints": {
+        "xor": [
+          "out_int",
+          "out_nice",
+          "out_double",
+          "out_fint",
+          "out_cint"
+        ]
+      }
+    },
+    "out_int": {
+      "type": "flag",
+      "desc": "specify int data type for output",
+      "cli": {
+        "argstr": "-i"
+      },
+      "constraints": {
+        "xor": [
+          "out_format",
+          "out_nice",
+          "out_double",
+          "out_fint",
+          "out_cint"
+        ]
+      }
+    },
+    "out_nice": {
+      "type": "flag",
+      "desc": "specify nice data type for output",
+      "cli": {
+        "argstr": "-n"
+      },
+      "constraints": {
+        "xor": [
+          "out_format",
+          "out_int",
+          "out_double",
+          "out_fint",
+          "out_cint"
+        ]
+      }
+    },
+    "sel": {
+      "type": "string",
+      "desc": "Apply the same column/row selection string to all filenames on the command line.",
+      "cli": {
+        "argstr": "-sel %s"
+      }
+    },
+    "stack": {
+      "type": "flag",
+      "desc": "Stack the columns of the resultant matrix in the output.",
+      "cli": {
+        "argstr": "-stack"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Cat",
+    "nipype_version": "1.10.0"
+  },
+  "description": "1dcat takes as input one or more 1D files, and writes out a 1D file"
+}

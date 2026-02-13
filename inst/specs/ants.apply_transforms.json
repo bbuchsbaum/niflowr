@@ -119,8 +119,7 @@
   "origin": {
     "source": "nipype",
     "nipype_class": "nipype.interfaces.ants.resampling.ApplyTransforms",
-    "nipype_version": "1.10.0",
-    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+    "nipype_version": "1.10.0"
   },
   "description": "ApplyTransforms, applied to an input image, transforms it according to a"
 }

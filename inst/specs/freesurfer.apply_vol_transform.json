@@ -1,0 +1,322 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.apply_vol_transform",
+  "title": "FREESURFER ApplyVolTransform",
+  "command": "mri_vol2vol",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fs_target": {
+      "type": "flag",
+      "desc": "use orig.mgz from subject in regfile as target",
+      "required": true,
+      "cli": {
+        "argstr": "--fstarg"
+      },
+      "constraints": {
+        "xor": [
+          "target_file",
+          "tal",
+          "fs_target"
+        ],
+        "requires": [
+          "reg_file"
+        ]
+      }
+    },
+    "fsl_reg_file": {
+      "type": "file",
+      "desc": "fslRAS-to-fslRAS matrix (FSL format)",
+      "required": true,
+      "cli": {
+        "argstr": "--fsl %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    },
+    "interp": {
+      "type": "enum",
+      "desc": "Interpolation method (<trilin> or nearest)",
+      "choices": [
+        "trilin",
+        "nearest",
+        "cubic"
+      ],
+      "cli": {
+        "argstr": "--interp %s"
+      }
+    },
+    "inverse": {
+      "type": "flag",
+      "desc": "sample from target to source",
+      "cli": {
+        "argstr": "--inv"
+      }
+    },
+    "invert_morph": {
+      "type": "flag",
+      "desc": "Compute and use the inverse of the non-linear morph to resample the input volume. To be used by --m3z.",
+      "cli": {
+        "argstr": "--inv-morph"
+      },
+      "constraints": {
+        "requires": [
+          "m3z_file"
+        ]
+      }
+    },
+    "lta_file": {
+      "type": "file",
+      "desc": "Linear Transform Array file",
+      "required": true,
+      "cli": {
+        "argstr": "--lta %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    },
+    "lta_inv_file": {
+      "type": "file",
+      "desc": "LTA, invert",
+      "required": true,
+      "cli": {
+        "argstr": "--lta-inv %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    },
+    "m3z_file": {
+      "type": "file",
+      "desc": "This is the morph to be applied to the volume. Unless the morph is in mri/transforms (eg.: for talairach.m3z computed by reconall), you will need to specify the full path to this morph and use the --noDefM3zPath flag.",
+      "cli": {
+        "argstr": "--m3z %s"
+      }
+    },
+    "mni_152_reg": {
+      "type": "flag",
+      "desc": "target MNI152 space",
+      "required": true,
+      "cli": {
+        "argstr": "--regheader"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    },
+    "no_ded_m3z_path": {
+      "type": "flag",
+      "desc": "To be used with the m3z flag. Instructs the code not to look for them3z morph in the default location (SUBJECTS_DIR/subj/mri/transforms), but instead just use the path indicated in --m3z.",
+      "cli": {
+        "argstr": "--noDefM3zPath"
+      },
+      "constraints": {
+        "requires": [
+          "m3z_file"
+        ]
+      }
+    },
+    "no_resample": {
+      "type": "flag",
+      "desc": "Do not resample; just change vox2ras matrix",
+      "cli": {
+        "argstr": "--no-resample"
+      }
+    },
+    "reg_file": {
+      "type": "file",
+      "desc": "tkRAS-to-tkRAS matrix   (tkregister2 format)",
+      "required": true,
+      "cli": {
+        "argstr": "--reg %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    },
+    "reg_header": {
+      "type": "flag",
+      "desc": "ScannerRAS-to-ScannerRAS matrix = identity",
+      "required": true,
+      "cli": {
+        "argstr": "--regheader"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "desc": "Input volume you wish to transform",
+      "required": true,
+      "cli": {
+        "argstr": "--mov %s"
+      }
+    },
+    "subject": {
+      "type": "string",
+      "desc": "set matrix = identity and use subject for any templates",
+      "required": true,
+      "cli": {
+        "argstr": "--s %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    },
+    "tal": {
+      "type": "flag",
+      "desc": "map to a sub FOV of MNI305 (with --reg only)",
+      "required": true,
+      "cli": {
+        "argstr": "--tal"
+      },
+      "constraints": {
+        "xor": [
+          "target_file",
+          "tal",
+          "fs_target"
+        ]
+      }
+    },
+    "tal_resolution": {
+      "type": "double",
+      "desc": "Resolution to sample when using tal",
+      "cli": {
+        "argstr": "--talres %.10f"
+      }
+    },
+    "target_file": {
+      "type": "file",
+      "desc": "Output template volume",
+      "required": true,
+      "cli": {
+        "argstr": "--targ %s"
+      },
+      "constraints": {
+        "xor": [
+          "target_file",
+          "tal",
+          "fs_target"
+        ]
+      }
+    },
+    "transformed_file": {
+      "type": "file",
+      "desc": "Output volume",
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "xfm_reg_file": {
+      "type": "file",
+      "desc": "ScannerRAS-to-ScannerRAS matrix (MNI format)",
+      "required": true,
+      "cli": {
+        "argstr": "--xfm %s"
+      },
+      "constraints": {
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "transformed_file": {
+      "type": "file",
+      "path": {
+        "from_input": "transformed_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.ApplyVolTransform",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FreeSurfer mri_vol2vol to apply a transform."
+}

@@ -1,0 +1,111 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.curvature_stats",
+  "title": "FREESURFER CurvatureStats",
+  "command": "mris_curvature_stats",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "curvfile1": {
+      "type": "file",
+      "desc": "Input file for CurvatureStats",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "curvfile2": {
+      "type": "file",
+      "desc": "Input file for CurvatureStats",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Hemisphere being processed",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "min_max": {
+      "type": "flag",
+      "desc": "Output min / max information for the processed curvature.",
+      "cli": {
+        "argstr": "-m"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output curvature stats file",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      }
+    },
+    "surface": {
+      "type": "file",
+      "desc": "Specify surface file for CurvatureStats",
+      "cli": {
+        "argstr": "-F %s"
+      }
+    },
+    "values": {
+      "type": "flag",
+      "desc": "Triggers a series of derived curvature values",
+      "cli": {
+        "argstr": "-G"
+      }
+    },
+    "write": {
+      "type": "flag",
+      "desc": "Write curvature files",
+      "cli": {
+        "argstr": "--writeCurvatureFiles"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.CurvatureStats",
+    "nipype_version": "1.10.0"
+  },
+  "description": "In its simplest usage, 'mris_curvature_stats' will compute a set"
+}

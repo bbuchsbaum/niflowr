@@ -1,0 +1,76 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.fim",
+  "title": "AFNI Fim",
+  "command": "3dfim+",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fim_thr": {
+      "type": "double",
+      "desc": "fim internal mask threshold value",
+      "cli": {
+        "argstr": "-fim_thr %f",
+        "position": 3
+      }
+    },
+    "ideal_file": {
+      "type": "file",
+      "desc": "ideal time series file name",
+      "required": true,
+      "cli": {
+        "argstr": "-ideal_file %s",
+        "position": 2
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dfim+",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s",
+        "position": 1
+      }
+    },
+    "out": {
+      "type": "string",
+      "desc": "Flag to output the specified parameter",
+      "cli": {
+        "argstr": "-out %s",
+        "position": 4
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-bucket %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Fim",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Program to calculate the cross-correlation of an ideal reference"
+}

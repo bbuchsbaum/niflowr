@@ -1,0 +1,88 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.susan",
+  "title": "FSL SUSAN",
+  "command": "susan",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "brightness_threshold": {
+      "type": "double",
+      "desc": "brightness threshold and should be greater than noise level and less than contrast of edges to be preserved.",
+      "required": true,
+      "cli": {
+        "argstr": "%.10f",
+        "position": 2
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "within-plane (2) or fully 3D (3)",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 4
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "fwhm of smoothing, in mm, gets converted using sqrt(8*log(2))",
+      "required": true,
+      "cli": {
+        "argstr": "%.10f",
+        "position": 3
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "filename of input timeseries",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output file name",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "use_median": {
+      "type": "enum",
+      "desc": "whether to use a local median filter in the cases where single-point noise is detected",
+      "default": 1,
+      "choices": [
+        1,
+        0
+      ],
+      "cli": {
+        "argstr": "%d",
+        "position": 5
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.SUSAN",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL SUSAN wrapper to perform smoothing"
+}

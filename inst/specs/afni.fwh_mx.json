@@ -1,0 +1,172 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.fwh_mx",
+  "title": "AFNI FWHMx",
+  "command": "3dFWHMx",
+  "inputs": {
+    "acf": {
+      "type": "string",
+      "desc": "computes the spatial autocorrelation",
+      "default": false,
+      "cli": {
+        "argstr": "-acf"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "arith": {
+      "type": "flag",
+      "desc": "if in_file has more than one sub-brick, compute the final estimate as the arithmetic mean of the individual sub-brick FWHM estimates",
+      "cli": {
+        "argstr": "-arith"
+      },
+      "constraints": {
+        "xor": [
+          "geom"
+        ]
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "compute a mask from THIS dataset, a la 3dAutomask",
+      "default": false,
+      "cli": {
+        "argstr": "-automask"
+      }
+    },
+    "combine": {
+      "type": "flag",
+      "desc": "combine the final measurements along each axis",
+      "cli": {
+        "argstr": "-combine"
+      }
+    },
+    "compat": {
+      "type": "flag",
+      "desc": "be compatible with the older 3dFWHM",
+      "cli": {
+        "argstr": "-compat"
+      }
+    },
+    "demed": {
+      "type": "flag",
+      "desc": "If the input dataset has more than one sub-brick (e.g., has a time axis), then subtract the median of each voxel's time series before processing FWHM. This will tend to remove intrinsic spatial structure and leave behind the noise.",
+      "cli": {
+        "argstr": "-demed"
+      },
+      "constraints": {
+        "xor": [
+          "detrend"
+        ]
+      }
+    },
+    "detrend": {
+      "type": "string",
+      "desc": "instead of demed (0th order detrending), detrend to the specified order.  If order is not given, the program picks q=NT/30. -detrend disables -demed, and includes -unif.",
+      "default": false,
+      "cli": {
+        "argstr": "-detrend"
+      },
+      "constraints": {
+        "xor": [
+          "demed"
+        ]
+      }
+    },
+    "geom": {
+      "type": "flag",
+      "desc": "if in_file has more than one sub-brick, compute the final estimate as the geometric mean of the individual sub-brick FWHM estimates",
+      "cli": {
+        "argstr": "-geom"
+      },
+      "constraints": {
+        "xor": [
+          "arith"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input dataset",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "use only voxels that are nonzero in mask",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "out_detrend": {
+      "type": "file",
+      "desc": "Save the detrended file into a dataset",
+      "cli": {
+        "argstr": "-detprefix %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output file",
+      "cli": {
+        "argstr": "> %s",
+        "position": -1
+      }
+    },
+    "out_subbricks": {
+      "type": "file",
+      "desc": "output file listing the subbricks FWHM",
+      "cli": {
+        "argstr": "-out %s"
+      }
+    },
+    "unif": {
+      "type": "flag",
+      "desc": "If the input dataset has more than one sub-brick, then normalize each voxel's time series to have the same MAD before processing FWHM.",
+      "cli": {
+        "argstr": "-unif"
+      }
+    }
+  },
+  "outputs": {
+    "out_detrend": {
+      "type": "file",
+      "path": {
+        "from_input": "out_detrend"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_subbricks": {
+      "type": "file",
+      "path": {
+        "from_input": "out_subbricks"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.FWHMx",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Unlike the older 3dFWHM, this program computes FWHMs for all sub-bricks"
+}

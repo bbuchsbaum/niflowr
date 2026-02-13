@@ -1,0 +1,205 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.zeropad",
+  "title": "AFNI Zeropad",
+  "command": "3dZeropad",
+  "inputs": {
+    "A": {
+      "type": "int",
+      "desc": "adds 'n' planes of zero at the Anterior edge",
+      "cli": {
+        "argstr": "-A %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "AP": {
+      "type": "int",
+      "desc": "specify that planes should be added or cut symmetrically to make the resulting volume haveN slices in the anterior-posterior direction",
+      "cli": {
+        "argstr": "-AP %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "I": {
+      "type": "int",
+      "desc": "adds 'n' planes of zero at the Inferior edge",
+      "cli": {
+        "argstr": "-I %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "IS": {
+      "type": "int",
+      "desc": "specify that planes should be added or cut symmetrically to make the resulting volume haveN slices in the inferior-superior direction",
+      "cli": {
+        "argstr": "-IS %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "L": {
+      "type": "int",
+      "desc": "adds 'n' planes of zero at the Left edge",
+      "cli": {
+        "argstr": "-L %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "P": {
+      "type": "int",
+      "desc": "adds 'n' planes of zero at the Posterior edge",
+      "cli": {
+        "argstr": "-P %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "R": {
+      "type": "int",
+      "desc": "adds 'n' planes of zero at the Right edge",
+      "cli": {
+        "argstr": "-R %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "RL": {
+      "type": "int",
+      "desc": "specify that planes should be added or cut symmetrically to make the resulting volume haveN slices in the right-left direction",
+      "cli": {
+        "argstr": "-RL %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "S": {
+      "type": "int",
+      "desc": "adds 'n' planes of zero at the Superior edge",
+      "cli": {
+        "argstr": "-S %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_files": {
+      "type": "file",
+      "desc": "input dataset",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "master": {
+      "type": "file",
+      "desc": "match the volume described in dataset 'mset', where mset must have the same orientation and grid spacing as dataset to be padded. the goal of -master is to make the output dataset from 3dZeropad match the spatial 'extents' of mset by adding or subtracting slices as needed. You can't use -I,-S,..., or -mm with -master",
+      "cli": {
+        "argstr": "-master %s"
+      },
+      "constraints": {
+        "xor": [
+          "I",
+          "S",
+          "A",
+          "P",
+          "L",
+          "R",
+          "z",
+          "RL",
+          "AP",
+          "IS",
+          "mm"
+        ]
+      }
+    },
+    "mm": {
+      "type": "flag",
+      "desc": "pad counts 'n' are in mm instead of slices, where each 'n' is an integer and at least 'n' mm of slices will be added/removed; e.g., n =  3 and slice thickness = 2.5 mm ==> 2 slices added",
+      "cli": {
+        "argstr": "-mm"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output dataset prefix name (default 'zeropad')",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "z": {
+      "type": "int",
+      "desc": "adds 'n' planes of zero on EACH of the dataset z-axis (slice-direction) faces",
+      "cli": {
+        "argstr": "-z %i"
+      },
+      "constraints": {
+        "xor": [
+          "master"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Zeropad",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Adds planes of zeros to a dataset (i.e., pads it out)."
+}

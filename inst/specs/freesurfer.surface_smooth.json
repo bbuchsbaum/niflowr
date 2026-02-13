@@ -1,0 +1,109 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.surface_smooth",
+  "title": "FREESURFER SurfaceSmooth",
+  "command": "mri_surf2surf",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "cortex": {
+      "type": "flag",
+      "desc": "only smooth within ``$hemi.cortex.label``",
+      "default": true,
+      "cli": {
+        "argstr": "--cortex"
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "effective FWHM of the smoothing process",
+      "cli": {
+        "argstr": "--fwhm %.4f"
+      },
+      "constraints": {
+        "xor": [
+          "smooth_iters"
+        ]
+      }
+    },
+    "hemi": {
+      "type": "enum",
+      "desc": "hemisphere to operate on",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "--hemi %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "source surface file",
+      "required": true,
+      "cli": {
+        "argstr": "--sval %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "surface file to write",
+      "cli": {
+        "argstr": "--tval %s"
+      }
+    },
+    "reshape": {
+      "type": "flag",
+      "desc": "reshape surface vector to fit in non-mgh format",
+      "cli": {
+        "argstr": "--reshape"
+      }
+    },
+    "smooth_iters": {
+      "type": "int",
+      "desc": "iterations of the smoothing process",
+      "cli": {
+        "argstr": "--smooth %d"
+      },
+      "constraints": {
+        "xor": [
+          "fwhm"
+        ]
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "subject id of surface file",
+      "required": true,
+      "cli": {
+        "argstr": "--s %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.SurfaceSmooth",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Smooth a surface image with mri_surf2surf."
+}

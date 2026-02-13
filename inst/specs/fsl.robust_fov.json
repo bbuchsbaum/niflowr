@@ -1,0 +1,72 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.robust_fov",
+  "title": "FSL RobustFOV",
+  "command": "robustfov",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "brainsize": {
+      "type": "int",
+      "desc": "size of brain in z-dimension (default 170mm/150mm)",
+      "cli": {
+        "argstr": "-b %d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input filename",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": 0
+      }
+    },
+    "out_roi": {
+      "type": "file",
+      "desc": "ROI volume output name",
+      "cli": {
+        "argstr": "-r %s"
+      }
+    },
+    "out_transform": {
+      "type": "file",
+      "desc": "Transformation matrix in_file to out_roi output name",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_roi": {
+      "type": "file",
+      "path": {
+        "from_input": "out_roi"
+      },
+      "must_exist": false
+    },
+    "out_transform": {
+      "type": "file",
+      "path": {
+        "from_input": "out_transform"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.RobustFOV",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Automatically crops an image removing lower head and neck."
+}

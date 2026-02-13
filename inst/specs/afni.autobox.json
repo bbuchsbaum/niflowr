@@ -1,0 +1,63 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.autobox",
+  "title": "AFNI Autobox",
+  "command": "3dAutobox",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s"
+      }
+    },
+    "no_clustering": {
+      "type": "flag",
+      "desc": "Don't do any clustering to find box. Any non-zero voxel will be preserved in the cropped volume. The default method uses some clustering to find the cropping box, and will clip off small isolated blobs.",
+      "cli": {
+        "argstr": "-noclust"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "padding": {
+      "type": "int",
+      "desc": "Number of extra voxels to pad on each side of box",
+      "cli": {
+        "argstr": "-npad %d"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Autobox",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes size of a box that fits around the volume."
+}

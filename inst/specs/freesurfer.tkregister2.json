@@ -1,0 +1,166 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.tkregister2",
+  "title": "FREESURFER Tkregister2",
+  "command": "tkregister2",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "fsl_in_matrix": {
+      "type": "file",
+      "desc": "fsl-style registration input matrix",
+      "cli": {
+        "argstr": "--fsl %s"
+      }
+    },
+    "fsl_out": {
+      "type": "list",
+      "desc": "compute an FSL-compatible resgitration matrix",
+      "cli": {
+        "argstr": "--fslregout %s"
+      }
+    },
+    "fstal": {
+      "type": "flag",
+      "desc": "set mov to be tal and reg to be tal xfm",
+      "cli": {
+        "argstr": "--fstal"
+      },
+      "constraints": {
+        "xor": [
+          "target_image",
+          "moving_image",
+          "reg_file"
+        ]
+      }
+    },
+    "fstarg": {
+      "type": "flag",
+      "desc": "use subject's T1 as reference",
+      "cli": {
+        "argstr": "--fstarg"
+      },
+      "constraints": {
+        "xor": [
+          "target_image"
+        ]
+      }
+    },
+    "invert_lta_out": {
+      "type": "flag",
+      "desc": "Invert input LTA before applying",
+      "cli": {
+        "argstr": "--ltaout-inv"
+      },
+      "constraints": {
+        "requires": [
+          "lta_in"
+        ]
+      }
+    },
+    "lta_in": {
+      "type": "file",
+      "desc": "use a matrix in MNI coordinates as initial registration",
+      "cli": {
+        "argstr": "--lta %s"
+      }
+    },
+    "lta_out": {
+      "type": "list",
+      "desc": "output registration file (LTA format)",
+      "cli": {
+        "argstr": "--ltaout %s"
+      }
+    },
+    "moving_image": {
+      "type": "file",
+      "desc": "moving volume",
+      "required": true,
+      "cli": {
+        "argstr": "--mov %s"
+      }
+    },
+    "movscale": {
+      "type": "double",
+      "desc": "adjust registration matrix to scale mov",
+      "cli": {
+        "argstr": "--movscale %f"
+      }
+    },
+    "noedit": {
+      "type": "flag",
+      "desc": "do not open edit window (exit)",
+      "default": true,
+      "cli": {
+        "argstr": "--noedit"
+      }
+    },
+    "reg_file": {
+      "type": "file",
+      "desc": "freesurfer-style registration file",
+      "required": true,
+      "default": "register.dat",
+      "cli": {
+        "argstr": "--reg %s"
+      }
+    },
+    "reg_header": {
+      "type": "flag",
+      "desc": "compute registration from headers",
+      "cli": {
+        "argstr": "--regheader"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "freesurfer subject ID",
+      "cli": {
+        "argstr": "--s %s"
+      }
+    },
+    "target_image": {
+      "type": "file",
+      "desc": "target volume",
+      "cli": {
+        "argstr": "--targ %s"
+      },
+      "constraints": {
+        "xor": [
+          "fstarg"
+        ]
+      }
+    },
+    "xfm": {
+      "type": "file",
+      "desc": "use a matrix in MNI coordinates as initial registration",
+      "cli": {
+        "argstr": "--xfm %s"
+      }
+    }
+  },
+  "outputs": {
+    "reg_file": {
+      "type": "file",
+      "path": {
+        "from_input": "reg_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.Tkregister2",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Examples"
+}

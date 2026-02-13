@@ -1,0 +1,53 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.smm",
+  "title": "FSL SMM",
+  "command": "mm --ld=logdir",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask file",
+      "required": true,
+      "cli": {
+        "argstr": "--mask=\"%s\"",
+        "position": 1
+      }
+    },
+    "no_deactivation_class": {
+      "type": "flag",
+      "desc": "enforces no deactivation class",
+      "cli": {
+        "argstr": "--zfstatmode",
+        "position": 2
+      }
+    },
+    "spatial_data_file": {
+      "type": "file",
+      "desc": "statistics spatial map",
+      "required": true,
+      "cli": {
+        "argstr": "--sdf=\"%s\"",
+        "position": 0
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.SMM",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Spatial Mixture Modelling. For more detail on the spatial mixture modelling"
+}

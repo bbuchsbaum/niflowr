@@ -1,0 +1,131 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.gen_warp_fields",
+  "title": "ANTS GenWarpFields",
+  "command": "antsIntroduction.sh",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bias_field_correction": {
+      "type": "flag",
+      "desc": "Applies bias field correction to moving image",
+      "cli": {
+        "argstr": "-n 1"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "-d %d",
+        "position": 1
+      }
+    },
+    "force_proceed": {
+      "type": "flag",
+      "desc": "force script to proceed even if headers may be incompatible",
+      "cli": {
+        "argstr": "-f 1"
+      }
+    },
+    "input_image": {
+      "type": "file",
+      "desc": "input image to warp to template",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s"
+      }
+    },
+    "inverse_warp_template_labels": {
+      "type": "flag",
+      "desc": "Applies inverse warp to the template labels to estimate label positions in target space (use for template-based segmentation)",
+      "cli": {
+        "argstr": "-l"
+      }
+    },
+    "max_iterations": {
+      "type": "list",
+      "desc": "maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations",
+      "cli": {
+        "argstr": "-m %s",
+        "sep": "x"
+      }
+    },
+    "out_prefix": {
+      "type": "string",
+      "desc": "Prefix that is prepended to all output files (default = ants_)",
+      "default": "ants_",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "quality_check": {
+      "type": "flag",
+      "desc": "Perform a quality check of the result",
+      "cli": {
+        "argstr": "-q 1"
+      }
+    },
+    "reference_image": {
+      "type": "file",
+      "desc": "template file to warp to",
+      "required": true,
+      "cli": {
+        "argstr": "-r %s"
+      }
+    },
+    "similarity_metric": {
+      "type": "enum",
+      "desc": "Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)",
+      "choices": [
+        "PR",
+        "CC",
+        "MI",
+        "MSQ"
+      ],
+      "cli": {
+        "argstr": "-s %s"
+      }
+    },
+    "transformation_model": {
+      "type": "enum",
+      "desc": "Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 =  SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping, RI = purely rigid, RA = affine rigid",
+      "default": "GR",
+      "choices": [
+        "GR",
+        "EL",
+        "SY",
+        "S2",
+        "EX",
+        "DD",
+        "RI",
+        "RA"
+      ],
+      "cli": {
+        "argstr": "-t %s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.legacy.GenWarpFields",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Uses ANTS to generate matrices to warp data from one space to another."
+}

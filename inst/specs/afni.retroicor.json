@@ -1,0 +1,100 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.retroicor",
+  "title": "AFNI Retroicor",
+  "command": "3dretroicor",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "card": {
+      "type": "file",
+      "desc": "1D cardiac data file for cardiac correction",
+      "cli": {
+        "argstr": "-card %s",
+        "position": -2
+      }
+    },
+    "cardphase": {
+      "type": "file",
+      "desc": "Filename for 1D cardiac phase output",
+      "cli": {
+        "argstr": "-cardphase %s",
+        "position": -6
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dretroicor",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "order": {
+      "type": "int",
+      "desc": "The order of the correction (2 is typical)",
+      "cli": {
+        "argstr": "-order %s",
+        "position": -5
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s",
+        "position": 1
+      }
+    },
+    "resp": {
+      "type": "file",
+      "desc": "1D respiratory waveform data for correction",
+      "cli": {
+        "argstr": "-resp %s",
+        "position": -3
+      }
+    },
+    "respphase": {
+      "type": "file",
+      "desc": "Filename for 1D resp phase output",
+      "cli": {
+        "argstr": "-respphase %s",
+        "position": -7
+      }
+    },
+    "threshold": {
+      "type": "int",
+      "desc": "Threshold for detection of R-wave peaks in input (Make sure it is above the background noise level, Try 3/4 or 4/5 times range plus minimum)",
+      "cli": {
+        "argstr": "-threshold %d",
+        "position": -4
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.Retroicor",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Performs Retrospective Image Correction for physiological"
+}

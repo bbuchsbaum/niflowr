@@ -1,0 +1,158 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.ica_aroma",
+  "title": "FSL ICA_AROMA",
+  "command": "ICA_AROMA.py",
+  "inputs": {
+    "TR": {
+      "type": "double",
+      "desc": "TR in seconds. If this is not specified the TR will be extracted from the header of the fMRI nifti file.",
+      "cli": {
+        "argstr": "-tr %.3f"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "denoise_type": {
+      "type": "enum",
+      "desc": "Type of denoising strategy:\n-no: only classification, no denoising\n-nonaggr (default): non-aggresssive denoising, i.e. partial component regression\n-aggr: aggressive denoising, i.e. full component regression\n-both: both aggressive and non-aggressive denoising (two outputs)",
+      "required": true,
+      "default": "nonaggr",
+      "choices": [
+        "nonaggr",
+        "aggr",
+        "both",
+        "no"
+      ],
+      "cli": {
+        "argstr": "-den %s"
+      }
+    },
+    "dim": {
+      "type": "int",
+      "desc": "Dimensionality reduction when running MELODIC (default is automatic estimation)",
+      "cli": {
+        "argstr": "-dim %d"
+      }
+    },
+    "feat_dir": {
+      "type": "dir",
+      "desc": "If a feat directory exists and temporal filtering has not been run yet, ICA_AROMA can use the files in this directory.",
+      "required": true,
+      "cli": {
+        "argstr": "-feat %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_file",
+          "mat_file",
+          "fnirt_warp_file",
+          "motion_parameters"
+        ]
+      }
+    },
+    "fnirt_warp_file": {
+      "type": "file",
+      "desc": "File name of the warp-file describing the non-linear registration (e.g. FSL FNIRT) of the structural data to MNI152 space (.nii.gz)",
+      "cli": {
+        "argstr": "-warp %s"
+      },
+      "constraints": {
+        "xor": [
+          "feat_dir"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "volume to be denoised",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s"
+      },
+      "constraints": {
+        "xor": [
+          "feat_dir"
+        ]
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "path/name volume mask",
+      "cli": {
+        "argstr": "-m %s"
+      },
+      "constraints": {
+        "xor": [
+          "feat_dir"
+        ]
+      }
+    },
+    "mat_file": {
+      "type": "file",
+      "desc": "path/name of the mat-file describing the affine registration (e.g. FSL FLIRT) of the functional data to structural space (.mat file)",
+      "cli": {
+        "argstr": "-affmat %s"
+      },
+      "constraints": {
+        "xor": [
+          "feat_dir"
+        ]
+      }
+    },
+    "melodic_dir": {
+      "type": "dir",
+      "desc": "path to MELODIC directory if MELODIC has already been run",
+      "cli": {
+        "argstr": "-meldir %s"
+      }
+    },
+    "motion_parameters": {
+      "type": "file",
+      "desc": "motion parameters file",
+      "required": true,
+      "cli": {
+        "argstr": "-mc %s"
+      },
+      "constraints": {
+        "xor": [
+          "feat_dir"
+        ]
+      }
+    },
+    "out_dir": {
+      "type": "dir",
+      "desc": "output directory",
+      "required": true,
+      "default": "out",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_dir": {
+      "type": "dir",
+      "path": {
+        "from_input": "out_dir"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.aroma.ICA_AROMA",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Interface for the ICA_AROMA.py script."
+}

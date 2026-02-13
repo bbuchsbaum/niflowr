@@ -1,0 +1,121 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.outlier_count",
+  "title": "AFNI OutlierCount",
+  "command": "3dToutcount",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "autoclip": {
+      "type": "flag",
+      "desc": "clip off small voxels",
+      "default": false,
+      "cli": {
+        "argstr": "-autoclip"
+      },
+      "constraints": {
+        "xor": [
+          "mask"
+        ]
+      }
+    },
+    "automask": {
+      "type": "flag",
+      "desc": "clip off small voxels",
+      "default": false,
+      "cli": {
+        "argstr": "-automask"
+      },
+      "constraints": {
+        "xor": [
+          "mask"
+        ]
+      }
+    },
+    "fraction": {
+      "type": "flag",
+      "desc": "write out the fraction of masked voxels which are outliers at each timepoint",
+      "default": false,
+      "cli": {
+        "argstr": "-fraction"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input dataset",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "interval": {
+      "type": "flag",
+      "desc": "write out the median + 3.5 MAD of outlier count with each timepoint",
+      "default": false,
+      "cli": {
+        "argstr": "-range"
+      }
+    },
+    "legendre": {
+      "type": "flag",
+      "desc": "use Legendre polynomials",
+      "default": false,
+      "cli": {
+        "argstr": "-legendre"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "only count voxels within the given mask",
+      "cli": {
+        "argstr": "-mask %s"
+      },
+      "constraints": {
+        "xor": [
+          "autoclip",
+          "automask"
+        ]
+      }
+    },
+    "outliers_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-save %s"
+      }
+    },
+    "polort": {
+      "type": "int",
+      "desc": "detrend each voxel timeseries with polynomials",
+      "cli": {
+        "argstr": "-polort %d"
+      }
+    },
+    "qthr": {
+      "type": "string",
+      "desc": "indicate a value for q to compute alpha",
+      "default": 0.001,
+      "cli": {
+        "argstr": "-qthr %.5f"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.preprocess.OutlierCount",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Calculates number of 'outliers' at each time point of a"
+}

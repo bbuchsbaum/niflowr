@@ -1,0 +1,57 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.gcor",
+  "title": "AFNI GCOR",
+  "command": "@compute_gcor",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input dataset to compute the GCOR over",
+      "required": true,
+      "cli": {
+        "argstr": "-input %s",
+        "position": -1
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "mask dataset, for restricting the computation",
+      "cli": {
+        "argstr": "-mask %s"
+      }
+    },
+    "nfirst": {
+      "type": "int",
+      "desc": "specify number of initial TRs to ignore",
+      "cli": {
+        "argstr": "-nfirst %d"
+      }
+    },
+    "no_demean": {
+      "type": "flag",
+      "desc": "do not (need to) demean as first step",
+      "cli": {
+        "argstr": "-no_demean"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.GCOR",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Computes the average correlation between every voxel"
+}

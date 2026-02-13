@@ -1,0 +1,114 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.first",
+  "title": "FSL FIRST",
+  "command": "run_first_all",
+  "inputs": {
+    "affine_file": {
+      "type": "file",
+      "desc": "Affine matrix to use (e.g. img2std.mat) (does not re-run registration)",
+      "cli": {
+        "argstr": "-a %s",
+        "position": 6
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "brain_extracted": {
+      "type": "flag",
+      "desc": "Input structural image is already brain-extracted",
+      "cli": {
+        "argstr": "-b",
+        "position": 2
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input data file",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": -2
+      }
+    },
+    "list_of_specific_structures": {
+      "type": "list",
+      "desc": "Runs only on the specified structures (e.g. L_Hipp, R_HippL_Accu, R_Accu, L_Amyg, R_AmygL_Caud, R_Caud, L_Pall, R_PallL_Puta, R_Puta, L_Thal, R_Thal, BrStem",
+      "cli": {
+        "argstr": "-s %s",
+        "position": 5,
+        "sep": ","
+      }
+    },
+    "method": {
+      "type": "enum",
+      "desc": "Method must be one of auto, fast, none, or it can be entered using the 'method_as_numerical_threshold' input",
+      "default": "auto",
+      "choices": [
+        "auto",
+        "fast",
+        "none"
+      ],
+      "cli": {
+        "argstr": "-m %s",
+        "position": 4
+      },
+      "constraints": {
+        "xor": [
+          "method_as_numerical_threshold"
+        ]
+      }
+    },
+    "method_as_numerical_threshold": {
+      "type": "double",
+      "desc": "Specify a numerical threshold value or use the 'method' input to choose auto, fast, or none",
+      "cli": {
+        "argstr": "-m %.4f",
+        "position": 4
+      }
+    },
+    "no_cleanup": {
+      "type": "flag",
+      "desc": "Input structural image is already brain-extracted",
+      "cli": {
+        "argstr": "-d",
+        "position": 3
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output data file",
+      "required": true,
+      "default": "segmented",
+      "cli": {
+        "argstr": "-o %s",
+        "position": -1
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "desc": "Use verbose logging.",
+      "cli": {
+        "argstr": "-v",
+        "position": 1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.FIRST",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL run_first_all wrapper for segmentation of subcortical volumes"
+}

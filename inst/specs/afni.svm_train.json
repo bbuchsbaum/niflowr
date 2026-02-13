@@ -1,0 +1,143 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.svm_train",
+  "title": "AFNI SVMTrain",
+  "command": "3dsvm",
+  "inputs": {
+    "alphas": {
+      "type": "file",
+      "desc": "output alphas file name",
+      "cli": {
+        "argstr": "-alpha %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "censor": {
+      "type": "file",
+      "desc": ".1D censor file that allows the user to ignore certain samples in the training data.",
+      "cli": {
+        "argstr": "-censor %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "A 3D+t AFNI brik dataset to be used for training.",
+      "required": true,
+      "cli": {
+        "argstr": "-trainvol %s"
+      }
+    },
+    "kernel": {
+      "type": "string",
+      "desc": "string specifying type of kernel function:linear, polynomial, rbf, sigmoid",
+      "cli": {
+        "argstr": "-kernel %s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "byte-format brik file used to mask voxels in the analysis",
+      "cli": {
+        "argstr": "-mask %s",
+        "position": -1
+      }
+    },
+    "max_iterations": {
+      "type": "int",
+      "desc": "Specify the maximum number of iterations for the optimization.",
+      "cli": {
+        "argstr": "-max_iterations %d"
+      }
+    },
+    "model": {
+      "type": "file",
+      "desc": "basename for the brik containing the SVM model",
+      "cli": {
+        "argstr": "-model %s"
+      }
+    },
+    "nomodelmask": {
+      "type": "flag",
+      "desc": "Flag to enable the omission of a mask file",
+      "cli": {
+        "argstr": "-nomodelmask"
+      }
+    },
+    "options": {
+      "type": "string",
+      "desc": "additional options for SVM-light",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output sum of weighted linear support vectors file name",
+      "cli": {
+        "argstr": "-bucket %s"
+      }
+    },
+    "trainlabels": {
+      "type": "file",
+      "desc": ".1D labels corresponding to the stimulus paradigm for the training data.",
+      "cli": {
+        "argstr": "-trainlabels %s"
+      }
+    },
+    "ttype": {
+      "type": "string",
+      "desc": "tname: classification or regression",
+      "required": true,
+      "cli": {
+        "argstr": "-type %s"
+      }
+    },
+    "w_out": {
+      "type": "flag",
+      "desc": "output sum of weighted linear support vectors",
+      "cli": {
+        "argstr": "-wout"
+      }
+    }
+  },
+  "outputs": {
+    "alphas": {
+      "type": "file",
+      "path": {
+        "from_input": "alphas"
+      },
+      "must_exist": false
+    },
+    "model": {
+      "type": "file",
+      "path": {
+        "from_input": "model"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.svm.SVMTrain",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Temporally predictive modeling with the support vector machine"
+}

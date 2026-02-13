@@ -1,0 +1,205 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.parcellation_stats",
+  "title": "FREESURFER ParcellationStats",
+  "command": "mris_anatomical_stats",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "aseg": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/aseg.presurf.mgz",
+      "required": true
+    },
+    "brainmask": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/brainmask.mgz",
+      "required": true
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Hemisphere being processed",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "in_annotation": {
+      "type": "file",
+      "desc": "compute properties for each label in the annotation file separately",
+      "cli": {
+        "argstr": "-a %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_label"
+        ]
+      }
+    },
+    "in_cortex": {
+      "type": "file",
+      "desc": "Input cortex label",
+      "cli": {
+        "argstr": "-cortex %s"
+      }
+    },
+    "in_label": {
+      "type": "file",
+      "desc": "limit calculations to specified label",
+      "cli": {
+        "argstr": "-l %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_annotatoin",
+          "out_color"
+        ]
+      }
+    },
+    "lh_pial": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/lh.pial",
+      "required": true
+    },
+    "lh_white": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/lh.white",
+      "required": true
+    },
+    "mgz": {
+      "type": "flag",
+      "desc": "Look for mgz files",
+      "cli": {
+        "argstr": "-mgz"
+      }
+    },
+    "out_color": {
+      "type": "file",
+      "desc": "Output annotation files's colortable to text file",
+      "cli": {
+        "argstr": "-c %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_label"
+        ]
+      }
+    },
+    "out_table": {
+      "type": "file",
+      "desc": "Table output to tablefile",
+      "cli": {
+        "argstr": "-f %s"
+      },
+      "constraints": {
+        "requires": [
+          "tabular_output"
+        ]
+      }
+    },
+    "rh_pial": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/rh.pial",
+      "required": true
+    },
+    "rh_white": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/rh.white",
+      "required": true
+    },
+    "ribbon": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/ribbon.mgz",
+      "required": true
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "surface": {
+      "type": "string",
+      "desc": "Input surface (e.g. 'white')",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "tabular_output": {
+      "type": "flag",
+      "desc": "Tabular output",
+      "cli": {
+        "argstr": "-b"
+      }
+    },
+    "th3": {
+      "type": "flag",
+      "desc": "turns on new vertex-wise volume calc for mris_anat_stats",
+      "cli": {
+        "argstr": "-th3"
+      },
+      "constraints": {
+        "requires": [
+          "cortex_label"
+        ]
+      }
+    },
+    "thickness": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/?h.thickness",
+      "required": true
+    },
+    "transform": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/transforms/talairach.xfm",
+      "required": true
+    },
+    "wm": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/wm.mgz",
+      "required": true
+    }
+  },
+  "outputs": {
+    "out_color": {
+      "type": "file",
+      "path": {
+        "from_input": "out_color"
+      },
+      "must_exist": false
+    },
+    "out_table": {
+      "type": "file",
+      "path": {
+        "from_input": "out_table"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.ParcellationStats",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program computes a number of anatomical properties."
+}

@@ -1,0 +1,113 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.vec_reg",
+  "title": "FSL VecReg",
+  "command": "vecreg",
+  "inputs": {
+    "affine_mat": {
+      "type": "file",
+      "desc": "filename for affine transformation matrix",
+      "cli": {
+        "argstr": "-t %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "filename for input vector or tensor field",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s"
+      }
+    },
+    "interpolation": {
+      "type": "enum",
+      "desc": "interpolation method : nearestneighbour, trilinear (default), sinc or spline",
+      "choices": [
+        "nearestneighbour",
+        "trilinear",
+        "sinc",
+        "spline"
+      ],
+      "cli": {
+        "argstr": "--interp=%s"
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "brain mask in input space",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "filename for output registered vector or tensor field",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "ref_mask": {
+      "type": "file",
+      "desc": "brain mask in output space (useful for speed up of nonlinear reg)",
+      "cli": {
+        "argstr": "--refmask=%s"
+      }
+    },
+    "ref_vol": {
+      "type": "file",
+      "desc": "filename for reference (target) volume",
+      "required": true,
+      "cli": {
+        "argstr": "-r %s"
+      }
+    },
+    "rotation_mat": {
+      "type": "file",
+      "desc": "filename for secondary affine matrix if set, this will be used for the rotation of the vector/tensor field",
+      "cli": {
+        "argstr": "--rotmat=%s"
+      }
+    },
+    "rotation_warp": {
+      "type": "file",
+      "desc": "filename for secondary warp field if set, this will be used for the rotation of the vector/tensor field",
+      "cli": {
+        "argstr": "--rotwarp=%s"
+      }
+    },
+    "warp_field": {
+      "type": "file",
+      "desc": "filename for 4D warp field for nonlinear registration",
+      "cli": {
+        "argstr": "-w %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.dti.VecReg",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL vecreg for registering vector data"
+}

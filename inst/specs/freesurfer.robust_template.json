@@ -1,0 +1,166 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.robust_template",
+  "title": "FREESURFER RobustTemplate",
+  "command": "mri_robust_template",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "auto_detect_sensitivity": {
+      "type": "flag",
+      "desc": "auto-detect good sensitivity (recommended for head or full brain scans)",
+      "required": true,
+      "cli": {
+        "argstr": "--satit"
+      },
+      "constraints": {
+        "xor": [
+          "outlier_sensitivity"
+        ]
+      }
+    },
+    "average_metric": {
+      "type": "enum",
+      "desc": "construct template from: 0 Mean, 1 Median (default)",
+      "choices": [
+        "median",
+        "mean"
+      ],
+      "cli": {
+        "argstr": "--average %d"
+      }
+    },
+    "fixed_timepoint": {
+      "type": "flag",
+      "desc": "map everything to init TP# (init TP is not resampled)",
+      "cli": {
+        "argstr": "--fixtp"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "input movable volumes to be aligned to common mean/median template",
+      "required": true,
+      "cli": {
+        "argstr": "--mov %s"
+      }
+    },
+    "in_intensity_scales": {
+      "type": "list",
+      "desc": "use initial intensity scales",
+      "cli": {
+        "argstr": "--iscalein %s"
+      }
+    },
+    "initial_timepoint": {
+      "type": "int",
+      "desc": "use TP# for special init (default random), 0: no init",
+      "cli": {
+        "argstr": "--inittp %d"
+      }
+    },
+    "initial_transforms": {
+      "type": "list",
+      "desc": "use initial transforms (lta) on source",
+      "cli": {
+        "argstr": "--ixforms %s"
+      }
+    },
+    "intensity_scaling": {
+      "type": "flag",
+      "desc": "allow also intensity scaling (default off)",
+      "cli": {
+        "argstr": "--iscale"
+      }
+    },
+    "no_iteration": {
+      "type": "flag",
+      "desc": "do not iterate, just create first template",
+      "cli": {
+        "argstr": "--noit"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output template volume (final mean/median image)",
+      "required": true,
+      "default": "mri_robust_template_out.mgz",
+      "cli": {
+        "argstr": "--template %s"
+      }
+    },
+    "outlier_sensitivity": {
+      "type": "double",
+      "desc": "set outlier sensitivity manually (e.g. \"--sat 4.685\" ). Higher values mean less sensitivity.",
+      "required": true,
+      "cli": {
+        "argstr": "--sat %.4f"
+      },
+      "constraints": {
+        "xor": [
+          "auto_detect_sensitivity"
+        ]
+      }
+    },
+    "scaled_intensity_outputs": {
+      "type": "list",
+      "desc": "final intensity scales (will activate --iscale)",
+      "cli": {
+        "argstr": "--iscaleout %s"
+      }
+    },
+    "subsample_threshold": {
+      "type": "int",
+      "desc": "subsample if dim > # on all axes (default no subs.)",
+      "cli": {
+        "argstr": "--subsample %d"
+      }
+    },
+    "transform_outputs": {
+      "type": "list",
+      "desc": "output xforms to template (for each input)",
+      "cli": {
+        "argstr": "--lta %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "scaled_intensity_outputs": {
+      "type": "text",
+      "path": {
+        "from_input": "scaled_intensity_outputs"
+      },
+      "must_exist": false
+    },
+    "transform_outputs": {
+      "type": "text",
+      "path": {
+        "from_input": "transform_outputs"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.longitudinal.RobustTemplate",
+    "nipype_version": "1.10.0"
+  },
+  "description": "construct an unbiased robust template for longitudinal volumes"
+}

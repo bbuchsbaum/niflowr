@@ -1,0 +1,52 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.extract_main_component",
+  "title": "FREESURFER ExtractMainComponent",
+  "command": "mris_extract_main_component",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input surface file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "surface containing main component",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.ExtractMainComponent",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Extract the main component of a tessellated surface"
+}

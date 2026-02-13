@@ -1,0 +1,72 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.smooth_estimate",
+  "title": "FSL SmoothEstimate",
+  "command": "smoothest",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dof": {
+      "type": "int",
+      "desc": "number of degrees of freedom",
+      "required": true,
+      "cli": {
+        "argstr": "--dof=%d"
+      },
+      "constraints": {
+        "xor": [
+          "zstat_file"
+        ]
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "brain mask volume",
+      "required": true,
+      "cli": {
+        "argstr": "--mask=%s"
+      }
+    },
+    "residual_fit_file": {
+      "type": "file",
+      "desc": "residual-fit image file",
+      "cli": {
+        "argstr": "--res=%s"
+      },
+      "constraints": {
+        "requires": [
+          "dof"
+        ]
+      }
+    },
+    "zstat_file": {
+      "type": "file",
+      "desc": "zstat image file",
+      "cli": {
+        "argstr": "--zstat=%s"
+      },
+      "constraints": {
+        "xor": [
+          "dof"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.SmoothEstimate",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Estimates the smoothness of an image"
+}

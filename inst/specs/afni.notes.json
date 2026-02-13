@@ -1,0 +1,96 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.notes",
+  "title": "AFNI Notes",
+  "command": "3dNotes",
+  "inputs": {
+    "add": {
+      "type": "string",
+      "desc": "note to add",
+      "cli": {
+        "argstr": "-a \"%s\""
+      }
+    },
+    "add_history": {
+      "type": "string",
+      "desc": "note to add to history",
+      "cli": {
+        "argstr": "-h \"%s\""
+      },
+      "constraints": {
+        "xor": [
+          "rep_history"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "delete": {
+      "type": "int",
+      "desc": "delete note number num",
+      "cli": {
+        "argstr": "-d %d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dNotes",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "rep_history": {
+      "type": "string",
+      "desc": "note with which to replace history",
+      "cli": {
+        "argstr": "-HH \"%s\""
+      },
+      "constraints": {
+        "xor": [
+          "add_history"
+        ]
+      }
+    },
+    "ses": {
+      "type": "flag",
+      "desc": "print to stdout the expanded notes",
+      "cli": {
+        "argstr": "-ses"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Notes",
+    "nipype_version": "1.10.0"
+  },
+  "description": "A program to add, delete, and show notes for AFNI datasets."
+}

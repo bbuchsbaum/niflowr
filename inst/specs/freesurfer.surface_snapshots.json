@@ -1,0 +1,289 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.surface_snapshots",
+  "title": "FREESURFER SurfaceSnapshots",
+  "command": "tksurfer",
+  "inputs": {
+    "annot_file": {
+      "type": "file",
+      "desc": "path to annotation file to display",
+      "cli": {
+        "argstr": "-annotation %s"
+      },
+      "constraints": {
+        "xor": [
+          "annot_name"
+        ]
+      }
+    },
+    "annot_name": {
+      "type": "string",
+      "desc": "name of annotation to display (must be in $subject/label directory",
+      "cli": {
+        "argstr": "-annotation %s"
+      },
+      "constraints": {
+        "xor": [
+          "annot_file"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "colortable": {
+      "type": "file",
+      "desc": "load colortable file",
+      "cli": {
+        "argstr": "-colortable %s"
+      }
+    },
+    "demean_overlay": {
+      "type": "flag",
+      "desc": "remove mean from overlay",
+      "cli": {
+        "argstr": "-zm"
+      }
+    },
+    "hemi": {
+      "type": "enum",
+      "desc": "hemisphere to visualize",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "identity_reg": {
+      "type": "flag",
+      "desc": "use the identity matrix to register the overlay to the surface",
+      "cli": {
+        "argstr": "-overlay-reg-identity"
+      },
+      "constraints": {
+        "xor": [
+          "overlay_reg",
+          "identity_reg",
+          "mni152_reg"
+        ]
+      }
+    },
+    "invert_overlay": {
+      "type": "flag",
+      "desc": "invert the overlay display",
+      "cli": {
+        "argstr": "-invphaseflag 1"
+      }
+    },
+    "label_file": {
+      "type": "file",
+      "desc": "path to label file to display",
+      "cli": {
+        "argstr": "-label %s"
+      },
+      "constraints": {
+        "xor": [
+          "label_name"
+        ]
+      }
+    },
+    "label_name": {
+      "type": "string",
+      "desc": "name of label to display (must be in $subject/label directory",
+      "cli": {
+        "argstr": "-label %s"
+      },
+      "constraints": {
+        "xor": [
+          "label_file"
+        ]
+      }
+    },
+    "label_outline": {
+      "type": "flag",
+      "desc": "draw label/annotation as outline",
+      "cli": {
+        "argstr": "-label-outline"
+      }
+    },
+    "label_under": {
+      "type": "flag",
+      "desc": "draw label/annotation under overlay",
+      "cli": {
+        "argstr": "-labels-under"
+      }
+    },
+    "mni152_reg": {
+      "type": "flag",
+      "desc": "use to display a volume in MNI152 space on the average subject",
+      "cli": {
+        "argstr": "-mni152reg"
+      },
+      "constraints": {
+        "xor": [
+          "overlay_reg",
+          "identity_reg",
+          "mni152_reg"
+        ]
+      }
+    },
+    "orig_suffix": {
+      "type": "string",
+      "desc": "set the orig surface suffix string",
+      "cli": {
+        "argstr": "-orig %s"
+      }
+    },
+    "overlay": {
+      "type": "file",
+      "desc": "load an overlay volume/surface",
+      "cli": {
+        "argstr": "-overlay %s"
+      },
+      "constraints": {
+        "requires": [
+          "overlay_range"
+        ]
+      }
+    },
+    "overlay_range": {
+      "type": "list",
+      "desc": "overlay range--either min, (min, max) or (min, mid, max)",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "overlay_range_offset": {
+      "type": "double",
+      "desc": "overlay range will be symmetric around offset value",
+      "cli": {
+        "argstr": "-foffset %.3f"
+      }
+    },
+    "overlay_reg": {
+      "type": "file",
+      "desc": "registration matrix file to register overlay to surface",
+      "cli": {
+        "argstr": "-overlay-reg %s"
+      },
+      "constraints": {
+        "xor": [
+          "overlay_reg",
+          "identity_reg",
+          "mni152_reg"
+        ]
+      }
+    },
+    "patch_file": {
+      "type": "file",
+      "desc": "load a patch",
+      "cli": {
+        "argstr": "-patch %s"
+      }
+    },
+    "reverse_overlay": {
+      "type": "flag",
+      "desc": "reverse the overlay display",
+      "cli": {
+        "argstr": "-revphaseflag 1"
+      }
+    },
+    "show_color_scale": {
+      "type": "flag",
+      "desc": "display the color scale bar",
+      "cli": {
+        "argstr": "-colscalebarflag 1"
+      }
+    },
+    "show_color_text": {
+      "type": "flag",
+      "desc": "display text in the color scale bar",
+      "cli": {
+        "argstr": "-colscaletext 1"
+      }
+    },
+    "show_curv": {
+      "type": "flag",
+      "desc": "show curvature",
+      "cli": {
+        "argstr": "-curv"
+      },
+      "constraints": {
+        "xor": [
+          "show_gray_curv"
+        ]
+      }
+    },
+    "show_gray_curv": {
+      "type": "flag",
+      "desc": "show curvature in gray",
+      "cli": {
+        "argstr": "-gray"
+      },
+      "constraints": {
+        "xor": [
+          "show_curv"
+        ]
+      }
+    },
+    "sphere_suffix": {
+      "type": "string",
+      "desc": "set the sphere.reg suffix string",
+      "cli": {
+        "argstr": "-sphere %s"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "subject to visualize",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "surface": {
+      "type": "string",
+      "desc": "surface to visualize",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 3
+      }
+    },
+    "tcl_script": {
+      "type": "file",
+      "desc": "override default screenshot script",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "truncate_overlay": {
+      "type": "flag",
+      "desc": "truncate the overlay display",
+      "cli": {
+        "argstr": "-truncphaseflag 1"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.SurfaceSnapshots",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use Tksurfer to save pictures of the cortical surface."
+}

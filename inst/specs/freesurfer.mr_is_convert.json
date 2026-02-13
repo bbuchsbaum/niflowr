@@ -1,0 +1,189 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mr_is_convert",
+  "title": "FREESURFER MRIsConvert",
+  "command": "mris_convert",
+  "inputs": {
+    "annot_file": {
+      "type": "file",
+      "desc": "input is annotation or gifti label data",
+      "cli": {
+        "argstr": "--annot %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "dataarray_num": {
+      "type": "int",
+      "desc": "if input is gifti, 'num' specifies which data array to use",
+      "cli": {
+        "argstr": "--da_num %d"
+      }
+    },
+    "functional_file": {
+      "type": "file",
+      "desc": "input is functional time-series or other multi-frame data (must specify surface)",
+      "cli": {
+        "argstr": "-f %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "File to read/convert",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "label_file": {
+      "type": "file",
+      "desc": "infile is .label file, label is name of this label",
+      "cli": {
+        "argstr": "--label %s"
+      }
+    },
+    "labelstats_outfile": {
+      "type": "file",
+      "desc": "outfile is name of gifti file to which label stats will be written",
+      "cli": {
+        "argstr": "--labelstats %s"
+      }
+    },
+    "normal": {
+      "type": "flag",
+      "desc": "output is an ascii file where vertex data",
+      "cli": {
+        "argstr": "-n"
+      }
+    },
+    "origname": {
+      "type": "string",
+      "desc": "read orig positions",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "out_datatype": {
+      "type": "enum",
+      "desc": "These file formats are supported:  ASCII:       .ascICO: .ico, .tri GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded 'volume': .mgh, .mgz",
+      "required": true,
+      "choices": [
+        "asc",
+        "ico",
+        "tri",
+        "stl",
+        "vtk",
+        "gii",
+        "mgh",
+        "mgz"
+      ],
+      "constraints": {
+        "xor": [
+          "out_file"
+        ]
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output filename or True to generate one",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      },
+      "constraints": {
+        "xor": [
+          "out_datatype"
+        ]
+      }
+    },
+    "parcstats_file": {
+      "type": "file",
+      "desc": "infile is name of text file containing label/val pairs",
+      "cli": {
+        "argstr": "--parcstats %s"
+      }
+    },
+    "patch": {
+      "type": "flag",
+      "desc": "input is a patch, not a full surface",
+      "cli": {
+        "argstr": "-p"
+      }
+    },
+    "rescale": {
+      "type": "flag",
+      "desc": "rescale vertex xyz so total area is same as group average",
+      "cli": {
+        "argstr": "-r"
+      }
+    },
+    "scalarcurv_file": {
+      "type": "file",
+      "desc": "input is scalar curv overlay file (must still specify surface)",
+      "cli": {
+        "argstr": "-c %s"
+      }
+    },
+    "scale": {
+      "type": "double",
+      "desc": "scale vertex xyz by scale",
+      "cli": {
+        "argstr": "-s %.3f"
+      }
+    },
+    "talairachxfm_subjid": {
+      "type": "string",
+      "desc": "apply talairach xfm of subject to vertex xyz",
+      "cli": {
+        "argstr": "-t %s"
+      }
+    },
+    "to_scanner": {
+      "type": "flag",
+      "desc": "convert coordinates from native FS (tkr) coords to scanner coords",
+      "cli": {
+        "argstr": "--to-scanner"
+      }
+    },
+    "to_tkr": {
+      "type": "flag",
+      "desc": "convert coordinates from scanner coords to native FS (tkr) coords",
+      "cli": {
+        "argstr": "--to-tkr"
+      }
+    },
+    "vertex": {
+      "type": "flag",
+      "desc": "Writes out neighbors of a vertex in each row",
+      "cli": {
+        "argstr": "-v"
+      }
+    },
+    "xyz_ascii": {
+      "type": "flag",
+      "desc": "Print only surface xyz to ascii file",
+      "cli": {
+        "argstr": "-a"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.MRIsConvert",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Uses Freesurfer's mris_convert to convert surface files to various formats"
+}

@@ -1,0 +1,241 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.lta_convert",
+  "title": "FREESURFER LTAConvert",
+  "command": "lta_convert",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_fsl": {
+      "type": "file",
+      "desc": "input transform of FSL type",
+      "required": true,
+      "cli": {
+        "argstr": "--infsl %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
+      }
+    },
+    "in_itk": {
+      "type": "file",
+      "desc": "input transform of ITK type",
+      "required": true,
+      "cli": {
+        "argstr": "--initk %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
+      }
+    },
+    "in_lta": {
+      "type": "list",
+      "desc": "input transform of LTA type",
+      "required": true,
+      "cli": {
+        "argstr": "--inlta %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
+      }
+    },
+    "in_mni": {
+      "type": "file",
+      "desc": "input transform of MNI/XFM type",
+      "required": true,
+      "cli": {
+        "argstr": "--inmni %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
+      }
+    },
+    "in_niftyreg": {
+      "type": "file",
+      "desc": "input transform of Nifty Reg type (inverse RAS2RAS)",
+      "required": true,
+      "cli": {
+        "argstr": "--inniftyreg %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
+      }
+    },
+    "in_reg": {
+      "type": "file",
+      "desc": "input transform of TK REG type (deprecated format)",
+      "required": true,
+      "cli": {
+        "argstr": "--inreg %s"
+      },
+      "constraints": {
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
+      }
+    },
+    "invert": {
+      "type": "flag",
+      "cli": {
+        "argstr": "--invert"
+      }
+    },
+    "ltavox2vox": {
+      "type": "flag",
+      "cli": {
+        "argstr": "--ltavox2vox"
+      },
+      "constraints": {
+        "requires": [
+          "out_lta"
+        ]
+      }
+    },
+    "out_fsl": {
+      "type": "list",
+      "desc": "output transform in FSL format",
+      "cli": {
+        "argstr": "--outfsl %s"
+      }
+    },
+    "out_itk": {
+      "type": "list",
+      "desc": "output transform in ITK format",
+      "cli": {
+        "argstr": "--outitk %s"
+      }
+    },
+    "out_lta": {
+      "type": "list",
+      "desc": "output linear transform (LTA Freesurfer format)",
+      "cli": {
+        "argstr": "--outlta %s"
+      }
+    },
+    "out_mni": {
+      "type": "list",
+      "desc": "output transform in MNI/XFM format",
+      "cli": {
+        "argstr": "--outmni %s"
+      }
+    },
+    "out_reg": {
+      "type": "list",
+      "desc": "output transform in reg dat format",
+      "cli": {
+        "argstr": "--outreg %s"
+      }
+    },
+    "source_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "--src %s"
+      }
+    },
+    "target_conform": {
+      "type": "flag",
+      "cli": {
+        "argstr": "--trgconform"
+      }
+    },
+    "target_file": {
+      "type": "file",
+      "cli": {
+        "argstr": "--trg %s"
+      }
+    }
+  },
+  "outputs": {
+    "out_fsl": {
+      "type": "file",
+      "path": {
+        "from_input": "out_fsl"
+      },
+      "must_exist": false
+    },
+    "out_itk": {
+      "type": "file",
+      "path": {
+        "from_input": "out_itk"
+      },
+      "must_exist": false
+    },
+    "out_lta": {
+      "type": "file",
+      "path": {
+        "from_input": "out_lta"
+      },
+      "must_exist": false
+    },
+    "out_mni": {
+      "type": "file",
+      "path": {
+        "from_input": "out_mni"
+      },
+      "must_exist": false
+    },
+    "out_reg": {
+      "type": "file",
+      "path": {
+        "from_input": "out_reg"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.LTAConvert",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Convert different transformation formats."
+}

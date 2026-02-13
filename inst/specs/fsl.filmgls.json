@@ -1,0 +1,196 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.filmgls",
+  "title": "FSL FILMGLS",
+  "command": "film_gls",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "autocorr_estimate_only": {
+      "type": "flag",
+      "desc": "perform autocorrelation estimatation only",
+      "cli": {
+        "argstr": "-ac"
+      },
+      "constraints": {
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
+      }
+    },
+    "autocorr_noestimate": {
+      "type": "flag",
+      "desc": "do not estimate autocorrs",
+      "cli": {
+        "argstr": "-noest"
+      },
+      "constraints": {
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
+      }
+    },
+    "brightness_threshold": {
+      "type": "string",
+      "desc": "susan brightness threshold, otherwise it is estimated",
+      "cli": {
+        "argstr": "-epith %d"
+      }
+    },
+    "design_file": {
+      "type": "file",
+      "desc": "design matrix file",
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "fit_armodel": {
+      "type": "flag",
+      "desc": "fits autoregressive model - default is to use tukey with M=sqrt(numvols)",
+      "cli": {
+        "argstr": "-ar"
+      },
+      "constraints": {
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
+      }
+    },
+    "full_data": {
+      "type": "flag",
+      "desc": "output full data",
+      "cli": {
+        "argstr": "-v"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input data file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "mask_size": {
+      "type": "int",
+      "desc": "susan mask size",
+      "cli": {
+        "argstr": "-ms %d"
+      }
+    },
+    "multitaper_product": {
+      "type": "int",
+      "desc": "multitapering with slepian tapers and num is the time-bandwidth product",
+      "cli": {
+        "argstr": "-mt %d"
+      },
+      "constraints": {
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
+      }
+    },
+    "output_pwdata": {
+      "type": "flag",
+      "desc": "output prewhitened data and average design matrix",
+      "cli": {
+        "argstr": "-output_pwdata"
+      }
+    },
+    "results_dir": {
+      "type": "dir",
+      "desc": "directory to store results in",
+      "default": "results",
+      "cli": {
+        "argstr": "-rn %s"
+      }
+    },
+    "smooth_autocorr": {
+      "type": "flag",
+      "desc": "Smooth auto corr estimates",
+      "cli": {
+        "argstr": "-sa"
+      }
+    },
+    "threshold": {
+      "type": "string",
+      "desc": "threshold",
+      "default": 1000.0,
+      "cli": {
+        "argstr": "%f",
+        "position": -1
+      }
+    },
+    "tukey_window": {
+      "type": "int",
+      "desc": "tukey window size to estimate autocorr",
+      "cli": {
+        "argstr": "-tukey %d"
+      },
+      "constraints": {
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
+      }
+    },
+    "use_pava": {
+      "type": "flag",
+      "desc": "estimates autocorr using PAVA",
+      "cli": {
+        "argstr": "-pava"
+      }
+    }
+  },
+  "outputs": {
+    "results_dir": {
+      "type": "dir",
+      "path": {
+        "from_input": "results_dir"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.model.FILMGLS",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use FSL film_gls command to fit a design matrix to voxel timeseries"
+}

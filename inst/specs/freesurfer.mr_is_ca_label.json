@@ -1,0 +1,119 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mr_is_ca_label",
+  "title": "FREESURFER MRIsCALabel",
+  "command": "mris_ca_label",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "aseg": {
+      "type": "file",
+      "desc": "Undocumented flag. Autorecon3 uses ../mri/aseg.presurf.mgz as input file",
+      "cli": {
+        "argstr": "-aseg %s"
+      }
+    },
+    "canonsurf": {
+      "type": "file",
+      "desc": "Input canonical surface file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "classifier": {
+      "type": "file",
+      "desc": "Classifier array input file",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "curv": {
+      "type": "file",
+      "desc": "implicit input {hemisphere}.curv",
+      "required": true
+    },
+    "hemisphere": {
+      "type": "enum",
+      "desc": "Hemisphere ('lh' or 'rh')",
+      "required": true,
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "%s",
+        "position": -4
+      }
+    },
+    "label": {
+      "type": "file",
+      "desc": "Undocumented flag. Autorecon3 uses ../label/{hemisphere}.cortex.label as input file",
+      "cli": {
+        "argstr": "-l %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Annotated surface output file",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "seed": {
+      "type": "int",
+      "cli": {
+        "argstr": "-seed %d"
+      }
+    },
+    "smoothwm": {
+      "type": "file",
+      "desc": "implicit input {hemisphere}.smoothwm",
+      "required": true
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject name or ID",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "%s",
+        "position": -5
+      }
+    },
+    "sulc": {
+      "type": "file",
+      "desc": "implicit input {hemisphere}.sulc",
+      "required": true
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.MRIsCALabel",
+    "nipype_version": "1.10.0"
+  },
+  "description": "For a single subject, produces an annotation file, in which each"
+}

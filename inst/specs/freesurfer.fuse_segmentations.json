@@ -1,0 +1,84 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.fuse_segmentations",
+  "title": "FREESURFER FuseSegmentations",
+  "command": "mri_fuse_segmentations",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_norms": {
+      "type": "list",
+      "desc": "-n <filename>  - name of norm file to use (default: norm.mgs)         must include the corresponding norm file for all given timepoints         as well as for the current subject",
+      "required": true,
+      "cli": {
+        "argstr": "-n %s"
+      }
+    },
+    "in_segmentations": {
+      "type": "list",
+      "desc": "name of aseg file to use (default: aseg.mgz)         must include the aseg files for all the given timepoints",
+      "required": true,
+      "cli": {
+        "argstr": "-a %s"
+      }
+    },
+    "in_segmentations_noCC": {
+      "type": "list",
+      "desc": "name of aseg file w/o CC labels (default: aseg.auto_noCCseg.mgz)         must include the corresponding file for all the given timepoints",
+      "required": true,
+      "cli": {
+        "argstr": "-c %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output fused segmentation file",
+      "required": true,
+      "cli": {
+        "position": -1
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "subject_id being processed",
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "timepoints": {
+      "type": "list",
+      "desc": "subject_ids or timepoints to be processed",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.longitudinal.FuseSegmentations",
+    "nipype_version": "1.10.0"
+  },
+  "description": "fuse segmentations together from multiple timepoints"
+}

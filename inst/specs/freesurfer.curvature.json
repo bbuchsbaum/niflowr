@@ -1,0 +1,71 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.curvature",
+  "title": "FREESURFER Curvature",
+  "command": "mris_curvature",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "averages": {
+      "type": "int",
+      "desc": "Perform this number iterative averages of curvature measure before saving",
+      "cli": {
+        "argstr": "-a %d"
+      }
+    },
+    "distances": {
+      "type": "list",
+      "desc": "Undocumented input integer distances",
+      "cli": {
+        "argstr": "-distances %d %d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input file for Curvature",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "n": {
+      "type": "flag",
+      "desc": "Undocumented boolean flag",
+      "cli": {
+        "argstr": "-n"
+      }
+    },
+    "save": {
+      "type": "flag",
+      "desc": "Save curvature files (will only generate screen output without this option)",
+      "cli": {
+        "argstr": "-w"
+      }
+    },
+    "threshold": {
+      "type": "double",
+      "desc": "Undocumented input threshold",
+      "cli": {
+        "argstr": "-thresh %.3f"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.Curvature",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program will compute the second fundamental form of a cortical"
+}

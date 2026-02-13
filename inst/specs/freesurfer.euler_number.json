@@ -1,0 +1,36 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.euler_number",
+  "title": "FREESURFER EulerNumber",
+  "command": "mris_euler_number",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "Input file for EulerNumber",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.EulerNumber",
+    "nipype_version": "1.10.0"
+  },
+  "description": "This program computes EulerNumber for a cortical surface"
+}

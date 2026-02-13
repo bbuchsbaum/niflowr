@@ -1,0 +1,44 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.fit_ms_params",
+  "title": "FREESURFER FitMSParams",
+  "command": "mri_ms_fitparms",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_files": {
+      "type": "list",
+      "desc": "list of FLASH images (must be in mgh format)",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "out_dir": {
+      "type": "dir",
+      "desc": "directory to store output in",
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.FitMSParams",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Estimate tissue parameters from a set of FLASH images."
+}

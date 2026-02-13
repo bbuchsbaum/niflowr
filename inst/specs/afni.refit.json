@@ -1,0 +1,153 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.refit",
+  "title": "AFNI Refit",
+  "command": "3drefit",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "atrcopy": {
+      "type": "list",
+      "desc": "Copy AFNI header attribute from the given file into the header of the dataset(s) being modified. For more information on AFNI header attributes, see documentation file README.attributes. More than one '-atrcopy' option can be used. For AFNI advanced users only. Do NOT use -atrcopy or -atrstring with other modification options. See also -copyaux.",
+      "cli": {
+        "argstr": "-atrcopy %s %s"
+      }
+    },
+    "atrfloat": {
+      "type": "list",
+      "desc": "Create or modify floating point attributes. The input values may be specified as a single string in quotes or as a 1D filename or string, example '1 0.2 0 0 -0.2 1 0 0 0 0 1 0' or flipZ.1D or '1D:1,0.2,2@0,-0.2,1,2@0,2@0,1,0'",
+      "cli": {
+        "argstr": "-atrfloat %s %s"
+      }
+    },
+    "atrint": {
+      "type": "list",
+      "desc": "Create or modify integer attributes. The input values may be specified as a single string in quotes or as a 1D filename or string, example '1 0 0 0 0 1 0 0 0 0 1 0' or flipZ.1D or '1D:1,0,2@0,-0,1,2@0,2@0,1,0'",
+      "cli": {
+        "argstr": "-atrint %s %s"
+      }
+    },
+    "atrstring": {
+      "type": "list",
+      "desc": "Copy the last given string into the dataset(s) being modified, giving it the attribute name given by the last string.To be safe, the last string should be in quotes.",
+      "cli": {
+        "argstr": "-atrstring %s %s"
+      }
+    },
+    "deoblique": {
+      "type": "flag",
+      "desc": "replace current transformation matrix with cardinal matrix",
+      "cli": {
+        "argstr": "-deoblique"
+      }
+    },
+    "duporigin_file": {
+      "type": "file",
+      "desc": "Copies the xorigin, yorigin, and zorigin values from the header of the given dataset",
+      "cli": {
+        "argstr": "-duporigin %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3drefit",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "nosaveatr": {
+      "type": "flag",
+      "desc": "Opposite of -saveatr",
+      "cli": {
+        "argstr": "-nosaveatr"
+      }
+    },
+    "saveatr": {
+      "type": "flag",
+      "desc": "(default) Copy the attributes that are known to AFNI into the dset->dblk structure thereby forcing changes to known attributes to be present in the output. This option only makes sense with -atrcopy.",
+      "cli": {
+        "argstr": "-saveatr"
+      }
+    },
+    "space": {
+      "type": "enum",
+      "desc": "Associates the dataset with a specific template type, e.g. TLRC, MNI, ORIG",
+      "choices": [
+        "TLRC",
+        "MNI",
+        "ORIG"
+      ],
+      "cli": {
+        "argstr": "-space %s"
+      }
+    },
+    "xdel": {
+      "type": "double",
+      "desc": "new x voxel dimension in mm",
+      "cli": {
+        "argstr": "-xdel %f"
+      }
+    },
+    "xorigin": {
+      "type": "string",
+      "desc": "x distance for edge voxel offset",
+      "cli": {
+        "argstr": "-xorigin %s"
+      }
+    },
+    "xyzscale": {
+      "type": "double",
+      "desc": "Scale the size of the dataset voxels by the given factor",
+      "cli": {
+        "argstr": "-xyzscale %f"
+      }
+    },
+    "ydel": {
+      "type": "double",
+      "desc": "new y voxel dimension in mm",
+      "cli": {
+        "argstr": "-ydel %f"
+      }
+    },
+    "yorigin": {
+      "type": "string",
+      "desc": "y distance for edge voxel offset",
+      "cli": {
+        "argstr": "-yorigin %s"
+      }
+    },
+    "zdel": {
+      "type": "double",
+      "desc": "new z voxel dimension in mm",
+      "cli": {
+        "argstr": "-zdel %f"
+      }
+    },
+    "zorigin": {
+      "type": "string",
+      "desc": "z distance for edge voxel offset",
+      "cli": {
+        "argstr": "-zorigin %s"
+      }
+    }
+  },
+  "outputs": {},
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Refit",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Changes some of the information inside a 3D dataset's header"
+}

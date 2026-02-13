@@ -1,0 +1,145 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.aparc2_aseg",
+  "title": "FREESURFER Aparc2Aseg",
+  "command": "mri_aparc2aseg",
+  "inputs": {
+    "a2009s": {
+      "type": "flag",
+      "desc": "Using the a2009s atlas",
+      "cli": {
+        "argstr": "--a2009s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "aseg": {
+      "type": "file",
+      "desc": "Input aseg file",
+      "cli": {
+        "argstr": "--aseg %s"
+      }
+    },
+    "ctxseg": {
+      "type": "file",
+      "cli": {
+        "argstr": "--ctxseg %s"
+      }
+    },
+    "hypo_wm": {
+      "type": "flag",
+      "desc": "Label hypointensities as WM",
+      "cli": {
+        "argstr": "--hypo-as-wm"
+      }
+    },
+    "label_wm": {
+      "type": "flag",
+      "desc": "For each voxel labeled as white matter in the aseg, re-assign\nits label to be that of the closest cortical point if its\ndistance is less than dmaxctx.",
+      "cli": {
+        "argstr": "--labelwm"
+      }
+    },
+    "lh_annotation": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/label/lh.aparc.annot",
+      "required": true
+    },
+    "lh_pial": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/lh.pial",
+      "required": true
+    },
+    "lh_ribbon": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/lh.ribbon.mgz",
+      "required": true
+    },
+    "lh_white": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/lh.white",
+      "required": true
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Full path of file to save the output segmentation in",
+      "required": true,
+      "cli": {
+        "argstr": "--o %s"
+      }
+    },
+    "rh_annotation": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/label/rh.aparc.annot",
+      "required": true
+    },
+    "rh_pial": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/rh.pial",
+      "required": true
+    },
+    "rh_ribbon": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/rh.ribbon.mgz",
+      "required": true
+    },
+    "rh_white": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/surf/rh.white",
+      "required": true
+    },
+    "ribbon": {
+      "type": "file",
+      "desc": "Input file must be <subject_id>/mri/ribbon.mgz",
+      "required": true
+    },
+    "rip_unknown": {
+      "type": "flag",
+      "desc": "Do not label WM based on 'unknown' corical label",
+      "cli": {
+        "argstr": "--rip-unknown"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "Subject being processed",
+      "required": true,
+      "default": "subject_id",
+      "cli": {
+        "argstr": "--s %s"
+      }
+    },
+    "volmask": {
+      "type": "flag",
+      "desc": "Volume mask flag",
+      "cli": {
+        "argstr": "--volmask"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.utils.Aparc2Aseg",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Maps the cortical labels from the automatic cortical parcellation"
+}

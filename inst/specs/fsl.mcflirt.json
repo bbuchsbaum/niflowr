@@ -1,0 +1,190 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.mcflirt",
+  "title": "FSL MCFLIRT",
+  "command": "mcflirt",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "bins": {
+      "type": "int",
+      "desc": "number of histogram bins",
+      "cli": {
+        "argstr": "-bins %d"
+      }
+    },
+    "cost": {
+      "type": "enum",
+      "desc": "cost function to optimize",
+      "choices": [
+        "mutualinfo",
+        "woods",
+        "corratio",
+        "normcorr",
+        "normmi",
+        "leastsquares"
+      ],
+      "cli": {
+        "argstr": "-cost %s"
+      }
+    },
+    "dof": {
+      "type": "int",
+      "desc": "degrees of freedom for the transformation",
+      "cli": {
+        "argstr": "-dof %d"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "timeseries to motion-correct",
+      "required": true,
+      "cli": {
+        "argstr": "-in %s",
+        "position": 0
+      }
+    },
+    "init": {
+      "type": "file",
+      "desc": "initial transformation matrix",
+      "cli": {
+        "argstr": "-init %s"
+      }
+    },
+    "interpolation": {
+      "type": "enum",
+      "desc": "interpolation method for transformation",
+      "choices": [
+        "spline",
+        "nn",
+        "sinc"
+      ],
+      "cli": {
+        "argstr": "-%s_final"
+      }
+    },
+    "mean_vol": {
+      "type": "flag",
+      "desc": "register to mean volume",
+      "cli": {
+        "argstr": "-meanvol"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "file to write",
+      "cli": {
+        "argstr": "-out %s"
+      }
+    },
+    "ref_file": {
+      "type": "file",
+      "desc": "target image for motion correction",
+      "cli": {
+        "argstr": "-reffile %s"
+      }
+    },
+    "ref_vol": {
+      "type": "int",
+      "desc": "volume to align frames to",
+      "cli": {
+        "argstr": "-refvol %d"
+      }
+    },
+    "rotation": {
+      "type": "int",
+      "desc": "scaling factor for rotation tolerances",
+      "cli": {
+        "argstr": "-rotation %d"
+      }
+    },
+    "save_mats": {
+      "type": "flag",
+      "desc": "save transformation matrices",
+      "cli": {
+        "argstr": "-mats"
+      }
+    },
+    "save_plots": {
+      "type": "flag",
+      "desc": "save transformation parameters",
+      "cli": {
+        "argstr": "-plots"
+      }
+    },
+    "save_rms": {
+      "type": "flag",
+      "desc": "save rms displacement parameters",
+      "cli": {
+        "argstr": "-rmsabs -rmsrel"
+      }
+    },
+    "scaling": {
+      "type": "double",
+      "desc": "scaling factor to use",
+      "cli": {
+        "argstr": "-scaling %.2f"
+      }
+    },
+    "smooth": {
+      "type": "double",
+      "desc": "smoothing factor for the cost function",
+      "cli": {
+        "argstr": "-smooth %.2f"
+      }
+    },
+    "stages": {
+      "type": "int",
+      "desc": "stages (if 4, perform final search with sinc interpolation",
+      "cli": {
+        "argstr": "-stages %d"
+      }
+    },
+    "stats_imgs": {
+      "type": "flag",
+      "desc": "produce variance and std. dev. images",
+      "cli": {
+        "argstr": "-stats"
+      }
+    },
+    "use_contour": {
+      "type": "flag",
+      "desc": "run search on contour images",
+      "cli": {
+        "argstr": "-edge"
+      }
+    },
+    "use_gradient": {
+      "type": "flag",
+      "desc": "run search on gradient images",
+      "cli": {
+        "argstr": "-gdt"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.MCFLIRT",
+    "nipype_version": "1.10.0"
+  },
+  "description": "FSL MCFLIRT wrapper for within-modality motion correction"
+}

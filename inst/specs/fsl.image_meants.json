@@ -1,0 +1,108 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.image_meants",
+  "title": "FSL ImageMeants",
+  "command": "fslmeants",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "eig": {
+      "type": "flag",
+      "desc": "calculate Eigenvariate(s) instead of mean (output will have 0 mean)",
+      "cli": {
+        "argstr": "--eig"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file for computing the average timeseries",
+      "required": true,
+      "cli": {
+        "argstr": "-i %s",
+        "position": 0
+      }
+    },
+    "mask": {
+      "type": "file",
+      "desc": "input 3D mask",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "nobin": {
+      "type": "flag",
+      "desc": "do not binarise the mask for calculation of Eigenvariates",
+      "cli": {
+        "argstr": "--no_bin"
+      }
+    },
+    "order": {
+      "type": "int",
+      "desc": "select number of Eigenvariates",
+      "default": 1,
+      "cli": {
+        "argstr": "--order=%d"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "name of output text matrix",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "show_all": {
+      "type": "flag",
+      "desc": "show all voxel time series (within mask) instead of averaging",
+      "cli": {
+        "argstr": "--showall"
+      }
+    },
+    "spatial_coord": {
+      "type": "list",
+      "desc": "<x y z>  requested spatial coordinate (instead of mask)",
+      "cli": {
+        "argstr": "-c %s"
+      }
+    },
+    "transpose": {
+      "type": "flag",
+      "desc": "output results in transpose format (one row per voxel/mean)",
+      "cli": {
+        "argstr": "--transpose"
+      }
+    },
+    "use_mm": {
+      "type": "flag",
+      "desc": "use mm instead of voxel coordinates (for -c option)",
+      "cli": {
+        "argstr": "--usemm"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.utils.ImageMeants",
+    "nipype_version": "1.10.0"
+  },
+  "description": "Use fslmeants for printing the average timeseries (intensities) to"
+}
