@@ -76,7 +76,7 @@
     "fudge_factor": {
       "type": "double",
       "desc": "Fudge factor for hyperparameter error variance",
-      "default": 10.0,
+      "default": 10,
       "cli": {
         "argstr": "--ff=%s"
       }
@@ -142,11 +142,7 @@
       "cli": {
         "argstr": "--topup=%s"
       },
-      "constraints": {
-        "requires": [
-          "in_topup_movpar"
-        ]
-      }
+      "constraints": {}
     },
     "initrand": {
       "type": "flag",
@@ -243,11 +239,7 @@
       "cli": {
         "argstr": "--mporder=%s"
       },
-      "constraints": {
-        "requires": [
-          "use_cuda"
-        ]
-      }
+      "constraints": {}
     },
     "multiband_factor": {
       "type": "int",

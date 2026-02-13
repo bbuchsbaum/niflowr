@@ -70,8 +70,7 @@
       "type": "double",
       "desc": "kernel size - voxels for box/boxv, mm for sphere, mm sigma for gauss",
       "cli": {
-        "argstr": "%.4f",
-        "position": 5
+        "argstr": "%.4f"
       },
       "constraints": {
         "xor": [

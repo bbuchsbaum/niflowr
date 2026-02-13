@@ -75,11 +75,7 @@
       "cli": {
         "argstr": "-p %d"
       },
-      "constraints": {
-        "xor": [
-          "blobs"
-        ]
-      }
+      "constraints": {}
     },
     "search_factor": {
       "type": "list",

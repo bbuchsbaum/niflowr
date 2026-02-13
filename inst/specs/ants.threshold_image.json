@@ -114,8 +114,7 @@
       "type": "double",
       "desc": "upper threshold",
       "cli": {
-        "argstr": "%f",
-        "position": 5
+        "argstr": "%f"
       },
       "constraints": {
         "xor": [
@@ -127,8 +126,7 @@
       "type": "double",
       "desc": "lower threshold",
       "cli": {
-        "argstr": "%f",
-        "position": 4
+        "argstr": "%f"
       },
       "constraints": {
         "xor": [

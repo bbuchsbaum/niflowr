@@ -83,3 +83,26 @@ test_that("non-positional args are sorted alphabetically", {
   expect_true(f_pos < m_pos)
   expect_true(m_pos < r_pos)
 })
+
+test_that("build_command renders bool placeholders as numeric values", {
+  spec <- structure(list(
+    spec_version = "0.1.0",
+    id = "test.boolfmt",
+    command = "testcmd",
+    inputs = list(
+      switch = list(
+        type = "bool",
+        cli = list(argstr = "--switch %d")
+      )
+    ),
+    outputs = list()
+  ), class = "ni_spec")
+
+  call_true <- ni_call(spec, switch = TRUE, .validate = FALSE)
+  built_true <- niflowr:::build_command(call_true)
+  expect_equal(built_true$args, c("--switch", "1"))
+
+  call_false <- ni_call(spec, switch = FALSE, .validate = FALSE)
+  built_false <- niflowr:::build_command(call_false)
+  expect_equal(built_false$args, c("--switch", "0"))
+})

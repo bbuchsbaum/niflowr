@@ -47,7 +47,6 @@
       },
       "constraints": {
         "xor": [
-          "color_table_file",
           "default_color_table"
         ]
       }
@@ -67,8 +66,7 @@
       },
       "constraints": {
         "xor": [
-          "color_table_file",
-          "default_color_table"
+          "color_table_file"
         ]
       }
     },
@@ -278,11 +276,7 @@
       "cli": {
         "argstr": "--rbv"
       },
-      "constraints": {
-        "requires": [
-          "subjects_dir"
-        ]
-      }
+      "constraints": {}
     },
     "rbv_res": {
       "type": "double",
@@ -307,7 +301,6 @@
       },
       "constraints": {
         "xor": [
-          "reg_file",
           "regheader",
           "reg_identity"
         ]
@@ -323,8 +316,7 @@
       "constraints": {
         "xor": [
           "reg_file",
-          "regheader",
-          "reg_identity"
+          "regheader"
         ]
       }
     },
@@ -338,7 +330,6 @@
       "constraints": {
         "xor": [
           "reg_file",
-          "regheader",
           "reg_identity"
         ]
       }

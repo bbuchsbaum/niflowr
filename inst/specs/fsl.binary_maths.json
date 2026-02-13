@@ -63,8 +63,7 @@
       "desc": "value to perform operation with",
       "required": true,
       "cli": {
-        "argstr": "%.8f",
-        "position": 5
+        "argstr": "%.8f"
       },
       "constraints": {
         "xor": [

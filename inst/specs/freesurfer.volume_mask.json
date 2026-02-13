@@ -17,11 +17,7 @@
       "cli": {
         "argstr": "--aseg_name %s"
       },
-      "constraints": {
-        "xor": [
-          "aseg"
-        ]
-      }
+      "constraints": {}
     },
     "left_ribbonlabel": {
       "type": "int",

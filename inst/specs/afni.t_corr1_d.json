@@ -37,8 +37,7 @@
       "type": "flag",
       "desc": "Correlation is the normal Pearson correlation coefficient",
       "cli": {
-        "argstr": "-pearson",
-        "position": 1
+        "argstr": "-pearson"
       },
       "constraints": {
         "xor": [
@@ -52,8 +51,7 @@
       "type": "flag",
       "desc": "Correlation is the quadrant correlation coefficient",
       "cli": {
-        "argstr": "-quadrant",
-        "position": 1
+        "argstr": "-quadrant"
       },
       "constraints": {
         "xor": [
@@ -67,8 +65,7 @@
       "type": "flag",
       "desc": "Correlation is the Spearman (rank) correlation coefficient",
       "cli": {
-        "argstr": "-spearman",
-        "position": 1
+        "argstr": "-spearman"
       },
       "constraints": {
         "xor": [

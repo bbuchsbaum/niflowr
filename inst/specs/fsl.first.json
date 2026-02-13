@@ -68,8 +68,7 @@
       "type": "double",
       "desc": "Specify a numerical threshold value or use the 'method' input to choose auto, fast, or none",
       "cli": {
-        "argstr": "-m %.4f",
-        "position": 4
+        "argstr": "-m %.4f"
       }
     },
     "no_cleanup": {

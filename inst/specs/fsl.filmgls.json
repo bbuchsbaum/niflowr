@@ -18,14 +18,7 @@
         "argstr": "-ac"
       },
       "constraints": {
-        "xor": [
-          "autocorr_estimate_only",
-          "fit_armodel",
-          "tukey_window",
-          "multitaper_product",
-          "use_pava",
-          "autocorr_noestimate"
-        ]
+        "xor": ["fit_armodel", "tukey_window", "multitaper_product", "use_pava", "autocorr_noestimate"]
       }
     },
     "autocorr_noestimate": {
@@ -35,14 +28,7 @@
         "argstr": "-noest"
       },
       "constraints": {
-        "xor": [
-          "autocorr_estimate_only",
-          "fit_armodel",
-          "tukey_window",
-          "multitaper_product",
-          "use_pava",
-          "autocorr_noestimate"
-        ]
+        "xor": ["autocorr_estimate_only", "fit_armodel", "tukey_window", "multitaper_product", "use_pava"]
       }
     },
     "brightness_threshold": {
@@ -67,14 +53,7 @@
         "argstr": "-ar"
       },
       "constraints": {
-        "xor": [
-          "autocorr_estimate_only",
-          "fit_armodel",
-          "tukey_window",
-          "multitaper_product",
-          "use_pava",
-          "autocorr_noestimate"
-        ]
+        "xor": ["autocorr_estimate_only", "tukey_window", "multitaper_product", "use_pava", "autocorr_noestimate"]
       }
     },
     "full_data": {
@@ -107,14 +86,7 @@
         "argstr": "-mt %d"
       },
       "constraints": {
-        "xor": [
-          "autocorr_estimate_only",
-          "fit_armodel",
-          "tukey_window",
-          "multitaper_product",
-          "use_pava",
-          "autocorr_noestimate"
-        ]
+        "xor": ["autocorr_estimate_only", "fit_armodel", "tukey_window", "use_pava", "autocorr_noestimate"]
       }
     },
     "output_pwdata": {
@@ -142,7 +114,7 @@
     "threshold": {
       "type": "string",
       "desc": "threshold",
-      "default": 1000.0,
+      "default": 1000,
       "cli": {
         "argstr": "%f",
         "position": -1
@@ -155,14 +127,7 @@
         "argstr": "-tukey %d"
       },
       "constraints": {
-        "xor": [
-          "autocorr_estimate_only",
-          "fit_armodel",
-          "tukey_window",
-          "multitaper_product",
-          "use_pava",
-          "autocorr_noestimate"
-        ]
+        "xor": ["autocorr_estimate_only", "fit_armodel", "multitaper_product", "use_pava", "autocorr_noestimate"]
       }
     },
     "use_pava": {

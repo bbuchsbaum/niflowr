@@ -167,11 +167,7 @@
       "cli": {
         "argstr": "--unmaskfmap"
       },
-      "constraints": {
-        "xor": [
-          "save_fmap"
-        ]
-      }
+      "constraints": {}
     },
     "save_unmasked_shift": {
       "type": "flag",
@@ -179,11 +175,7 @@
       "cli": {
         "argstr": "--unmaskshift"
       },
-      "constraints": {
-        "xor": [
-          "save_shift"
-        ]
-      }
+      "constraints": {}
     },
     "shift_in_file": {
       "type": "file",

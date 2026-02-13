@@ -17,11 +17,7 @@
       "cli": {
         "argstr": "-curv"
       },
-      "constraints": {
-        "requires": [
-          "in_smoothwm"
-        ]
-      }
+      "constraints": {}
     },
     "in_sulc": {
       "type": "file",

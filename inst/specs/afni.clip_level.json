@@ -15,8 +15,7 @@
       "type": "flag",
       "desc": "Apply the algorithm to each sub-brick separately.",
       "cli": {
-        "argstr": "-doall",
-        "position": 3
+        "argstr": "-doall"
       },
       "constraints": {
         "xor": [

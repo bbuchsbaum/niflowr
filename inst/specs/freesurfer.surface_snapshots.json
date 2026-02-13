@@ -69,11 +69,7 @@
         "argstr": "-overlay-reg-identity"
       },
       "constraints": {
-        "xor": [
-          "overlay_reg",
-          "identity_reg",
-          "mni152_reg"
-        ]
+        "xor": ["overlay_reg", "mni152_reg"]
       }
     },
     "invert_overlay": {
@@ -128,11 +124,7 @@
         "argstr": "-mni152reg"
       },
       "constraints": {
-        "xor": [
-          "overlay_reg",
-          "identity_reg",
-          "mni152_reg"
-        ]
+        "xor": ["overlay_reg", "identity_reg"]
       }
     },
     "orig_suffix": {
@@ -175,11 +167,7 @@
         "argstr": "-overlay-reg %s"
       },
       "constraints": {
-        "xor": [
-          "overlay_reg",
-          "identity_reg",
-          "mni152_reg"
-        ]
+        "xor": ["identity_reg", "mni152_reg"]
       }
     },
     "patch_file": {

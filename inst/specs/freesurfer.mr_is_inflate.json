@@ -26,11 +26,7 @@
       "cli": {
         "argstr": "-no-save-sulc"
       },
-      "constraints": {
-        "xor": [
-          "out_sulc"
-        ]
-      }
+      "constraints": {}
     },
     "out_file": {
       "type": "file",

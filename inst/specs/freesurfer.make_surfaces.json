@@ -97,11 +97,7 @@
       "cli": {
         "argstr": "-noaparc"
       },
-      "constraints": {
-        "xor": [
-          "in_label"
-        ]
-      }
+      "constraints": {}
     },
     "orig_pial": {
       "type": "file",
@@ -109,11 +105,7 @@
       "cli": {
         "argstr": "-orig_pial %s"
       },
-      "constraints": {
-        "requires": [
-          "in_label"
-        ]
-      }
+      "constraints": {}
     },
     "orig_white": {
       "type": "file",

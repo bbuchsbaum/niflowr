@@ -38,8 +38,7 @@
       "desc": "gaussian kernel sigma in mm (not voxels)",
       "required": true,
       "cli": {
-        "argstr": "-kernel gauss %.03f -fmean",
-        "position": 1
+        "argstr": "-kernel gauss %.03f -fmean"
       },
       "constraints": {
         "xor": [

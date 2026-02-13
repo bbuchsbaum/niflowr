@@ -115,6 +115,10 @@ render_arg <- function(value, def, argstr) {
   # Bool type: render as flag
 
   if (type == "bool") {
+    if (grepl("%", argstr, fixed = TRUE)) {
+      bval <- if (is.logical(value)) as.integer(value) else value
+      return(render_single(bval, argstr))
+    }
     if (isTRUE(value)) {
       return(strsplit(argstr, "\\s+")[[1]])
     } else {

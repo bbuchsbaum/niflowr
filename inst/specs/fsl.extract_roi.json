@@ -65,8 +65,7 @@
     "x_min": {
       "type": "int",
       "cli": {
-        "argstr": "%d",
-        "position": 2
+        "argstr": "%d"
       }
     },
     "x_size": {

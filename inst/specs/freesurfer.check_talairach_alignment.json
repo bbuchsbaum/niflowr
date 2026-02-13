@@ -30,8 +30,7 @@
       "desc": "specify subject's name",
       "required": true,
       "cli": {
-        "argstr": "-subj %s",
-        "position": -1
+        "argstr": "-subj %s"
       },
       "constraints": {
         "xor": [

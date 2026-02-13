@@ -32,15 +32,7 @@
         "argstr": "-F"
       },
       "constraints": {
-        "xor": [
-          "functional",
-          "reduce_bias",
-          "robust",
-          "padding",
-          "remove_eyes",
-          "surfaces",
-          "t2_guided"
-        ]
+        "xor": ["reduce_bias", "robust", "padding", "remove_eyes", "surfaces", "t2_guided"]
       }
     },
     "in_file": {
@@ -95,15 +87,7 @@
         "argstr": "-Z"
       },
       "constraints": {
-        "xor": [
-          "functional",
-          "reduce_bias",
-          "robust",
-          "padding",
-          "remove_eyes",
-          "surfaces",
-          "t2_guided"
-        ]
+        "xor": ["functional", "reduce_bias", "robust", "remove_eyes", "surfaces", "t2_guided"]
       }
     },
     "radius": {
@@ -120,15 +104,7 @@
         "argstr": "-B"
       },
       "constraints": {
-        "xor": [
-          "functional",
-          "reduce_bias",
-          "robust",
-          "padding",
-          "remove_eyes",
-          "surfaces",
-          "t2_guided"
-        ]
+        "xor": ["functional", "robust", "padding", "remove_eyes", "surfaces", "t2_guided"]
       }
     },
     "remove_eyes": {
@@ -138,15 +114,7 @@
         "argstr": "-S"
       },
       "constraints": {
-        "xor": [
-          "functional",
-          "reduce_bias",
-          "robust",
-          "padding",
-          "remove_eyes",
-          "surfaces",
-          "t2_guided"
-        ]
+        "xor": ["functional", "reduce_bias", "robust", "padding", "surfaces", "t2_guided"]
       }
     },
     "robust": {
@@ -156,15 +124,7 @@
         "argstr": "-R"
       },
       "constraints": {
-        "xor": [
-          "functional",
-          "reduce_bias",
-          "robust",
-          "padding",
-          "remove_eyes",
-          "surfaces",
-          "t2_guided"
-        ]
+        "xor": ["functional", "reduce_bias", "padding", "remove_eyes", "surfaces", "t2_guided"]
       }
     },
     "skull": {
@@ -181,15 +141,7 @@
         "argstr": "-A"
       },
       "constraints": {
-        "xor": [
-          "functional",
-          "reduce_bias",
-          "robust",
-          "padding",
-          "remove_eyes",
-          "surfaces",
-          "t2_guided"
-        ]
+        "xor": ["functional", "reduce_bias", "robust", "padding", "remove_eyes", "t2_guided"]
       }
     },
     "t2_guided": {
@@ -199,15 +151,7 @@
         "argstr": "-A2 %s"
       },
       "constraints": {
-        "xor": [
-          "functional",
-          "reduce_bias",
-          "robust",
-          "padding",
-          "remove_eyes",
-          "surfaces",
-          "t2_guided"
-        ]
+        "xor": ["functional", "reduce_bias", "robust", "padding", "remove_eyes", "surfaces"]
       }
     },
     "threshold": {

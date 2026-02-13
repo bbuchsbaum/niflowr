@@ -151,11 +151,7 @@
         "argstr": "--mni152reg"
       },
       "constraints": {
-        "xor": [
-          "reg_file",
-          "reg_header",
-          "mni152reg"
-        ]
+        "xor": ["reg_file", "reg_header"]
       }
     },
     "no_reshape": {
@@ -211,11 +207,7 @@
       "cli": {
         "argstr": "--srcsubject %s"
       },
-      "constraints": {
-        "requires": [
-          "subject_id"
-        ]
-      }
+      "constraints": {}
     },
     "projection_stem": {
       "type": "string",
@@ -242,11 +234,7 @@
         "argstr": "--reg %s"
       },
       "constraints": {
-        "xor": [
-          "reg_file",
-          "reg_header",
-          "mni152reg"
-        ]
+        "xor": ["reg_header", "mni152reg"]
       }
     },
     "reg_header": {
@@ -257,14 +245,7 @@
         "argstr": "--regheader %s"
       },
       "constraints": {
-        "xor": [
-          "reg_file",
-          "reg_header",
-          "mni152reg"
-        ],
-        "requires": [
-          "subject_id"
-        ]
+        "xor": ["reg_file", "mni152reg"]
       }
     },
     "reshape": {
@@ -301,10 +282,6 @@
       "constraints": {
         "xor": [
           "projection_stem"
-        ],
-        "requires": [
-          "sampling_range",
-          "sampling_units"
         ]
       }
     },

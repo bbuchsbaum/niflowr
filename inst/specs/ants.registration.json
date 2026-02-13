@@ -42,11 +42,7 @@
       "cli": {
         "argstr": "%s"
       },
-      "constraints": {
-        "xor": [
-          "fixed_image_masks"
-        ]
-      }
+      "constraints": {}
     },
     "float": {
       "type": "bool",
@@ -121,7 +117,7 @@
       "desc": "the metric weight(s) for each stage. The weights must sum to 1 per stage.",
       "required": true,
       "default": [
-        1.0
+        1
       ],
       "constraints": {
         "requires": [
@@ -187,7 +183,7 @@
     "winsorize_lower_quantile": {
       "type": "string",
       "desc": "The Lower quantile to clip image ranges",
-      "default": 0.0,
+      "default": 0,
       "cli": {
         "argstr": "%s"
       }
@@ -195,7 +191,7 @@
     "winsorize_upper_quantile": {
       "type": "string",
       "desc": "The Upper quantile to clip image ranges",
-      "default": 1.0,
+      "default": 1,
       "cli": {
         "argstr": "%s"
       }

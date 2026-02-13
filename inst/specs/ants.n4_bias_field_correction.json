@@ -84,11 +84,7 @@
       "desc": "True if the estimated bias should be saved to file.",
       "required": true,
       "default": false,
-      "constraints": {
-        "xor": [
-          "bias_image"
-        ]
-      }
+      "constraints": {}
     },
     "shrink_factor": {
       "type": "int",

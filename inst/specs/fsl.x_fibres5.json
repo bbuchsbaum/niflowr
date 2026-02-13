@@ -12,8 +12,7 @@
       },
       "constraints": {
         "xor": [
-          "no_ard",
-          "all_ard"
+          "no_ard"
         ]
       }
     },
@@ -65,8 +64,7 @@
       "constraints": {
         "xor": [
           "no_spat",
-          "non_linear",
-          "cnlinear"
+          "non_linear"
         ]
       }
     },
@@ -87,7 +85,6 @@
       "constraints": {
         "xor": [
           "f0_noard",
-          "f0_ard",
           "all_ard"
         ]
       }
@@ -100,7 +97,6 @@
       },
       "constraints": {
         "xor": [
-          "f0_noard",
           "f0_ard"
         ]
       }
@@ -179,7 +175,6 @@
       },
       "constraints": {
         "xor": [
-          "no_ard",
           "all_ard"
         ]
       }
@@ -192,7 +187,6 @@
       },
       "constraints": {
         "xor": [
-          "no_spat",
           "non_linear",
           "cnlinear"
         ]
@@ -207,7 +201,6 @@
       "constraints": {
         "xor": [
           "no_spat",
-          "non_linear",
           "cnlinear"
         ]
       }

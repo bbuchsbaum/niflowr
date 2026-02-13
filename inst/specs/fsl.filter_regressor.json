@@ -25,8 +25,7 @@
       "desc": "use all columns in the design file in denoising",
       "required": true,
       "cli": {
-        "argstr": "-f '%s'",
-        "position": 4
+        "argstr": "-f '%s'"
       },
       "constraints": {
         "xor": [

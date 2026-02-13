@@ -39,13 +39,7 @@
       "cli": {
         "argstr": "-p %.3f %s %s %s %s"
       },
-      "constraints": {
-        "requires": [
-          "threshold",
-          "distance_map",
-          "data_file"
-        ]
-      }
+      "constraints": {}
     },
     "skeleton_file": {
       "type": "list",

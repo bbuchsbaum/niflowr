@@ -55,11 +55,7 @@
       "desc": "True if the estimated noise should be saved to file.",
       "required": true,
       "default": false,
-      "constraints": {
-        "xor": [
-          "noise_image"
-        ]
-      }
+      "constraints": {}
     },
     "shrink_factor": {
       "type": "int",

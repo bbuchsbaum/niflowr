@@ -38,7 +38,7 @@
     "beta": {
       "type": "double",
       "desc": "Exponent for mapping intensity difference to the joint error. Default = 2.0",
-      "default": 2.0,
+      "default": 2,
       "cli": {
         "argstr": "-b %s"
       }
@@ -69,11 +69,7 @@
       "cli": {
         "argstr": "-e %s"
       },
-      "constraints": {
-        "requires": [
-          "exclusion_image"
-        ]
-      }
+      "constraints": {}
     },
     "mask_image": {
       "type": "file",

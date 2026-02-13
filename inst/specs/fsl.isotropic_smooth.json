@@ -87,8 +87,7 @@
       "desc": "sigma of smoothing kernel [mm]",
       "required": true,
       "cli": {
-        "argstr": "-s %.5f",
-        "position": 4
+        "argstr": "-s %.5f"
       },
       "constraints": {
         "xor": [

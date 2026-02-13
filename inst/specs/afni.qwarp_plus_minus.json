@@ -66,8 +66,7 @@
       },
       "constraints": {
         "xor": [
-          "workhard",
-          "boxopt"
+          "workhard"
         ]
       }
     },
@@ -268,7 +267,6 @@
       },
       "constraints": {
         "xor": [
-          "mi",
           "hel",
           "lpc",
           "lpa",
@@ -291,7 +289,6 @@
       },
       "constraints": {
         "xor": [
-          "nmi",
           "hel",
           "lpc",
           "lpa",
@@ -505,7 +502,6 @@
       },
       "constraints": {
         "xor": [
-          "boxopt",
           "ballopt"
         ]
       }

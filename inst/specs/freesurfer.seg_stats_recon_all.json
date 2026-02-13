@@ -12,11 +12,7 @@
         "argstr": "--annot %s %s %s"
       },
       "constraints": {
-        "xor": [
-          "segmentation_file",
-          "annot",
-          "surf_label"
-        ]
+        "xor": ["segmentation_file", "surf_label"]
       }
     },
     "args": {
@@ -83,11 +79,7 @@
         "argstr": "--ctab %s"
       },
       "constraints": {
-        "xor": [
-          "color_table_file",
-          "default_color_table",
-          "gca_color_table"
-        ]
+        "xor": ["default_color_table", "gca_color_table"]
       }
     },
     "cortex_vol_from_surf": {
@@ -104,11 +96,7 @@
         "argstr": "--ctab-default"
       },
       "constraints": {
-        "xor": [
-          "color_table_file",
-          "default_color_table",
-          "gca_color_table"
-        ]
+        "xor": ["color_table_file", "gca_color_table"]
       }
     },
     "empty": {
@@ -160,11 +148,7 @@
         "argstr": "--ctab-gca %s"
       },
       "constraints": {
-        "xor": [
-          "color_table_file",
-          "default_color_table",
-          "gca_color_table"
-        ]
+        "xor": ["color_table_file", "default_color_table"]
       }
     },
     "in_file": {
@@ -295,11 +279,7 @@
         "argstr": "--seg %s"
       },
       "constraints": {
-        "xor": [
-          "segmentation_file",
-          "annot",
-          "surf_label"
-        ]
+        "xor": ["annot", "surf_label"]
       }
     },
     "sf_avg_file": {
@@ -348,11 +328,7 @@
         "argstr": "--slabel %s %s %s"
       },
       "constraints": {
-        "xor": [
-          "segmentation_file",
-          "annot",
-          "surf_label"
-        ]
+        "xor": ["segmentation_file", "annot"]
       }
     },
     "total_gray": {

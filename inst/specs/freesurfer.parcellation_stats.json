@@ -61,7 +61,6 @@
       },
       "constraints": {
         "xor": [
-          "in_annotatoin",
           "out_color"
         ]
       }
@@ -153,11 +152,7 @@
       "cli": {
         "argstr": "-th3"
       },
-      "constraints": {
-        "requires": [
-          "cortex_label"
-        ]
-      }
+      "constraints": {}
     },
     "thickness": {
       "type": "file",

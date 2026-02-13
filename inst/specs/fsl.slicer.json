@@ -8,16 +8,10 @@
       "type": "flag",
       "desc": "output all axial slices into one picture",
       "cli": {
-        "argstr": "-A",
-        "position": 10
+        "argstr": "-A"
       },
       "constraints": {
-        "xor": [
-          "single_slice",
-          "middle_slices",
-          "all_axial",
-          "sample_axial"
-        ],
+        "xor": ["single_slice", "middle_slices", "sample_axial"],
         "requires": [
           "image_width"
         ]
@@ -92,16 +86,10 @@
       "type": "flag",
       "desc": "output picture of mid-sagittal, axial, and coronal slices",
       "cli": {
-        "argstr": "-a",
-        "position": 10
+        "argstr": "-a"
       },
       "constraints": {
-        "xor": [
-          "single_slice",
-          "middle_slices",
-          "all_axial",
-          "sample_axial"
-        ]
+        "xor": ["single_slice", "all_axial", "sample_axial"]
       }
     },
     "nearest_neighbour": {
@@ -128,12 +116,7 @@
         "position": 10
       },
       "constraints": {
-        "xor": [
-          "single_slice",
-          "middle_slices",
-          "all_axial",
-          "sample_axial"
-        ],
+        "xor": ["single_slice", "middle_slices", "all_axial"],
         "requires": [
           "image_width"
         ]
@@ -165,16 +148,10 @@
         "z"
       ],
       "cli": {
-        "argstr": "-%s",
-        "position": 10
+        "argstr": "-%s"
       },
       "constraints": {
-        "xor": [
-          "single_slice",
-          "middle_slices",
-          "all_axial",
-          "sample_axial"
-        ],
+        "xor": ["middle_slices", "all_axial", "sample_axial"],
         "requires": [
           "slice_number"
         ]

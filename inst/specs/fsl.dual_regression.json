@@ -68,8 +68,7 @@
       "type": "flag",
       "desc": "perform 1-sample group-mean test instead of generic permutation test",
       "cli": {
-        "argstr": "-1",
-        "position": 3
+        "argstr": "-1"
       }
     },
     "out_dir": {

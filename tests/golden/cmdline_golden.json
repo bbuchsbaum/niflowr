@@ -237,7 +237,7 @@
   },
   "afni.svm_test": {
     "command": "3dsvm",
-    "args": ["args_value", "-testvol", "/tmp/niflowr/in_file.nii.gz", "-model", "model_value", "options_value", "-predictions", "/tmp/niflowr/out_file.nii.gz", "-testlabels", "/tmp/niflowr/testlabels.nii.gz"]
+    "args": ["args_value", "-testvol", "/tmp/niflowr/in_file.nii.gz", "-model", "model_value", "-multiclass", "0", "options_value", "-predictions", "/tmp/niflowr/out_file.nii.gz", "-testlabels", "/tmp/niflowr/testlabels.nii.gz"]
   },
   "afni.svm_train": {
     "command": "3dsvm",
@@ -321,15 +321,15 @@
   },
   "ants.affine_initializer": {
     "command": "antsAffineInitializer",
-    "args": ["3", "/tmp/niflowr/fixed_image.nii.gz", "/tmp/niflowr/moving_image.nii.gz", "transform.mat", "15.000000", "0.100000", "10", "args_value"]
+    "args": ["3", "/tmp/niflowr/fixed_image.nii.gz", "/tmp/niflowr/moving_image.nii.gz", "transform.mat", "15.000000", "0.100000", "0", "10", "args_value"]
   },
   "ants.ai": {
     "command": "antsAI",
-    "args": ["args_value", "-c", "[%d,%g,%d] 10,1e-06,10", "-d", "3", "-x", "/tmp/niflowr/fixed_image_mask.nii.gz", "-m", "item1,item2", "-o", "initialization.mat", "-s", "[%g,%g] 20,0.12", "-g", "item1,item2", "-t", "%s[%g] Affine,0.1"]
+    "args": ["args_value", "-c", "[%d,%g,%d] 10,1e-06,10", "-d", "3", "-x", "/tmp/niflowr/fixed_image_mask.nii.gz", "-m", "item1,item2", "-o", "initialization.mat", "-p", "0", "-s", "[%g,%g] 20,0.12", "-g", "item1,item2", "-t", "%s[%g] Affine,0.1", "-v", "0"]
   },
   "ants.ants": {
     "command": "ANTS",
-    "args": ["3", "item1,item2", "args_value", "--MI-option", "item1xitem2", "item1,item2", "--number-of-affine-iterations", "item1xitem2", "--number-of-iterations", "item1xitem2", "--output-naming", "out", "Gauss", "--gaussian-smoothing-sigmas", "item1xitem2", "--subsampling-factors", "item1xitem2", "Diff", "%s"]
+    "args": ["3", "item1,item2", "args_value", "--MI-option", "item1xitem2", "item1,item2", "--number-of-affine-iterations", "item1xitem2", "--number-of-iterations", "item1xitem2", "--output-naming", "out", "Gauss", "--gaussian-smoothing-sigmas", "item1xitem2", "--subsampling-factors", "item1xitem2", "Diff", "1"]
   },
   "ants.ants_introduction": {
     "command": "antsIntroduction.sh",
@@ -337,7 +337,7 @@
   },
   "ants.apply_transforms": {
     "command": "antsApplyTransforms",
-    "args": ["args_value", "--default-value", "0", "--dimensionality", "2", "--input", "/tmp/niflowr/input_image.nii.gz", "--input-image-type", "0", "Linear", "--output", "output_image_value", "--reference-image", "/tmp/niflowr/reference_image.nii.gz", "item1,item2"]
+    "args": ["args_value", "--default-value", "0", "--dimensionality", "2", "--float", "0", "--input", "/tmp/niflowr/input_image.nii.gz", "--input-image-type", "0", "Linear", "--output", "output_image_value", "--reference-image", "/tmp/niflowr/reference_image.nii.gz", "item1,item2"]
   },
   "ants.apply_transforms_to_points": {
     "command": "antsApplyTransformsToPoints",
@@ -345,7 +345,7 @@
   },
   "ants.atropos": {
     "command": "Atropos",
-    "args": ["args_value", "--image-dimensionality", "3", "Random", "--intensity-image", "item1,item2...", "--likelihood-model", "likelihood_model_value", "--mask-image", "/tmp/niflowr/mask_image.nii.gz", "1", "1", "/tmp/niflowr/out_classified_image_name.nii.gz", "posterior_formulation_value", "--use-random-seed", "%d"]
+    "args": ["args_value", "--image-dimensionality", "3", "0", "Random", "--intensity-image", "item1,item2...", "--likelihood-model", "likelihood_model_value", "--mask-image", "/tmp/niflowr/mask_image.nii.gz", "1", "1", "/tmp/niflowr/out_classified_image_name.nii.gz", "posterior_formulation_value", "--use-random-seed", "1"]
   },
   "ants.average_affine_transform": {
     "command": "AverageAffineTransform",
@@ -353,7 +353,7 @@
   },
   "ants.average_images": {
     "command": "AverageImages",
-    "args": ["3", "average.nii", "item1,item2", "args_value"]
+    "args": ["3", "average.nii", "0", "item1,item2", "args_value"]
   },
   "ants.brain_extraction": {
     "command": "antsBrainExtraction.sh",
@@ -429,19 +429,19 @@
   },
   "ants.registration": {
     "command": "antsRegistration",
-    "args": ["args_value", "--collapse-output-transforms", "%d", "--dimensionality", "3", "/tmp/niflowr/fixed_image_mask.nii.gz", "item1,item2", "0", "Linear", "transform", "--random-seed", "1", "--restore-state", "/tmp/niflowr/restore_state.nii.gz", "--save-state", "/tmp/niflowr/save_state.nii.gz", "item1,item2", "0", "1"]
+    "args": ["args_value", "--collapse-output-transforms", "1", "--dimensionality", "3", "/tmp/niflowr/fixed_image_mask.nii.gz", "--float", "0", "item1,item2", "0", "--initialize-transforms-per-stage", "0", "Linear", "transform", "--random-seed", "1", "--restore-state", "/tmp/niflowr/restore_state.nii.gz", "--save-state", "/tmp/niflowr/save_state.nii.gz", "item1,item2", "0", "1", "--write-composite-transform", "0"]
   },
   "ants.registration_syn_quick": {
     "command": "antsRegistrationSyNQuick.sh",
-    "args": ["args_value", "-d", "3", "-f", "item1,item2...", "-r", "32", "-m", "item1,item2...", "-n", "1", "-o", "transform", "-p", "double", "-e", "1", "-s", "26", "-t", "s"]
+    "args": ["args_value", "-d", "3", "-f", "item1,item2...", "-r", "32", "-m", "item1,item2...", "-n", "1", "-o", "transform", "-p", "double", "-e", "1", "-s", "26", "-t", "s", "-j", "0"]
   },
   "ants.resample_image_by_spacing": {
     "command": "ResampleImageBySpacing",
-    "args": ["3", "/tmp/niflowr/input_image.nii.gz", "/tmp/niflowr/output_image.nii.gz", "item1,item2", "1", "args_value"]
+    "args": ["0", "3", "/tmp/niflowr/input_image.nii.gz", "/tmp/niflowr/output_image.nii.gz", "item1,item2", "0", "1", "args_value"]
   },
   "ants.threshold_image": {
     "command": "ThresholdImage",
-    "args": ["3", "/tmp/niflowr/input_image.nii.gz", "/tmp/niflowr/output_image.nii.gz", "Otsu", "1.000000", "1", "1.000000", "1.000000", "1.000000", "args_value", "/tmp/niflowr/input_mask.nii.gz"]
+    "args": ["3", "/tmp/niflowr/input_image.nii.gz", "/tmp/niflowr/output_image.nii.gz", "Otsu", "1", "1.000000", "1.000000", "args_value", "/tmp/niflowr/input_mask.nii.gz", "1.000000", "1.000000"]
   },
   "ants.warp_image_multi_transform": {
     "command": "WarpImageMultiTransform",
@@ -493,7 +493,7 @@
   },
   "freesurfer.check_talairach_alignment": {
     "command": "talairach_afd",
-    "args": ["-xfm", "/tmp/niflowr/in_file.nii.gz", "-subj", "subject_value", "args_value", "-T", "0.010"]
+    "args": ["-xfm", "/tmp/niflowr/in_file.nii.gz", "args_value", "-subj", "subject_value", "-T", "0.010"]
   },
   "freesurfer.concatenate": {
     "command": "mri_concat",
@@ -549,7 +549,7 @@
   },
   "freesurfer.glm_fit": {
     "command": "mri_glmfit",
-    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
+    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--surf", "%s", "%s", "%s", "0", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
   },
   "freesurfer.gtm_seg": {
     "command": "gtmseg",
@@ -581,7 +581,7 @@
   },
   "freesurfer.logan": {
     "command": "mri_glmfit",
-    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %g item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
+    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %g item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--surf", "%s", "%s", "%s", "0", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
   },
   "freesurfer.lta_convert": {
     "command": "lta_convert",
@@ -609,7 +609,7 @@
   },
   "freesurfer.mr_is_calc": {
     "command": "mris_calc",
-    "args": ["/tmp/niflowr/in_file1.nii.gz", "action_value", "/tmp/niflowr/in_file2.nii.gz", "1.000000", "1", "args_value", "-o", "/tmp/niflowr/out_file.nii.gz"]
+    "args": ["/tmp/niflowr/in_file1.nii.gz", "action_value", "/tmp/niflowr/in_file2.nii.gz", "args_value", "1.000000", "1", "-o", "/tmp/niflowr/out_file.nii.gz"]
   },
   "freesurfer.mr_is_combine": {
     "command": "mris_convert",
@@ -661,11 +661,11 @@
   },
   "freesurfer.mrtm1": {
     "command": "mri_glmfit",
-    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
+    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--surf", "%s", "%s", "%s", "0", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
   },
   "freesurfer.mrtm2": {
     "command": "mri_glmfit",
-    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
+    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--surf", "%s", "%s", "%s", "0", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
   },
   "freesurfer.ms_lda": {
     "command": "mri_ms_LDA",
@@ -677,7 +677,7 @@
   },
   "freesurfer.one_sample_t_test": {
     "command": "mri_glmfit",
-    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--osgm", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
+    "args": ["args_value", "--bp-clip-max", "1.000000", "--C", "item1,item2...", "--X", "/tmp/niflowr/design.nii.gz", "--diag", "1", "--ffxdof", "1", "--ffxdofdat", "%d", "/tmp/niflowr/fixed_fx_dof_file.nii.gz", "--yffxvar", "/tmp/niflowr/fixed_fx_var.nii.gz", "--fsgd", "%s %s item1,item2", "--fwhm", "%f", "fwhm_value", "--glmdir", "glm_dir_value", "--y", "/tmp/niflowr/in_file.nii.gz", "--label", "/tmp/niflowr/label_file.nii.gz", "--logan", "%s %s %f item1,item2", "--mask", "/tmp/niflowr/mask_file.nii.gz", "--mrtm1", "%s %s item1,item2", "--mrtm2", "%s %s %f item1,item2", "--osgm", "--pvr", "item1,item2...", "--profile", "1", "--prune_thr", "1.000000", "--resynthtest", "1", "--seed", "1", "--selfreg", "%d %d %d item1,item2", "--sim-done", "/tmp/niflowr/sim_done_file.nii.gz", "--sim-sign", "abs", "--sim", "%s %d %f %s item1,item2", "--surf", "%s", "%s", "%s", "0", "--uniform", "%f %f item1,item2", "--var-fwhm", "%f", "var_fwhm_value", "--voxdump", "%d %d %d item1,item2", "--wls", "/tmp/niflowr/weighted_ls.nii.gz"]
   },
   "freesurfer.paint": {
     "command": "mrisp_paint",
@@ -729,7 +729,7 @@
   },
   "freesurfer.sample_to_surface": {
     "command": "mri_vol2surf",
-    "args": ["--rot", "%.3f %.3f %.3f item1,item2", "--trans", "%.3f %.3f %.3f item1,item2", "args_value", "--float2int", "round", "--frame", "1", "--hemi", "lh", "--srchit", "item1,item2", "--srchit_type", "--icoorder", "1", "--interp", "nearest", "--mask", "/tmp/niflowr/mask_label.nii.gz", "--o", "/tmp/niflowr/out_file.nii.gz", "--out_type", "cor", "--ref", "/tmp/niflowr/reference_file.nii.gz", "--reg", "/tmp/niflowr/reg_file.nii.gz", "--rf", "1", "point", "--scale", "1.000", "--surf-fwhm", "1.000", "--fwhm", "1.000", "--mov", "/tmp/niflowr/source_file.nii.gz", "--surfreg", "item1,item2", "--surf", "surface_value", "--trgsubject", "target_subject_value", "--nvox", "item1,item2"]
+    "args": ["--rot", "%.3f %.3f %.3f item1,item2", "--trans", "%.3f %.3f %.3f item1,item2", "args_value", "--float2int", "round", "--frame", "1", "--hemi", "lh", "--srchit", "item1,item2", "--srchit_type", "--icoorder", "1", "--interp", "nearest", "--mask", "/tmp/niflowr/mask_label.nii.gz", "--o", "/tmp/niflowr/out_file.nii.gz", "--out_type", "cor", "--srcsubject", "0", "--ref", "/tmp/niflowr/reference_file.nii.gz", "--reg", "/tmp/niflowr/reg_file.nii.gz", "--regheader", "0", "--rf", "1", "point", "--scale", "1.000", "--surf-fwhm", "1.000", "--fwhm", "1.000", "--mov", "/tmp/niflowr/source_file.nii.gz", "--surfreg", "item1,item2", "--surf", "surface_value", "--trgsubject", "target_subject_value", "--nvox", "item1,item2"]
   },
   "freesurfer.seg_stats": {
     "command": "mri_segstats",
@@ -845,7 +845,7 @@
   },
   "fsl.binary_maths": {
     "command": "fslmaths",
-    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-add", "/tmp/niflowr/operand_file.nii.gz", "1.00000000", "args_value"]
+    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-add", "/tmp/niflowr/operand_file.nii.gz", "args_value", "1.00000000"]
   },
   "fsl.change_data_type": {
     "command": "fslmaths",
@@ -857,7 +857,7 @@
   },
   "fsl.complex": {
     "command": "fslcomplex",
-    "args": ["/tmp/niflowr/magnitude_out_file.nii.gz", "/tmp/niflowr/real_out_file.nii.gz", "/tmp/niflowr/complex_out_file.nii.gz", "/tmp/niflowr/imaginary_out_file.nii.gz", "/tmp/niflowr/phase_out_file.nii.gz", "1", "1", "/tmp/niflowr/complex_in_file.nii.gz", "/tmp/niflowr/magnitude_in_file.nii.gz", "/tmp/niflowr/real_in_file.nii.gz", "/tmp/niflowr/complex_in_file2.nii.gz", "/tmp/niflowr/imaginary_in_file.nii.gz", "/tmp/niflowr/phase_in_file.nii.gz", "args_value"]
+    "args": ["/tmp/niflowr/magnitude_out_file.nii.gz", "/tmp/niflowr/complex_out_file.nii.gz", "1", "1", "/tmp/niflowr/complex_in_file.nii.gz", "/tmp/niflowr/complex_in_file2.nii.gz", "args_value", "/tmp/niflowr/imaginary_in_file.nii.gz", "/tmp/niflowr/imaginary_out_file.nii.gz", "/tmp/niflowr/magnitude_in_file.nii.gz", "/tmp/niflowr/phase_in_file.nii.gz", "/tmp/niflowr/phase_out_file.nii.gz", "/tmp/niflowr/real_in_file.nii.gz", "/tmp/niflowr/real_out_file.nii.gz"]
   },
   "fsl.contrast_mgr": {
     "command": "contrast_mgr",
@@ -877,7 +877,7 @@
   },
   "fsl.dilate_image": {
     "command": "fslmaths",
-    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-kernel", "3D", "/tmp/niflowr/kernel_file.nii.gz", "1.0000", "-dilmean", "args_value"]
+    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-kernel", "3D", "/tmp/niflowr/kernel_file.nii.gz", "-dilmean", "args_value", "1.0000"]
   },
   "fsl.distance_map": {
     "command": "distancemap",
@@ -889,7 +889,7 @@
   },
   "fsl.dual_regression": {
     "command": "dual_regression",
-    "args": ["item1", "item2", "/tmp/niflowr/group_IC_maps_4D.nii.gz", "%i", "/tmp/niflowr/design_file.nii.gz", "/tmp/niflowr/con_file.nii.gz", "1", "output", "args_value"]
+    "args": ["item1", "item2", "/tmp/niflowr/group_IC_maps_4D.nii.gz", "1", "/tmp/niflowr/design_file.nii.gz", "/tmp/niflowr/con_file.nii.gz", "1", "output", "args_value"]
   },
   "fsl.eddy": {
     "command": "eddy_openmp",
@@ -913,11 +913,11 @@
   },
   "fsl.erode_image": {
     "command": "fslmaths",
-    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-kernel", "3D", "/tmp/niflowr/kernel_file.nii.gz", "1.0000", "args_value"]
+    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-kernel", "3D", "/tmp/niflowr/kernel_file.nii.gz", "0", "args_value", "1.0000"]
   },
   "fsl.extract_roi": {
     "command": "fslroi",
-    "args": ["/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/roi_file.nii.gz", "item1,item2", "1", "1", "1", "1", "1", "1", "1", "1", "args_value"]
+    "args": ["/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/roi_file.nii.gz", "item1,item2", "1", "1", "1", "1", "1", "1", "1", "args_value", "1"]
   },
   "fsl.fast": {
     "command": "fast",
@@ -937,7 +937,7 @@
   },
   "fsl.filter_regressor": {
     "command": "fsl_regfilt",
-    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "-o", "/tmp/niflowr/out_file.nii.gz", "-d", "/tmp/niflowr/design_file.nii.gz", "-f", "'item1,item2'", "args_value", "-m", "/tmp/niflowr/mask.nii.gz"]
+    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "-o", "/tmp/niflowr/out_file.nii.gz", "-d", "/tmp/niflowr/design_file.nii.gz", "-f", "'item1,item2'", "args_value", "-f", "'0'", "-m", "/tmp/niflowr/mask.nii.gz"]
   },
   "fsl.find_the_biggest": {
     "command": "find_the_biggest",
@@ -945,7 +945,7 @@
   },
   "fsl.first": {
     "command": "run_first_all",
-    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "-o", "segmented", "-m", "auto", "-m", "1.0000", "-s", "item1,item2", "-a", "/tmp/niflowr/affine_file.nii.gz", "args_value"]
+    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "-o", "segmented", "-m", "auto", "-s", "item1,item2", "-a", "/tmp/niflowr/affine_file.nii.gz", "args_value", "-m", "1.0000"]
   },
   "fsl.flameo": {
     "command": "flameo",
@@ -989,7 +989,7 @@
   },
   "fsl.isotropic_smooth": {
     "command": "fslmaths",
-    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-s", "1.00000", "-s", "1.00000", "args_value"]
+    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-s", "1.00000", "args_value", "-s", "1.00000"]
   },
   "fsl.make_dyadic_vectors": {
     "command": "make_dyadic_vectors",
@@ -1041,7 +1041,7 @@
   },
   "fsl.overlay": {
     "command": "overlay",
-    "args": ["/tmp/niflowr/out_file.nii.gz", "%s", "float", "/tmp/niflowr/background_image.nii.gz", "%.3f", "%.3f item1,item2", "/tmp/niflowr/stat_image.nii.gz", "%.2f", "%.2f item1,item2", "/tmp/niflowr/stat_image2.nii.gz", "%.2f", "%.2f item1,item2", "args_value"]
+    "args": ["/tmp/niflowr/out_file.nii.gz", "1", "float", "/tmp/niflowr/background_image.nii.gz", "%.3f", "%.3f item1,item2", "/tmp/niflowr/stat_image.nii.gz", "%.2f", "%.2f item1,item2", "0", "/tmp/niflowr/stat_image2.nii.gz", "%.2f", "%.2f item1,item2", "args_value"]
   },
   "fsl.percentile_image": {
     "command": "fslmaths",
@@ -1105,7 +1105,7 @@
   },
   "fsl.slicer": {
     "command": "slicer",
-    "args": ["1", "/tmp/niflowr/out_file.nii.gz", "-s", "1.000000", "/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/image_edges.nii.gz", "-L", "-l", "/tmp/niflowr/colour_map.nii.gz", "-i", "%.3f %.3f item1,item2", "-e", "1.000", "%s", "-S", "1", "-x", "-1", "args_value"]
+    "args": ["1", "/tmp/niflowr/out_file.nii.gz", "-s", "1.000000", "/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/image_edges.nii.gz", "-L", "-l", "/tmp/niflowr/colour_map.nii.gz", "-i", "%.3f %.3f item1,item2", "-e", "1.000", "1", "-S", "1", "-1", "args_value", "-x"]
   },
   "fsl.smm": {
     "command": "mm --ld=logdir",
@@ -1113,7 +1113,7 @@
   },
   "fsl.smooth": {
     "command": "fslmaths",
-    "args": ["/tmp/niflowr/in_file.nii.gz", "-kernel", "gauss", "1.000", "-fmean", "-kernel", "gauss", "1.000", "-fmean", "/tmp/niflowr/smoothed_file.nii.gz", "args_value"]
+    "args": ["/tmp/niflowr/in_file.nii.gz", "-kernel", "gauss", "1.000", "-fmean", "/tmp/niflowr/smoothed_file.nii.gz", "args_value", "-kernel", "gauss", "1.000", "-fmean"]
   },
   "fsl.smooth_estimate": {
     "command": "smoothest",
@@ -1121,7 +1121,7 @@
   },
   "fsl.spatial_filter": {
     "command": "fslmaths",
-    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-kernel", "3D", "/tmp/niflowr/kernel_file.nii.gz", "1.0000", "-fmean", "args_value"]
+    "args": ["/tmp/niflowr/out_file.nii.gz", "-odt", "float", "-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-kernel", "3D", "/tmp/niflowr/kernel_file.nii.gz", "-fmean", "args_value", "1.0000"]
   },
   "fsl.split": {
     "command": "fslsplit",
@@ -1157,7 +1157,7 @@
   },
   "fsl.tract_skeleton": {
     "command": "tbss_skeleton",
-    "args": ["-a", "/tmp/niflowr/alt_data_file.nii.gz", "-s", "/tmp/niflowr/alt_skeleton.nii.gz", "args_value", "-i", "/tmp/niflowr/in_file.nii.gz", "-o", "item1,item2"]
+    "args": ["-a", "/tmp/niflowr/alt_data_file.nii.gz", "-s", "/tmp/niflowr/alt_skeleton.nii.gz", "args_value", "-i", "/tmp/niflowr/in_file.nii.gz", "-p", "%.3f", "%s", "%s", "%s", "%s", "0", "-o", "item1,item2"]
   },
   "fsl.unary_maths": {
     "command": "fslmaths",

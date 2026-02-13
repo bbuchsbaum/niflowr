@@ -40,11 +40,7 @@
         "argstr": "%s",
         "position": 3
       },
-      "constraints": {
-        "xor": [
-          "out_postfix"
-        ]
-      }
+      "constraints": {}
     },
     "reference_image": {
       "type": "file",

@@ -16,15 +16,10 @@
       "desc": "automatically threshold the background image",
       "required": true,
       "cli": {
-        "argstr": "-a",
-        "position": 5
+        "argstr": "-a"
       },
       "constraints": {
-        "xor": [
-          "auto_thresh_bg",
-          "full_bg_range",
-          "bg_thresh"
-        ]
+        "xor": ["full_bg_range", "bg_thresh"]
       }
     },
     "background_image": {
@@ -45,11 +40,7 @@
         "position": 5
       },
       "constraints": {
-        "xor": [
-          "auto_thresh_bg",
-          "full_bg_range",
-          "bg_thresh"
-        ]
+        "xor": ["auto_thresh_bg", "full_bg_range"]
       }
     },
     "full_bg_range": {
@@ -57,15 +48,10 @@
       "desc": "use full range of background image",
       "required": true,
       "cli": {
-        "argstr": "-A",
-        "position": 5
+        "argstr": "-A"
       },
       "constraints": {
-        "xor": [
-          "auto_thresh_bg",
-          "full_bg_range",
-          "bg_thresh"
-        ]
+        "xor": ["auto_thresh_bg", "bg_thresh"]
       }
     },
     "out_file": {

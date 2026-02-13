@@ -37,6 +37,66 @@ test_that("ni_lint_specs rewrites shell redirection patterns", {
   })
 })
 
+test_that("ni_lint_specs normalizes broken constraints and position collisions", {
+  withr::with_tempdir({
+    spec_path <- file.path(getwd(), "tmp_constraints.json")
+    spec <- list(
+      spec_version = "0.1.0",
+      id = "test.normalize",
+      title = "Normalize Test",
+      command = "echo",
+      inputs = list(
+        in_file = list(type = "file", required = TRUE, cli = list(argstr = "%s", position = 0)),
+        mode_a = list(
+          type = "flag",
+          cli = list(argstr = "-A", position = 1),
+          constraints = list(xor = c("mode_a", "mode_b", "ghost"))
+        ),
+        mode_b = list(
+          type = "flag",
+          cli = list(argstr = "-B", position = 1),
+          constraints = list(requires = c("in_file", "missing_param"))
+        )
+      ),
+      outputs = list(out_file = list(type = "file", path = list(template = "{in_file}"), must_exist = FALSE))
+    )
+    jsonlite::write_json(spec, spec_path, pretty = TRUE, auto_unbox = TRUE, null = "null")
+
+    findings <- ni_lint_specs(spec_paths = spec_path, fix = TRUE, write = TRUE, strict = FALSE)
+    expect_true(any(findings$code == "constraint_unknown_ref" & findings$fixed))
+    expect_true(any(findings$code == "position_collision" & findings$fixed))
+
+    fixed <- jsonlite::read_json(spec_path, simplifyVector = FALSE)
+    expect_identical(fixed$inputs$mode_a$constraints$xor, list("mode_b"))
+    expect_identical(fixed$inputs$mode_b$constraints$requires, list("in_file"))
+    pos_count <- sum(vapply(fixed$inputs[c("mode_a", "mode_b")], function(x) !is.null(x$cli$position), logical(1)))
+    expect_equal(pos_count, 1)
+  })
+})
+
+test_that("bool placeholders are warnings, not errors", {
+  withr::with_tempdir({
+    spec_path <- file.path(getwd(), "tmp_bool.json")
+    spec <- list(
+      spec_version = "0.1.0",
+      id = "test.bool_placeholder",
+      title = "Bool Placeholder",
+      command = "echo",
+      inputs = list(
+        in_file = list(type = "file", required = TRUE, cli = list(argstr = "%s", position = 0)),
+        as_int = list(type = "bool", cli = list(argstr = "--flag %d"))
+      ),
+      outputs = list(out_file = list(type = "file", path = list(template = "{in_file}"), must_exist = FALSE))
+    )
+    jsonlite::write_json(spec, spec_path, pretty = TRUE, auto_unbox = TRUE, null = "null")
+
+    findings <- ni_lint_specs(spec_paths = spec_path, fix = FALSE, write = FALSE, strict = FALSE)
+    errs <- findings[findings$level == "error", , drop = FALSE]
+    expect_false(any(errs$code == "flag_placeholder"))
+    expect_true(any(findings$code == "bool_placeholder" & findings$level == "warning"))
+  })
+})
+
 test_that("ni_lint_specs reports clean shell syntax for bundled specs", {
   findings <- ni_lint_specs(spec_dir = "inst/specs", strict = FALSE, fix = FALSE)
   shell_errors <- findings[findings$code == "shell_argstr" & findings$level == "error", , drop = FALSE]

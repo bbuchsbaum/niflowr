@@ -18,11 +18,7 @@
         "argstr": "--fsgd %s"
       },
       "constraints": {
-        "xor": [
-          "subjects",
-          "fsgd_file",
-          "subject_file"
-        ]
+        "xor": ["subjects", "subject_file"]
       }
     },
     "fwhm": {
@@ -120,11 +116,7 @@
         "argstr": "--f %s"
       },
       "constraints": {
-        "xor": [
-          "subjects",
-          "fsgd_file",
-          "subject_file"
-        ]
+        "xor": ["subjects", "fsgd_file"]
       }
     },
     "subjects": {
@@ -134,11 +126,7 @@
         "argstr": "--s %s..."
       },
       "constraints": {
-        "xor": [
-          "subjects",
-          "fsgd_file",
-          "subject_file"
-        ]
+        "xor": ["fsgd_file", "subject_file"]
       }
     },
     "surf_area": {
@@ -148,11 +136,7 @@
         "argstr": "--area %s"
       },
       "constraints": {
-        "xor": [
-          "surf_measure",
-          "surf_measure_file",
-          "surf_area"
-        ]
+        "xor": ["surf_measure", "surf_measure_file"]
       }
     },
     "surf_dir": {
@@ -169,11 +153,7 @@
         "argstr": "--meas %s"
       },
       "constraints": {
-        "xor": [
-          "surf_measure",
-          "surf_measure_file",
-          "surf_area"
-        ]
+        "xor": ["surf_measure_file", "surf_area"]
       }
     },
     "surf_measure_file": {
@@ -183,11 +163,7 @@
         "argstr": "--is %s..."
       },
       "constraints": {
-        "xor": [
-          "surf_measure",
-          "surf_measure_file",
-          "surf_area"
-        ]
+        "xor": ["surf_measure", "surf_area"]
       }
     },
     "target": {

@@ -227,14 +227,36 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     positions[[key]] <- c(positions[[key]], nm)
   }
   for (key in names(positions)) {
-    if (length(positions[[key]]) > 1) {
-      add_finding(
-        level = "error",
-        code = "position_collision",
-        param = paste(positions[[key]], collapse = ","),
-        message = sprintf("Multiple inputs share position %s: %s",
-                          key, paste(positions[[key]], collapse = ", "))
-      )
+    params_at_pos <- positions[[key]]
+    if (length(params_at_pos) > 1) {
+      if (fix) {
+        keep <- choose_position_winner(inputs, params_at_pos)
+        drop <- setdiff(params_at_pos, keep)
+        for (nm in drop) {
+          if (!is.null(inputs[[nm]]$cli$position)) {
+            inputs[[nm]]$cli$position <- NULL
+            fixed <- TRUE
+          }
+        }
+        add_finding(
+          level = "warning",
+          code = "position_collision",
+          param = paste(params_at_pos, collapse = ","),
+          message = sprintf(
+            "Resolved position %s collision by keeping %s; dropped from %s",
+            key, keep, paste(drop, collapse = ", ")
+          ),
+          fixed_flag = TRUE
+        )
+      } else {
+        add_finding(
+          level = "error",
+          code = "position_collision",
+          param = paste(params_at_pos, collapse = ","),
+          message = sprintf("Multiple inputs share position %s: %s",
+                            key, paste(params_at_pos, collapse = ", "))
+        )
+      }
     }
   }
 
@@ -244,12 +266,21 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     if (!def$type %in% c("flag", "bool")) next
     argstr <- def$cli$argstr
     if (is.character(argstr) && grepl("%", argstr)) {
-      add_finding(
-        level = "error",
-        code = "flag_placeholder",
-        param = nm,
-        message = sprintf("%s input has placeholder in argstr: %s", def$type, argstr)
-      )
+      if (identical(def$type, "flag")) {
+        add_finding(
+          level = "error",
+          code = "flag_placeholder",
+          param = nm,
+          message = sprintf("%s input has placeholder in argstr: %s", def$type, argstr)
+        )
+      } else {
+        add_finding(
+          level = "warning",
+          code = "bool_placeholder",
+          param = nm,
+          message = sprintf("bool input uses formatted argstr: %s", argstr)
+        )
+      }
     }
   }
 
@@ -259,24 +290,62 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     cons <- inputs[[nm]]$constraints
     if (is.null(cons)) next
     for (kind in intersect(names(cons), c("xor", "requires"))) {
-      vals <- as.character(unlist(cons[[kind]]))
-      missing <- setdiff(vals, input_names)
-      if (length(missing) > 0) {
-        add_finding(
-          level = "error",
-          code = "constraint_unknown_ref",
-          param = nm,
-          message = sprintf("constraints.%s references unknown inputs: %s",
-                            kind, paste(missing, collapse = ", "))
-        )
-      }
-      if (nm %in% vals) {
+      # Normalize to list form so JSON round-trips as arrays under auto_unbox=TRUE.
+      if (fix && !is.list(cons[[kind]])) {
+        cons[[kind]] <- as.list(as.character(unlist(cons[[kind]])))
+        inputs[[nm]]$constraints <- cons
+        fixed <- TRUE
         add_finding(
           level = "warning",
-          code = "constraint_self_ref",
+          code = "constraint_array_shape",
           param = nm,
-          message = sprintf("constraints.%s includes self-reference.", kind)
+          message = sprintf("Normalized constraints.%s to array form.", kind),
+          fixed_flag = TRUE
         )
+      }
+
+      vals <- unique(as.character(unlist(cons[[kind]])))
+      missing <- setdiff(vals, input_names)
+      self_ref <- intersect(vals, nm)
+      cleaned <- setdiff(intersect(vals, input_names), nm)
+
+      if (fix && (length(missing) > 0 || length(self_ref) > 0)) {
+        if (length(cleaned) == 0) {
+          cons[[kind]] <- NULL
+        } else {
+          cons[[kind]] <- as.list(cleaned)
+        }
+        inputs[[nm]]$constraints <- cons
+        fixed <- TRUE
+
+        detail <- c()
+        if (length(missing) > 0) detail <- c(detail, paste0("unknown=", paste(missing, collapse = ",")))
+        if (length(self_ref) > 0) detail <- c(detail, "self-ref removed")
+        add_finding(
+          level = "warning",
+          code = "constraint_unknown_ref",
+          param = nm,
+          message = sprintf("Normalized constraints.%s (%s).", kind, paste(detail, collapse = "; ")),
+          fixed_flag = TRUE
+        )
+      } else {
+        if (length(missing) > 0) {
+          add_finding(
+            level = "error",
+            code = "constraint_unknown_ref",
+            param = nm,
+            message = sprintf("constraints.%s references unknown inputs: %s",
+                              kind, paste(missing, collapse = ", "))
+          )
+        }
+        if (length(self_ref) > 0) {
+          add_finding(
+            level = "warning",
+            code = "constraint_self_ref",
+            param = nm,
+            message = sprintf("constraints.%s includes self-reference.", kind)
+          )
+        }
       }
     }
   }
@@ -304,6 +373,21 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
   } else {
     list(findings = findings, spec_fixed = NULL)
   }
+}
+
+#' @keywords internal
+choose_position_winner <- function(inputs, params) {
+  score <- vapply(params, function(nm) {
+    def <- inputs[[nm]]
+    req <- isTRUE(def$required)
+    type <- def$type %||% "string"
+    # Prefer required and non-flag values for deterministic positional rendering
+    (if (req) 100L else 0L) +
+      (if (type %in% c("file", "dir", "string", "int", "double", "enum", "list")) 10L else 0L)
+  }, integer(1))
+
+  winners <- params[score == max(score)]
+  sort(winners)[1]
 }
 
 #' @keywords internal

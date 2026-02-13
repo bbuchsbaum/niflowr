@@ -56,11 +56,7 @@
       "cli": {
         "argstr": "--topup=%s"
       },
-      "constraints": {
-        "requires": [
-          "in_topup_movpar"
-        ]
-      }
+      "constraints": {}
     },
     "interp": {
       "type": "enum",

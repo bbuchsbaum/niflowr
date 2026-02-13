@@ -40,13 +40,7 @@
         "argstr": "-d"
       },
       "constraints": {
-        "xor": [
-          "out_format",
-          "out_nice",
-          "out_int",
-          "out_fint",
-          "out_cint"
-        ]
+        "xor": ["out_format", "out_nice", "out_int", "out_fint"]
       }
     },
     "out_file": {
@@ -65,13 +59,7 @@
         "argstr": "-f"
       },
       "constraints": {
-        "xor": [
-          "out_format",
-          "out_nice",
-          "out_double",
-          "out_int",
-          "out_cint"
-        ]
+        "xor": ["out_format", "out_nice", "out_double", "out_int"]
       }
     },
     "out_format": {
@@ -88,13 +76,7 @@
         "argstr": "-form %s"
       },
       "constraints": {
-        "xor": [
-          "out_int",
-          "out_nice",
-          "out_double",
-          "out_fint",
-          "out_cint"
-        ]
+        "xor": ["out_int", "out_nice", "out_double", "out_fint"]
       }
     },
     "out_int": {
@@ -104,13 +86,7 @@
         "argstr": "-i"
       },
       "constraints": {
-        "xor": [
-          "out_format",
-          "out_nice",
-          "out_double",
-          "out_fint",
-          "out_cint"
-        ]
+        "xor": ["out_format", "out_nice", "out_double", "out_fint"]
       }
     },
     "out_nice": {
@@ -120,13 +96,7 @@
         "argstr": "-n"
       },
       "constraints": {
-        "xor": [
-          "out_format",
-          "out_int",
-          "out_double",
-          "out_fint",
-          "out_cint"
-        ]
+        "xor": ["out_format", "out_int", "out_double", "out_fint"]
       }
     },
     "sel": {
