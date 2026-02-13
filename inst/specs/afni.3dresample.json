@@ -1,0 +1,86 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.3dresample",
+  "title": "AFNI Resample",
+  "command": "3dresample",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to 3dresample",
+      "required": true,
+      "cli": {
+        "argstr": "-inset %s",
+        "position": -1
+      }
+    },
+    "master": {
+      "type": "file",
+      "desc": "align dataset grid to a reference file",
+      "cli": {
+        "argstr": "-master %s"
+      }
+    },
+    "orientation": {
+      "type": "string",
+      "desc": "new orientation code",
+      "cli": {
+        "argstr": "-orient %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "resample_mode": {
+      "type": "enum",
+      "desc": "resampling method from set {\"NN\", \"Li\", \"Cu\", \"Bk\"}. These are for \"Nearest Neighbor\", \"Linear\", \"Cubic\" and \"Blocky\"interpolation, respectively. Default is NN.",
+      "choices": [
+        "NN",
+        "Li",
+        "Cu",
+        "Bk"
+      ],
+      "cli": {
+        "argstr": "-rmode %s"
+      }
+    },
+    "voxel_size": {
+      "type": "list",
+      "desc": "resample to new dx, dy and dz",
+      "cli": {
+        "argstr": "-dxyz %f %f %f"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Resample",
+    "nipype_version": "1.10.0",
+    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+  },
+  "description": "Resample or reorient an image using AFNI 3dresample command"
+}

@@ -1,0 +1,126 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.apply_transforms",
+  "title": "ANTS ApplyTransforms",
+  "command": "antsApplyTransforms",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "default_value": {
+      "type": "double",
+      "default": 0.0,
+      "cli": {
+        "argstr": "--default-value %g"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.",
+      "choices": [
+        2,
+        3,
+        4
+      ],
+      "cli": {
+        "argstr": "--dimensionality %d"
+      }
+    },
+    "float": {
+      "type": "bool",
+      "desc": "Use float instead of double for computations.",
+      "default": false,
+      "cli": {
+        "argstr": "--float %d"
+      }
+    },
+    "input_image": {
+      "type": "file",
+      "desc": "image to apply transformation to (generally a coregistered functional)",
+      "required": true,
+      "cli": {
+        "argstr": "--input %s"
+      }
+    },
+    "input_image_type": {
+      "type": "enum",
+      "desc": "Option specifying the input image type of scalar (default), vector, tensor, or time series.",
+      "choices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "cli": {
+        "argstr": "--input-image-type %d"
+      }
+    },
+    "interpolation": {
+      "type": "enum",
+      "default": "Linear",
+      "choices": [
+        "Linear",
+        "NearestNeighbor",
+        "CosineWindowedSinc",
+        "WelchWindowedSinc",
+        "HammingWindowedSinc",
+        "LanczosWindowedSinc",
+        "MultiLabel",
+        "Gaussian",
+        "BSpline",
+        "GenericLabel"
+      ],
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "output_image": {
+      "type": "string",
+      "desc": "output file name",
+      "cli": {
+        "argstr": "--output %s"
+      }
+    },
+    "reference_image": {
+      "type": "file",
+      "desc": "reference image space that you wish to warp INTO",
+      "required": true,
+      "cli": {
+        "argstr": "--reference-image %s"
+      }
+    },
+    "transforms": {
+      "type": "list",
+      "desc": "transform files: will be applied in reverse order. For example, the last specified transform will be applied first.",
+      "required": true,
+      "cli": {
+        "argstr": "%s"
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.resampling.ApplyTransforms",
+    "nipype_version": "1.10.0",
+    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+  },
+  "description": "ApplyTransforms, applied to an input image, transforms it according to a"
+}

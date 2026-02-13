@@ -1,0 +1,39 @@
+Package: niflowr
+Title: Spec-Driven Neuroimaging Command-Line Tool Wrappers
+Version: 0.1.0
+Authors@R: person("Bradley", "Buchsbaum", email = "brad.buchsbaum@gmail.com",
+    role = c("aut", "cre"))
+Description: A lightweight, declarative framework for wrapping neuroimaging
+    command-line tools (FSL, AFNI, ANTs, FreeSurfer) in R. Tool interfaces are
+    defined as JSON specifications that describe inputs, outputs, CLI rendering
+    rules, and validation constraints. The package builds safe argument vectors
+    (never shell strings), executes via 'processx', captures provenance, and
+    integrates with 'targets' for pipeline orchestration.
+License: MIT + file LICENSE
+URL: https://github.com/bbuchsbaum/niflowr
+BugReports: https://github.com/bbuchsbaum/niflowr/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    cli,
+    digest,
+    fs,
+    glue,
+    jsonlite,
+    jsonvalidate,
+    processx,
+    utils
+Suggests:
+    bidser,
+    crew,
+    knitr,
+    neuroim2,
+    neurotransform,
+    rmarkdown,
+    targets,
+    tarchetypes,
+    testthat (>= 3.0.0),
+    withr
+VignetteBuilder: knitr
+Config/testthat/edition: 3

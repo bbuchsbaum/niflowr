@@ -1,0 +1,38 @@
+[
+  {
+    "interface": "nipype.interfaces.fsl.preprocess:BET",
+    "id": "fsl.bet"
+  },
+  {
+    "interface": "nipype.interfaces.fsl.preprocess:FLIRT",
+    "id": "fsl.flirt"
+  },
+  {
+    "interface": "nipype.interfaces.fsl.preprocess:ApplyWarp",
+    "id": "fsl.applywarp"
+  },
+  {
+    "interface": "nipype.interfaces.ants.resampling:ApplyTransforms",
+    "id": "ants.apply_transforms"
+  },
+  {
+    "interface": "nipype.interfaces.ants.registration:Registration",
+    "id": "ants.registration"
+  },
+  {
+    "interface": "nipype.interfaces.freesurfer.preprocess:MRIConvert",
+    "id": "freesurfer.mri_convert"
+  },
+  {
+    "interface": "nipype.interfaces.freesurfer.preprocess:ReconAll",
+    "id": "freesurfer.recon_all"
+  },
+  {
+    "interface": "nipype.interfaces.afni.utils:Calc",
+    "id": "afni.3dcalc"
+  },
+  {
+    "interface": "nipype.interfaces.afni.utils:Resample",
+    "id": "afni.3dresample"
+  }
+]

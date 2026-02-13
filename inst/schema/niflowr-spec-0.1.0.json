@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "niflowr interface spec",
+  "description": "Declarative specification for a neuroimaging command-line tool interface",
+  "type": "object",
+  "required": ["spec_version", "id", "command", "inputs", "outputs"],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "description": "Semantic version of the spec schema"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(\\.[a-z0-9_]+)*$",
+      "description": "Stable identifier, e.g. fsl.bet"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable tool name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of what the tool does"
+    },
+    "command": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      ],
+      "description": "Command name or command vector"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/param" },
+      "description": "Named map of input parameters"
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/output" },
+      "description": "Named map of expected outputs"
+    },
+    "runtime": { "$ref": "#/$defs/runtime" },
+    "origin": { "$ref": "#/$defs/origin" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "param": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["file", "dir", "string", "int", "double", "bool", "flag", "enum", "list"]
+        },
+        "desc": { "type": "string" },
+        "required": { "type": "boolean", "default": false },
+        "default": {},
+        "choices": {
+          "type": "array",
+          "items": {},
+          "minItems": 1,
+          "description": "Allowed values for enum type"
+        },
+        "cli": { "$ref": "#/$defs/cli" },
+        "validate": { "$ref": "#/$defs/validate" },
+        "constraints": { "$ref": "#/$defs/constraints" }
+      },
+      "additionalProperties": false
+    },
+    "cli": {
+      "type": "object",
+      "properties": {
+        "argstr": {
+          "type": "string",
+          "description": "printf-style format string for CLI rendering, e.g. '-f %f'"
+        },
+        "position": {
+          "type": "integer",
+          "description": "Ordering for positional arguments (negative = from end)"
+        },
+        "sep": {
+          "type": "string",
+          "description": "Separator for joining list values"
+        },
+        "repeat": {
+          "type": "boolean",
+          "default": false,
+          "description": "Repeat the flag for each list element"
+        },
+        "stdout_to": {
+          "type": "string",
+          "description": "Input name whose value is used as stdout redirect path (runner-level)"
+        },
+        "stderr_to": {
+          "type": "string",
+          "description": "Input name whose value is used as stderr redirect path (runner-level)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "validate": {
+      "type": "object",
+      "properties": {
+        "exists": {
+          "type": "boolean",
+          "description": "File/dir must exist"
+        },
+        "min": {
+          "type": "number",
+          "description": "Minimum numeric value"
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum numeric value"
+        },
+        "regex": {
+          "type": "string",
+          "description": "Value must match this regex"
+        }
+      },
+      "additionalProperties": false
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "xor": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Mutually exclusive parameter group"
+        },
+        "requires": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Parameters that must also be set"
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "required": ["type", "path"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["file", "dir", "text"]
+        },
+        "path": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["from_input"],
+              "properties": {
+                "from_input": { "type": "string" }
+              },
+              "additionalProperties": false,
+              "description": "Output path taken directly from an input value"
+            },
+            {
+              "type": "object",
+              "required": ["template"],
+              "properties": {
+                "template": { "type": "string" }
+              },
+              "additionalProperties": false,
+              "description": "Output path computed from a glue-style template using input values"
+            },
+            {
+              "type": "object",
+              "required": ["static"],
+              "properties": {
+                "static": { "type": "string" }
+              },
+              "additionalProperties": false,
+              "description": "Fixed output path"
+            }
+          ]
+        },
+        "must_exist": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to verify this output exists after execution"
+        }
+      },
+      "additionalProperties": false
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "cwd": {
+          "type": "string",
+          "description": "Working directory override"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Environment variables"
+        },
+        "version": {
+          "type": "object",
+          "properties": {
+            "args": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Args to probe tool version, e.g. ['--version']"
+            }
+          },
+          "additionalProperties": false
+        },
+        "container": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["none", "docker", "apptainer"]
+            },
+            "image": { "type": "string" },
+            "args": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Extra args passed to docker/apptainer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "origin": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["manual", "nipype"]
+        },
+        "nipype_class": { "type": "string" },
+        "nipype_version": { "type": "string" },
+        "imported_at": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

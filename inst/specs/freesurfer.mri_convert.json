@@ -1,0 +1,807 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.mri_convert",
+  "title": "FREESURFER MRIConvert",
+  "command": "mri_convert",
+  "inputs": {
+    "apply_inv_transform": {
+      "type": "file",
+      "desc": "apply inverse transformation xfm file",
+      "cli": {
+        "argstr": "--apply_inverse_transform %s"
+      }
+    },
+    "apply_transform": {
+      "type": "file",
+      "desc": "apply xfm file",
+      "cli": {
+        "argstr": "--apply_transform %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "ascii": {
+      "type": "flag",
+      "desc": "save output as ascii col>row>slice>frame",
+      "cli": {
+        "argstr": "--ascii"
+      }
+    },
+    "autoalign_matrix": {
+      "type": "file",
+      "desc": "text file with autoalign matrix",
+      "cli": {
+        "argstr": "--autoalign %s"
+      }
+    },
+    "color_file": {
+      "type": "file",
+      "desc": "color file",
+      "cli": {
+        "argstr": "--color_file %s"
+      }
+    },
+    "conform": {
+      "type": "flag",
+      "desc": "conform to 1mm voxel size in coronal slice direction with 256^3 or more",
+      "cli": {
+        "argstr": "--conform"
+      }
+    },
+    "conform_min": {
+      "type": "flag",
+      "desc": "conform to smallest size",
+      "cli": {
+        "argstr": "--conform_min"
+      }
+    },
+    "conform_size": {
+      "type": "double",
+      "desc": "conform to size_in_mm",
+      "cli": {
+        "argstr": "--conform_size %s"
+      }
+    },
+    "crop_center": {
+      "type": "list",
+      "desc": "<x> <y> <z> crop to 256 around center (x, y, z)",
+      "cli": {
+        "argstr": "--crop %d %d %d"
+      }
+    },
+    "crop_gdf": {
+      "type": "flag",
+      "desc": "apply GDF cropping",
+      "cli": {
+        "argstr": "--crop_gdf"
+      }
+    },
+    "crop_size": {
+      "type": "list",
+      "desc": "<dx> <dy> <dz> crop to size <dx, dy, dz>",
+      "cli": {
+        "argstr": "--cropsize %d %d %d"
+      }
+    },
+    "cut_ends": {
+      "type": "int",
+      "desc": "remove ncut slices from the ends",
+      "cli": {
+        "argstr": "--cutends %d"
+      }
+    },
+    "cw256": {
+      "type": "flag",
+      "desc": "confrom to dimensions of 256^3",
+      "cli": {
+        "argstr": "--cw256"
+      }
+    },
+    "devolve_transform": {
+      "type": "string",
+      "desc": "subject id",
+      "cli": {
+        "argstr": "--devolvexfm %s"
+      }
+    },
+    "drop_n": {
+      "type": "int",
+      "desc": "drop the last n frames",
+      "cli": {
+        "argstr": "--ndrop %d"
+      }
+    },
+    "fill_parcellation": {
+      "type": "flag",
+      "desc": "fill parcellation",
+      "cli": {
+        "argstr": "--fill_parcellation"
+      }
+    },
+    "force_ras": {
+      "type": "flag",
+      "desc": "use default when orientation info absent",
+      "cli": {
+        "argstr": "--force_ras_good"
+      }
+    },
+    "frame": {
+      "type": "int",
+      "desc": "keep only 0-based frame number",
+      "cli": {
+        "argstr": "--frame %d"
+      }
+    },
+    "frame_subsample": {
+      "type": "list",
+      "desc": "start delta end : frame subsampling (end = -1 for end)",
+      "cli": {
+        "argstr": "--fsubsample %d %d %d"
+      }
+    },
+    "fwhm": {
+      "type": "double",
+      "desc": "smooth input volume by fwhm mm",
+      "cli": {
+        "argstr": "--fwhm %f"
+      }
+    },
+    "in_center": {
+      "type": "list",
+      "desc": "<R coordinate> <A coordinate> <S coordinate>",
+      "cli": {
+        "argstr": "--in_center %s"
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "File to read/convert",
+      "required": true,
+      "cli": {
+        "argstr": "--input_volume %s",
+        "position": -2
+      }
+    },
+    "in_i_dir": {
+      "type": "list",
+      "desc": "<R direction> <A direction> <S direction>",
+      "cli": {
+        "argstr": "--in_i_direction %f %f %f"
+      }
+    },
+    "in_i_size": {
+      "type": "int",
+      "desc": "input i size",
+      "cli": {
+        "argstr": "--in_i_size %d"
+      }
+    },
+    "in_info": {
+      "type": "flag",
+      "desc": "display input info",
+      "cli": {
+        "argstr": "--in_info"
+      }
+    },
+    "in_j_dir": {
+      "type": "list",
+      "desc": "<R direction> <A direction> <S direction>",
+      "cli": {
+        "argstr": "--in_j_direction %f %f %f"
+      }
+    },
+    "in_j_size": {
+      "type": "int",
+      "desc": "input j size",
+      "cli": {
+        "argstr": "--in_j_size %d"
+      }
+    },
+    "in_k_dir": {
+      "type": "list",
+      "desc": "<R direction> <A direction> <S direction>",
+      "cli": {
+        "argstr": "--in_k_direction %f %f %f"
+      }
+    },
+    "in_k_size": {
+      "type": "int",
+      "desc": "input k size",
+      "cli": {
+        "argstr": "--in_k_size %d"
+      }
+    },
+    "in_like": {
+      "type": "file",
+      "desc": "input looks like",
+      "cli": {
+        "argstr": "--in_like %s"
+      }
+    },
+    "in_matrix": {
+      "type": "flag",
+      "desc": "display input matrix",
+      "cli": {
+        "argstr": "--in_matrix"
+      }
+    },
+    "in_orientation": {
+      "type": "enum",
+      "desc": "specify the input orientation",
+      "choices": [
+        "LAI",
+        "LIA",
+        "ALI",
+        "AIL",
+        "ILA",
+        "IAL",
+        "LAS",
+        "LSA",
+        "ALS",
+        "ASL",
+        "SLA",
+        "SAL",
+        "LPI",
+        "LIP",
+        "PLI",
+        "PIL",
+        "ILP",
+        "IPL",
+        "LPS",
+        "LSP",
+        "PLS",
+        "PSL",
+        "SLP",
+        "SPL",
+        "RAI",
+        "RIA",
+        "ARI",
+        "AIR",
+        "IRA",
+        "IAR",
+        "RAS",
+        "RSA",
+        "ARS",
+        "ASR",
+        "SRA",
+        "SAR",
+        "RPI",
+        "RIP",
+        "PRI",
+        "PIR",
+        "IRP",
+        "IPR",
+        "RPS",
+        "RSP",
+        "PRS",
+        "PSR",
+        "SRP",
+        "SPR"
+      ],
+      "cli": {
+        "argstr": "--in_orientation %s"
+      }
+    },
+    "in_scale": {
+      "type": "double",
+      "desc": "input intensity scale factor",
+      "cli": {
+        "argstr": "--scale %f"
+      }
+    },
+    "in_stats": {
+      "type": "flag",
+      "desc": "display input stats",
+      "cli": {
+        "argstr": "--in_stats"
+      }
+    },
+    "in_type": {
+      "type": "enum",
+      "desc": "input file type",
+      "choices": [
+        "cor",
+        "mgh",
+        "mgz",
+        "minc",
+        "analyze",
+        "analyze4d",
+        "spm",
+        "afni",
+        "brik",
+        "bshort",
+        "bfloat",
+        "sdt",
+        "outline",
+        "otl",
+        "gdf",
+        "nifti1",
+        "nii",
+        "niigz",
+        "ge",
+        "gelx",
+        "lx",
+        "ximg",
+        "siemens",
+        "dicom",
+        "siemens_dicom"
+      ],
+      "cli": {
+        "argstr": "--in_type %s"
+      }
+    },
+    "invert_contrast": {
+      "type": "double",
+      "desc": "threshold for inversting contrast",
+      "cli": {
+        "argstr": "--invert_contrast %f"
+      }
+    },
+    "midframe": {
+      "type": "flag",
+      "desc": "keep only the middle frame",
+      "cli": {
+        "argstr": "--mid-frame"
+      }
+    },
+    "no_change": {
+      "type": "flag",
+      "desc": "don't change type of input to that of template",
+      "cli": {
+        "argstr": "--nochange"
+      }
+    },
+    "no_scale": {
+      "type": "flag",
+      "desc": "dont rescale values for COR",
+      "cli": {
+        "argstr": "--no_scale 1"
+      }
+    },
+    "no_translate": {
+      "type": "flag",
+      "desc": "???",
+      "cli": {
+        "argstr": "--no_translate"
+      }
+    },
+    "no_write": {
+      "type": "flag",
+      "desc": "do not write output",
+      "cli": {
+        "argstr": "--no_write"
+      }
+    },
+    "out_center": {
+      "type": "list",
+      "desc": "<R coordinate> <A coordinate> <S coordinate>",
+      "cli": {
+        "argstr": "--out_center %f %f %f"
+      }
+    },
+    "out_datatype": {
+      "type": "enum",
+      "desc": "output data type <uchar|short|int|float>",
+      "choices": [
+        "uchar",
+        "short",
+        "int",
+        "float"
+      ],
+      "cli": {
+        "argstr": "--out_data_type %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output filename or True to generate one",
+      "cli": {
+        "argstr": "--output_volume %s",
+        "position": -1
+      }
+    },
+    "out_i_count": {
+      "type": "int",
+      "desc": "some count ?? in i direction",
+      "cli": {
+        "argstr": "--out_i_count %d"
+      }
+    },
+    "out_i_dir": {
+      "type": "list",
+      "desc": "<R direction> <A direction> <S direction>",
+      "cli": {
+        "argstr": "--out_i_direction %f %f %f"
+      }
+    },
+    "out_i_size": {
+      "type": "int",
+      "desc": "output i size",
+      "cli": {
+        "argstr": "--out_i_size %d"
+      }
+    },
+    "out_info": {
+      "type": "flag",
+      "desc": "display output info",
+      "cli": {
+        "argstr": "--out_info"
+      }
+    },
+    "out_j_count": {
+      "type": "int",
+      "desc": "some count ?? in j direction",
+      "cli": {
+        "argstr": "--out_j_count %d"
+      }
+    },
+    "out_j_dir": {
+      "type": "list",
+      "desc": "<R direction> <A direction> <S direction>",
+      "cli": {
+        "argstr": "--out_j_direction %f %f %f"
+      }
+    },
+    "out_j_size": {
+      "type": "int",
+      "desc": "output j size",
+      "cli": {
+        "argstr": "--out_j_size %d"
+      }
+    },
+    "out_k_count": {
+      "type": "int",
+      "desc": "some count ?? in k direction",
+      "cli": {
+        "argstr": "--out_k_count %d"
+      }
+    },
+    "out_k_dir": {
+      "type": "list",
+      "desc": "<R direction> <A direction> <S direction>",
+      "cli": {
+        "argstr": "--out_k_direction %f %f %f"
+      }
+    },
+    "out_k_size": {
+      "type": "int",
+      "desc": "output k size",
+      "cli": {
+        "argstr": "--out_k_size %d"
+      }
+    },
+    "out_matrix": {
+      "type": "flag",
+      "desc": "display output matrix",
+      "cli": {
+        "argstr": "--out_matrix"
+      }
+    },
+    "out_orientation": {
+      "type": "enum",
+      "desc": "specify the output orientation",
+      "choices": [
+        "LAI",
+        "LIA",
+        "ALI",
+        "AIL",
+        "ILA",
+        "IAL",
+        "LAS",
+        "LSA",
+        "ALS",
+        "ASL",
+        "SLA",
+        "SAL",
+        "LPI",
+        "LIP",
+        "PLI",
+        "PIL",
+        "ILP",
+        "IPL",
+        "LPS",
+        "LSP",
+        "PLS",
+        "PSL",
+        "SLP",
+        "SPL",
+        "RAI",
+        "RIA",
+        "ARI",
+        "AIR",
+        "IRA",
+        "IAR",
+        "RAS",
+        "RSA",
+        "ARS",
+        "ASR",
+        "SRA",
+        "SAR",
+        "RPI",
+        "RIP",
+        "PRI",
+        "PIR",
+        "IRP",
+        "IPR",
+        "RPS",
+        "RSP",
+        "PRS",
+        "PSR",
+        "SRP",
+        "SPR"
+      ],
+      "cli": {
+        "argstr": "--out_orientation %s"
+      }
+    },
+    "out_scale": {
+      "type": "double",
+      "desc": "output intensity scale factor",
+      "cli": {
+        "argstr": "--out-scale %d"
+      }
+    },
+    "out_stats": {
+      "type": "flag",
+      "desc": "display output stats",
+      "cli": {
+        "argstr": "--out_stats"
+      }
+    },
+    "out_type": {
+      "type": "enum",
+      "desc": "output file type",
+      "choices": [
+        "cor",
+        "mgh",
+        "mgz",
+        "minc",
+        "analyze",
+        "analyze4d",
+        "spm",
+        "afni",
+        "brik",
+        "bshort",
+        "bfloat",
+        "sdt",
+        "outline",
+        "otl",
+        "gdf",
+        "nifti1",
+        "nii",
+        "niigz"
+      ],
+      "cli": {
+        "argstr": "--out_type %s"
+      }
+    },
+    "parse_only": {
+      "type": "flag",
+      "desc": "parse input only",
+      "cli": {
+        "argstr": "--parse_only"
+      }
+    },
+    "read_only": {
+      "type": "flag",
+      "desc": "read the input volume",
+      "cli": {
+        "argstr": "--read_only"
+      }
+    },
+    "reorder": {
+      "type": "list",
+      "desc": "olddim1 olddim2 olddim3",
+      "cli": {
+        "argstr": "--reorder %d %d %d"
+      }
+    },
+    "resample_type": {
+      "type": "enum",
+      "desc": "<interpolate|weighted|nearest|sinc|cubic> (default is interpolate)",
+      "choices": [
+        "interpolate",
+        "weighted",
+        "nearest",
+        "sinc",
+        "cubic"
+      ],
+      "cli": {
+        "argstr": "--resample_type %s"
+      }
+    },
+    "reslice_like": {
+      "type": "file",
+      "desc": "reslice output to match file",
+      "cli": {
+        "argstr": "--reslice_like %s"
+      }
+    },
+    "sdcm_list": {
+      "type": "file",
+      "desc": "list of DICOM files for conversion",
+      "cli": {
+        "argstr": "--sdcmlist %s"
+      }
+    },
+    "skip_n": {
+      "type": "int",
+      "desc": "skip the first n frames",
+      "cli": {
+        "argstr": "--nskip %d"
+      }
+    },
+    "slice_bias": {
+      "type": "double",
+      "desc": "apply half-cosine bias field",
+      "cli": {
+        "argstr": "--slice-bias %f"
+      }
+    },
+    "slice_crop": {
+      "type": "list",
+      "desc": "s_start s_end : keep slices s_start to s_end",
+      "cli": {
+        "argstr": "--slice-crop %d %d"
+      }
+    },
+    "slice_reverse": {
+      "type": "flag",
+      "desc": "reverse order of slices, update vox2ras",
+      "cli": {
+        "argstr": "--slice-reverse"
+      }
+    },
+    "smooth_parcellation": {
+      "type": "flag",
+      "desc": "smooth parcellation",
+      "cli": {
+        "argstr": "--smooth_parcellation"
+      }
+    },
+    "sphinx": {
+      "type": "flag",
+      "desc": "change orientation info to sphinx",
+      "cli": {
+        "argstr": "--sphinx"
+      }
+    },
+    "split": {
+      "type": "flag",
+      "desc": "split output frames into separate output files.",
+      "cli": {
+        "argstr": "--split"
+      }
+    },
+    "status_file": {
+      "type": "file",
+      "desc": "status file for DICOM conversion",
+      "cli": {
+        "argstr": "--status %s"
+      }
+    },
+    "subject_name": {
+      "type": "string",
+      "desc": "subject name ???",
+      "cli": {
+        "argstr": "--subject_name %s"
+      }
+    },
+    "te": {
+      "type": "int",
+      "desc": "TE in msec",
+      "cli": {
+        "argstr": "-te %d"
+      }
+    },
+    "template_info": {
+      "type": "flag",
+      "desc": "dump info about template",
+      "cli": {
+        "argstr": "--template_info"
+      }
+    },
+    "template_type": {
+      "type": "enum",
+      "desc": "template file type",
+      "choices": [
+        "cor",
+        "mgh",
+        "mgz",
+        "minc",
+        "analyze",
+        "analyze4d",
+        "spm",
+        "afni",
+        "brik",
+        "bshort",
+        "bfloat",
+        "sdt",
+        "outline",
+        "otl",
+        "gdf",
+        "nifti1",
+        "nii",
+        "niigz",
+        "ge",
+        "gelx",
+        "lx",
+        "ximg",
+        "siemens",
+        "dicom",
+        "siemens_dicom"
+      ],
+      "cli": {
+        "argstr": "--template_type %s"
+      }
+    },
+    "ti": {
+      "type": "int",
+      "desc": "TI in msec (note upper case flag)",
+      "cli": {
+        "argstr": "-ti %d"
+      }
+    },
+    "tr": {
+      "type": "int",
+      "desc": "TR in msec",
+      "cli": {
+        "argstr": "-tr %d"
+      }
+    },
+    "unwarp_gradient": {
+      "type": "flag",
+      "desc": "unwarp gradient nonlinearity",
+      "cli": {
+        "argstr": "--unwarp_gradient_nonlinearity"
+      }
+    },
+    "vox_size": {
+      "type": "list",
+      "desc": "<size_x> <size_y> <size_z> specify the size (mm) - useful for upsampling or downsampling",
+      "cli": {
+        "argstr": "-voxsize %f %f %f"
+      }
+    },
+    "zero_ge_z_offset": {
+      "type": "flag",
+      "desc": "zero ge z offset ???",
+      "cli": {
+        "argstr": "--zero_ge_z_offset"
+      }
+    },
+    "zero_outlines": {
+      "type": "flag",
+      "desc": "zero outlines",
+      "cli": {
+        "argstr": "--zero_outlines"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "text",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.MRIConvert",
+    "nipype_version": "1.10.0",
+    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+  },
+  "description": "use fs mri_convert to manipulate files"
+}

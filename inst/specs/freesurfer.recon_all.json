@@ -1,0 +1,314 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.recon_all",
+  "title": "FREESURFER ReconAll",
+  "command": "recon-all",
+  "inputs": {
+    "FLAIR_file": {
+      "type": "file",
+      "desc": "Convert FLAIR image to orig directory",
+      "cli": {
+        "argstr": "-FLAIR %s"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "T1_files": {
+      "type": "list",
+      "desc": "name of T1 file to process",
+      "cli": {
+        "argstr": "-i %s..."
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "T2_file": {
+      "type": "file",
+      "desc": "Convert T2 image to orig directory",
+      "cli": {
+        "argstr": "-T2 %s"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "base_template_id": {
+      "type": "string",
+      "desc": "base template id",
+      "cli": {
+        "argstr": "-base %s"
+      },
+      "constraints": {
+        "xor": [
+          "subject_id",
+          "longitudinal_timepoint_id"
+        ],
+        "requires": [
+          "base_timepoint_ids"
+        ]
+      }
+    },
+    "base_timepoint_ids": {
+      "type": "list",
+      "desc": "processed timepoint to use in template",
+      "cli": {
+        "argstr": "-base-tp %s..."
+      }
+    },
+    "big_ventricles": {
+      "type": "flag",
+      "desc": "For use in subjects with enlarged ventricles",
+      "cli": {
+        "argstr": "-bigventricles"
+      }
+    },
+    "brainstem": {
+      "type": "flag",
+      "desc": "Segment brainstem structures",
+      "cli": {
+        "argstr": "-brainstem-structures"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "directive": {
+      "type": "enum",
+      "desc": "process directive",
+      "default": "all",
+      "choices": [
+        "all",
+        "autorecon1",
+        "autorecon2",
+        "autorecon2-volonly",
+        "autorecon2-perhemi",
+        "autorecon2-inflate1",
+        "autorecon2-cp",
+        "autorecon2-wm",
+        "autorecon3",
+        "autorecon3-T2pial",
+        "autorecon-pial",
+        "autorecon-hemi",
+        "localGI",
+        "qcache"
+      ],
+      "cli": {
+        "argstr": "-%s",
+        "position": 0
+      }
+    },
+    "expert": {
+      "type": "file",
+      "desc": "Set parameters using expert file",
+      "cli": {
+        "argstr": "-expert %s"
+      }
+    },
+    "flags": {
+      "type": "list",
+      "desc": "additional parameters",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "hemi": {
+      "type": "enum",
+      "desc": "hemisphere to process",
+      "choices": [
+        "lh",
+        "rh"
+      ],
+      "cli": {
+        "argstr": "-hemi %s"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "hippocampal_subfields_T1": {
+      "type": "flag",
+      "desc": "segment hippocampal subfields using input T1 scan",
+      "cli": {
+        "argstr": "-hippocampal-subfields-T1"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "hippocampal_subfields_T2": {
+      "type": "list",
+      "desc": "segment hippocampal subfields using T2 scan, identified by ID (may be combined with hippocampal_subfields_T1)",
+      "cli": {
+        "argstr": "-hippocampal-subfields-T2 %s %s"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "hires": {
+      "type": "flag",
+      "desc": "Conform to minimum voxel size (for voxels < 1mm)",
+      "cli": {
+        "argstr": "-hires"
+      }
+    },
+    "longitudinal_template_id": {
+      "type": "string",
+      "desc": "longitudinal base template id",
+      "cli": {
+        "argstr": "%s",
+        "position": 2
+      }
+    },
+    "longitudinal_timepoint_id": {
+      "type": "string",
+      "desc": "longitudinal session/timepoint id",
+      "cli": {
+        "argstr": "-long %s",
+        "position": 1
+      },
+      "constraints": {
+        "xor": [
+          "subject_id",
+          "base_template_id"
+        ],
+        "requires": [
+          "longitudinal_template_id"
+        ]
+      }
+    },
+    "mprage": {
+      "type": "flag",
+      "desc": "Assume scan parameters are MGH MP-RAGE protocol, which produces darker gray matter",
+      "cli": {
+        "argstr": "-mprage"
+      },
+      "constraints": {
+        "requires": [
+          "subject_id"
+        ]
+      }
+    },
+    "openmp": {
+      "type": "int",
+      "desc": "Number of processors to use in parallel",
+      "cli": {
+        "argstr": "-openmp %d"
+      }
+    },
+    "parallel": {
+      "type": "flag",
+      "desc": "Enable parallel execution",
+      "cli": {
+        "argstr": "-parallel"
+      }
+    },
+    "subject_id": {
+      "type": "string",
+      "desc": "subject name",
+      "cli": {
+        "argstr": "-subjid %s"
+      },
+      "constraints": {
+        "xor": [
+          "base_template_id",
+          "longitudinal_timepoint_id"
+        ]
+      }
+    },
+    "subjects_dir": {
+      "type": "dir",
+      "desc": "path to subjects directory",
+      "cli": {
+        "argstr": "-sd %s"
+      }
+    },
+    "use_FLAIR": {
+      "type": "flag",
+      "desc": "Use FLAIR image to refine the pial surface",
+      "cli": {
+        "argstr": "-FLAIRpial"
+      },
+      "constraints": {
+        "xor": [
+          "use_T2"
+        ]
+      }
+    },
+    "use_T2": {
+      "type": "flag",
+      "desc": "Use T2 image to refine the pial surface",
+      "cli": {
+        "argstr": "-T2pial"
+      },
+      "constraints": {
+        "xor": [
+          "use_FLAIR"
+        ]
+      }
+    },
+    "xopts": {
+      "type": "enum",
+      "desc": "Use, delete or overwrite existing expert options file",
+      "choices": [
+        "use",
+        "clean",
+        "overwrite"
+      ],
+      "cli": {
+        "argstr": "-xopts-%s"
+      }
+    }
+  },
+  "outputs": {
+    "subject_id": {
+      "type": "text",
+      "path": {
+        "from_input": "subject_id"
+      },
+      "must_exist": false
+    },
+    "subjects_dir": {
+      "type": "dir",
+      "path": {
+        "from_input": "subjects_dir"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.freesurfer.preprocess.ReconAll",
+    "nipype_version": "1.10.0",
+    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+  },
+  "description": "Uses recon-all to generate surfaces and parcellations of structural data"
+}

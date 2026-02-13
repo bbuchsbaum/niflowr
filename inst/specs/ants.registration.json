@@ -1,0 +1,232 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.registration",
+  "title": "ANTS Registration",
+  "command": "antsRegistration",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "collapse_output_transforms": {
+      "type": "bool",
+      "desc": "Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.",
+      "default": true,
+      "cli": {
+        "argstr": "--collapse-output-transforms %d"
+      }
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "image dimension (2 or 3)",
+      "default": 3,
+      "choices": [
+        3,
+        2
+      ],
+      "cli": {
+        "argstr": "--dimensionality %d"
+      }
+    },
+    "fixed_image": {
+      "type": "list",
+      "desc": "Image to which the moving_image should be transformed(usually a structural image)",
+      "required": true
+    },
+    "fixed_image_mask": {
+      "type": "file",
+      "desc": "Mask used to limit metric sampling region of the fixed imagein all stages",
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "xor": [
+          "fixed_image_masks"
+        ]
+      }
+    },
+    "float": {
+      "type": "bool",
+      "desc": "Use float instead of double for computations.",
+      "cli": {
+        "argstr": "--float %d"
+      }
+    },
+    "initial_moving_transform": {
+      "type": "list",
+      "desc": "A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.",
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "xor": [
+          "initial_moving_transform_com"
+        ]
+      }
+    },
+    "initial_moving_transform_com": {
+      "type": "enum",
+      "desc": "Align the moving_image and fixed_image before registration using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).",
+      "choices": [
+        0,
+        1,
+        2
+      ],
+      "cli": {
+        "argstr": "%s"
+      },
+      "constraints": {
+        "xor": [
+          "initial_moving_transform"
+        ]
+      }
+    },
+    "initialize_transforms_per_stage": {
+      "type": "bool",
+      "desc": "Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).",
+      "default": false,
+      "cli": {
+        "argstr": "--initialize-transforms-per-stage %d"
+      }
+    },
+    "interpolation": {
+      "type": "enum",
+      "default": "Linear",
+      "choices": [
+        "Linear",
+        "NearestNeighbor",
+        "CosineWindowedSinc",
+        "WelchWindowedSinc",
+        "HammingWindowedSinc",
+        "LanczosWindowedSinc",
+        "BSpline",
+        "MultiLabel",
+        "Gaussian",
+        "GenericLabel"
+      ],
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "metric": {
+      "type": "list",
+      "desc": "the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.",
+      "required": true
+    },
+    "metric_weight": {
+      "type": "list",
+      "desc": "the metric weight(s) for each stage. The weights must sum to 1 per stage.",
+      "required": true,
+      "default": [
+        1.0
+      ],
+      "constraints": {
+        "requires": [
+          "metric"
+        ]
+      }
+    },
+    "moving_image": {
+      "type": "list",
+      "desc": "Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to",
+      "required": true
+    },
+    "output_transform_prefix": {
+      "type": "string",
+      "default": "transform",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "random_seed": {
+      "type": "int",
+      "desc": "Fixed seed for random number generation",
+      "cli": {
+        "argstr": "--random-seed %d"
+      }
+    },
+    "restore_state": {
+      "type": "file",
+      "desc": "Filename for restoring the internal restorable state of the registration",
+      "cli": {
+        "argstr": "--restore-state %s"
+      }
+    },
+    "save_state": {
+      "type": "file",
+      "desc": "Filename for saving the internal restorable state of the registration",
+      "cli": {
+        "argstr": "--save-state %s"
+      }
+    },
+    "shrink_factors": {
+      "type": "list",
+      "required": true
+    },
+    "smoothing_sigmas": {
+      "type": "list",
+      "required": true
+    },
+    "transforms": {
+      "type": "list",
+      "required": true,
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "verbose": {
+      "type": "flag",
+      "default": false,
+      "cli": {
+        "argstr": "-v"
+      }
+    },
+    "winsorize_lower_quantile": {
+      "type": "string",
+      "desc": "The Lower quantile to clip image ranges",
+      "default": 0.0,
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "winsorize_upper_quantile": {
+      "type": "string",
+      "desc": "The Upper quantile to clip image ranges",
+      "default": 1.0,
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "write_composite_transform": {
+      "type": "bool",
+      "default": false,
+      "cli": {
+        "argstr": "--write-composite-transform %d"
+      }
+    }
+  },
+  "outputs": {
+    "save_state": {
+      "type": "file",
+      "path": {
+        "from_input": "save_state"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.ants.registration.Registration",
+    "nipype_version": "1.10.0",
+    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+  },
+  "description": "ANTs Registration command for registration of images"
+}

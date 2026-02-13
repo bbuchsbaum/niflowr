@@ -1,0 +1,15 @@
+^\.omc$
+^tools$
+^\.gitignore$
+^\.Rproj\.user$
+^.*\.Rproj$
+^LICENSE\.md$
+^README\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^vignettes/albers\.css$
+^vignettes/albers\.js$
+^doc$
+^Meta$

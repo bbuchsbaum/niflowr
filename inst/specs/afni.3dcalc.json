@@ -1,0 +1,84 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.3dcalc",
+  "title": "AFNI Calc",
+  "command": "3dcalc",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "expr": {
+      "type": "string",
+      "desc": "expr",
+      "required": true,
+      "cli": {
+        "argstr": "-expr \"%s\"",
+        "position": 3
+      }
+    },
+    "in_file_a": {
+      "type": "file",
+      "desc": "input file to 3dcalc",
+      "required": true,
+      "cli": {
+        "argstr": "-a %s",
+        "position": 0
+      }
+    },
+    "in_file_b": {
+      "type": "file",
+      "desc": "operand file to 3dcalc",
+      "cli": {
+        "argstr": "-b %s",
+        "position": 1
+      }
+    },
+    "in_file_c": {
+      "type": "file",
+      "desc": "operand file to 3dcalc",
+      "cli": {
+        "argstr": "-c %s",
+        "position": 2
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "output image file name",
+      "cli": {
+        "argstr": "-prefix %s"
+      }
+    },
+    "overwrite": {
+      "type": "flag",
+      "desc": "overwrite output",
+      "cli": {
+        "argstr": "-overwrite"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.afni.utils.Calc",
+    "nipype_version": "1.10.0",
+    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+  },
+  "description": "This program does voxel-by-voxel arithmetic on 3D datasets."
+}

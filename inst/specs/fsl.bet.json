@@ -1,0 +1,249 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.bet",
+  "title": "FSL BET",
+  "command": "bet",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s"
+      }
+    },
+    "center": {
+      "type": "list",
+      "desc": "center of gravity in voxels",
+      "cli": {
+        "argstr": "-c %s"
+      }
+    },
+    "frac": {
+      "type": "double",
+      "desc": "fractional intensity threshold",
+      "cli": {
+        "argstr": "-f %.2f"
+      }
+    },
+    "functional": {
+      "type": "flag",
+      "desc": "apply to 4D fMRI data",
+      "cli": {
+        "argstr": "-F"
+      },
+      "constraints": {
+        "xor": [
+          "functional",
+          "reduce_bias",
+          "robust",
+          "padding",
+          "remove_eyes",
+          "surfaces",
+          "t2_guided"
+        ]
+      }
+    },
+    "in_file": {
+      "type": "file",
+      "desc": "input file to skull strip",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": 0
+      }
+    },
+    "mask": {
+      "type": "flag",
+      "desc": "create binary mask image",
+      "cli": {
+        "argstr": "-m"
+      }
+    },
+    "mesh": {
+      "type": "flag",
+      "desc": "generate a vtk mesh brain surface",
+      "cli": {
+        "argstr": "-e"
+      }
+    },
+    "no_output": {
+      "type": "flag",
+      "desc": "Don't generate segmented output",
+      "cli": {
+        "argstr": "-n"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "name of output skull stripped image",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "outline": {
+      "type": "flag",
+      "desc": "create surface outline image",
+      "cli": {
+        "argstr": "-o"
+      }
+    },
+    "padding": {
+      "type": "flag",
+      "desc": "improve BET if FOV is very small in Z (by temporarily padding end slices)",
+      "cli": {
+        "argstr": "-Z"
+      },
+      "constraints": {
+        "xor": [
+          "functional",
+          "reduce_bias",
+          "robust",
+          "padding",
+          "remove_eyes",
+          "surfaces",
+          "t2_guided"
+        ]
+      }
+    },
+    "radius": {
+      "type": "int",
+      "desc": "head radius",
+      "cli": {
+        "argstr": "-r %d"
+      }
+    },
+    "reduce_bias": {
+      "type": "flag",
+      "desc": "bias field and neck cleanup",
+      "cli": {
+        "argstr": "-B"
+      },
+      "constraints": {
+        "xor": [
+          "functional",
+          "reduce_bias",
+          "robust",
+          "padding",
+          "remove_eyes",
+          "surfaces",
+          "t2_guided"
+        ]
+      }
+    },
+    "remove_eyes": {
+      "type": "flag",
+      "desc": "eye & optic nerve cleanup (can be useful in SIENA)",
+      "cli": {
+        "argstr": "-S"
+      },
+      "constraints": {
+        "xor": [
+          "functional",
+          "reduce_bias",
+          "robust",
+          "padding",
+          "remove_eyes",
+          "surfaces",
+          "t2_guided"
+        ]
+      }
+    },
+    "robust": {
+      "type": "flag",
+      "desc": "robust brain centre estimation (iterates BET several times)",
+      "cli": {
+        "argstr": "-R"
+      },
+      "constraints": {
+        "xor": [
+          "functional",
+          "reduce_bias",
+          "robust",
+          "padding",
+          "remove_eyes",
+          "surfaces",
+          "t2_guided"
+        ]
+      }
+    },
+    "skull": {
+      "type": "flag",
+      "desc": "create skull image",
+      "cli": {
+        "argstr": "-s"
+      }
+    },
+    "surfaces": {
+      "type": "flag",
+      "desc": "run bet2 and then betsurf to get additional skull and scalp surfaces (includes registrations)",
+      "cli": {
+        "argstr": "-A"
+      },
+      "constraints": {
+        "xor": [
+          "functional",
+          "reduce_bias",
+          "robust",
+          "padding",
+          "remove_eyes",
+          "surfaces",
+          "t2_guided"
+        ]
+      }
+    },
+    "t2_guided": {
+      "type": "file",
+      "desc": "as with creating surfaces, when also feeding in non-brain-extracted T2 (includes registrations)",
+      "cli": {
+        "argstr": "-A2 %s"
+      },
+      "constraints": {
+        "xor": [
+          "functional",
+          "reduce_bias",
+          "robust",
+          "padding",
+          "remove_eyes",
+          "surfaces",
+          "t2_guided"
+        ]
+      }
+    },
+    "threshold": {
+      "type": "flag",
+      "desc": "apply thresholding to segmented brain image and mask",
+      "cli": {
+        "argstr": "-t"
+      }
+    },
+    "vertical_gradient": {
+      "type": "double",
+      "desc": "vertical gradient in fractional intensity threshold (-1, 1)",
+      "cli": {
+        "argstr": "-g %.2f"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "container": {
+      "type": "none"
+    }
+  },
+  "origin": {
+    "source": "nipype",
+    "nipype_class": "nipype.interfaces.fsl.preprocess.BET",
+    "nipype_version": "1.10.0",
+    "imported_at": "2026-02-13T02:41:15.998108+00:00"
+  },
+  "description": "FSL BET wrapper for skull stripping"
+}

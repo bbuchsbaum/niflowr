@@ -1,0 +1,393 @@
+---
+title: "Getting started with niflowr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with niflowr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(niflowr)
+```
+
+## Why niflowr?
+
+Neuroimaging pipelines call many command-line tools — FSL's `bet`, ANTs'
+`antsRegistration`, FreeSurfer's `recon-all` — each with its own argument
+syntax, validation quirks, and output conventions. Wrapping these in R
+typically means writing brittle `system()` calls with `paste()`-assembled
+shell strings, no input validation, and no record of what ran.
+niflowr takes a different approach:
+
+- **Tool interfaces are defined as JSON specs**, not executable code. Each
+  spec declares inputs, outputs, CLI rendering rules, and validation
+  constraints.
+- **Commands are built as argument vectors**, never shell strings — no
+  quoting bugs, no injection hazards.
+- **Execution captures provenance** — what command ran, with what arguments,
+  how long it took, and what it produced.
+- **Pipeline orchestration is left to {targets}** — niflowr handles the
+  interface layer; {targets} and {crew} handle scheduling, caching, and
+  parallelism.
+
+## Quick example
+
+Here's what it looks like to run FSL's brain extraction tool:
+
+```{r quick-example, eval = FALSE}
+result <- ni_fsl_bet(
+  in_file  = "sub-01_T1w.nii.gz",
+  out_file = "sub-01_desc-brain_T1w.nii.gz",
+  frac     = 0.5,
+  mask     = TRUE
+)
+
+ni_outputs(result)
+#> $out_file
+#> [1] "sub-01_desc-brain_T1w.nii.gz"
+#> $mask_file
+#> [1] "sub-01_desc-brain_T1w.nii.gz_mask.nii.gz"
+```
+
+That single call validated your inputs, built a safe argument vector,
+ran `bet` via `processx`, checked that outputs exist, and wrote a
+provenance sidecar — all without a single `paste()` or `system()`.
+
+## Browsing available specs
+
+niflowr ships with specs for common tools across four major suites:
+
+```{r list-specs}
+ni_spec_list()
+```
+
+Each spec is a JSON file under `inst/specs/`. You can inspect any spec
+to see what inputs and outputs it defines:
+
+```{r read-spec}
+spec <- ni_spec_read("fsl.bet")
+spec
+```
+
+## The core workflow
+
+niflowr has three core objects that flow into each other:
+
+1. **`ni_spec`** — the tool interface definition (from JSON)
+2. **`ni_call`** — a spec bound to concrete parameter values
+3. **`ni_result`** — the execution output with runtime info and provenance
+
+### Step 1: Build a call
+
+`ni_call()` binds parameter values to a spec. It validates inputs
+immediately — required parameters, file existence, numeric ranges,
+mutual exclusion constraints:
+```{r build-call, error = TRUE}
+# This fails: frac must be between 0 and 1
+ni_call("fsl.bet",
+  in_file  = "/tmp/t1.nii.gz",
+  out_file = "/tmp/brain.nii.gz",
+  frac     = 1.5,
+  .validate = FALSE  # skip file-exists check for this demo
+)
+```
+
+When inputs are valid, you get back a call object you can inspect:
+```{r valid-call}
+call <- ni_call("fsl.bet",
+  in_file  = "/tmp/t1.nii.gz",
+  out_file = "/tmp/brain.nii.gz",
+  frac     = 0.3,
+  mask     = TRUE,
+  .validate = FALSE
+)
+call
+```
+
+### Step 2: Inspect the command
+
+Before running anything, you can see exactly what command would be
+executed. niflowr never hides what it's doing:
+
+```{r inspect-cmd}
+ni_cmd(call)
+```
+
+The `args` vector is what gets passed to `processx::run()` — each
+element is a separate argument, never concatenated into a shell string.
+
+### Step 3: Execute
+
+`ni_run()` runs the command and returns an `ni_result`:
+
+```{r execute, eval = FALSE}
+result <- ni_run(call)
+result
+#> -- ni_result: fsl.bet [success] --
+#> Exit status: 0
+#> Duration: 12.3s
+#>
+#> -- Outputs --
+#>   out_file: /tmp/brain.nii.gz
+#>   mask_file: /tmp/brain.nii.gz_mask.nii.gz
+```
+
+### Dry-run mode
+
+If you just want to preview the command without executing it, use
+`dry_run = TRUE` or the shorthand `ni_dry_run()`:
+
+```{r dry-run}
+ni_dry_run("fsl.bet",
+  in_file  = "/tmp/t1.nii.gz",
+  out_file = "/tmp/brain.nii.gz",
+  frac     = 0.5
+)
+```
+
+## Using the convenience wrappers
+
+Every bundled spec has a corresponding wrapper function with typed
+arguments and documentation. These are the recommended way to call tools:
+
+| Function | Tool |
+|---|---|
+| `ni_fsl_bet()` | FSL BET (brain extraction) |
+| `ni_fsl_flirt()` | FSL FLIRT (linear registration) |
+| `ni_fsl_applywarp()` | FSL applywarp (apply warp fields) |
+| `ni_afni_3dcalc()` | AFNI 3dcalc (voxelwise math) |
+| `ni_afni_3dresample()` | AFNI 3dresample (reslicing) |
+| `ni_ants_registration()` | ANTs registration (SyN) |
+| `ni_ants_apply_transforms()` | ANTs antsApplyTransforms |
+| `ni_freesurfer_recon_all()` | FreeSurfer recon-all |
+| `ni_freesurfer_mri_convert()` | FreeSurfer mri_convert |
+
+Each wrapper calls `ni_call()` + `ni_run()` internally, so you get
+the same validation, safe execution, and provenance:
+
+```{r wrapper-example, eval = FALSE}
+# Linear registration with FLIRT
+result <- ni_fsl_flirt(
+  in_file         = "func_mean.nii.gz",
+  reference       = "MNI152_T1_2mm.nii.gz",
+  out_file        = "func_mean_mni.nii.gz",
+  out_matrix_file = "func2mni.mat",
+  dof             = 12,
+  cost            = "corratio"
+)
+```
+
+## Provenance
+
+Every successful run writes a JSON sidecar next to the primary output.
+This records the exact command, arguments, timing, and (optionally)
+input file hashes:
+
+```{r provenance, eval = FALSE}
+# After running bet...
+prov <- ni_provenance(result)
+prov$command
+#> [1] "bet"
+prov$args
+#> [1] "/data/sub-01_T1w.nii.gz" "/data/sub-01_brain.nii.gz" "-f" "0.5" "-m"
+prov$duration_secs
+#> [1] 12.3
+
+# Or read a sidecar from disk
+ni_provenance_read("sub-01_brain_provenance.json")
+```
+
+## Container support
+
+niflowr can run tools inside Docker or Apptainer containers.
+Directories containing input and output files are automatically
+bind-mounted:
+
+```{r container, eval = FALSE}
+result <- ni_fsl_bet(
+  in_file    = "/data/t1.nii.gz",
+  out_file   = "/data/brain.nii.gz",
+  .container = list(type = "docker", image = "brainlife/fsl:6.0")
+)
+# Runs: docker run --rm -v /data:/data brainlife/fsl:6.0 bet ...
+```
+
+You can also set container defaults at the spec level in the JSON.
+
+## Ecosystem integration
+
+niflowr is designed to work with three companion packages:
+
+### neuroim2 — read outputs as R objects
+
+After running a tool, load its output directly into a neuroim2
+`NeuroVol` or `NeuroVec`:
+
+```{r neuroim2, eval = FALSE}
+result <- ni_fsl_bet(in_file = "t1.nii.gz", out_file = "brain.nii.gz")
+brain <- ni_read_output(result, "out_file")
+# Returns a NeuroVol — you can slice, plot, do math on it
+```
+
+### neurotransform — work with spatial transforms
+
+Registration outputs can be loaded as neurotransform morphism objects
+for composition and resampling:
+
+```{r neurotransform, eval = FALSE}
+reg <- ni_fsl_flirt(
+  in_file = "func.nii.gz", reference = "t1.nii.gz",
+  out_file = "func_t1.nii.gz", out_matrix_file = "func2t1.mat"
+)
+xfm <- ni_read_transform(reg, "out_matrix_file")
+# Returns an Affine3DMorphism — compose, invert, resample with it
+```
+
+### bidser — BIDS-aware input discovery
+
+Query a BIDS dataset for inputs and generate derivatives-style output
+paths:
+
+```{r bidser, eval = FALSE}
+library(bidser)
+proj <- bids_project("/data/bids")
+
+# Find T1w images for a subject
+inputs <- ni_bids_inputs(proj, "fsl.bet", subid = "01", modality = "T1w")
+
+# Generate a BIDS-derivatives output path
+ni_deriv_path(inputs$path[1], desc = "brain", suffix = "T1w")
+#> [1] "derivatives/niflowr/sub-01/anat/sub-01_desc-brain_T1w.nii.gz"
+```
+
+## Building pipelines with {targets}
+
+For multi-step pipelines, niflowr integrates with {targets} for
+DAG-based execution with caching and parallelism. The key idea:
+niflowr handles the *interface layer*, {targets} handles the
+*execution layer*.
+
+### Using `ni_run_files()` in targets
+
+The simplest pattern uses `ni_run_files()`, which returns output paths
+suitable for `format = "file"` targets:
+
+```{r targets-basic, eval = FALSE}
+# _targets.R
+library(targets)
+library(niflowr)
+
+list(
+  tar_target(
+    brain,
+    ni_run_files("fsl.bet",
+      in_file  = "data/sub-01_T1w.nii.gz",
+      out_file = "derivatives/sub-01_desc-brain_T1w.nii.gz",
+      frac = 0.5
+    ),
+    format = "file"
+  )
+)
+```
+
+### Using `tar_ni_step()` for less boilerplate
+
+The `tar_ni_step()` target factory wraps this pattern:
+
+```{r targets-factory, eval = FALSE}
+list(
+  tar_ni_step(brain, "fsl.bet",
+    in_file  = "data/sub-01_T1w.nii.gz",
+    out_file = "derivatives/sub-01_desc-brain_T1w.nii.gz",
+    frac = 0.5
+  )
+)
+```
+
+### Dynamic branching over subjects
+
+Process multiple subjects in parallel with {targets} dynamic branching
+and {crew} workers:
+
+```{r targets-branch, eval = FALSE}
+library(targets)
+library(crew)
+library(niflowr)
+library(bidser)
+
+tar_option_set(
+  packages = c("niflowr", "bidser"),
+  controller = crew_controller_local(workers = 8)
+)
+
+list(
+  tar_target(bids, bidser::bids_project("data/bids")),
+
+  tar_target(t1w_files,
+    bidser::search_files(bids, regex = "_T1w\\.nii", full_path = TRUE)
+  ),
+
+  tar_target(brain, {
+    out <- ni_deriv_path(t1w_files, desc = "brain")
+    ni_run_files("fsl.bet", in_file = t1w_files, out_file = out, frac = 0.5)
+  }, pattern = map(t1w_files), format = "file")
+)
+```
+
+{targets} skips subjects whose outputs are already up to date, and
+{crew} distributes the work across 8 parallel workers.
+
+## Writing your own specs
+
+You can write specs for any command-line tool. Create a JSON file
+following the schema at `inst/schema/niflowr-spec-0.1.0.json`:
+
+```json
+{
+  "spec_version": "0.1.0",
+  "id": "my.tool",
+  "title": "My Custom Tool",
+  "command": "mytool",
+  "inputs": {
+    "in_file": {
+      "type": "file",
+      "required": true,
+      "validate": { "exists": true },
+      "cli": { "argstr": "--input %s" }
+    },
+    "threshold": {
+      "type": "double",
+      "validate": { "min": 0, "max": 1 },
+      "cli": { "argstr": "--thresh %g" }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": { "template": "{in_file}_processed.nii.gz" },
+      "must_exist": true
+    }
+  }
+}
+```
+
+Load it by path:
+
+```{r custom-spec, eval = FALSE}
+spec <- ni_spec_read("/path/to/my.tool.json")
+result <- ni_run(ni_call(spec, in_file = "data.nii.gz", threshold = 0.5))
+```
+
+## Next steps
+
+- Browse the bundled specs with `ni_spec_list()` and `ni_spec_read()`
+  to see how real interfaces are defined
+- See `?ni_call` for the full set of validation and constraint options
+- See `?ni_run` for execution options (echo, provenance, container)
+- See `?tar_ni_step` for {targets} integration details
+- See `?ni_read_output` and `?ni_read_transform` for ecosystem helpers
