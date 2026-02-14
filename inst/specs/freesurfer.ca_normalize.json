@@ -85,9 +85,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "freesurfer"
   },
   "origin": {
     "source": "nipype",

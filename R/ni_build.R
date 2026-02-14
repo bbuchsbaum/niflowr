@@ -74,10 +74,10 @@ build_command <- function(call) {
     positional <- positional[order(pos_vals)]
   }
 
-  # Sort non-positional by name for stable ordering
+  # Sort non-positional by name for stable, locale-independent ordering
   if (length(non_positional) > 0) {
     np_names <- vapply(non_positional, function(e) e$name, character(1))
-    non_positional <- non_positional[order(np_names)]
+    non_positional <- non_positional[order(np_names, method = "radix")]
   }
 
   # Assemble final args vector

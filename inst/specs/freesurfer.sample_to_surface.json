@@ -151,7 +151,10 @@
         "argstr": "--mni152reg"
       },
       "constraints": {
-        "xor": ["reg_file", "reg_header"]
+        "xor": [
+          "reg_file",
+          "reg_header"
+        ]
       }
     },
     "no_reshape": {
@@ -234,7 +237,10 @@
         "argstr": "--reg %s"
       },
       "constraints": {
-        "xor": ["reg_header", "mni152reg"]
+        "xor": [
+          "reg_header",
+          "mni152reg"
+        ]
       }
     },
     "reg_header": {
@@ -245,7 +251,10 @@
         "argstr": "--regheader %s"
       },
       "constraints": {
-        "xor": ["reg_file", "mni152reg"]
+        "xor": [
+          "reg_file",
+          "mni152reg"
+        ]
       }
     },
     "reshape": {
@@ -372,9 +381,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "freesurfer"
   },
   "origin": {
     "source": "nipype",

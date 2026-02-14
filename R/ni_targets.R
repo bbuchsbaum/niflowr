@@ -33,8 +33,8 @@ tar_ni_step <- function(name, spec_id, ..., packages = "niflowr",
 
   full_cmd <- substitute({
     call <- NI_CALL
-    result <- niflowr::ni_run(call, echo = FALSE)
-    unname(unlist(niflowr::ni_outputs(result)))
+    files <- niflowr::ni_run(call, echo = FALSE, return = "files")
+    as.character(files)
   }, list(NI_CALL = ni_call_expr))
 
   targets::tar_target_raw(
@@ -59,9 +59,5 @@ tar_ni_step <- function(name, spec_id, ..., packages = "niflowr",
 #' @export
 ni_run_files <- function(spec_id, ...) {
   call <- ni_call(spec_id, ...)
-  result <- ni_run(call, echo = FALSE, provenance = TRUE)
-
-  paths <- unname(unlist(ni_outputs(result)))
-  # Only return paths that exist
-  paths[file.exists(paths)]
+  as.character(ni_run(call, echo = FALSE, provenance = TRUE, return = "files"))
 }

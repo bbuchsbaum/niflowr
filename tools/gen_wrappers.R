@@ -49,7 +49,8 @@ type_desc <- function(def) {
   )
   if (!is.null(def$desc)) {
     # Escape special roxygen2 characters in Nipype descriptions
-    desc <- gsub("\\{", "\\\\{", def$desc)
+    desc <- gsub("\\\\", "\\\\\\\\", def$desc)
+    desc <- gsub("\\{", "\\\\{", desc)
     desc <- gsub("\\}", "\\\\}", desc)
     desc <- gsub("\\[", "\\\\[", desc)
     desc <- gsub("\\]", "\\\\]", desc)
@@ -75,7 +76,7 @@ gen_wrapper <- function(spec_path) {
   inputs <- spec$inputs
 
   # Reserved wrapper argument names used for execution controls
-  reserved_names <- c(".cwd", ".env", ".container", "dry_run", "echo")
+  reserved_names <- c(".cwd", ".env", ".engine", ".profile", "dry_run", "echo")
   safe_formal_name <- function(nm) {
     out <- if (nm %in% reserved_names) paste0(nm, "_arg") else nm
     out <- gsub("[^A-Za-z0-9_.]", "_", out)
@@ -123,7 +124,7 @@ gen_wrapper <- function(spec_path) {
     params <- c(params, paste0(formal_nm, " = ", type_default(def)))
     fwd_pairs <- c(fwd_pairs, paste0(nm, " = ", formal_nm))
   }
-  params <- c(params, ".cwd = NULL", ".env = NULL", ".container = NULL",
+  params <- c(params, ".cwd = NULL", ".env = NULL", ".engine = NULL", ".profile = NULL",
               "dry_run = FALSE", "echo = interactive()")
   sig <- paste(params, collapse = ",\n                     ")
 
@@ -144,7 +145,8 @@ gen_wrapper <- function(spec_path) {
   }
   roxy <- c(roxy, "#' @param .cwd Working directory override.")
   roxy <- c(roxy, "#' @param .env Named character vector of environment variables.")
-  roxy <- c(roxy, "#' @param .container Container configuration list.")
+  roxy <- c(roxy, "#' @param .engine Execution engine override.")
+  roxy <- c(roxy, "#' @param .profile Runtime profile override.")
   roxy <- c(roxy, "#' @param dry_run Logical; preview command without executing.")
   roxy <- c(roxy, "#' @param echo Logical; echo stdout/stderr in real time.")
   roxy <- c(roxy, "#' @return An `ni_result` object.")
@@ -158,7 +160,7 @@ gen_wrapper <- function(spec_path) {
     paste(roxy, collapse = "\n"),
     paste0(func_name, " <- function(", sig, ") {"),
     paste0('  call <- ni_call("', spec$id, '", ', fwd,
-           ", .cwd = .cwd, .env = .env, .container = .container)"),
+           ", .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)"),
     "  ni_run(call, dry_run = dry_run, echo = echo)",
     "}"
   )

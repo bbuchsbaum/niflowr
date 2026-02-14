@@ -19,7 +19,10 @@
         "argstr": "-cfg %s"
       },
       "constraints": {
-        "xor": ["run_info", "seq_config"]
+        "xor": [
+          "run_info",
+          "seq_config"
+        ]
       }
     },
     "dir_structure": {
@@ -69,7 +72,10 @@
         "argstr": "-run %d %s %s %s"
       },
       "constraints": {
-        "xor": ["config", "seq_config"]
+        "xor": [
+          "config",
+          "seq_config"
+        ]
       }
     },
     "scan_only": {
@@ -87,7 +93,10 @@
         "argstr": "-seqcfg %s"
       },
       "constraints": {
-        "xor": ["run_info", "config"]
+        "xor": [
+          "run_info",
+          "config"
+        ]
       }
     },
     "source_dir": {
@@ -108,9 +117,7 @@
   },
   "outputs": {},
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "freesurfer"
   },
   "origin": {
     "source": "nipype",

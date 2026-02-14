@@ -23,7 +23,8 @@ ni_afni_ecm(
   thresh = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -37,7 +38,7 @@ ni_afni_ecm(
 
 \item{automask}{Logical. Mask the dataset to target brain-only voxels}
 
-\item{eps}{Numeric. sets the stopping criterion for the power iteration; :math:\verb{l2\\|v_\\text\\\{old\\\} - v_\\text\\\{new\\\}\\| < eps\\|v_\\text\\\{old\\\}\\|}; default = 0.001}
+\item{eps}{Numeric. sets the stopping criterion for the power iteration; :math:\verb{l2\\\\|v_\\\\text\\\{old\\\} - v_\\\\text\\\{new\\\}\\\\| < eps\\\\|v_\\\\text\\\{old\\\}\\\\|}; default = 0.001}
 
 \item{fecm}{Logical. Fast centrality method; substantial speed increase but cannot accommodate thresholding; automatically selected if -thresh or -sparsity are not set}
 
@@ -65,7 +66,9 @@ ni_afni_ecm(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

@@ -37,7 +37,8 @@ ni_freesurfer_robust_register(
   write_vo2vox = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -107,7 +108,9 @@ ni_freesurfer_robust_register(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

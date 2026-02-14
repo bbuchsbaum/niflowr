@@ -451,6 +451,14 @@
     "command": "WarpTimeSeriesImageMultiTransform",
     "args": ["4", "args_value", "/tmp/niflowr/input_image.nii.gz", "_wtsimt", "-R", "/tmp/niflowr/reference_image.nii.gz", "item1,item2"]
   },
+  "fastsurfer.run": {
+    "command": "run_fastsurfer.sh",
+    "args": ["--device", "auto", "--fs_license", "/tmp/niflowr/fs_license.nii.gz", "--py", "py_value", "--sd", "/tmp/niflowr/sd_dir", "--sid", "sid_value", "--t1", "/tmp/niflowr/t1.nii.gz", "--t2", "/tmp/niflowr/t2.nii.gz", "--threads", "1", "--viewagg_device", "cpu", "--vox_size", "vox_size_value"]
+  },
+  "fastsurfer.segment": {
+    "command": "run_fastsurfer.sh",
+    "args": ["--seg_only", "--device", "auto", "--sd", "/tmp/niflowr/sd_dir", "--sid", "sid_value", "--t1", "/tmp/niflowr/t1.nii.gz", "--threads", "1", "--vox_size", "vox_size_value"]
+  },
   "freesurfer.add_x_form_to_header": {
     "command": "mri_add_xform_to_header",
     "args": ["/tmp/niflowr/transform.mat", "/tmp/niflowr/in_file.nii.gz", "output.mgz", "args_value"]

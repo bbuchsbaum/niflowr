@@ -4,17 +4,38 @@
 \alias{ni_config}
 \title{Get or update niflowr runtime configuration}
 \usage{
-ni_config(derivatives_dir = NULL, .reset = FALSE)
+ni_config(
+  derivatives_dir = NULL,
+  config = NULL,
+  config_file = NULL,
+  auto_read = NULL,
+  .reset = FALSE
+)
 }
 \arguments{
 \item{derivatives_dir}{Base directory used for inferred BIDS-derivatives
 outputs. Default: \code{"derivatives/niflowr"}.}
 
-\item{.reset}{Logical; if \code{TRUE}, reset config to defaults.}
+\item{config}{Optional named list of configuration overrides to merge into
+in-memory overrides.}
+
+\item{config_file}{Path to project config file. Default: \code{"niflowr.yml"}.}
+
+\item{auto_read}{Logical; if \code{TRUE}, read \code{config_file} automatically when
+resolving config.}
+
+\item{.reset}{Logical; if \code{TRUE}, reset in-memory overrides and behavior.}
 }
 \value{
-Named list with current configuration.
+Named list with current effective configuration.
 }
 \description{
-Get or update niflowr runtime configuration
+By default, \code{ni_config()} returns the effective configuration computed as:
+}
+\details{
+\verb{defaults <- niflowr defaults}
+
+\verb{file <- niflowr.yml (if present and auto_read = TRUE)}
+
+\code{effective <- merge(defaults, file, in_memory_overrides)}
 }

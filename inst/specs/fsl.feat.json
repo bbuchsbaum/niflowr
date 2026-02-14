@@ -23,9 +23,7 @@
   },
   "outputs": {},
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "fsl"
   },
   "origin": {
     "source": "nipype",

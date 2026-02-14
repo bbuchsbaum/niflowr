@@ -10,7 +10,8 @@ ni_run(
   dry_run = FALSE,
   echo = interactive(),
   provenance = TRUE,
-  error_on_status = TRUE
+  error_on_status = TRUE,
+  return = c("result", "files")
 )
 }
 \arguments{
@@ -19,7 +20,8 @@ args are passed to \code{\link[=ni_call]{ni_call()}}).}
 
 \item{...}{If \code{call} is a spec ID, passed to \code{\link[=ni_call]{ni_call()}}.}
 
-\item{dry_run}{Logical; if \code{TRUE}, print the command without executing.}
+\item{dry_run}{Logical; if \code{TRUE}, print the resolved command and return
+without executing.}
 
 \item{echo}{Logical; if \code{TRUE}, print stdout/stderr in real time.
 Defaults to \code{interactive()}.}
@@ -28,11 +30,16 @@ Defaults to \code{interactive()}.}
 
 \item{error_on_status}{Logical; if \code{TRUE} (default), error when the command
 exits with a non-zero status. If \code{FALSE}, issue a warning instead.}
+
+\item{return}{One of \code{"result"} (default) or \code{"files"}.}
 }
 \value{
-An \code{ni_result} object.
+An \code{ni_result} object, or (when \code{return = "files"}) a character
+vector of output files with the full result attached as \code{ni_result}
+attribute.
 }
 \description{
-Validates inputs, builds the argument vector, runs the command via
-\code{\link[processx:run]{processx::run()}}, checks outputs, and returns a structured \code{ni_result}.
+Validates inputs, builds an argument vector, resolves runtime engine
+(\code{native}, \code{docker}, \code{apptainer}), executes via \code{\link[processx:run]{processx::run()}}, checks
+outputs, and returns a structured result.
 }

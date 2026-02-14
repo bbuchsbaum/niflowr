@@ -154,9 +154,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "afni"
   },
   "origin": {
     "source": "nipype",

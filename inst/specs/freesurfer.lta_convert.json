@@ -19,7 +19,13 @@
         "argstr": "--infsl %s"
       },
       "constraints": {
-        "xor": ["in_lta", "in_mni", "in_reg", "in_niftyreg", "in_itk"]
+        "xor": [
+          "in_lta",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
       }
     },
     "in_itk": {
@@ -30,7 +36,13 @@
         "argstr": "--initk %s"
       },
       "constraints": {
-        "xor": ["in_lta", "in_fsl", "in_mni", "in_reg", "in_niftyreg"]
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg"
+        ]
       }
     },
     "in_lta": {
@@ -41,7 +53,13 @@
         "argstr": "--inlta %s"
       },
       "constraints": {
-        "xor": ["in_fsl", "in_mni", "in_reg", "in_niftyreg", "in_itk"]
+        "xor": [
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
       }
     },
     "in_mni": {
@@ -52,7 +70,13 @@
         "argstr": "--inmni %s"
       },
       "constraints": {
-        "xor": ["in_lta", "in_fsl", "in_reg", "in_niftyreg", "in_itk"]
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_reg",
+          "in_niftyreg",
+          "in_itk"
+        ]
       }
     },
     "in_niftyreg": {
@@ -63,7 +87,13 @@
         "argstr": "--inniftyreg %s"
       },
       "constraints": {
-        "xor": ["in_lta", "in_fsl", "in_mni", "in_reg", "in_itk"]
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_reg",
+          "in_itk"
+        ]
       }
     },
     "in_reg": {
@@ -74,7 +104,13 @@
         "argstr": "--inreg %s"
       },
       "constraints": {
-        "xor": ["in_lta", "in_fsl", "in_mni", "in_niftyreg", "in_itk"]
+        "xor": [
+          "in_lta",
+          "in_fsl",
+          "in_mni",
+          "in_niftyreg",
+          "in_itk"
+        ]
       }
     },
     "invert": {
@@ -186,9 +222,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "freesurfer"
   },
   "origin": {
     "source": "nipype",

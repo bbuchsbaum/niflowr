@@ -45,9 +45,7 @@
   },
   "outputs": {},
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "ants"
   },
   "origin": {
     "source": "nipype",

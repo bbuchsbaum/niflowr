@@ -11,7 +11,11 @@
         "argstr": "-A"
       },
       "constraints": {
-        "xor": ["single_slice", "middle_slices", "sample_axial"],
+        "xor": [
+          "single_slice",
+          "middle_slices",
+          "sample_axial"
+        ],
         "requires": [
           "image_width"
         ]
@@ -89,7 +93,11 @@
         "argstr": "-a"
       },
       "constraints": {
-        "xor": ["single_slice", "all_axial", "sample_axial"]
+        "xor": [
+          "single_slice",
+          "all_axial",
+          "sample_axial"
+        ]
       }
     },
     "nearest_neighbour": {
@@ -116,7 +124,11 @@
         "position": 10
       },
       "constraints": {
-        "xor": ["single_slice", "middle_slices", "all_axial"],
+        "xor": [
+          "single_slice",
+          "middle_slices",
+          "all_axial"
+        ],
         "requires": [
           "image_width"
         ]
@@ -151,7 +163,11 @@
         "argstr": "-%s"
       },
       "constraints": {
-        "xor": ["middle_slices", "all_axial", "sample_axial"],
+        "xor": [
+          "middle_slices",
+          "all_axial",
+          "sample_axial"
+        ],
         "requires": [
           "slice_number"
         ]
@@ -184,9 +200,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "fsl"
   },
   "origin": {
     "source": "nipype",

@@ -61,6 +61,11 @@
           "minItems": 1,
           "description": "Allowed values for enum type"
         },
+        "items_type": {
+          "type": "string",
+          "enum": ["file", "dir", "string", "int", "double", "bool", "enum"],
+          "description": "Element type for list inputs."
+        },
         "cli": { "$ref": "#/$defs/cli" },
         "validate": { "$ref": "#/$defs/validate" },
         "constraints": { "$ref": "#/$defs/constraints" }
@@ -206,23 +211,17 @@
           },
           "additionalProperties": false
         },
-        "container": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["none", "docker", "apptainer"]
-            },
-            "image": { "type": "string" },
-            "args": {
-              "type": "array",
-              "items": { "type": "string" },
-              "description": "Extra args passed to docker/apptainer"
-            }
-          },
-          "additionalProperties": false
+        "engine": {
+          "type": "string",
+          "enum": ["auto", "native", "docker", "apptainer"],
+          "description": "Optional per-spec engine preference."
+        },
+        "profile": {
+          "type": "string",
+          "description": "Execution profile ID from niflowr.yml profiles."
         }
       },
+      "required": ["profile"],
       "additionalProperties": false
     },
     "origin": {

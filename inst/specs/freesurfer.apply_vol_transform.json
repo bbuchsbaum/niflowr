@@ -19,7 +19,10 @@
         "argstr": "--fstarg"
       },
       "constraints": {
-        "xor": ["target_file", "tal"],
+        "xor": [
+          "target_file",
+          "tal"
+        ],
         "requires": [
           "reg_file"
         ]
@@ -33,7 +36,15 @@
         "argstr": "--fsl %s"
       },
       "constraints": {
-        "xor": ["reg_file", "lta_file", "lta_inv_file", "xfm_reg_file", "reg_header", "mni_152_reg", "subject"]
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
       }
     },
     "interp": {
@@ -75,7 +86,15 @@
         "argstr": "--lta %s"
       },
       "constraints": {
-        "xor": ["reg_file", "lta_inv_file", "fsl_reg_file", "xfm_reg_file", "reg_header", "mni_152_reg", "subject"]
+        "xor": [
+          "reg_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
       }
     },
     "lta_inv_file": {
@@ -86,7 +105,15 @@
         "argstr": "--lta-inv %s"
       },
       "constraints": {
-        "xor": ["reg_file", "lta_file", "fsl_reg_file", "xfm_reg_file", "reg_header", "mni_152_reg", "subject"]
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
       }
     },
     "m3z_file": {
@@ -104,7 +131,15 @@
         "argstr": "--regheader"
       },
       "constraints": {
-        "xor": ["reg_file", "lta_file", "lta_inv_file", "fsl_reg_file", "xfm_reg_file", "reg_header", "subject"]
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "subject"
+        ]
       }
     },
     "no_ded_m3z_path": {
@@ -134,7 +169,15 @@
         "argstr": "--reg %s"
       },
       "constraints": {
-        "xor": ["lta_file", "lta_inv_file", "fsl_reg_file", "xfm_reg_file", "reg_header", "mni_152_reg", "subject"]
+        "xor": [
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
       }
     },
     "reg_header": {
@@ -145,7 +188,15 @@
         "argstr": "--regheader"
       },
       "constraints": {
-        "xor": ["reg_file", "lta_file", "lta_inv_file", "fsl_reg_file", "xfm_reg_file", "mni_152_reg", "subject"]
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "mni_152_reg",
+          "subject"
+        ]
       }
     },
     "source_file": {
@@ -164,7 +215,15 @@
         "argstr": "--s %s"
       },
       "constraints": {
-        "xor": ["reg_file", "lta_file", "lta_inv_file", "fsl_reg_file", "xfm_reg_file", "reg_header", "mni_152_reg"]
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "xfm_reg_file",
+          "reg_header",
+          "mni_152_reg"
+        ]
       }
     },
     "tal": {
@@ -175,7 +234,10 @@
         "argstr": "--tal"
       },
       "constraints": {
-        "xor": ["target_file", "fs_target"]
+        "xor": [
+          "target_file",
+          "fs_target"
+        ]
       }
     },
     "tal_resolution": {
@@ -193,7 +255,10 @@
         "argstr": "--targ %s"
       },
       "constraints": {
-        "xor": ["tal", "fs_target"]
+        "xor": [
+          "tal",
+          "fs_target"
+        ]
       }
     },
     "transformed_file": {
@@ -211,7 +276,15 @@
         "argstr": "--xfm %s"
       },
       "constraints": {
-        "xor": ["reg_file", "lta_file", "lta_inv_file", "fsl_reg_file", "reg_header", "mni_152_reg", "subject"]
+        "xor": [
+          "reg_file",
+          "lta_file",
+          "lta_inv_file",
+          "fsl_reg_file",
+          "reg_header",
+          "mni_152_reg",
+          "subject"
+        ]
       }
     }
   },
@@ -225,9 +298,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "freesurfer"
   },
   "origin": {
     "source": "nipype",

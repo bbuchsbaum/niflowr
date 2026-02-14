@@ -13,6 +13,8 @@
 
   rm(list = ls(.spec_registry, all.names = TRUE), envir = .spec_registry)
 
-  # Reset runtime config defaults
-  .ni_config$derivatives_dir <- "derivatives/niflowr"
+  # Runtime config behavior
+  .ni_config$overrides <- list()
+  .ni_config$config_file <- "niflowr.yml"
+  .ni_config$auto_read <- TRUE
 }

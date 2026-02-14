@@ -57,7 +57,8 @@ ni_afni_qwarp_plus_minus(
   workhard = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -155,7 +156,7 @@ ni_afni_qwarp_plus_minus(
 
 \item{verb}{Logical. more detailed description of the process}
 
-\item{wball}{Character or numeric vector. "\verb{-wball x y z r f} Enhance automatic weight from '-useweight' by a factor of 1+f\*Gaussian(FWHM=r) centered in the base image at DICOM coordinates (x,y,z) and with radius 'r'. The goal of this option is to try and make the alignment better in a specific part of the brain. Example: -wball 0 14 6 30 40 to emphasize the thalamic area (in MNI/Talairach space). * The 'r' parameter must be positive! * The 'f' parameter must be between 1 and 100 (inclusive). * '-wball' does nothing if you input your own weight with the '-weight' option. * '-wball' does change the binary weight created by the '-noweight' option. * You can only use '-wball' once in a run of 3dQwarp. \strong{The effect of '-wball' is not dramatic.} The example above makes the average brain image across a collection of subjects a little sharper in the thalamic area, which might have some small value. If you care enough about alignment to use '-wball', then you should examine the results from 3dQwarp for each subject, to see if the alignments are good enough for your purposes.}
+\item{wball}{Character or numeric vector. "\verb{-wball x y z r f} Enhance automatic weight from '-useweight' by a factor of 1+f\\*Gaussian(FWHM=r) centered in the base image at DICOM coordinates (x,y,z) and with radius 'r'. The goal of this option is to try and make the alignment better in a specific part of the brain. Example: -wball 0 14 6 30 40 to emphasize the thalamic area (in MNI/Talairach space). * The 'r' parameter must be positive! * The 'f' parameter must be between 1 and 100 (inclusive). * '-wball' does nothing if you input your own weight with the '-weight' option. * '-wball' does change the binary weight created by the '-noweight' option. * You can only use '-wball' once in a run of 3dQwarp. \strong{The effect of '-wball' is not dramatic.} The example above makes the average brain image across a collection of subjects a little sharper in the thalamic area, which might have some small value. If you care enough about alignment to use '-wball', then you should examine the results from 3dQwarp for each subject, to see if the alignments are good enough for your purposes.}
 
 \item{weight}{Character; file path. Instead of computing the weight from the base dataset,directly input the weight volume from dataset 'www'.Useful if you know what over parts of the base image youwant to emphasize or de-emphasize the matching functional.}
 
@@ -167,7 +168,9 @@ ni_afni_qwarp_plus_minus(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

@@ -111,9 +111,11 @@ ni_golden_cmdline_generate <- function(output = "tests/golden/cmdline_golden.jso
   spec_dir <- resolve_spec_dir(spec_dir)
 
   if (is.null(spec_ids)) {
-    spec_ids <- sort(ni_spec_list())
+    all_ids <- ni_spec_list()
+    spec_ids <- all_ids[order(all_ids, method = "radix")]
     if (length(spec_ids) == 0 && dir.exists(spec_dir)) {
-      spec_ids <- sort(sub("\\.json$", "", list.files(spec_dir, pattern = "\\.json$")))
+      raw_ids <- sub("\\.json$", "", list.files(spec_dir, pattern = "\\.json$"))
+      spec_ids <- raw_ids[order(raw_ids, method = "radix")]
     }
   }
 

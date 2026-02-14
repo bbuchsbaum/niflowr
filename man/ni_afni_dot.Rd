@@ -22,7 +22,8 @@ ni_afni_dot(
   upper = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -32,7 +33,7 @@ ni_afni_dot(
 
 \item{demean}{Logical. Remove the mean from each volume prior to computing the correlation}
 
-\item{docoef}{Logical. Return the least square fit coefficients \{\{a,b\}\} so that dset2 is approximately a + b\*dset1}
+\item{docoef}{Logical. Return the least square fit coefficients \{\{a,b\}\} so that dset2 is approximately a + b\\*dset1}
 
 \item{docor}{Logical. Return the correlation coefficient (default).}
 
@@ -62,7 +63,9 @@ ni_afni_dot(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

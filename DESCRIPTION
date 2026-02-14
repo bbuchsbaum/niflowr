@@ -23,6 +23,7 @@ Imports:
     jsonlite,
     jsonvalidate,
     processx,
+    yaml,
     utils
 Suggests:
     bidser,

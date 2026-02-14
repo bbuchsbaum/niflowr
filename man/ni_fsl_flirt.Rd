@@ -53,7 +53,8 @@ ni_fsl_flirt(
   wmnorms = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -155,7 +156,9 @@ ni_fsl_flirt(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

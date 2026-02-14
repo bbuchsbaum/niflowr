@@ -8,12 +8,15 @@
 #' @param ... Named parameter values.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
-#' @param .container List with `type` (`"docker"` or `"apptainer"`), `image`,
-#'   and optional `args`.
+#' @param .engine Execution engine override. One of `"auto"`, `"native"`,
+#'   `"docker"`, `"apptainer"`.
+#' @param .profile Runtime profile override (maps to `profiles` entry in
+#'   `niflowr.yml`).
 #' @param .validate Logical; validate inputs at construction time. Default `TRUE`.
 #' @return An `ni_call` object (S3 list).
 #' @export
-ni_call <- function(spec_id, ..., .cwd = NULL, .env = NULL, .container = NULL,
+ni_call <- function(spec_id, ..., .cwd = NULL, .env = NULL,
+                    .engine = NULL, .profile = NULL,
                     .validate = TRUE) {
   # Resolve spec
   if (inherits(spec_id, "ni_spec")) {
@@ -40,9 +43,12 @@ ni_call <- function(spec_id, ..., .cwd = NULL, .env = NULL, .container = NULL,
       spec = spec,
       values = values,
       outputs = outputs,
-      cwd = .cwd,
-      env = .env,
-      container = .container
+      runtime = list(
+        cwd = .cwd,
+        env = .env,
+        engine = .engine,
+        profile = .profile
+      )
     ),
     class = "ni_call"
   )
@@ -273,12 +279,15 @@ resolve_outputs <- function(spec, values) {
 ni_cmd <- function(call) {
   stopifnot(inherits(call, "ni_call"))
   built <- build_command(call)
+  rt <- call$runtime %||% list()
 
   list(
     command = built$command,
     args = built$args,
-    wd = call$cwd,
-    env = call$env,
+    wd = rt$cwd,
+    env = rt$env,
+    engine = rt$engine,
+    profile = rt$profile,
     stdout = built$stdout,
     stderr = built$stderr
   )
@@ -292,8 +301,15 @@ print.ni_call <- function(x, ...) {
   cli::cli_h3("ni_call: {x$spec$id}")
   cli::cli_text("Command: {.code {cmd_str}}")
 
-  if (!is.null(x$cwd)) {
-    cli::cli_text("Working dir: {.path {x$cwd}}")
+  rt <- x$runtime %||% list()
+  if (!is.null(rt$cwd)) {
+    cli::cli_text("Working dir: {.path {rt$cwd}}")
+  }
+  if (!is.null(rt$engine)) {
+    cli::cli_text("Engine override: {.val {rt$engine}}")
+  }
+  if (!is.null(rt$profile)) {
+    cli::cli_text("Profile override: {.val {rt$profile}}")
   }
 
   if (length(x$outputs) > 0) {

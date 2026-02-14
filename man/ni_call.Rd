@@ -9,7 +9,8 @@ ni_call(
   ...,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   .validate = TRUE
 )
 }
@@ -23,8 +24,11 @@ ni_call(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{List with \code{type} (\code{"docker"} or \code{"apptainer"}), \code{image},
-and optional \code{args}.}
+\item{.engine}{Execution engine override. One of \code{"auto"}, \code{"native"},
+\code{"docker"}, \code{"apptainer"}.}
+
+\item{.profile}{Runtime profile override (maps to \code{profiles} entry in
+\code{niflowr.yml}).}
 
 \item{.validate}{Logical; validate inputs at construction time. Default \code{TRUE}.}
 }

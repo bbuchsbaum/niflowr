@@ -21,7 +21,8 @@ ni_afni_localstat(
   reduce_restore_grid = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -31,7 +32,7 @@ ni_afni_localstat(
 
 \item{neighborhood}{Character or numeric vector. The region around each voxel that will be extracted for the statistics calculation. Possible regions are: 'SPHERE', 'RHDD' (rhombic dodecahedron), 'TOHD' (truncated octahedron) with a given radius in mm or 'RECT' (rectangular block) with dimensions to specify in mm. \strong{Required.}}
 
-\item{stat}{Character or numeric vector. statistics to compute. Possible names are: * mean = average of the values * stdev = standard deviation * var = variance (stdev\\emph{stdev) * cvar = coefficient of variation = stdev/fabs(mean) * median = median of the values * MAD = median absolute deviation * min = minimum * max = maximum * absmax = maximum of the absolute values * num = number of the values in the region: with the use of -mask or -automask, the size of the region around any given voxel will vary; this option lets you map that size. It may be useful if you plan to compute a t-statistic (say) from the mean and stdev outputs. * sum = sum of the values in the region * FWHM = compute (like 3dFWHM) image smoothness inside each voxel's neighborhood. Results are in 3 sub-bricks: FWHMx, FHWMy, and FWHMz. Places where an output is -1 are locations where the FWHM value could not be computed (e.g., outside the mask). * FWHMbar= Compute just the average of the 3 FWHM values (normally would NOT do this with FWHM also). * perc:P0:P1:Pstep = Compute percentiles between P0 and P1 with a step of Pstep. Default P1 is equal to P0 and default P2 = 1 * rank = rank of the voxel's intensity * frank = rank / number of voxels in neighborhood * P2skew = Pearson's second skewness coefficient 3 \} (mean - median) / stdev * ALL = all of the above, in that order (except for FWHMbar and perc). * mMP2s = Exactly the same output as: median, MAD, P2skew, but a little faster * mmMP2s = Exactly the same output as: mean, median, MAD, P2skew More than one option can be used. \strong{Required.}}
+\item{stat}{Character or numeric vector. statistics to compute. Possible names are: * mean = average of the values * stdev = standard deviation * var = variance (stdev\\\emph{stdev) * cvar = coefficient of variation = stdev/fabs(mean) * median = median of the values * MAD = median absolute deviation * min = minimum * max = maximum * absmax = maximum of the absolute values * num = number of the values in the region: with the use of -mask or -automask, the size of the region around any given voxel will vary; this option lets you map that size. It may be useful if you plan to compute a t-statistic (say) from the mean and stdev outputs. * sum = sum of the values in the region * FWHM = compute (like 3dFWHM) image smoothness inside each voxel's neighborhood. Results are in 3 sub-bricks: FWHMx, FHWMy, and FWHMz. Places where an output is -1 are locations where the FWHM value could not be computed (e.g., outside the mask). * FWHMbar= Compute just the average of the 3 FWHM values (normally would NOT do this with FWHM also). * perc:P0:P1:Pstep = Compute percentiles between P0 and P1 with a step of Pstep. Default P1 is equal to P0 and default P2 = 1 * rank = rank of the voxel's intensity * frank = rank / number of voxels in neighborhood * P2skew = Pearson's second skewness coefficient 3 \\} (mean - median) / stdev * ALL = all of the above, in that order (except for FWHMbar and perc). * mMP2s = Exactly the same output as: median, MAD, P2skew, but a little faster * mmMP2s = Exactly the same output as: mean, median, MAD, P2skew More than one option can be used. \strong{Required.}}
 
 \item{args}{Character. Additional parameters to the command}
 
@@ -59,7 +60,9 @@ ni_afni_localstat(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

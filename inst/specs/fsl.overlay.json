@@ -19,7 +19,10 @@
         "argstr": "-a"
       },
       "constraints": {
-        "xor": ["full_bg_range", "bg_thresh"]
+        "xor": [
+          "full_bg_range",
+          "bg_thresh"
+        ]
       }
     },
     "background_image": {
@@ -40,7 +43,10 @@
         "position": 5
       },
       "constraints": {
-        "xor": ["auto_thresh_bg", "full_bg_range"]
+        "xor": [
+          "auto_thresh_bg",
+          "full_bg_range"
+        ]
       }
     },
     "full_bg_range": {
@@ -51,7 +57,10 @@
         "argstr": "-A"
       },
       "constraints": {
-        "xor": ["auto_thresh_bg", "bg_thresh"]
+        "xor": [
+          "auto_thresh_bg",
+          "bg_thresh"
+        ]
       }
     },
     "out_file": {
@@ -155,9 +164,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "fsl"
   },
   "origin": {
     "source": "nipype",

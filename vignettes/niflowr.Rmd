@@ -146,7 +146,8 @@ If you just want to preview the command without executing it, use
 ni_dry_run("fsl.bet",
   in_file  = "/tmp/t1.nii.gz",
   out_file = "/tmp/brain.nii.gz",
-  frac     = 0.5
+  frac     = 0.5,
+  .engine  = "native"
 )
 ```
 
@@ -205,19 +206,115 @@ ni_provenance_read("sub-01_brain_provenance.json")
 ## Container support
 
 niflowr can run tools inside Docker or Apptainer containers.
-Directories containing input and output files are automatically
-bind-mounted:
+Container execution is profile-driven via `niflowr.yml`, with stable
+container paths (`/in`, `/out`, `/work`):
 
 ```{r container, eval = FALSE}
+# Configure once per project (or rely on automatic niflowr.yml discovery):
+ni_config(config_file = "niflowr.yml")
+
 result <- ni_fsl_bet(
   in_file    = "/data/t1.nii.gz",
   out_file   = "/data/brain.nii.gz",
-  .container = list(type = "docker", image = "brainlife/fsl:6.0")
+  .engine    = "auto",   # native first, then container fallback by runtime.prefer
+  .profile   = "fsl"     # maps to profiles.fsl in niflowr.yml
 )
-# Runs: docker run --rm -v /data:/data brainlife/fsl:6.0 bet ...
+# Runs natively if `bet` exists; otherwise uses configured container backend.
 ```
 
-You can also set container defaults at the spec level in the JSON.
+Wrappers always accept host paths; path mapping into container paths is handled
+inside `ni_run()`.
+
+### FastSurfer: GPU-accelerated segmentation
+
+niflowr includes specs for [FastSurfer](https://deep-mi.org/research/fastsurfer/),
+a GPU-accelerated alternative to FreeSurfer that runs brain segmentation in
+~5 minutes. FastSurfer runs primarily via container, so configure a profile
+in `niflowr.yml`:
+
+```yaml
+profiles:
+  fastsurfer:
+    docker_image: "deepmi/fastsurfer:cpu-v2.4.2"
+    apptainer_uri: "docker://deepmi/fastsurfer:cpu-v2.4.2"
+```
+
+Then call the wrapper:
+
+```{r fastsurfer-example, eval = FALSE}
+# Full pipeline: segmentation + surface reconstruction
+result <- ni_fastsurfer_run(
+  t1     = "sub-01_T1w.nii.gz",
+  sid    = "sub-01",
+  sd     = "derivatives/fastsurfer",
+  device = "cuda",
+  .engine = "docker"
+)
+
+# Segmentation only (~5 min)
+seg <- ni_fastsurfer_segment(
+  t1     = "sub-01_T1w.nii.gz",
+  sid    = "sub-01",
+  sd     = "derivatives/fastsurfer",
+  device = "cpu"
+)
+ni_outputs(seg)
+#> $seg_file
+#> [1] "derivatives/fastsurfer/sub-01/mri/aparc.DKTatlas+aseg.deep.mgz"
+#> $mask_file
+#> [1] "derivatives/fastsurfer/sub-01/mri/mask.mgz"
+```
+
+### Runtime diagnostics with `ni_doctor()`
+
+Use `ni_doctor()` to check runtime binaries, mounted roots, profile definitions,
+and lockfile consistency:
+
+```{r doctor, eval = FALSE}
+report <- ni_doctor()
+report
+
+# Strict mode errors on failures:
+ni_doctor(strict = TRUE)
+```
+
+### Pinning and validating lockfiles
+
+Use `ni_pin()` to create/update a lockfile with resolved runtime references
+for configured profiles, and `ni_lock_validate()` to verify current config
+matches the lock:
+
+```{r lockfile, eval = FALSE}
+# Create/update lockfile (default: runtime.lockfile or niflowr.lock.yml)
+lock <- ni_pin()
+
+# Validate current config against lockfile
+checks <- ni_lock_validate()
+checks
+```
+
+### Lock enforcement during execution
+
+Enable lock enforcement to ensure containerized runs use lockfile-pinned
+references:
+
+```{r lock-enforce, eval = FALSE}
+ni_config(config = list(
+  runtime = list(
+    lockfile = "niflowr.lock.yml",
+    lock_enforce = TRUE
+  )
+))
+
+# When lock_enforce = TRUE, ni_run() resolves container refs from the lockfile
+# for the selected profile and errors if lock constraints are violated.
+result <- ni_fsl_bet(
+  in_file  = "/data/t1.nii.gz",
+  out_file = "/data/brain.nii.gz",
+  .engine  = "docker",
+  .profile = "fsl"
+)
+```
 
 ## Ecosystem integration
 

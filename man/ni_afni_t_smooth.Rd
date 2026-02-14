@@ -19,7 +19,8 @@ ni_afni_t_smooth(
   out_file = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -39,13 +40,13 @@ ni_afni_t_smooth(
 
 \item{hamming}{Integer. Use N point Hamming windows. (N must be odd and bigger than 1.)}
 
-\item{lin}{Logical. 3 point linear filter: :math:\verb{0.15\\,a + 0.70\\,b + 0.15\\,c} [This is the default smoother]}
+\item{lin}{Logical. 3 point linear filter: :math:\verb{0.15\\\\,a + 0.70\\\\,b + 0.15\\\\,c} [This is the default smoother]}
 
-\item{lin3}{Integer. 3 point linear filter: :math:\verb{0.5\\,(1-m)\\,a + m\\,b + 0.5\\,(1-m)\\,c}. Here, 'm' is a number strictly between 0 and 1.}
+\item{lin3}{Integer. 3 point linear filter: :math:\verb{0.5\\\\,(1-m)\\\\,a + m\\\\,b + 0.5\\\\,(1-m)\\\\,c}. Here, 'm' is a number strictly between 0 and 1.}
 
 \item{med}{Logical. 3 point median filter: median(a,b,c)}
 
-\item{osf}{Logical. 3 point order statistics filter::math:\verb{0.15\\,min(a,b,c) + 0.70\\,median(a,b,c) + 0.15\\,max(a,b,c)}}
+\item{osf}{Logical. 3 point order statistics filter::math:\verb{0.15\\\\,min(a,b,c) + 0.70\\\\,median(a,b,c) + 0.15\\\\,max(a,b,c)}}
 
 \item{out_file}{Character; file path. output file from 3dTSmooth}
 
@@ -53,7 +54,9 @@ ni_afni_t_smooth(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

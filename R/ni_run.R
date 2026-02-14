@@ -1,53 +1,110 @@
 #' Execute an ni_call
 #'
-#' Validates inputs, builds the argument vector, runs the command via
-#' [processx::run()], checks outputs, and returns a structured `ni_result`.
+#' Validates inputs, builds an argument vector, resolves runtime engine
+#' (`native`, `docker`, `apptainer`), executes via [processx::run()], checks
+#' outputs, and returns a structured result.
 #'
 #' @param call An `ni_call` object, or a spec ID (in which case remaining
 #'   args are passed to [ni_call()]).
 #' @param ... If `call` is a spec ID, passed to [ni_call()].
-#' @param dry_run Logical; if `TRUE`, print the command without executing.
+#' @param dry_run Logical; if `TRUE`, print the resolved command and return
+#'   without executing.
 #' @param echo Logical; if `TRUE`, print stdout/stderr in real time.
 #'   Defaults to `interactive()`.
 #' @param provenance Logical; write a provenance JSON sidecar. Default `TRUE`.
 #' @param error_on_status Logical; if `TRUE` (default), error when the command
 #'   exits with a non-zero status. If `FALSE`, issue a warning instead.
-#' @return An `ni_result` object.
+#' @param return One of `"result"` (default) or `"files"`.
+#' @return An `ni_result` object, or (when `return = "files"`) a character
+#'   vector of output files with the full result attached as `ni_result`
+#'   attribute.
 #' @export
 ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
-                   provenance = TRUE, error_on_status = TRUE) {
-  # Allow shorthand: ni_run("fsl.bet", in_file = ..., out_file = ...)
+                   provenance = TRUE, error_on_status = TRUE,
+                   return = c("result", "files")) {
   if (is.character(call)) {
     call <- ni_call(call, ...)
   }
-
   stopifnot(inherits(call, "ni_call"))
+  return <- match.arg(return)
 
-  # Build command
-  built <- build_command(call)
+  cfg <- ni_config_resolve()
 
-  # Apply container wrapping if needed
-  container <- call$container %||% call$spec$runtime$container
-  if (!is.null(container) && !identical(container$type, "none")) {
-    built <- wrap_container(built, container, call)
-  }
+  # Build host payload first for human-readable provenance and redirects.
+  payload_host <- build_command(call)
+  runtime <- call$runtime %||% list()
+  engine_override <- runtime$engine %||% call$spec$runtime$engine
+  engine <- ni_runtime_detect(cfg, payload_host$command, engine_override)
 
-  # Resolve working directory
-  wd <- call$cwd %||% call$spec$runtime$cwd
+  # Resolve working dir and environment (global cfg < spec < call override).
+  wd <- runtime$cwd %||% call$spec$runtime$cwd
+  env <- ni_env_vector(c(
+    cfg$env %||% list(),
+    call$spec$runtime$env %||% list(),
+    runtime$env %||% list()
+  ))
 
-  # Resolve environment
-  env <- call$env
-  spec_env <- call$spec$runtime$env
-  if (!is.null(spec_env)) {
-    env <- c(spec_env, env)  # call-level overrides spec-level
+  stdout_arg <- if (!is.null(payload_host$stdout)) payload_host$stdout else "|"
+  stderr_arg <- if (!is.null(payload_host$stderr)) payload_host$stderr else "|"
+
+  host_command <- list(
+    engine = engine,
+    command = payload_host$command,
+    args = payload_host$args
+  )
+
+  if (identical(engine, "native")) {
+    exec_command <- payload_host$command
+    exec_args <- payload_host$args
+    exec_wd <- wd
+    payload_exec <- payload_host
+  } else {
+    # Rewrite path-like inputs only for container execution.
+    call_container <- call
+    call_container$values <- ni_rewrite_values_for_container(call$spec, call$values, cfg)
+    payload_container <- build_command(call_container)
+    payload_container$stdout <- payload_host$stdout
+    payload_container$stderr <- payload_host$stderr
+    payload_exec <- payload_container
+
+    built <- ni_build_container_command(
+      engine = engine,
+      cfg = cfg,
+      call = call,
+      payload_cmd = payload_container$command,
+      payload_args = payload_container$args,
+      env = env
+    )
+
+    exec_command <- built$bin
+    exec_args <- built$argv
+    exec_wd <- NULL
+
+    host_command <- c(host_command, list(
+      profile = built$profile,
+      container_ref = built$container_ref,
+      command = built$bin,
+      args = built$argv
+    ))
+    if (!is.null(built$container_source)) host_command$container_source <- built$container_source
+    if (!is.null(built$sif_path)) host_command$sif_path <- built$sif_path
+
+    ni_lock_enforce_profile(
+      cfg = cfg,
+      engine = engine,
+      profile = built$profile,
+      container_ref = built$container_ref,
+      container_source = built$container_source %||% NULL,
+      sif_path = built$sif_path %||% NULL
+    )
   }
 
   if (dry_run) {
-    cmd_str <- paste(c(built$command, built$args), collapse = " ")
-    cli::cli_alert_info("Dry run: {.code {cmd_str}}")
-    if (!is.null(wd)) cli::cli_text("  Working dir: {.path {wd}}")
-    if (!is.null(built$stdout)) cli::cli_text("  stdout -> {.path {built$stdout}}")
-    if (!is.null(built$stderr)) cli::cli_text("  stderr -> {.path {built$stderr}}")
+    cmd_str <- paste(c(exec_command, exec_args), collapse = " ")
+    cli::cli_alert_info("Dry run [{engine}]: {.code {cmd_str}}")
+    if (!is.null(exec_wd)) cli::cli_text("  Working dir: {.path {exec_wd}}")
+    if (!is.null(payload_exec$stdout)) cli::cli_text("  stdout -> {.path {payload_exec$stdout}}")
+    if (!is.null(payload_exec$stderr)) cli::cli_text("  stderr -> {.path {payload_exec$stderr}}")
     cli::cli_h3("Expected outputs")
     for (nm in names(call$outputs)) {
       cli::cli_text("  {.field {nm}}: {.path {call$outputs[[nm]]}}")
@@ -55,47 +112,36 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
     return(invisible(NULL))
   }
 
-  # Determine stdout/stderr handling for processx
-  stdout_arg <- if (!is.null(built$stdout)) built$stdout else "|"
-  stderr_arg <- if (!is.null(built$stderr)) built$stderr else "|"
+  if (echo && is.null(payload_exec$stdout)) stdout_arg <- ""
+  if (echo && is.null(payload_exec$stderr)) stderr_arg <- ""
 
-  # Execute
   start_time <- Sys.time()
-
-  if (echo && is.null(built$stdout)) {
-    stdout_arg <- ""
-  }
-  if (echo && is.null(built$stderr)) {
-    stderr_arg <- ""
-  }
-
   proc_result <- processx::run(
-    command = built$command,
-    args = built$args,
-    wd = wd,
-    env = if (!is.null(env)) env else NULL,
+    command = exec_command,
+    args = exec_args,
+    wd = exec_wd,
+    env = if (length(env) > 0) env else NULL,
     stdout = stdout_arg,
     stderr = stderr_arg,
     error_on_status = FALSE
   )
-
   end_time <- Sys.time()
   duration <- as.numeric(difftime(end_time, start_time, units = "secs"))
 
-  # Check outputs
   output_warnings <- check_outputs(call)
-
   if (length(output_warnings) > 0) {
-    for (w in output_warnings) {
-      cli::cli_warn(w)
-    }
+    for (w in output_warnings) cli::cli_warn(w)
   }
 
-  # Build provenance
   prov <- list(
     spec_id = call$spec$id,
-    command = built$command,
-    args = built$args,
+    engine = engine,
+    profile = host_command$profile %||% NULL,
+    payload = list(
+      command = payload_host$command,
+      args = payload_host$args
+    ),
+    host_command = host_command,
     exit_status = proc_result$status,
     start_time = format(start_time, "%Y-%m-%dT%H:%M:%S%z"),
     end_time = format(end_time, "%Y-%m-%dT%H:%M:%S%z"),
@@ -108,6 +154,8 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
       spec_id = call$spec$id,
       outputs = call$outputs,
       runtime = list(
+        engine = engine,
+        profile = host_command$profile %||% NULL,
         exit_status = proc_result$status,
         stdout = proc_result$stdout %||% "",
         stderr = proc_result$stderr %||% "",
@@ -121,21 +169,17 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
     class = "ni_result"
   )
 
-  # Write provenance sidecar
   if (provenance && proc_result$status == 0 && length(call$outputs) > 0) {
     primary_output <- call$outputs[[1]]
     if (!is.null(primary_output) && is.character(primary_output)) {
       prov_path <- paste0(fs::path_ext_remove(primary_output), "_provenance.json")
       tryCatch(
         ni_provenance_write(result, prov_path),
-        error = function(e) {
-          cli::cli_warn("Could not write provenance sidecar: {e$message}")
-        }
+        error = function(e) cli::cli_warn("Could not write provenance sidecar: {e$message}")
       )
     }
   }
 
-  # Handle non-zero exit
   if (proc_result$status != 0) {
     msg <- c(
       "Command {.code {call$spec$id}} exited with status {proc_result$status}.",
@@ -146,6 +190,14 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
     } else {
       cli::cli_warn(msg)
     }
+  }
+
+  if (identical(return, "files")) {
+    files <- unname(unlist(call$outputs, use.names = FALSE))
+    files <- as.character(files[nzchar(files)])
+    out <- structure(files, class = c("ni_files", "character"))
+    attr(out, "ni_result") <- result
+    return(out)
   }
 
   result

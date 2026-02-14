@@ -1,0 +1,195 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fastsurfer.run",
+  "title": "FastSurfer Run",
+  "command": "run_fastsurfer.sh",
+  "inputs": {
+    "t1": {
+      "type": "file",
+      "desc": "Input T1-weighted image",
+      "required": true,
+      "cli": {
+        "argstr": "--t1 %s"
+      }
+    },
+    "sid": {
+      "type": "string",
+      "desc": "Subject ID",
+      "required": true,
+      "cli": {
+        "argstr": "--sid %s"
+      }
+    },
+    "sd": {
+      "type": "dir",
+      "desc": "Subjects directory (output root)",
+      "required": true,
+      "cli": {
+        "argstr": "--sd %s"
+      }
+    },
+    "fs_license": {
+      "type": "file",
+      "desc": "FreeSurfer license file",
+      "cli": {
+        "argstr": "--fs_license %s"
+      }
+    },
+    "t2": {
+      "type": "file",
+      "desc": "Optional T2-weighted image for hypothalamus segmentation",
+      "cli": {
+        "argstr": "--t2 %s"
+      }
+    },
+    "seg_only": {
+      "type": "flag",
+      "desc": "Run segmentation only (skip surface reconstruction, ~5 min)",
+      "cli": {
+        "argstr": "--seg_only"
+      },
+      "constraints": {
+        "xor": ["seg_only", "surf_only"]
+      }
+    },
+    "surf_only": {
+      "type": "flag",
+      "desc": "Run surface reconstruction only (requires prior segmentation)",
+      "cli": {
+        "argstr": "--surf_only"
+      },
+      "constraints": {
+        "xor": ["seg_only", "surf_only"]
+      }
+    },
+    "device": {
+      "type": "enum",
+      "desc": "Device for DNN inference",
+      "choices": ["auto", "cpu", "cuda", "mps"],
+      "cli": {
+        "argstr": "--device %s"
+      }
+    },
+    "viewagg_device": {
+      "type": "enum",
+      "desc": "Device for view aggregation (use cpu to reduce VRAM usage)",
+      "choices": ["cpu", "cuda"],
+      "cli": {
+        "argstr": "--viewagg_device %s"
+      }
+    },
+    "threads": {
+      "type": "int",
+      "desc": "Number of parallel threads",
+      "validate": {
+        "min": 1
+      },
+      "cli": {
+        "argstr": "--threads %d"
+      }
+    },
+    "vox_size": {
+      "type": "string",
+      "desc": "Voxel size for processing (0.7-1.0 or 'min')",
+      "validate": {
+        "regex": "^(min|[0-9]+(\\.[0-9]+)?)$"
+      },
+      "cli": {
+        "argstr": "--vox_size %s"
+      }
+    },
+    "three_t": {
+      "type": "flag",
+      "desc": "Use the 3T atlas for talairach registration",
+      "cli": {
+        "argstr": "--3T"
+      }
+    },
+    "no_asegdkt": {
+      "type": "flag",
+      "desc": "Skip whole-brain DKT segmentation",
+      "cli": {
+        "argstr": "--no_asegdkt"
+      }
+    },
+    "no_cereb": {
+      "type": "flag",
+      "desc": "Skip cerebellum segmentation",
+      "cli": {
+        "argstr": "--no_cereb"
+      }
+    },
+    "no_hypothal": {
+      "type": "flag",
+      "desc": "Skip hypothalamus segmentation",
+      "cli": {
+        "argstr": "--no_hypothal"
+      }
+    },
+    "no_cc": {
+      "type": "flag",
+      "desc": "Skip corpus callosum segmentation",
+      "cli": {
+        "argstr": "--no_cc"
+      }
+    },
+    "no_biasfield": {
+      "type": "flag",
+      "desc": "Skip bias field correction",
+      "cli": {
+        "argstr": "--no_biasfield"
+      }
+    },
+    "no_surfreg": {
+      "type": "flag",
+      "desc": "Skip surface registration (spherical registration)",
+      "cli": {
+        "argstr": "--no_surfreg"
+      }
+    },
+    "no_fs_t1": {
+      "type": "flag",
+      "desc": "Skip T1.mgz generation from conformed image",
+      "cli": {
+        "argstr": "--no_fs_T1"
+      }
+    },
+    "py": {
+      "type": "string",
+      "desc": "Python command to use (override default)",
+      "cli": {
+        "argstr": "--py %s"
+      }
+    }
+  },
+  "outputs": {
+    "subjects_dir": {
+      "type": "dir",
+      "path": {
+        "template": "{sd}/{sid}"
+      },
+      "must_exist": false
+    },
+    "seg_file": {
+      "type": "file",
+      "path": {
+        "template": "{sd}/{sid}/mri/aparc.DKTatlas+aseg.deep.mgz"
+      },
+      "must_exist": false
+    },
+    "mask_file": {
+      "type": "file",
+      "path": {
+        "template": "{sd}/{sid}/mri/mask.mgz"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "profile": "fastsurfer"
+  },
+  "origin": {
+    "source": "manual"
+  },
+  "description": "FastSurfer: GPU-accelerated brain segmentation and cortical surface reconstruction"
+}

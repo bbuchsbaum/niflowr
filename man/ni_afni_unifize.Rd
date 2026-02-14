@@ -20,7 +20,8 @@ ni_afni_unifize(
   urad = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -32,7 +33,7 @@ ni_afni_unifize(
 
 \item{cl_frac}{Numeric. Option for AFNI experts only.Set the automask 'clip level fraction'. Must be between 0.1 and 0.9. A small fraction means to make the initial threshold for clipping (a la 3dClipLevel) smaller, which will tend to make the mask larger. [default=0.1]}
 
-\item{epi}{Logical. Assume the input dataset is a T2 (or T2\*) weighted EPI time series. After computing the scaling, apply it to ALL volumes (TRs) in the input dataset. That is, a given voxel will be scaled by the same factor at each TR. This option also implies '-noduplo' and '-T2'.This option turns off '-GM' if you turned it on.}
+\item{epi}{Logical. Assume the input dataset is a T2 (or T2\\*) weighted EPI time series. After computing the scaling, apply it to ALL volumes (TRs) in the input dataset. That is, a given voxel will be scaled by the same factor at each TR. This option also implies '-noduplo' and '-T2'.This option turns off '-GM' if you turned it on.}
 
 \item{gm}{Logical. Also scale to unifize 'gray matter' = lower intensity voxels (to aid in registering images from different scanners).}
 
@@ -56,7 +57,9 @@ ni_afni_unifize(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

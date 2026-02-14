@@ -19,7 +19,10 @@
         "position": -3
       },
       "constraints": {
-        "xor": ["invert_xfm", "fix_scale_skew"],
+        "xor": [
+          "invert_xfm",
+          "fix_scale_skew"
+        ],
         "requires": [
           "in_file2"
         ]
@@ -32,7 +35,10 @@
         "argstr": "-fixscaleskew"
       },
       "constraints": {
-        "xor": ["invert_xfm", "concat_xfm"],
+        "xor": [
+          "invert_xfm",
+          "concat_xfm"
+        ],
         "requires": [
           "in_file2"
         ]
@@ -62,7 +68,10 @@
         "argstr": "-inverse"
       },
       "constraints": {
-        "xor": ["concat_xfm", "fix_scale_skew"]
+        "xor": [
+          "concat_xfm",
+          "fix_scale_skew"
+        ]
       }
     },
     "out_file": {
@@ -84,9 +93,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "fsl"
   },
   "origin": {
     "source": "nipype",

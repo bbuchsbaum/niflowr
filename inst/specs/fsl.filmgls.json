@@ -18,7 +18,13 @@
         "argstr": "-ac"
       },
       "constraints": {
-        "xor": ["fit_armodel", "tukey_window", "multitaper_product", "use_pava", "autocorr_noestimate"]
+        "xor": [
+          "fit_armodel",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
       }
     },
     "autocorr_noestimate": {
@@ -28,7 +34,13 @@
         "argstr": "-noest"
       },
       "constraints": {
-        "xor": ["autocorr_estimate_only", "fit_armodel", "tukey_window", "multitaper_product", "use_pava"]
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava"
+        ]
       }
     },
     "brightness_threshold": {
@@ -53,7 +65,13 @@
         "argstr": "-ar"
       },
       "constraints": {
-        "xor": ["autocorr_estimate_only", "tukey_window", "multitaper_product", "use_pava", "autocorr_noestimate"]
+        "xor": [
+          "autocorr_estimate_only",
+          "tukey_window",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
       }
     },
     "full_data": {
@@ -86,7 +104,13 @@
         "argstr": "-mt %d"
       },
       "constraints": {
-        "xor": ["autocorr_estimate_only", "fit_armodel", "tukey_window", "use_pava", "autocorr_noestimate"]
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "tukey_window",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
       }
     },
     "output_pwdata": {
@@ -127,7 +151,13 @@
         "argstr": "-tukey %d"
       },
       "constraints": {
-        "xor": ["autocorr_estimate_only", "fit_armodel", "multitaper_product", "use_pava", "autocorr_noestimate"]
+        "xor": [
+          "autocorr_estimate_only",
+          "fit_armodel",
+          "multitaper_product",
+          "use_pava",
+          "autocorr_noestimate"
+        ]
       }
     },
     "use_pava": {
@@ -148,9 +178,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "fsl"
   },
   "origin": {
     "source": "nipype",

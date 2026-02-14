@@ -16,7 +16,8 @@ ni_afni_t_norm(
   polort = NULL,
   .cwd = NULL,
   .env = NULL,
-  .container = NULL,
+  .engine = NULL,
+  .profile = NULL,
   dry_run = FALSE,
   echo = interactive()
 )
@@ -32,7 +33,7 @@ ni_afni_t_norm(
 
 \item{norm2}{Logical. L2 normalize (sum of squares = 1) [DEFAULT]}
 
-\item{normR}{Logical. normalize so sum of squares = number of time points \* e.g., so RMS = 1.}
+\item{normR}{Logical. normalize so sum of squares = number of time points \\* e.g., so RMS = 1.}
 
 \item{normx}{Logical. Scale so max absolute value = 1 (L_infinity norm)}
 
@@ -44,7 +45,9 @@ ni_afni_t_norm(
 
 \item{.env}{Named character vector of environment variables.}
 
-\item{.container}{Container configuration list.}
+\item{.engine}{Execution engine override.}
+
+\item{.profile}{Runtime profile override.}
 
 \item{dry_run}{Logical; preview command without executing.}
 

@@ -1,0 +1,125 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fastsurfer.segment",
+  "title": "FastSurfer Segment",
+  "command": ["run_fastsurfer.sh", "--seg_only"],
+  "inputs": {
+    "t1": {
+      "type": "file",
+      "desc": "Input T1-weighted image",
+      "required": true,
+      "cli": {
+        "argstr": "--t1 %s"
+      }
+    },
+    "sid": {
+      "type": "string",
+      "desc": "Subject ID",
+      "required": true,
+      "cli": {
+        "argstr": "--sid %s"
+      }
+    },
+    "sd": {
+      "type": "dir",
+      "desc": "Subjects directory (output root)",
+      "required": true,
+      "cli": {
+        "argstr": "--sd %s"
+      }
+    },
+    "device": {
+      "type": "enum",
+      "desc": "Device for DNN inference",
+      "choices": ["auto", "cpu", "cuda", "mps"],
+      "cli": {
+        "argstr": "--device %s"
+      }
+    },
+    "threads": {
+      "type": "int",
+      "desc": "Number of parallel threads",
+      "validate": {
+        "min": 1
+      },
+      "cli": {
+        "argstr": "--threads %d"
+      }
+    },
+    "vox_size": {
+      "type": "string",
+      "desc": "Voxel size for processing (0.7-1.0 or 'min')",
+      "validate": {
+        "regex": "^(min|[0-9]+(\\.[0-9]+)?)$"
+      },
+      "cli": {
+        "argstr": "--vox_size %s"
+      }
+    },
+    "no_asegdkt": {
+      "type": "flag",
+      "desc": "Skip whole-brain DKT segmentation",
+      "cli": {
+        "argstr": "--no_asegdkt"
+      }
+    },
+    "no_cereb": {
+      "type": "flag",
+      "desc": "Skip cerebellum segmentation",
+      "cli": {
+        "argstr": "--no_cereb"
+      }
+    },
+    "no_hypothal": {
+      "type": "flag",
+      "desc": "Skip hypothalamus segmentation",
+      "cli": {
+        "argstr": "--no_hypothal"
+      }
+    },
+    "no_cc": {
+      "type": "flag",
+      "desc": "Skip corpus callosum segmentation",
+      "cli": {
+        "argstr": "--no_cc"
+      }
+    },
+    "no_biasfield": {
+      "type": "flag",
+      "desc": "Skip bias field correction",
+      "cli": {
+        "argstr": "--no_biasfield"
+      }
+    }
+  },
+  "outputs": {
+    "subjects_dir": {
+      "type": "dir",
+      "path": {
+        "template": "{sd}/{sid}"
+      },
+      "must_exist": false
+    },
+    "seg_file": {
+      "type": "file",
+      "path": {
+        "template": "{sd}/{sid}/mri/aparc.DKTatlas+aseg.deep.mgz"
+      },
+      "must_exist": false
+    },
+    "mask_file": {
+      "type": "file",
+      "path": {
+        "template": "{sd}/{sid}/mri/mask.mgz"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "profile": "fastsurfer"
+  },
+  "origin": {
+    "source": "manual"
+  },
+  "description": "FastSurfer segmentation-only mode: fast brain segmentation (~5 min) without surface reconstruction"
+}

@@ -133,3 +133,84 @@ test_that("validate_inputs catches wrong type", {
     )
   })
 })
+
+# ---- Additional validation tests ----
+
+test_that("validate_type rejects non-integer for int type", {
+  errs <- niflowr:::validate_type("x", 1.5, list(type = "int"))
+  expect_true(length(errs) > 0)
+  expect_match(errs[1], "whole number")
+})
+
+test_that("validate_type rejects non-numeric for double type", {
+  errs <- niflowr:::validate_type("x", "abc", list(type = "double"))
+  expect_true(length(errs) > 0)
+  expect_match(errs[1], "number")
+})
+
+test_that("validate_type accepts numeric for double type", {
+  errs <- niflowr:::validate_type("x", 3.14, list(type = "double"))
+  expect_equal(length(errs), 0)
+})
+
+test_that("validate_type rejects named list for list type", {
+  # list type expects character or numeric vector, not a named list
+  errs <- niflowr:::validate_type("x", list(a = 1), list(type = "list"))
+  expect_true(length(errs) > 0)
+})
+
+test_that("validate_type accepts character vector for list type", {
+  errs <- niflowr:::validate_type("x", c("a", "b", "c"), list(type = "list"))
+  expect_equal(length(errs), 0)
+})
+
+test_that("validate_type accepts numeric vector for list type", {
+  errs <- niflowr:::validate_type("x", c(1, 2, 3), list(type = "list"))
+  expect_equal(length(errs), 0)
+})
+
+test_that("validate_constraints_single checks min", {
+  errs <- niflowr:::validate_constraints_single("x", 5, list(min = 10))
+  expect_true(length(errs) > 0)
+  expect_match(errs[1], ">=")
+})
+
+test_that("validate_constraints_single checks max", {
+  errs <- niflowr:::validate_constraints_single("x", 15, list(max = 10))
+  expect_true(length(errs) > 0)
+  expect_match(errs[1], "<=")
+})
+
+test_that("validate_constraints_single checks regex", {
+  errs <- niflowr:::validate_constraints_single("x", "abc123", list(regex = "^[0-9]+$"))
+  expect_true(length(errs) > 0)
+  expect_match(errs[1], "pattern")
+})
+
+test_that("validate_constraints_single passes when constraints met", {
+  errs <- niflowr:::validate_constraints_single("x", 5, list(min = 1, max = 10))
+  expect_equal(length(errs), 0)
+})
+
+test_that("validate_constraints_single checks dir existence", {
+  errs <- niflowr:::validate_constraints_single("x", "/nonexistent_dir", list(exists = TRUE), type = "dir")
+  expect_true(length(errs) > 0)
+  expect_match(errs[1], "Directory")
+})
+
+test_that("validate_constraints_single checks file existence", {
+  errs <- niflowr:::validate_constraints_single("x", "/nonexistent_file.txt", list(exists = TRUE), type = "file")
+  expect_true(length(errs) > 0)
+  expect_match(errs[1], "File")
+})
+
+test_that("is_missing_value returns TRUE for NULL", {
+  expect_true(niflowr:::is_missing_value(NULL))
+})
+
+test_that("is_missing_value returns FALSE for non-NULL values", {
+  expect_false(niflowr:::is_missing_value(1))
+  expect_false(niflowr:::is_missing_value("a"))
+  expect_false(niflowr:::is_missing_value(TRUE))
+  expect_false(niflowr:::is_missing_value(list(a = 1)))
+})

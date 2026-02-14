@@ -10,7 +10,10 @@
         "argstr": "-Thresh %f %s"
       },
       "constraints": {
-        "xor": ["var_absolute_threshold", "var_absolute_threshold_normalize"]
+        "xor": [
+          "var_absolute_threshold",
+          "var_absolute_threshold_normalize"
+        ]
       }
     },
     "args": {
@@ -32,7 +35,10 @@
         "argstr": "-Aexpr %s %s"
       },
       "constraints": {
-        "xor": ["average_expr_nonzero", "sum_expr"]
+        "xor": [
+          "average_expr_nonzero",
+          "sum_expr"
+        ]
       }
     },
     "average_expr_nonzero": {
@@ -41,7 +47,10 @@
         "argstr": "-Cexpr %s %s"
       },
       "constraints": {
-        "xor": ["average_expr", "sum_expr"]
+        "xor": [
+          "average_expr",
+          "sum_expr"
+        ]
       }
     },
     "bandpass": {
@@ -152,7 +161,10 @@
         "argstr": "-Sexpr %s %s"
       },
       "constraints": {
-        "xor": ["average_expr", "average_expr_nonzero"]
+        "xor": [
+          "average_expr",
+          "average_expr_nonzero"
+        ]
       }
     },
     "var_absolute_threshold": {
@@ -161,7 +173,10 @@
         "argstr": "-VarThresh %f %f %f %s"
       },
       "constraints": {
-        "xor": ["absolute_threshold", "var_absolute_threshold_normalize"]
+        "xor": [
+          "absolute_threshold",
+          "var_absolute_threshold_normalize"
+        ]
       }
     },
     "var_absolute_threshold_normalize": {
@@ -170,7 +185,10 @@
         "argstr": "-VarThreshN %f %f %f %s"
       },
       "constraints": {
-        "xor": ["absolute_threshold", "var_absolute_threshold"]
+        "xor": [
+          "absolute_threshold",
+          "var_absolute_threshold"
+        ]
       }
     },
     "zmean": {
@@ -274,9 +292,7 @@
     }
   },
   "runtime": {
-    "container": {
-      "type": "none"
-    }
+    "profile": "afni"
   },
   "origin": {
     "source": "nipype",
