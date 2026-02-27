@@ -89,7 +89,57 @@ coerce_input_value <- function(value, def, param_name) {
     }), use.names = FALSE))
   }
 
+  if (identical(def$type, "enum")) {
+    value <- coerce_enum_value(value, def)
+  }
+
   value
+}
+
+#' Coerce ergonomic enum inputs to declared enum choices
+#' @keywords internal
+coerce_enum_value <- function(value, def) {
+  choices <- as.character(def$choices %||% character(0))
+  if (length(choices) == 0) return(value)
+
+  if (is.logical(value) && length(value) == 1 && !is.na(value)) {
+    yn <- enum_pick_choice(choices, yes = c("y", "yes", "true"), no = c("n", "no", "false"))
+    if (!is.null(yn)) {
+      return(if (isTRUE(value)) yn$yes else yn$no)
+    }
+
+    bit <- enum_pick_choice(choices, yes = c("1"), no = c("0"))
+    if (!is.null(bit)) {
+      return(if (isTRUE(value)) bit$yes else bit$no)
+    }
+  }
+
+  if (is.numeric(value) && length(value) == 1 && !is.na(value)) {
+    as_chr <- as.character(value)
+    if (as_chr %in% choices) return(as_chr)
+
+    if (isTRUE(all.equal(value, trunc(value)))) {
+      as_int <- as.character(as.integer(value))
+      if (as_int %in% choices) return(as_int)
+    }
+  }
+
+  value
+}
+
+#' Pick matching enum choices for yes/no style mappings
+#' @keywords internal
+enum_pick_choice <- function(choices, yes, no) {
+  lower <- tolower(choices)
+  yes_idx <- match(yes, lower, nomatch = 0L)
+  no_idx <- match(no, lower, nomatch = 0L)
+  yes_idx <- yes_idx[yes_idx > 0][1]
+  no_idx <- no_idx[no_idx > 0][1]
+
+  if (length(yes_idx) == 0 || length(no_idx) == 0 || is.na(yes_idx) || is.na(no_idx)) {
+    return(NULL)
+  }
+  list(yes = choices[[yes_idx]], no = choices[[no_idx]])
 }
 
 #' Pick a file path from a previous call/result output set

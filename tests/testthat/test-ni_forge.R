@@ -97,10 +97,50 @@ test_that("bool placeholders are warnings, not errors", {
   })
 })
 
+test_that("ni_lint_specs flags placeholder descriptions", {
+  withr::with_tempdir({
+    spec_path <- file.path(getwd(), "tmp_placeholder.json")
+    spec <- list(
+      spec_version = "0.1.0",
+      id = "test.placeholder",
+      title = "Placeholder Test",
+      description = "TODO replace this text",
+      command = "echo",
+      inputs = list(
+        in_file = list(
+          type = "file",
+          required = TRUE,
+          desc = "TBD",
+          cli = list(argstr = "%s", position = 0)
+        )
+      ),
+      outputs = list(
+        out_file = list(
+          type = "file",
+          path = list(template = "{in_file}"),
+          must_exist = FALSE
+        )
+      )
+    )
+    jsonlite::write_json(spec, spec_path, pretty = TRUE, auto_unbox = TRUE, null = "null")
+
+    findings <- ni_lint_specs(spec_paths = spec_path, fix = FALSE, write = FALSE, strict = FALSE)
+    placeholder <- findings[findings$code == "placeholder_desc", , drop = FALSE]
+    expect_true(nrow(placeholder) >= 2)
+    expect_true(all(placeholder$level == "error"))
+  })
+})
+
 test_that("ni_lint_specs reports clean shell syntax for bundled specs", {
   findings <- ni_lint_specs(spec_dir = "inst/specs", strict = FALSE, fix = FALSE)
   shell_errors <- findings[findings$code == "shell_argstr" & findings$level == "error", , drop = FALSE]
   expect_equal(nrow(shell_errors), 0)
+})
+
+test_that("ni_lint_specs reports no placeholder descriptions for bundled specs", {
+  findings <- ni_lint_specs(spec_dir = "inst/specs", strict = FALSE, fix = FALSE)
+  placeholder_errors <- findings[findings$code == "placeholder_desc" & findings$level == "error", , drop = FALSE]
+  expect_equal(nrow(placeholder_errors), 0)
 })
 
 test_that("golden cmdline fixtures are up to date", {

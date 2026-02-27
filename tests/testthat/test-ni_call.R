@@ -81,6 +81,24 @@ test_that("coerce_input_value handles list of ni_results", {
   expect_equal(coerced, c("/tmp/a.nii.gz", "/tmp/b.nii.gz"))
 })
 
+test_that("coerce_input_value maps logical to y/n enum choices", {
+  def <- list(type = "enum", choices = c("y", "n"))
+  expect_equal(niflowr:::coerce_input_value(TRUE, def, "bids_sidecar"), "y")
+  expect_equal(niflowr:::coerce_input_value(FALSE, def, "bids_sidecar"), "n")
+})
+
+test_that("coerce_input_value maps logical to 1/0 enum choices", {
+  def <- list(type = "enum", choices = c("0", "1", "2"))
+  expect_equal(niflowr:::coerce_input_value(TRUE, def, "mode"), "1")
+  expect_equal(niflowr:::coerce_input_value(FALSE, def, "mode"), "0")
+})
+
+test_that("coerce_input_value maps numeric to enum string choices", {
+  def <- list(type = "enum", choices = c("0", "1", "2"))
+  expect_equal(niflowr:::coerce_input_value(2, def, "mode"), "2")
+  expect_equal(niflowr:::coerce_input_value(1L, def, "mode"), "1")
+})
+
 test_that("extract_pipeline_path prefers preferred_name match", {
   outputs <- list(mask = "/tmp/mask.nii.gz", out_file = "/tmp/brain.nii.gz")
   path <- niflowr:::extract_pipeline_path(outputs, preferred_name = "mask")

@@ -1,0 +1,382 @@
+{
+  "spec_version": "0.1.0",
+  "id": "dcm2niix.convert",
+  "title": "dcm2niix Convert",
+  "command": "dcm2niix",
+  "inputs": {
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters to the command",
+      "cli": {
+        "argstr": "%s",
+        "position": 1
+      }
+    },
+    "compression_level": {
+      "type": "int",
+      "desc": "Gzip compression level (1=fastest..9=smallest).",
+      "validate": {
+        "min": 1,
+        "max": 9
+      },
+      "cli": {
+        "argstr": "-%d",
+        "position": 5
+      }
+    },
+    "adjacent": {
+      "type": "enum",
+      "desc": "Assume adjacent DICOMs from a series are stored in the same folder (n/y).",
+      "choices": [
+        "n",
+        "y"
+      ],
+      "cli": {
+        "argstr": "-a %s",
+        "position": 10
+      }
+    },
+    "bids_sidecar": {
+      "type": "enum",
+      "desc": "BIDS sidecar mode (y/n/o; o=JSON only, no NIfTI).",
+      "choices": [
+        "y",
+        "n",
+        "o"
+      ],
+      "cli": {
+        "argstr": "-b %s",
+        "position": 20
+      }
+    },
+    "anon_bids": {
+      "type": "enum",
+      "desc": "Anonymize BIDS sidecars (y/n).",
+      "choices": [
+        "y",
+        "n"
+      ],
+      "constraints": {
+        "requires": [
+          "bids_sidecar"
+        ]
+      },
+      "cli": {
+        "argstr": "-ba %s",
+        "position": 21
+      }
+    },
+    "bids_subject": {
+      "type": "string",
+      "desc": "Set BIDS subject label (equivalent to -bi).",
+      "validate": {
+        "regex": "^[A-Za-z0-9]+$"
+      },
+      "constraints": {
+        "requires": [
+          "bids_sidecar"
+        ]
+      },
+      "cli": {
+        "argstr": "-bi %s",
+        "position": 22
+      }
+    },
+    "bids_session": {
+      "type": "string",
+      "desc": "Set BIDS session label (equivalent to -bv).",
+      "validate": {
+        "regex": "^[A-Za-z0-9]+$"
+      },
+      "constraints": {
+        "requires": [
+          "bids_sidecar"
+        ]
+      },
+      "cli": {
+        "argstr": "-bv %s",
+        "position": 23
+      }
+    },
+    "comment": {
+      "type": "string",
+      "desc": "Comment stored in NIfTI aux_file (up to 24 characters).",
+      "cli": {
+        "argstr": "-c %s",
+        "position": 30
+      }
+    },
+    "depth": {
+      "type": "int",
+      "desc": "Directory search depth for recursive discovery (0..9).",
+      "validate": {
+        "min": 0,
+        "max": 9
+      },
+      "cli": {
+        "argstr": "-d %d",
+        "position": 40
+      }
+    },
+    "export_format": {
+      "type": "enum",
+      "desc": "Export format (n=NIfTI, y=NRRD, o=MGH, j=JNIfTI, b=BJNIfTI).",
+      "choices": [
+        "n",
+        "y",
+        "o",
+        "j",
+        "b"
+      ],
+      "cli": {
+        "argstr": "-e %s",
+        "position": 50
+      }
+    },
+    "filename": {
+      "type": "string",
+      "desc": "Output filename template (e.g. %p_%t_%s).",
+      "cli": {
+        "argstr": "-f %s",
+        "position": 60
+      }
+    },
+    "ignore_derived": {
+      "type": "enum",
+      "desc": "Ignore derived/localizer/2D images (y/n).",
+      "choices": [
+        "y",
+        "n"
+      ],
+      "cli": {
+        "argstr": "-i %s",
+        "position": 70
+      }
+    },
+    "lossless_scale": {
+      "type": "enum",
+      "desc": "Lossless scaling for 16-bit integers (y/n/o).",
+      "choices": [
+        "y",
+        "n",
+        "o"
+      ],
+      "cli": {
+        "argstr": "-l %s",
+        "position": 80
+      }
+    },
+    "merge_2d_slices": {
+      "type": "enum",
+      "desc": "Merge slices from same series despite differing properties (0/1/2 or n/y).",
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "n",
+        "y"
+      ],
+      "cli": {
+        "argstr": "-m %s",
+        "position": 90
+      }
+    },
+    "series_crc": {
+      "type": "list",
+      "items_type": "string",
+      "desc": "Only convert specific series CRC numbers; repeatable.",
+      "cli": {
+        "argstr": "-n %s",
+        "repeat": true,
+        "position": 100
+      }
+    },
+    "out_dir": {
+      "type": "dir",
+      "desc": "Output directory (omit to write into input directory).",
+      "cli": {
+        "argstr": "-o %s",
+        "position": 110
+      }
+    },
+    "philips_float": {
+      "type": "enum",
+      "desc": "Use Philips precise floating-point scaling (y/n).",
+      "choices": [
+        "y",
+        "n"
+      ],
+      "cli": {
+        "argstr": "-p %s",
+        "position": 120
+      }
+    },
+    "search_only": {
+      "type": "enum",
+      "desc": "Directory search mode (y=count, l=list, n=off).",
+      "choices": [
+        "y",
+        "l",
+        "n"
+      ],
+      "cli": {
+        "argstr": "-q %s",
+        "position": 130
+      }
+    },
+    "rename": {
+      "type": "enum",
+      "desc": "Rename DICOMs instead of converting (y/n).",
+      "choices": [
+        "y",
+        "n"
+      ],
+      "cli": {
+        "argstr": "-r %s",
+        "position": 140
+      }
+    },
+    "single_file": {
+      "type": "enum",
+      "desc": "Single-file mode: convert only one file in folder (y/n).",
+      "choices": [
+        "y",
+        "n"
+      ],
+      "cli": {
+        "argstr": "-s %s",
+        "position": 150
+      }
+    },
+    "verbose": {
+      "type": "enum",
+      "desc": "Verbosity (0/1/2 or n/y).",
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "n",
+        "y"
+      ],
+      "cli": {
+        "argstr": "-v %s",
+        "position": 160
+      }
+    },
+    "write_conflicts": {
+      "type": "enum",
+      "desc": "Name conflict behavior (0=skip, 1=overwrite, 2=add suffix).",
+      "choices": [
+        "0",
+        "1",
+        "2"
+      ],
+      "cli": {
+        "argstr": "-w %s",
+        "position": 170
+      }
+    },
+    "crop": {
+      "type": "enum",
+      "desc": "Crop 3D acquisitions (y/n/i where i=ignore crop and rotate).",
+      "choices": [
+        "y",
+        "n",
+        "i"
+      ],
+      "cli": {
+        "argstr": "-x %s",
+        "position": 180
+      }
+    },
+    "compression": {
+      "type": "enum",
+      "desc": "Compression mode (y/o/i/n/3).",
+      "choices": [
+        "y",
+        "o",
+        "i",
+        "n",
+        "3"
+      ],
+      "cli": {
+        "argstr": "-z %s",
+        "position": 190
+      }
+    },
+    "big_endian": {
+      "type": "enum",
+      "desc": "Output byte order (y=big-endian, n=little-endian, o=native/optimal).",
+      "choices": [
+        "y",
+        "n",
+        "o"
+      ],
+      "cli": {
+        "argstr": "--big-endian %s",
+        "position": 200
+      }
+    },
+    "progress": {
+      "type": "enum",
+      "desc": "Progress reporting (y/n).",
+      "choices": [
+        "y",
+        "n"
+      ],
+      "cli": {
+        "argstr": "--progress %s",
+        "position": 210
+      }
+    },
+    "ignore_trigger_times": {
+      "type": "flag",
+      "desc": "Ignore trigger time DICOM fields (0018,1060 and 0020,9153).",
+      "cli": {
+        "argstr": "--ignore_trigger_times",
+        "position": 220
+      }
+    },
+    "terse": {
+      "type": "flag",
+      "desc": "Omit filename postfixes (can increase overwrite risk).",
+      "cli": {
+        "argstr": "--terse",
+        "position": 230
+      }
+    },
+    "in_folder": {
+      "type": "dir",
+      "desc": "Folder with DICOM images to convert.",
+      "required": true,
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "%s",
+        "position": 1000
+      }
+    }
+  },
+  "outputs": {
+    "output_dir": {
+      "type": "dir",
+      "path": {
+        "from_input": "out_dir"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "profile": "dcm2niix",
+    "version": {
+      "args": [
+        "--version"
+      ]
+    }
+  },
+  "origin": {
+    "source": "manual"
+  },
+  "description": "Convert DICOM folders to NIfTI (and optional BIDS sidecars) using dcm2niix."
+}

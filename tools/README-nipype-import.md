@@ -78,3 +78,25 @@ Rscript tools/gen_golden_cmdline.R
   `|& tee %s`) into runner-level redirects.
 - `tools/gen_golden_cmdline.R` writes
   `tests/golden/cmdline_golden.json` for regression testing.
+
+## dcm2niix spec sync
+
+Use the dcm2niix importer/checker to compare spec CLI coverage against
+`dcm2niix -h` and optionally sync descriptions:
+
+```bash
+# Coverage report (non-fatal by default)
+Rscript tools/import_dcm2niix_spec.R --mode check
+
+# Fail CI if help/spec flags diverge
+Rscript tools/import_dcm2niix_spec.R --mode check --strict
+
+# Update input descriptions from dcm2niix help text
+Rscript tools/import_dcm2niix_spec.R --mode sync-desc --write
+```
+
+If `dcm2niix` is unavailable locally, pass a captured help file:
+
+```bash
+Rscript tools/import_dcm2niix_spec.R --help-file /path/to/dcm2niix-help.txt
+```

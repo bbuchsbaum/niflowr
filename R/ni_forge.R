@@ -369,6 +369,28 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     }
   }
 
+  # 6) Placeholder descriptions (TODO/TBD/FIXME) are not allowed
+  if (is_placeholder_text(spec$description)) {
+    add_finding(
+      level = "error",
+      code = "placeholder_desc",
+      param = "description",
+      message = "Top-level description contains placeholder text."
+    )
+  }
+
+  for (nm in names(inputs)) {
+    desc <- inputs[[nm]]$desc
+    if (is_placeholder_text(desc)) {
+      add_finding(
+        level = "error",
+        code = "placeholder_desc",
+        param = nm,
+        message = "Input description contains placeholder text."
+      )
+    }
+  }
+
   if (fixed) {
     spec$inputs <- inputs
     list(findings = findings, spec_fixed = spec)
@@ -428,6 +450,14 @@ rewrite_shell_argstr <- function(argstr, param_name) {
   }
 
   NULL
+}
+
+#' @keywords internal
+is_placeholder_text <- function(x) {
+  is.character(x) &&
+    length(x) == 1 &&
+    nzchar(trimws(x)) &&
+    grepl("^\\s*(todo|tbd|fixme|xxx)\\b", x, ignore.case = TRUE)
 }
 
 #' @keywords internal

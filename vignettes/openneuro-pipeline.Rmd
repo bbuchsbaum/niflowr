@@ -1,0 +1,184 @@
+---
+title: "From OpenNeuro to analysis with niflowr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{From OpenNeuro to analysis with niflowr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Introduction
+
+This vignette demonstrates an end-to-end neuroimaging workflow in R by combining two packages:
+
+- **openneuroR**: fetches BIDS datasets from OpenNeuro
+- **niflowr**: processes neuroimaging data with FSL, AFNI, ANTs, and other tools
+
+Together, they provide a reproducible pipeline from data acquisition to analysis, entirely within R.
+
+## Setup
+
+Install both packages from GitHub:
+
+```{r}
+# install.packages("pak")
+pak::pak("bbuchsbaum/openneuroR")
+pak::pak("bbuchsbaum/niflowr")
+
+library(openneuroR)
+library(niflowr)
+```
+
+## Step 1: Browse OpenNeuro
+
+Use `on_search()` to find datasets by keyword, then `on_dataset()` to view metadata:
+
+```{r}
+# Search for flanker task datasets
+results <- on_search("flanker")
+
+# View details for ds000102 (flanker task)
+dataset <- on_dataset("ds000102")
+dataset$description
+```
+
+## Step 2: Download with ni_from_openneuro()
+
+The convenience function `ni_from_openneuro()` downloads a dataset and returns a BIDS object:
+
+```{r}
+# Download first 3 subjects
+bids <- ni_from_openneuro("ds000102", subjects = c("01", "02", "03"))
+
+# Inspect the BIDS structure
+print(bids)
+```
+
+This downloads to `~/openneuro_data/ds000102/` by default. Specify `target_dir` to customize.
+
+## Step 3: Process with niflowr
+
+### Skull strip T1w images
+
+Use `ni_bids_inputs()` to find files matching a specific modality, then process them:
+
+```{r}
+# Find T1w images for subject 01
+inputs <- ni_bids_inputs(bids, "fsl.bet", subid = "01", modality = "T1w")
+
+# Skull strip with FSL BET
+result <- ni_fsl_bet(
+  in_file = inputs$path[1],
+  out_file = ni_deriv_path(inputs$path[1], desc = "brain"),
+  frac = 0.5
+)
+```
+
+### Register to MNI space
+
+Chain operations by using output from one step as input to the next:
+
+```{r}
+# Register brain-extracted T1w to MNI152
+reg_result <- ni_fsl_flirt(
+  in_file = result$out_file,
+  ref_file = ni_fsl_template("MNI152_T1_2mm_brain"),
+  out_file = ni_deriv_path(result$out_file, space = "MNI152"),
+  out_matrix_file = ni_deriv_path(result$out_file, suffix = "xfm", ext = "mat")
+)
+```
+
+## Step 4: Scale with targets
+
+Use `targets` to process multiple subjects in parallel:
+
+```{r}
+library(targets)
+
+# _targets.R
+tar_option_set(packages = c("niflowr", "openneuroR"))
+
+list(
+  tar_target(bids, ni_from_openneuro("ds000102", subjects = c("01", "02", "03"))),
+
+  tar_target(
+    subjects,
+    bids$participants$participant_id
+  ),
+
+  tar_target(
+    brain_extracted,
+    {
+      inputs <- ni_bids_inputs(bids, "fsl.bet", subid = subjects, modality = "T1w")
+      ni_fsl_bet(
+        in_file = inputs$path[1],
+        out_file = ni_deriv_path(inputs$path[1], desc = "brain"),
+        frac = 0.5
+      )
+    },
+    pattern = map(subjects)
+  ),
+
+  tar_target(
+    registered,
+    {
+      ni_fsl_flirt(
+        in_file = brain_extracted$out_file,
+        ref_file = ni_fsl_template("MNI152_T1_2mm_brain"),
+        out_file = ni_deriv_path(brain_extracted$out_file, space = "MNI152")
+      )
+    },
+    pattern = map(brain_extracted)
+  )
+)
+```
+
+Run with `targets::tar_make()`.
+
+## Working with fMRIPrep derivatives
+
+If the dataset has preprocessed derivatives on OpenNeuro, download and use them directly:
+
+```{r}
+# Download fMRIPrep derivatives
+on_download_derivatives(
+  dataset = "ds000102",
+  derivative = "fmriprep",
+  dest_dir = "~/openneuro_data/ds000102/derivatives",
+  subjects = c("01", "02")
+)
+
+# Load confounds
+confounds <- ni_fmriprep_confounds(
+  "~/openneuro_data/ds000102/derivatives/fmriprep/sub-01/func/sub-01_task-flanker_desc-confounds_timeseries.tsv"
+)
+
+# Load preprocessed BOLD
+preproc <- ni_fmriprep_preproc(
+  "~/openneuro_data/ds000102/derivatives/fmriprep/sub-01/func/sub-01_task-flanker_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz"
+)
+```
+
+## Tips
+
+**Caching**: OpenNeuro downloads are cached. Re-running `ni_from_openneuro()` with the same arguments will reuse existing files.
+
+**Offline work**: Once downloaded, all processing happens locally. Disconnect and continue working.
+
+**Reproducibility**: Use `renv::snapshot()` to lock package versions and ensure reproducible results across environments.
+
+**Container profiles**: Use `ni_set_runtime_profile()` to switch between Docker, Apptainer, or native execution. See `vignette("container-profiles")` for details.
+
+## Next steps
+
+- Explore wrapper functions with `ni_list_wrappers()`
+- Build complex pipelines with `ni_pipe()`
+- Read `vignette("niflowr-basics")` for more processing examples

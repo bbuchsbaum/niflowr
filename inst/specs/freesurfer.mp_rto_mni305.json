@@ -20,7 +20,7 @@
     },
     "reference_dir": {
       "type": "dir",
-      "desc": "TODO",
+      "desc": "Path to FreeSurfer's MNI305 reference directory (commonly $FREESURFER_HOME/average).",
       "required": true
     },
     "target": {

@@ -1,0 +1,59 @@
+name: Generated Artifact Drift
+
+on:
+  pull_request:
+    paths:
+      - "inst/specs/**"
+      - "tools/gen_wrappers.R"
+      - "tools/gen_golden_cmdline.R"
+      - "tools/check_wrapper_docs.R"
+      - "R/wrappers_auto.R"
+      - "tests/golden/cmdline_golden.json"
+      - "NAMESPACE"
+      - "man/**"
+      - ".github/workflows/generated-artifact-drift.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "inst/specs/**"
+      - "tools/gen_wrappers.R"
+      - "tools/gen_golden_cmdline.R"
+      - "tools/check_wrapper_docs.R"
+      - "R/wrappers_auto.R"
+      - "tests/golden/cmdline_golden.json"
+      - "NAMESPACE"
+      - "man/**"
+      - ".github/workflows/generated-artifact-drift.yml"
+
+jobs:
+  check-generated-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+
+      - name: Regenerate wrappers
+        run: Rscript tools/gen_wrappers.R
+
+      - name: Regenerate golden command fixture
+        run: Rscript tools/gen_golden_cmdline.R
+
+      - name: Validate generated wrapper docs
+        run: Rscript tools/check_wrapper_docs.R
+
+      - name: Fail on generated artifact drift
+        run: |
+          if ! git diff --quiet -- R/wrappers_auto.R tests/golden/cmdline_golden.json; then
+            echo "::error::Generated artifacts are out of date. Regenerate wrappers and command goldens."
+            git --no-pager diff -- R/wrappers_auto.R tests/golden/cmdline_golden.json
+            exit 1
+          fi

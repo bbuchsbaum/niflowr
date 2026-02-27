@@ -18,7 +18,7 @@ ni_freesurfer_mp_rto_mni305(
 )
 }
 \arguments{
-\item{reference_dir}{Character; directory path. TODO \strong{Required.}}
+\item{reference_dir}{Character; directory path. Path to FreeSurfer's MNI305 reference directory (commonly $FREESURFER_HOME/average). \strong{Required.}}
 
 \item{target}{Character. input atlas file \strong{Required.}}
 
