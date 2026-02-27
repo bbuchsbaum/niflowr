@@ -13,3 +13,6 @@
 ^vignettes/albers\.js$
 ^doc$
 ^Meta$
+^\.claude$
+^\.rcmdcheck_result.*\.rds$
+^.*[.]Rcheck$

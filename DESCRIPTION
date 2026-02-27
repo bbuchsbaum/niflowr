@@ -26,14 +26,18 @@ Imports:
     yaml,
     utils
 Suggests:
+    bidsappr,
     bidser,
     crew,
+    fmriprepper,
     knitr,
     neuroim2,
     neurotransform,
+    openneuroR,
     rmarkdown,
     targets,
     tarchetypes,
+    tibble,
     testthat (>= 3.0.0),
     withr
 VignetteBuilder: knitr
