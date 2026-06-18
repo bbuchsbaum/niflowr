@@ -29,6 +29,10 @@
       ],
       "description": "Command name or command vector"
     },
+    "render": {
+      "type": "string",
+      "description": "Name of a registered custom renderer to build the argument vector instead of the generic per-input loop (e.g. 'ants_registration_staged')."
+    },
     "inputs": {
       "type": "object",
       "additionalProperties": { "$ref": "#/$defs/param" },
@@ -184,9 +188,36 @@
           "type": "boolean",
           "default": true,
           "description": "Whether to verify this output exists after execution"
-        }
+        },
+        "when": { "$ref": "#/$defs/when" }
       },
       "additionalProperties": false
+    },
+    "when": {
+      "type": "object",
+      "required": ["input"],
+      "properties": {
+        "input": {
+          "type": "string",
+          "description": "Input name whose value (with defaults applied) gates this output."
+        },
+        "in": {
+          "type": "array",
+          "items": {},
+          "description": "Output is produced only when the input value is one of these."
+        },
+        "not_in": {
+          "type": "array",
+          "items": {},
+          "description": "Output is produced only when the input value is NOT one of these."
+        }
+      },
+      "oneOf": [
+        { "required": ["in"] },
+        { "required": ["not_in"] }
+      ],
+      "additionalProperties": false,
+      "description": "Conditional gate: include this output only when the predicate over an input value holds. Exactly one of 'in' or 'not_in' must be given."
     },
     "runtime": {
       "type": "object",

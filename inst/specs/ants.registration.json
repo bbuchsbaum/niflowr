@@ -3,6 +3,7 @@
   "id": "ants.registration",
   "title": "ANTS Registration",
   "command": "antsRegistration",
+  "render": "ants_registration_staged",
   "inputs": {
     "args": {
       "type": "string",

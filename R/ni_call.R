@@ -286,14 +286,50 @@ is_bids_like_path <- function(path) {
   grepl("^sub-[A-Za-z0-9]+_", fname)
 }
 
+#' Fill missing inputs with their declared spec defaults
+#'
+#' Defaults are intentionally NOT injected into the generic command builder
+#' (that would change long-standing rendered output); this helper is used only
+#' where defaults are genuinely needed, e.g. resolving output templates and
+#' conditional outputs, and inside custom renderers.
+#'
+#' @keywords internal
+apply_spec_defaults <- function(spec, values) {
+  for (nm in names(spec$inputs)) {
+    if (is_missing_value(values[[nm]]) && !is.null(spec$inputs[[nm]]$default)) {
+      values[[nm]] <- spec$inputs[[nm]]$default
+    }
+  }
+  values
+}
+
+#' Evaluate a conditional output `when` predicate against input values
+#' @keywords internal
+output_when_holds <- function(when, values) {
+  if (is.null(when)) return(TRUE)
+  val <- values[[when$input]]
+  if (is_missing_value(val)) return(FALSE)
+  cmp <- as.character(val)
+  if (!is.null(when[["in"]])) {
+    return(any(cmp %in% as.character(when[["in"]])))
+  }
+  if (!is.null(when[["not_in"]])) {
+    return(!any(cmp %in% as.character(when[["not_in"]])))
+  }
+  TRUE
+}
+
 #' Resolve output paths from spec and input values
 #' @keywords internal
 resolve_outputs <- function(spec, values) {
   out <- list()
+  values <- apply_spec_defaults(spec, values)
 
   for (nm in names(spec$outputs)) {
     odef <- spec$outputs[[nm]]
     path_spec <- odef$path
+
+    if (!output_when_holds(odef$when, values)) next
 
     if (!is.null(path_spec$from_input)) {
       # Path taken directly from an input value

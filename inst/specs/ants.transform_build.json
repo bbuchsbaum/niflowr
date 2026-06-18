@@ -1,0 +1,112 @@
+{
+  "spec_version": "0.1.0",
+  "id": "ants.transform_build",
+  "title": "ANTs Composite Transform Build",
+  "command": "antsRegistration",
+  "render": "ants_transform_build",
+  "inputs": {
+    "fixed_image": {
+      "type": "file",
+      "desc": "Fixed (target / reference) image the moving image is registered into.",
+      "required": true,
+      "validate": {
+        "exists": true
+      }
+    },
+    "moving_image": {
+      "type": "file",
+      "desc": "Moving (source) image to register into the fixed image space.",
+      "required": true,
+      "validate": {
+        "exists": true
+      }
+    },
+    "output_prefix": {
+      "type": "string",
+      "desc": "Prefix prepended to all generated artifacts (e.g. '<prefix>Composite.h5').",
+      "required": true
+    },
+    "preset": {
+      "type": "enum",
+      "desc": "Registration preset expanded into staged antsRegistration transforms.",
+      "default": "rigid_affine_syn",
+      "choices": ["rigid_affine_syn", "rigid_affine", "rigid", "affine"]
+    },
+    "fixed_mask": {
+      "type": "file",
+      "desc": "Optional mask restricting metric sampling in the fixed image.",
+      "validate": {
+        "exists": true
+      }
+    },
+    "moving_mask": {
+      "type": "file",
+      "desc": "Optional mask restricting metric sampling in the moving image.",
+      "validate": {
+        "exists": true
+      }
+    },
+    "random_seed": {
+      "type": "int",
+      "desc": "Fixed seed for deterministic, reproducible registration."
+    },
+    "precision": {
+      "type": "enum",
+      "desc": "Computation precision; 'float' is faster and lower-memory.",
+      "default": "double",
+      "choices": ["double", "float"]
+    },
+    "dimension": {
+      "type": "enum",
+      "desc": "Image dimensionality.",
+      "default": 3,
+      "choices": [3, 2]
+    },
+    "interpolation": {
+      "type": "enum",
+      "desc": "Interpolation used when resampling the warped QC image.",
+      "default": "Linear",
+      "choices": [
+        "Linear",
+        "NearestNeighbor",
+        "BSpline",
+        "CosineWindowedSinc",
+        "WelchWindowedSinc",
+        "HammingWindowedSinc",
+        "LanczosWindowedSinc",
+        "Gaussian",
+        "GenericLabel"
+      ]
+    }
+  },
+  "outputs": {
+    "composite_transform": {
+      "type": "file",
+      "path": {
+        "template": "{output_prefix}Composite.h5"
+      },
+      "must_exist": false
+    },
+    "inverse_composite_transform": {
+      "type": "file",
+      "path": {
+        "template": "{output_prefix}InverseComposite.h5"
+      },
+      "must_exist": false
+    },
+    "warped_image": {
+      "type": "file",
+      "path": {
+        "template": "{output_prefix}Warped.nii.gz"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "profile": "ants"
+  },
+  "origin": {
+    "source": "manual"
+  },
+  "description": "High-level transform-build surface: registers a moving image to a fixed image with a preset staged antsRegistration pipeline and writes a composite .h5 transform (plus its inverse and a warped QC image) with deterministic, prefix-derived output paths."
+}

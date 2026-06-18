@@ -106,3 +106,78 @@ test_that("build_command renders bool placeholders as numeric values", {
   built_false <- niflowr:::build_command(call_false)
   expect_equal(built_false$args, c("--switch", "0"))
 })
+
+test_that("coerce_for_argstr coerces values to match printf conversions (#1)", {
+  # numeric enum stored as character must coerce for %d / %i
+  expect_identical(niflowr:::coerce_for_argstr("3", "--dimensionality %d"), 3L)
+  expect_identical(niflowr:::coerce_for_argstr("3", "-d %i"), 3L)
+  # float conversions coerce to numeric
+  expect_identical(niflowr:::coerce_for_argstr("0.5", "-f %f"), 0.5)
+  # non-numeric value with a numeric conversion is left untouched (safe fallback)
+  expect_identical(niflowr:::coerce_for_argstr("item1", "%d"), "item1")
+  # %s conversions never coerce
+  expect_identical(niflowr:::coerce_for_argstr("GenericLabel", "%s"), "GenericLabel")
+})
+
+test_that("coerce_for_argstr never turns non-finite or overflow values into NA (#1)", {
+  # Inf / NaN must not become integer NA
+  expect_identical(niflowr:::coerce_for_argstr("Inf", "--x %d"), "Inf")
+  expect_identical(niflowr:::coerce_for_argstr("NaN", "--x %d"), "NaN")
+  # value beyond R's integer range stays untouched (no silent NA)
+  expect_identical(niflowr:::coerce_for_argstr("3000000000", "--x %d"), "3000000000")
+  # in-range integral value still coerces
+  expect_identical(niflowr:::coerce_for_argstr("1000000000", "--x %d"), 1000000000L)
+})
+
+test_that("multi-conversion ellipsis argstrs are left to generic handling (#2)", {
+  list_def <- list(type = "list")
+  # a 2-conversion tuple argstr must NOT be split into clean per-element flags
+  out <- niflowr:::render_arg(c("a", "b"), list_def, "-x %d %s...")
+  expect_false(identical(out, c("-x", "a", "-x", "b")))
+  # single-conversion still expands
+  expect_equal(
+    niflowr:::render_arg(c("a", "b"), list_def, "-x %s..."),
+    c("-x", "a", "-x", "b")
+  )
+})
+
+test_that("numeric enum with %d argstr renders without literal placeholder (#1)", {
+  spec <- structure(list(
+    spec_version = "0.1.0",
+    id = "test.dimcoerce",
+    command = "testcmd",
+    inputs = list(
+      dimension = list(
+        type = "enum",
+        choices = c(2, 3, 4),
+        cli = list(argstr = "--dimensionality %d")
+      )
+    ),
+    outputs = list()
+  ), class = "ni_spec")
+
+  call <- ni_call(spec, dimension = 3)
+  built <- niflowr:::build_command(call)
+  expect_equal(built$args, c("--dimensionality", "3"))
+  expect_false("%d" %in% built$args)
+})
+
+test_that("%s... argstr expands per element instead of appending an ellipsis (#2)", {
+  list_def <- list(type = "list")
+
+  # scalar value: single application, no trailing "..."
+  expect_equal(
+    niflowr:::render_arg("fixed.nii.gz", list_def, "-f %s..."),
+    c("-f", "fixed.nii.gz")
+  )
+
+  # list value: flag repeated per element (Nipype repeat semantics)
+  expect_equal(
+    niflowr:::render_arg(c("a.nii.gz", "b.nii.gz"), list_def, "-f %s..."),
+    c("-f", "a.nii.gz", "-f", "b.nii.gz")
+  )
+
+  # no token retains a literal trailing ellipsis
+  tokens <- niflowr:::render_arg(c("a", "b"), list_def, "-m %s...")
+  expect_false(any(grepl("[.][.][.]$", tokens)))
+})
