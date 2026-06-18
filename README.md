@@ -1,0 +1,250 @@
+# niflowr
+
+> Spec-driven R wrappers for neuroimaging command-line tools — safe commands, real validation, automatic provenance.
+
+<!-- badges: start -->
+[![R-universe](https://bbuchsbaum.r-universe.dev/badges/niflowr)](https://bbuchsbaum.r-universe.dev/niflowr)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
+
+**niflowr** gives you typed, validated, provenance-tracked R functions for **300+ commands** across **FSL, AFNI, ANTs, FreeSurfer**, FastSurfer, and dcm2niix — without writing a single `system()` call. Each tool interface is a JSON *specification*, so the wrappers are consistent, inspectable, and easy to extend.
+
+```r
+result <- ni_fsl_bet(
+  in_file  = "sub-01_T1w.nii.gz",
+  out_file = "sub-01_desc-brain_T1w.nii.gz",
+  frac     = 0.5,
+  mask     = TRUE
+)
+
+ni_outputs(result)
+#> $out_file
+#> [1] "sub-01_desc-brain_T1w.nii.gz"
+```
+
+That single call validated the inputs, built a **safe argument vector** (no shell string), ran `bet` via [`processx`](https://processx.r-lib.org/), confirmed the output exists, and wrote a provenance sidecar — with no `paste()` and no quoting bugs.
+
+---
+
+## The problem
+
+Neuroimaging pipelines stitch together dozens of command-line tools, each with its own flag syntax, validation quirks, and output-naming conventions. Wrapping them in R usually means brittle `system()` calls with `paste()`-assembled shell strings: no input checking, silent failures on a typo'd flag, shell-injection hazards, and no record of what actually ran.
+
+## How niflowr is different
+
+- **Tools are described, not coded.** Every interface is a declarative JSON spec listing inputs, outputs, CLI-rendering rules, and constraints. One small, well-tested engine turns any spec into a working R function.
+- **Commands are argument vectors, never shell strings.** Values go straight to `processx` as a `character` vector — no quoting, no word-splitting, no injection.
+- **Inputs are validated before anything runs** — required fields, types, enum choices, numeric ranges, and cross-argument constraints (`xor`, `requires`).
+- **Every run is recorded.** A JSON provenance sidecar captures the exact command, engine/container, input checksums, outputs, exit status, and timing.
+- **Reproducible by construction.** Run natively, in Docker, or in Apptainer/Singularity; pin image digests in a lockfile.
+- **Pipelines are someone else's job.** niflowr is the interface layer; [`targets`](https://docs.ropensci.org/targets/) (and `crew`) handle scheduling, caching, and parallelism.
+
+## Installation
+
+From the [R-universe](https://bbuchsbaum.r-universe.dev) (recommended):
+
+```r
+install.packages("niflowr", repos = "https://bbuchsbaum.r-universe.dev")
+```
+
+Or the development version from GitHub:
+
+```r
+# install.packages("pak")
+pak::pak("bbuchsbaum/niflowr")
+```
+
+> **niflowr wraps neuroimaging tools; it does not install them.** FSL, AFNI, ANTs, FreeSurfer, etc. must be available on your `PATH`, or supplied through a Docker/Apptainer image (see [Reproducible execution](#reproducible-execution-engines-profiles-lockfiles)). The pure-R parts below — `ni_cmd()`, `ni_dry_run()`, spec browsing, validation — work with no external binaries at all.
+
+## A 60-second tour
+
+**Preview the exact command** without running it — pure R, no binaries needed:
+
+```r
+library(niflowr)
+
+ni_cmd(ni_call("fsl.bet",
+  in_file  = "sub-01_T1w.nii.gz",
+  out_file = "sub-01_desc-brain_T1w.nii.gz",
+  frac     = 0.5,
+  mask     = TRUE
+))
+#> $command
+#> [1] "bet"
+#> $args
+#> [1] "sub-01_T1w.nii.gz" "sub-01_desc-brain_T1w.nii.gz" "-f" "0.50" "-m"
+#> ...
+```
+
+**Dry-run** to see the resolved command and expected outputs together:
+
+```r
+ni_dry_run("fsl.bet",
+  in_file  = "/data/sub-01_T1w.nii.gz",
+  out_file = "/out/sub-01_brain.nii.gz",
+  frac     = 0.5
+)
+```
+
+**Two equivalent ways to run** — a generated wrapper, or the generic `ni_call()` / `ni_run()`:
+
+```r
+# Ergonomic, tab-completable wrapper
+res <- ni_fsl_bet(in_file = "T1w.nii.gz", out_file = "brain.nii.gz", frac = 0.5)
+
+# Generic equivalent — handy for programmatic / metaprogrammed pipelines
+res <- ni_run(ni_call("fsl.bet",
+  in_file = "T1w.nii.gz", out_file = "brain.nii.gz", frac = 0.5
+))
+
+ni_outputs(res)      # named list of produced files
+ni_provenance(res)   # full record of what ran
+```
+
+**Chain steps** by piping one result into the next — niflowr pulls the right output path automatically:
+
+```r
+ni_fsl_bet(in_file = "T1w.nii.gz", out_file = "brain.nii.gz") |>
+  ni_fsl_flirt(reference = "MNI152.nii.gz", out_file = "brain_mni.nii.gz")
+```
+
+## How it works: specs, not code
+
+A spec is a small JSON document. This is (abridged) the one behind `ni_fsl_bet()`:
+
+```json
+{
+  "id": "fsl.bet",
+  "command": "bet",
+  "inputs": {
+    "in_file":  { "type": "file",   "required": true, "cli": { "argstr": "%s", "position": 0 } },
+    "out_file": { "type": "file",                      "cli": { "argstr": "%s", "position": 1 } },
+    "frac":     { "type": "double",                    "cli": { "argstr": "-f %.2f" } },
+    "mask":     { "type": "flag",                      "cli": { "argstr": "-m" } }
+  },
+  "outputs": {
+    "out_file": { "type": "file", "path": { "from_input": "out_file" } }
+  }
+}
+```
+
+From that single declaration niflowr derives the validated `ni_fsl_bet()` wrapper, the argument vector, and the output path. Because the behavior lives in data, the whole catalog is uniform — and adding or fixing a tool is a JSON edit, not a code change.
+
+Outputs can be taken straight from an input (`from_input`), built from a [glue](https://glue.tidyverse.org/) `template`, or **gated on a condition**. For instance `ants.registration_syn_quick` derives every artifact from a single `output_prefix` and emits the warp fields only for deformable transforms — so `ni_outputs()` always reflects what the command actually produced (`x_0GenericAffine.mat`, `x_Warped.nii.gz`, `x_1Warp.nii.gz`, …).
+
+## What you get
+
+### Safe commands and real validation
+
+Arguments are assembled as a vector and handed to `processx`, so spaces, special characters, and untrusted paths can never break out into the shell. Inputs are checked *before* execution against the spec — types, required fields, enum choices, numeric `min`/`max`, regex patterns, and relational constraints (`xor`, `requires`). A bad call fails loudly in R instead of producing a cryptic tool error (or worse, silently wrong output).
+
+### Provenance, automatically <a name="provenance"></a>
+
+On a successful run, `ni_run()` writes a `*_provenance.json` sidecar next to the primary output capturing the spec id, full command and argument vector, execution engine/profile, input-file checksums (xxhash64), output paths, exit status, and timing. Read it back anytime:
+
+```r
+ni_provenance_read("sub-01_desc-brain_T1w.nii.gz_provenance.json")
+```
+
+### Reproducible execution: engines, profiles, lockfiles <a name="reproducible-execution-engines-profiles-lockfiles"></a>
+
+The same call runs natively or inside a container — niflowr handles path mounting and command rewriting:
+
+```r
+ni_fsl_bet(in_file = "T1w.nii.gz", out_file = "brain.nii.gz",
+           .engine = "apptainer", .profile = "fsl")
+```
+
+`.engine` is one of `"native"`, `"docker"`, `"apptainer"`, or `"auto"` (probe the host, then containers). A **profile** (defined in a project-level `niflowr.yml`) maps a tool suite to a container image:
+
+```yaml
+profiles:
+  fsl:  { docker_image: "brainlife/fsl:6.0.4" }
+  ants: { apptainer_uri: "docker://antsx/ants:v2.5.0" }
+```
+
+For bit-for-bit reproducibility, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, and lock status.
+
+### Pipelines with targets
+
+Wrap any step as a [`targets`](https://docs.ropensci.org/targets/) file target so outputs are tracked and only stale steps rerun:
+
+```r
+# _targets.R
+library(targets); library(niflowr)
+list(
+  tar_ni_step(brain, "fsl.bet",
+              in_file = "sub-01_T1w.nii.gz", out_file = "sub-01_brain.nii.gz", frac = 0.5)
+)
+```
+
+### BIDS and the neuroimaging R ecosystem
+
+niflowr speaks BIDS and plays well with adjacent packages (all optional `Suggests`):
+
+- `ni_deriv_path()` — build BIDS-derivatives output paths with the right entities.
+- `ni_bids_inputs()` / `ni_from_openneuro()` — query a BIDS project (via `bidser`) or pull a dataset from OpenNeuro (via `openneuroR`).
+- `ni_fmriprep_preproc()`, `ni_fmriprep_confounds()`, `ni_fmriprep_derivatives()` — locate and load fMRIPrep outputs.
+- `ni_bids_app()` — scaffold a BIDS App (via `bidsappr`).
+- `ni_read_output()` / `ni_read_transform()` — load results as `neuroim2` images or `neurotransform` transforms.
+
+### Introspection and diagnostics
+
+```r
+ni_spec_list()           # every available spec id
+ni_inputs("ants.registration")   # inputs: name, type, required, default, choices, ...
+ni_constraints("ants.registration")  # xor / requires / range constraints
+ni_doctor()              # environment & runtime health check
+```
+
+## Browsing the catalog
+
+niflowr ships specs (and a matching `ni_<tool>_<command>()` wrapper) for **300+ commands**:
+
+| Suite       | Commands | Example wrappers |
+|-------------|---------:|------------------|
+| FSL         | 96 | `ni_fsl_bet()`, `ni_fsl_flirt()`, `ni_fsl_eddy()` |
+| FreeSurfer  | 92 | `ni_freesurfer_recon_all()`, `ni_freesurfer_synthstrip()` |
+| AFNI        | 80 | `ni_afni_calc()`, `ni_afni_volreg()` |
+| ANTs        | 34 | `ni_ants_registration()`, `ni_ants_apply_transforms()`, `ni_ants_transform_build()` |
+| FastSurfer  | 2  | `ni_fastsurfer_run()`, `ni_fastsurfer_segment()` |
+| dcm2niix    | 1  | `ni_dcm2niix_convert()` |
+
+```r
+length(ni_spec_list())
+#> [1] 305
+```
+
+## Extending niflowr
+
+Adding a tool is writing a JSON spec — no R required. Drop a `mytool.command.json` file in `inst/specs/` (or point `ni_spec_read()` / `ni_call()` at any path), validate it, and you have a working interface:
+
+```r
+ni_lint_specs("path/to/specs")   # schema + sanity checks (shell metachars, position clashes, ...)
+ni_call("path/to/mytool.command.json", input = "x.nii.gz") |> ni_cmd()
+```
+
+Specs that need bespoke argument grammar (e.g. ANTs' staged `antsRegistration`) can declare a `render` hook backed by a registered builder. See the **Extending niflowr** article for the full guide.
+
+## What niflowr is — and isn't
+
+- ✅ A consistent, validated, provenance-tracked R interface to existing neuroimaging CLIs.
+- ✅ A safe command builder and runner with native + container execution.
+- ✅ A foundation for reproducible `targets` pipelines.
+- ❌ Not an installer or distributor of FSL/AFNI/ANTs/FreeSurfer — you bring the tools (or a container).
+- ❌ Not a workflow engine — that's what `targets`/`crew` are for.
+
+niflowr is **experimental** (v0.1.0): the spec schema and API may still change.
+
+## Documentation
+
+- **Getting started** — the core workflow end to end.
+- **Extending niflowr** — authoring specs and custom renderers.
+- **OpenNeuro pipeline**, **fmriprepper handoff**, **bidsappr integration** — ecosystem recipes.
+
+(Run `browseVignettes("niflowr")`, or see the [`vignettes/`](vignettes/) directory.)
+
+## License
+
+MIT © Bradley Buchsbaum. See [LICENSE](LICENSE).
