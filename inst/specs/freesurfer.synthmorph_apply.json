@@ -1,0 +1,87 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.synthmorph_apply",
+  "title": "FreeSurfer SynthMorph Apply",
+  "command": ["mri_synthmorph", "apply"],
+  "inputs": {
+    "trans": {
+      "type": "file",
+      "desc": "Transform produced by SynthMorph register",
+      "required": true,
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "%s",
+        "position": -3
+      }
+    },
+    "moving": {
+      "type": "file",
+      "desc": "Moving image to resample through the transform",
+      "required": true,
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "moved": {
+      "type": "file",
+      "desc": "Output moved image",
+      "required": true,
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "method": {
+      "type": "enum",
+      "desc": "Interpolation method",
+      "choices": ["linear", "nearest"],
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "out_type": {
+      "type": "enum",
+      "desc": "Output voxel type",
+      "choices": ["uchar", "short", "float"],
+      "cli": {
+        "argstr": "-t %s"
+      }
+    },
+    "header_only": {
+      "type": "flag",
+      "desc": "Adjust voxel-to-world matrix only (no resampling)",
+      "cli": {
+        "argstr": "-H"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters passed verbatim to mri_synthmorph apply",
+      "cli": {
+        "argstr": "%s"
+      }
+    }
+  },
+  "outputs": {
+    "moved": {
+      "type": "file",
+      "path": {
+        "from_input": "moved"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "profile": "freesurfer"
+  },
+  "origin": {
+    "source": "manual"
+  },
+  "description": "Apply a SynthMorph transform to resample a moving image into the fixed image's space. Provided by 'mri_synthmorph apply' in FreeSurfer 7.4+ and the freesurfer/synthmorph Docker image."
+}

@@ -1,0 +1,163 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.synthmorph_register",
+  "title": "FreeSurfer SynthMorph Register",
+  "command": ["mri_synthmorph", "register"],
+  "inputs": {
+    "moving": {
+      "type": "file",
+      "desc": "Moving image to register to the fixed image",
+      "required": true,
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "%s",
+        "position": -2
+      }
+    },
+    "fixed": {
+      "type": "file",
+      "desc": "Fixed (target) image",
+      "required": true,
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "%s",
+        "position": -1
+      }
+    },
+    "out_moving": {
+      "type": "file",
+      "desc": "Save moving image resampled into fixed space",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "out_fixed": {
+      "type": "file",
+      "desc": "Save fixed image resampled into moving space",
+      "cli": {
+        "argstr": "-O %s"
+      }
+    },
+    "trans": {
+      "type": "file",
+      "desc": "Save transform mapping moving to fixed",
+      "cli": {
+        "argstr": "-t %s"
+      }
+    },
+    "inverse": {
+      "type": "file",
+      "desc": "Save inverse transform mapping fixed to moving",
+      "cli": {
+        "argstr": "-T %s"
+      }
+    },
+    "header_only": {
+      "type": "flag",
+      "desc": "Adjust voxel-to-world matrix only (no resampling)",
+      "cli": {
+        "argstr": "-H"
+      }
+    },
+    "model": {
+      "type": "enum",
+      "desc": "Registration model",
+      "choices": ["joint", "deform", "affine", "rigid"],
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "init": {
+      "type": "file",
+      "desc": "Initial affine transform (LTA, mat, or txt)",
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "-i %s"
+      }
+    },
+    "extent": {
+      "type": "int",
+      "desc": "Registration FOV side length in mm (default 256)",
+      "validate": {
+        "min": 1
+      },
+      "cli": {
+        "argstr": "-e %d"
+      }
+    },
+    "threads": {
+      "type": "int",
+      "desc": "Number of CPU threads",
+      "validate": {
+        "min": 1
+      },
+      "cli": {
+        "argstr": "-j %d"
+      }
+    },
+    "gpu": {
+      "type": "flag",
+      "desc": "Use the GPU for inference",
+      "cli": {
+        "argstr": "-g"
+      }
+    },
+    "resample": {
+      "type": "flag",
+      "desc": "Resample fixed image to moving space",
+      "cli": {
+        "argstr": "-r"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters passed verbatim to mri_synthmorph register",
+      "cli": {
+        "argstr": "%s"
+      }
+    }
+  },
+  "outputs": {
+    "out_moving": {
+      "type": "file",
+      "path": {
+        "from_input": "out_moving"
+      },
+      "must_exist": false
+    },
+    "out_fixed": {
+      "type": "file",
+      "path": {
+        "from_input": "out_fixed"
+      },
+      "must_exist": false
+    },
+    "trans": {
+      "type": "file",
+      "path": {
+        "from_input": "trans"
+      },
+      "must_exist": false
+    },
+    "inverse": {
+      "type": "file",
+      "path": {
+        "from_input": "inverse"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "profile": "freesurfer"
+  },
+  "origin": {
+    "source": "manual"
+  },
+  "description": "SynthMorph image registration: deep-learning, contrast-agnostic affine and deformable registration. Bundled with FreeSurfer 7.4+ as 'mri_synthmorph register' and distributed standalone as the freesurfer/synthmorph Docker image."
+}

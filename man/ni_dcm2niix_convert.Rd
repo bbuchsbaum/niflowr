@@ -49,11 +49,11 @@ ni_dcm2niix_convert(
 
 \item{compression_level}{Integer. Gzip compression level (1=fastest..9=smallest).}
 
-\item{adjacent}{Character; one of: \code{"n"}, \code{"y"}. Assume adjacent DICOMs from a series are stored in the same folder (n/y).}
+\item{adjacent}{Character; one of: "n", "y". Assume adjacent DICOMs from a series are stored in the same folder (n/y).}
 
-\item{bids_sidecar}{Character; one of: \code{"y"}, \code{"n"}, \code{"o"}. BIDS sidecar mode (y/n/o; o=JSON only, no NIfTI).}
+\item{bids_sidecar}{Character; one of: "y", "n", "o". BIDS sidecar mode (y/n/o; o=JSON only, no NIfTI).}
 
-\item{anon_bids}{Character; one of: \code{"y"}, \code{"n"}. Anonymize BIDS sidecars (y/n).}
+\item{anon_bids}{Character; one of: "y", "n". Anonymize BIDS sidecars (y/n).}
 
 \item{bids_subject}{Character. Set BIDS subject label (equivalent to -bi).}
 
@@ -63,39 +63,39 @@ ni_dcm2niix_convert(
 
 \item{depth}{Integer. Directory search depth for recursive discovery (0..9).}
 
-\item{export_format}{Character; one of: \code{"n"}, \code{"y"}, \code{"o"}, \code{"j"}, \code{"b"}. Export format (n=NIfTI, y=NRRD, o=MGH, j=JNIfTI, b=BJNIfTI).}
+\item{export_format}{Character; one of: "n", "y", "o", "j", "b". Export format (n=NIfTI, y=NRRD, o=MGH, j=JNIfTI, b=BJNIfTI).}
 
 \item{filename}{Character. Output filename template (e.g. \%p_\%t_\%s).}
 
-\item{ignore_derived}{Character; one of: \code{"y"}, \code{"n"}. Ignore derived/localizer/2D images (y/n).}
+\item{ignore_derived}{Character; one of: "y", "n". Ignore derived/localizer/2D images (y/n).}
 
-\item{lossless_scale}{Character; one of: \code{"y"}, \code{"n"}, \code{"o"}. Lossless scaling for 16-bit integers (y/n/o).}
+\item{lossless_scale}{Character; one of: "y", "n", "o". Lossless scaling for 16-bit integers (y/n/o).}
 
-\item{merge_2d_slices}{Character; one of: \code{"0"}, \code{"1"}, \code{"2"}, \code{"n"}, \code{"y"}. Merge slices from same series despite differing properties (0/1/2 or n/y).}
+\item{merge_2d_slices}{Character; one of: "0", "1", "2", "n", "y". Merge slices from same series despite differing properties (0/1/2 or n/y).}
 
 \item{series_crc}{Character or numeric vector. Only convert specific series CRC numbers; repeatable.}
 
 \item{out_dir}{Character; directory path. Output directory (omit to write into input directory).}
 
-\item{philips_float}{Character; one of: \code{"y"}, \code{"n"}. Use Philips precise floating-point scaling (y/n).}
+\item{philips_float}{Character; one of: "y", "n". Use Philips precise floating-point scaling (y/n).}
 
-\item{search_only}{Character; one of: \code{"y"}, \code{"l"}, \code{"n"}. Directory search mode (y=count, l=list, n=off).}
+\item{search_only}{Character; one of: "y", "l", "n". Directory search mode (y=count, l=list, n=off).}
 
-\item{rename}{Character; one of: \code{"y"}, \code{"n"}. Rename DICOMs instead of converting (y/n).}
+\item{rename}{Character; one of: "y", "n". Rename DICOMs instead of converting (y/n).}
 
-\item{single_file}{Character; one of: \code{"y"}, \code{"n"}. Single-file mode: convert only one file in folder (y/n).}
+\item{single_file}{Character; one of: "y", "n". Single-file mode: convert only one file in folder (y/n).}
 
-\item{verbose}{Character; one of: \code{"0"}, \code{"1"}, \code{"2"}, \code{"n"}, \code{"y"}. Verbosity (0/1/2 or n/y).}
+\item{verbose}{Character; one of: "0", "1", "2", "n", "y". Verbosity (0/1/2 or n/y).}
 
-\item{write_conflicts}{Character; one of: \code{"0"}, \code{"1"}, \code{"2"}. Name conflict behavior (0=skip, 1=overwrite, 2=add suffix).}
+\item{write_conflicts}{Character; one of: "0", "1", "2". Name conflict behavior (0=skip, 1=overwrite, 2=add suffix).}
 
-\item{crop}{Character; one of: \code{"y"}, \code{"n"}, \code{"i"}. Crop 3D acquisitions (y/n/i where i=ignore crop and rotate).}
+\item{crop}{Character; one of: "y", "n", "i". Crop 3D acquisitions (y/n/i where i=ignore crop and rotate).}
 
-\item{compression}{Character; one of: \code{"y"}, \code{"o"}, \code{"i"}, \code{"n"}, \code{"3"}. Compression mode (y/o/i/n/3).}
+\item{compression}{Character; one of: "y", "o", "i", "n", "3". Compression mode (y/o/i/n/3).}
 
-\item{big_endian}{Character; one of: \code{"y"}, \code{"n"}, \code{"o"}. Output byte order (y=big-endian, n=little-endian, o=native/optimal).}
+\item{big_endian}{Character; one of: "y", "n", "o". Output byte order (y=big-endian, n=little-endian, o=native/optimal).}
 
-\item{progress}{Character; one of: \code{"y"}, \code{"n"}. Progress reporting (y/n).}
+\item{progress}{Character; one of: "y", "n". Progress reporting (y/n).}
 
 \item{ignore_trigger_times}{Logical. Ignore trigger time DICOM fields (0018,1060 and 0020,9153).}
 

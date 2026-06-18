@@ -1,0 +1,118 @@
+{
+  "spec_version": "0.1.0",
+  "id": "freesurfer.synthstrip",
+  "title": "FreeSurfer SynthStrip",
+  "command": "mri_synthstrip",
+  "inputs": {
+    "in_file": {
+      "type": "file",
+      "desc": "Input volume to skull strip (any MRI contrast)",
+      "required": true,
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "-i %s"
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Skull-stripped image output",
+      "cli": {
+        "argstr": "-o %s"
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "desc": "Binary brain mask output",
+      "cli": {
+        "argstr": "-m %s"
+      }
+    },
+    "sdt_file": {
+      "type": "file",
+      "desc": "Signed distance transform output",
+      "cli": {
+        "argstr": "-d %s"
+      }
+    },
+    "border": {
+      "type": "int",
+      "desc": "Mask border threshold in mm (default 1)",
+      "cli": {
+        "argstr": "-b %d"
+      }
+    },
+    "gpu": {
+      "type": "flag",
+      "desc": "Use the GPU for inference",
+      "cli": {
+        "argstr": "-g"
+      }
+    },
+    "threads": {
+      "type": "int",
+      "desc": "Number of CPU threads",
+      "validate": {
+        "min": 1
+      },
+      "cli": {
+        "argstr": "-t %d"
+      }
+    },
+    "no_csf": {
+      "type": "flag",
+      "desc": "Exclude CSF from the brain mask (uses the SynthStrip-CSF model)",
+      "cli": {
+        "argstr": "--no-csf"
+      }
+    },
+    "model": {
+      "type": "file",
+      "desc": "Path to alternate model weights file",
+      "validate": {
+        "exists": true
+      },
+      "cli": {
+        "argstr": "--model %s"
+      }
+    },
+    "args": {
+      "type": "string",
+      "desc": "Additional parameters passed verbatim to mri_synthstrip",
+      "cli": {
+        "argstr": "%s"
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "mask_file": {
+      "type": "file",
+      "path": {
+        "from_input": "mask_file"
+      },
+      "must_exist": false
+    },
+    "sdt_file": {
+      "type": "file",
+      "path": {
+        "from_input": "sdt_file"
+      },
+      "must_exist": false
+    }
+  },
+  "runtime": {
+    "profile": "freesurfer"
+  },
+  "origin": {
+    "source": "manual"
+  },
+  "description": "SynthStrip is a deep-learning skull-stripping tool that produces accurate brain masks across MRI contrasts (T1w, T2w, FLAIR, EPI, CT). Bundled with FreeSurfer 7.3+ as the mri_synthstrip command."
+}
