@@ -1,8 +1,7 @@
 # Build and deploy the pkgdown site to the gh-pages branch.
 # Based on r-lib/actions/examples/pkgdown.yaml, but the dependency step installs
 # packages explicitly instead of resolving DESCRIPTION: this package's Suggests
-# reference non-CRAN packages (bidsappr, neuroim2, ...) that pak cannot solve,
-# and the albersdown template lives on GitHub.
+# reference non-CRAN packages (bidsappr, neuroim2, ...) that pak cannot solve.
 name: pkgdown
 
 on:
@@ -39,9 +38,9 @@ jobs:
         run: |
           install.packages(c(
             "cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate",
-            "processx", "yaml", "knitr", "rmarkdown", "pkgdown", "remotes"
+            "processx", "yaml", "knitr", "rmarkdown", "pkgdown", "remotes",
+            "albersdown"
           ))
-          remotes::install_github("bbuchsbaum/albersdown")
           remotes::install_local(".", dependencies = FALSE, force = TRUE)
         shell: Rscript {0}
 
