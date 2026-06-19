@@ -1,0 +1,118 @@
+# ANTS GenWarpFields
+
+Uses ANTS to generate matrices to warp data from one space to another.
+
+## Usage
+
+``` r
+ni_ants_gen_warp_fields(
+  input_image,
+  reference_image,
+  args = NULL,
+  bias_field_correction = NULL,
+  dimension = 3,
+  force_proceed = NULL,
+  inverse_warp_template_labels = NULL,
+  max_iterations = NULL,
+  out_prefix = "ants_",
+  quality_check = NULL,
+  similarity_metric = NULL,
+  transformation_model = "GR",
+  .cwd = NULL,
+  .env = NULL,
+  .engine = NULL,
+  .profile = NULL,
+  dry_run = FALSE,
+  echo = interactive()
+)
+```
+
+## Arguments
+
+- input_image:
+
+  Character; file path. input image to warp to template **Required.**
+
+- reference_image:
+
+  Character; file path. template file to warp to **Required.**
+
+- args:
+
+  Character. Additional parameters to the command
+
+- bias_field_correction:
+
+  Logical. Applies bias field correction to moving image
+
+- dimension:
+
+  Character; one of: "3", "2". image dimension (2 or 3)
+
+- force_proceed:
+
+  Logical. force script to proceed even if headers may be incompatible
+
+- inverse_warp_template_labels:
+
+  Logical. Applies inverse warp to the template labels to estimate label
+  positions in target space (use for template-based segmentation)
+
+- max_iterations:
+
+  Character or numeric vector. maximum number of iterations (must be
+  list of integers in the form \[J,K,L...\]: J = coarsest resolution
+  iterations, K = middle resolution iterations, L = fine resolution
+  iterations
+
+- out_prefix:
+
+  Character. Prefix that is prepended to all output files (default =
+  ants\_)
+
+- quality_check:
+
+  Logical. Perform a quality check of the result
+
+- similarity_metric:
+
+  Character; one of: "PR", "CC", "MI", "MSQ". Type of similartiy metric
+  used for registration (CC = cross correlation, MI = mutual
+  information, PR = probability mapping, MSQ = mean square difference)
+
+- transformation_model:
+
+  Character; one of: "GR", "EL", "SY", "S2", "EX", "DD", "RI", "RA".
+  Type of transofmration model used for registration (EL = elastic
+  transformation model, SY = SyN with time, arbitrary number of time
+  points, S2 = SyN with time optimized for 2 time points, GR = greedy
+  SyN, EX = exponential, DD = diffeomorphic demons style exponential
+  mapping, RI = purely rigid, RA = affine rigid
+
+- .cwd:
+
+  Working directory override.
+
+- .env:
+
+  Named character vector of environment variables.
+
+- .engine:
+
+  Execution engine override.
+
+- .profile:
+
+  Runtime profile override.
+
+- dry_run:
+
+  Logical; preview command without executing.
+
+- echo:
+
+  Logical; echo stdout/stderr in real time.
+
+## Value
+
+An `ni_result` object.

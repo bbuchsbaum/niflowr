@@ -1,0 +1,262 @@
+# Building BIDS Apps with niflowr and bidsappr
+
+## Introduction
+
+The [bidsappr](https://github.com/bbuchsbaum/bidsappr) package lets you
+build containerized BIDS Apps in R with zero boilerplate. niflowr
+provides the neuroimaging operations through wrappers for FSL, ANTs,
+FreeSurfer, and AFNI. Together, you can build a standards-compliant BIDS
+App that wraps any combination of neuroimaging tools.
+
+A BIDS App is a containerized neuroimaging pipeline that follows the
+[BIDS Apps specification](https://bids-apps.neuroimaging.io/). It
+accepts a BIDS dataset as input, runs participant-level and/or
+group-level analysis, and writes outputs in a structured format.
+
+## Quick Start with ni_bids_app()
+
+Scaffold a new BIDS App with a single function call:
+
+``` r
+
+library(niflowr)
+
+ni_bids_app("~/my_brain_app", tools = c("fsl.bet", "fsl.flirt"))
+```
+
+This creates: - `app.R` with template participant/group functions -
+`Dockerfile` with neuroimaging tools pre-installed - `DESCRIPTION` and
+dependency metadata - Example configuration
+
+## Understanding the app.R Template
+
+The generated `app.R` defines two functions: `participant()` for
+subject-level processing and `group()` for group-level analysis.
+
+``` r
+
+participant <- function(ctx, frac = 0.5) {
+  # ctx provides:
+  # - ctx$subject: current subject ID
+  # - ctx$files: list of input files for this subject
+  # - ctx$out_file(): function to create output paths
+  # - ctx$write_tsv(): function to write QC metrics
+
+  for (subj in ctx$subjects) {
+    t1w <- ctx$files[[subj]]$anat$T1w[[1]]
+
+    # Run niflowr operation
+    result <- ni_fsl_bet(
+      in_file = t1w,
+      out_file = ctx$out_file(subj, "brain.nii.gz"),
+      frac = frac,
+      .engine = "native"
+    )
+
+    # Log QC metrics
+    ctx$write_tsv(
+      subject = subj,
+      out_size = file.size(result$out_file),
+      exit_code = result$exit_code
+    )
+  }
+}
+
+group <- function(ctx) {
+  # Access participant-level outputs
+  # Run group statistics, generate reports, etc.
+}
+```
+
+The `ctx` object is provided by bidsappr and handles all BIDS
+input/output conventions.
+
+## Example: Brain Extraction App
+
+A complete working example that runs BET on all T1w images:
+
+``` r
+
+library(niflowr)
+library(bidsappr)
+
+participant <- function(ctx, frac = 0.5, robust = FALSE) {
+  qc_metrics <- list()
+
+  for (subj in ctx$subjects) {
+    # Find T1w image
+    t1w_files <- ctx$files[[subj]]$anat$T1w
+    if (length(t1w_files) == 0) {
+      warning("No T1w found for ", subj)
+      next
+    }
+
+    t1w <- t1w_files[[1]]
+    out_brain <- ctx$out_file(subj, "anat", "brain.nii.gz")
+    out_mask <- ctx$out_file(subj, "anat", "brain_mask.nii.gz")
+
+    # Run brain extraction
+    result <- ni_fsl_bet(
+      in_file = t1w,
+      out_file = out_brain,
+      frac = frac,
+      robust = robust,
+      mask = TRUE,
+      .engine = "native"
+    )
+
+    # Collect QC metrics
+    qc_metrics[[subj]] <- data.frame(
+      subject_id = subj,
+      input_size_mb = file.size(t1w) / 1e6,
+      output_size_mb = file.size(out_brain) / 1e6,
+      frac_param = frac,
+      exit_status = result$exit_code,
+      timestamp = Sys.time()
+    )
+  }
+
+  # Write QC report
+  qc_df <- do.call(rbind, qc_metrics)
+  ctx$write_tsv(qc_df, "bet_qc.tsv")
+}
+
+# Run the app
+if (!interactive()) {
+  bidsappr::main(app_dir = "my_brain_app")
+}
+```
+
+Run from the command line:
+
+``` bash
+Rscript app.R /data/bids /data/output participant --frac 0.3 --robust
+```
+
+## Example: Multi-Step Preprocessing App
+
+A more complex app that chains multiple operations:
+
+``` r
+
+participant <- function(ctx, template = "MNI152_T1_2mm.nii.gz") {
+  for (subj in ctx$subjects) {
+    t1w <- ctx$files[[subj]]$anat$T1w[[1]]
+
+    # Step 1: Skull strip
+    brain <- ctx$out_file(subj, "anat", "brain.nii.gz")
+    ni_fsl_bet(
+      in_file = t1w,
+      out_file = brain,
+      frac = 0.5,
+      .engine = "native"
+    )
+
+    # Step 2: Register to template
+    mat_file <- ctx$out_file(subj, "anat", "brain_to_mni.mat")
+    reg_result <- ni_fsl_flirt(
+      in_file = brain,
+      ref = template,
+      out = ctx$out_file(subj, "anat", "brain_mni.nii.gz"),
+      omat = mat_file,
+      .engine = "native"
+    )
+
+    # Step 3: Apply transformation to original T1w
+    ni_fsl_flirt(
+      in_file = t1w,
+      ref = template,
+      init = mat_file,
+      applyxfm = TRUE,
+      out = ctx$out_file(subj, "anat", "T1w_mni.nii.gz"),
+      .engine = "native"
+    )
+
+    # Log pipeline completion
+    ctx$write_tsv(
+      subject = subj,
+      pipeline_complete = TRUE,
+      registration_exit = reg_result$exit_code
+    )
+  }
+}
+```
+
+## Container Deployment
+
+bidsappr scaffolds a `Dockerfile` that: - Installs R and required
+packages - Pre-installs neuroimaging tools (FSL, ANTs, etc.) -
+Configures the BIDS App entrypoint
+
+``` dockerfile
+FROM rocker/r-ver:4.3.0
+
+# Install neuroimaging tools
+RUN apt-get update && apt-get install -y \
+    fsl-core \
+    ants
+
+# Install R packages
+RUN R -e "install.packages(c('niflowr', 'bidsappr'))"
+
+# Copy app
+COPY app.R /app/
+WORKDIR /app
+
+ENTRYPOINT ["Rscript", "app.R"]
+```
+
+Build and run:
+
+``` bash
+docker build -t myapp .
+docker run myapp /bids /output participant --frac 0.3
+```
+
+Inside the container, use `.engine = "native"` since tools are installed
+in the container image.
+
+## Custom CLI Parameters
+
+bidsappr automatically generates CLI flags from your function
+signatures. Function parameters become command-line options:
+
+``` r
+
+participant <- function(ctx, frac = 0.5, robust = FALSE, threshold = 0.1) {
+  # frac, robust, threshold are now CLI parameters
+}
+```
+
+Users can then run:
+
+``` bash
+Rscript app.R /bids /output participant \
+  --frac 0.3 \
+  --robust \
+  --threshold 0.05
+```
+
+This makes niflowr pipelines instantly accessible as command-line tools
+without manual argument parsing.
+
+## Best Practices
+
+1.  **Always use `.engine = "native"`** inside BIDS Apps — tools are
+    containerized
+2.  **Write QC metrics** with `ctx$write_tsv()` for reproducibility
+3.  **Check file existence** before processing (not all subjects have
+    all modalities)
+4.  **Use ctx\$out_file()** to ensure outputs follow BIDS derivatives
+    structure
+5.  **Keep participant() pure** — no global state, all inputs via ctx or
+    parameters
+
+## Next Steps
+
+- Explore the [bidsappr
+  documentation](https://github.com/bbuchsbaum/bidsappr) for advanced
+  features
+- Add group-level analysis in the `group()` function
+- Integrate quality control dashboards
+- Publish your app on [BIDS Apps](https://bids-apps.neuroimaging.io/)

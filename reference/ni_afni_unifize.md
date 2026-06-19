@@ -1,0 +1,133 @@
+# AFNI Unifize
+
+3dUnifize - for uniformizing image intensity
+
+## Usage
+
+``` r
+ni_afni_unifize(
+  in_file,
+  args = NULL,
+  cl_frac = NULL,
+  epi = NULL,
+  gm = NULL,
+  no_duplo = NULL,
+  out_file = NULL,
+  quiet = NULL,
+  rbt = NULL,
+  scale_file = NULL,
+  t2 = NULL,
+  t2_up = NULL,
+  urad = NULL,
+  .cwd = NULL,
+  .env = NULL,
+  .engine = NULL,
+  .profile = NULL,
+  dry_run = FALSE,
+  echo = interactive()
+)
+```
+
+## Arguments
+
+- in_file:
+
+  Character; file path. input file to 3dUnifize **Required.**
+
+- args:
+
+  Character. Additional parameters to the command
+
+- cl_frac:
+
+  Numeric. Option for AFNI experts only.Set the automask 'clip level
+  fraction'. Must be between 0.1 and 0.9. A small fraction means to make
+  the initial threshold for clipping (a la 3dClipLevel) smaller, which
+  will tend to make the mask larger. \[default=0.1\]
+
+- epi:
+
+  Logical. Assume the input dataset is a T2 (or T2\\) weighted EPI time
+  series. After computing the scaling, apply it to ALL volumes (TRs) in
+  the input dataset. That is, a given voxel will be scaled by the same
+  factor at each TR. This option also implies '-noduplo' and '-T2'.This
+  option turns off '-GM' if you turned it on.
+
+- gm:
+
+  Logical. Also scale to unifize 'gray matter' = lower intensity voxels
+  (to aid in registering images from different scanners).
+
+- no_duplo:
+
+  Logical. Do NOT use the 'duplo down' step; this can be useful for
+  lower resolution datasets.
+
+- out_file:
+
+  Character; file path. output image file name
+
+- quiet:
+
+  Logical. Don't print the progress messages.
+
+- rbt:
+
+  Character or numeric vector. Option for AFNI experts only.Specify the
+  3 parameters for the algorithm: R = radius; same as given by option
+  '-Urad', \[default=18.3\] b = bottom percentile of normalizing data
+  range, \[default=70.0\] r = top percentile of normalizing data range,
+  \[default=80.0\]
+
+- scale_file:
+
+  Character; file path. output file name to save the scale factor used
+  at each voxel
+
+- t2:
+
+  Logical. Treat the input as if it were T2-weighted, rather than
+  T1-weighted. This processing is done simply by inverting the image
+  contrast, processing it as if that result were T1-weighted, and then
+  re-inverting the results counts of voxel overlap, i.e., each voxel
+  will contain the number of masks that it is set in.
+
+- t2_up:
+
+  Numeric. Option for AFNI experts only.Set the upper percentile point
+  used for T2-T1 inversion. Allowed to be anything between 90 and 100
+  (inclusive), with default to 98.5 (for no good reason).
+
+- urad:
+
+  Numeric. Sets the radius (in voxels) of the ball used for the sneaky
+  trick. Default value is 18.3, and should be changed proportionally if
+  the dataset voxel size differs significantly from 1 mm.
+
+- .cwd:
+
+  Working directory override.
+
+- .env:
+
+  Named character vector of environment variables.
+
+- .engine:
+
+  Execution engine override.
+
+- .profile:
+
+  Runtime profile override.
+
+- dry_run:
+
+  Logical; preview command without executing.
+
+- echo:
+
+  Logical; echo stdout/stderr in real time.
+
+## Value
+
+An `ni_result` object.

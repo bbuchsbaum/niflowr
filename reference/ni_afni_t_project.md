@@ -1,0 +1,187 @@
+# AFNI TProject
+
+This program projects (detrends) out various 'nuisance' time series from
+
+## Usage
+
+``` r
+ni_afni_t_project(
+  in_file,
+  TR = NULL,
+  args = NULL,
+  automask = NULL,
+  bandpass = NULL,
+  blur = NULL,
+  cenmode = NULL,
+  censor = NULL,
+  censortr = NULL,
+  concat = NULL,
+  dsort = NULL,
+  mask = NULL,
+  noblock = NULL,
+  norm = NULL,
+  ort = NULL,
+  out_file = NULL,
+  polort = NULL,
+  stopband = NULL,
+  .cwd = NULL,
+  .env = NULL,
+  .engine = NULL,
+  .profile = NULL,
+  dry_run = FALSE,
+  echo = interactive()
+)
+```
+
+## Arguments
+
+- in_file:
+
+  Character; file path. input file to 3dTproject **Required.**
+
+- TR:
+
+  Numeric. Use time step dd for the frequency calculations, rather than
+  the value stored in the dataset header.
+
+- args:
+
+  Character. Additional parameters to the command
+
+- automask:
+
+  Logical. Generate a mask automatically
+
+- bandpass:
+
+  Character or numeric vector. Remove all frequencies EXCEPT those in
+  the range
+
+- blur:
+
+  Numeric. Blur (inside the mask only) with a filter that has width
+  (FWHM) of fff millimeters. Spatial blurring (if done) is after the
+  time series filtering.
+
+- cenmode:
+
+  Character; one of: "KILL", "ZERO", "NTRP". Specifies how censored time
+  points are treated in the output dataset: \* mode = ZERO – put zero
+  values in their place; output dataset is same length as input \* mode
+  = KILL – remove those time points; output dataset is shorter than
+  input \* mode = NTRP – censored values are replaced by interpolated
+  neighboring (in time) non-censored values, BEFORE any projections, and
+  then the analysis proceeds without actual removal of any time points –
+  this feature is to keep the Spanish Inquisition happy. \* The default
+  mode is KILL !!!
+
+- censor:
+
+  Character; file path. Filename of censor .1D time series. This is a
+  file of 1s and 0s, indicating which time points are to be included (1)
+  and which are to be excluded (0).
+
+- censortr:
+
+  Character or numeric vector. List of strings that specify time indexes
+  to be removed from the analysis. Each string is of one of the
+  following forms: \* `37` =\> remove global time index \#37 \* `2:37`
+  =\> remove time index \#37 in run \#2 \* `37..47` =\> remove global
+  time indexes \#37-47 \* `37-47` =\> same as above \* `2:37..47` =\>
+  remove time indexes \#37-47 in run \#2 \* `*:0-2` =\> remove time
+  indexes \#0-2 in all runs \* Time indexes within each run start at 0.
+  \* Run indexes start at 1 (just be to confusing). \* N.B.: 2:37,47
+  means index \#37 in run \#2 and global time index 47; it does NOT mean
+  index \#37 in run \#2 AND index \#47 in run \#2.
+
+- concat:
+
+  Character; file path. The catenation file, as in 3dDeconvolve,
+  containing the TR indexes of the start points for each contiguous run
+  within the input dataset (the first entry should be 0). \* Also as in
+  3dDeconvolve, if the input dataset is automatically catenated from a
+  collection of datasets, then the run start indexes are determined
+  directly, and '-concat' is not needed (and will be ignored). \* Each
+  run must have at least 9 time points AFTER censoring, or the program
+  will not work! \* The only use made of this input is in setting up the
+  bandpass/stopband regressors. \* '-ort' and '-dsort' regressors run
+  through all time points, as read in. If you want separate projections
+  in each run, then you must either break these ort files into
+  appropriate components, OR you must run 3dTproject for each run
+  separately, using the appropriate pieces from the ort files via the
+  `\{...\}` selector for the 1D files and the `\[...\]` selector for the
+  datasets.
+
+- dsort:
+
+  Character or numeric vector. Remove the 3D+time time series in dataset
+  fset. \* That is, 'fset' contains a different nuisance time series for
+  each voxel (e.g., from AnatICOR). \* Multiple -dsort options are
+  allowed.
+
+- mask:
+
+  Character; file path. Only operate on voxels nonzero in the mset
+  dataset. \* Voxels outside the mask will be filled with zeros. \* If
+  no masking option is given, then all voxels will be processed.
+
+- noblock:
+
+  Logical. Also as in 3dDeconvolve, if you want the program to treat an
+  auto-catenated dataset as one long run, use this option. However,
+  '-noblock' will not affect catenation if you use the '-concat' option.
+
+- norm:
+
+  Logical. Normalize each output time series to have sum of squares = 1.
+  This is the LAST operation.
+
+- ort:
+
+  Character; file path. Remove each column in file. Each column will
+  have its mean removed.
+
+- out_file:
+
+  Character; file path. output image file name
+
+- polort:
+
+  Integer. Remove polynomials up to and including degree pp. \* Default
+  value is 2. \* It makes no sense to use a value of pp greater than 2,
+  if you are bandpassing out the lower frequencies! \* For catenated
+  datasets, each run gets a separate set set of pp+1 Legendre polynomial
+  regressors. \* Use of -polort -1 is not advised (if data mean != 0),
+  even if -ort contains constant terms, as all means are removed.
+
+- stopband:
+
+  Character or numeric vector. Remove all frequencies in the range
+
+- .cwd:
+
+  Working directory override.
+
+- .env:
+
+  Named character vector of environment variables.
+
+- .engine:
+
+  Execution engine override.
+
+- .profile:
+
+  Runtime profile override.
+
+- dry_run:
+
+  Logical; preview command without executing.
+
+- echo:
+
+  Logical; echo stdout/stderr in real time.
+
+## Value
+
+An `ni_result` object.

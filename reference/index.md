@@ -1,0 +1,676 @@
+# Package index
+
+## All functions
+
+- [`ni_afni_a_boverlap()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_a_boverlap.md)
+  : AFNI ABoverlap
+- [`ni_afni_afn_ito_nifti()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_afn_ito_nifti.md)
+  : AFNI AFNItoNIFTI
+- [`ni_afni_align_epi_anat_py()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_align_epi_anat_py.md)
+  : AFNI AlignEpiAnatPy
+- [`ni_afni_allineate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_allineate.md)
+  : AFNI Allineate
+- [`ni_afni_auto_tcorrelate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_auto_tcorrelate.md)
+  : AFNI AutoTcorrelate
+- [`ni_afni_auto_tlrc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_auto_tlrc.md)
+  : AFNI AutoTLRC
+- [`ni_afni_autobox()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_autobox.md)
+  : AFNI Autobox
+- [`ni_afni_automask()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_automask.md)
+  : AFNI Automask
+- [`ni_afni_axialize()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_axialize.md)
+  : AFNI Axialize
+- [`ni_afni_bandpass()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_bandpass.md)
+  : AFNI Bandpass
+- [`ni_afni_blur_in_mask()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_blur_in_mask.md)
+  : AFNI BlurInMask
+- [`ni_afni_blur_to_fwhm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_blur_to_fwhm.md)
+  : AFNI BlurToFWHM
+- [`ni_afni_brick_stat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_brick_stat.md)
+  : AFNI BrickStat
+- [`ni_afni_bucket()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_bucket.md)
+  : AFNI Bucket
+- [`ni_afni_calc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_calc.md)
+  : AFNI Calc
+- [`ni_afni_cat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_cat.md)
+  : AFNI Cat
+- [`ni_afni_cat_matvec()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_cat_matvec.md)
+  : AFNI CatMatvec
+- [`ni_afni_center_mass()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_center_mass.md)
+  : AFNI CenterMass
+- [`ni_afni_clip_level()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_clip_level.md)
+  : AFNI ClipLevel
+- [`ni_afni_convert_dset()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_convert_dset.md)
+  : AFNI ConvertDset
+- [`ni_afni_copy()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_copy.md)
+  : AFNI Copy
+- [`ni_afni_deconvolve()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_deconvolve.md)
+  : AFNI Deconvolve
+- [`ni_afni_degree_centrality()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_degree_centrality.md)
+  : AFNI DegreeCentrality
+- [`ni_afni_despike()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_despike.md)
+  : AFNI Despike
+- [`ni_afni_detrend()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_detrend.md)
+  : AFNI Detrend
+- [`ni_afni_dot()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_dot.md)
+  : AFNI Dot
+- [`ni_afni_ecm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_ecm.md)
+  : AFNI ECM
+- [`ni_afni_edge3()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_edge3.md)
+  : AFNI Edge3
+- [`ni_afni_eval()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_eval.md)
+  : AFNI Eval
+- [`ni_afni_fim()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_fim.md)
+  : AFNI Fim
+- [`ni_afni_fourier()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_fourier.md)
+  : AFNI Fourier
+- [`ni_afni_fwh_mx()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_fwh_mx.md)
+  : AFNI FWHMx
+- [`ni_afni_gcor()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_gcor.md)
+  : AFNI GCOR
+- [`ni_afni_hist()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_hist.md)
+  : AFNI Hist
+- [`ni_afni_lfcd()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_lfcd.md)
+  : AFNI LFCD
+- [`ni_afni_local_bistat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_local_bistat.md)
+  : AFNI LocalBistat
+- [`ni_afni_localstat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_localstat.md)
+  : AFNI Localstat
+- [`ni_afni_mask_tool()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_mask_tool.md)
+  : AFNI MaskTool
+- [`ni_afni_maskave()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_maskave.md)
+  : AFNI Maskave
+- [`ni_afni_means()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_means.md)
+  : AFNI Means
+- [`ni_afni_merge()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_merge.md)
+  : AFNI Merge
+- [`ni_afni_net_corr()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_net_corr.md)
+  : AFNI NetCorr
+- [`ni_afni_notes()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_notes.md)
+  : AFNI Notes
+- [`ni_afni_nwarp_adjust()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_nwarp_adjust.md)
+  : AFNI NwarpAdjust
+- [`ni_afni_nwarp_apply()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_nwarp_apply.md)
+  : AFNI NwarpApply
+- [`ni_afni_nwarp_cat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_nwarp_cat.md)
+  : AFNI NwarpCat
+- [`ni_afni_one_d_tool_py()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_one_d_tool_py.md)
+  : AFNI OneDToolPy
+- [`ni_afni_outlier_count()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_outlier_count.md)
+  : AFNI OutlierCount
+- [`ni_afni_quality_index()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_quality_index.md)
+  : AFNI QualityIndex
+- [`ni_afni_qwarp()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_qwarp.md)
+  : AFNI Qwarp
+- [`ni_afni_qwarp_plus_minus()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_qwarp_plus_minus.md)
+  : AFNI QwarpPlusMinus
+- [`ni_afni_re_ho()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_re_ho.md)
+  : AFNI ReHo
+- [`ni_afni_refit()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_refit.md)
+  : AFNI Refit
+- [`ni_afni_remlfit()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_remlfit.md)
+  : AFNI Remlfit
+- [`ni_afni_resample()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_resample.md)
+  : AFNI Resample
+- [`ni_afni_retroicor()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_retroicor.md)
+  : AFNI Retroicor
+- [`ni_afni_roi_stats()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_roi_stats.md)
+  : AFNI ROIStats
+- [`ni_afni_seg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_seg.md)
+  : AFNI Seg
+- [`ni_afni_skull_strip()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_skull_strip.md)
+  : AFNI SkullStrip
+- [`ni_afni_svm_test()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_svm_test.md)
+  : AFNI SVMTest
+- [`ni_afni_svm_train()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_svm_train.md)
+  : AFNI SVMTrain
+- [`ni_afni_synthesize()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_synthesize.md)
+  : AFNI Synthesize
+- [`ni_afni_t_cat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_cat.md)
+  : AFNI TCat
+- [`ni_afni_t_cat_sub_brick()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_cat_sub_brick.md)
+  : AFNI TCatSubBrick
+- [`ni_afni_t_corr1_d()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_corr1_d.md)
+  : AFNI TCorr1D
+- [`ni_afni_t_corr_map()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_corr_map.md)
+  : AFNI TCorrMap
+- [`ni_afni_t_correlate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_correlate.md)
+  : AFNI TCorrelate
+- [`ni_afni_t_norm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_norm.md)
+  : AFNI TNorm
+- [`ni_afni_t_project()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_project.md)
+  : AFNI TProject
+- [`ni_afni_t_shift()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_shift.md)
+  : AFNI TShift
+- [`ni_afni_t_smooth()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_smooth.md)
+  : AFNI TSmooth
+- [`ni_afni_t_stat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_t_stat.md)
+  : AFNI TStat
+- [`ni_afni_to3_d()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_to3_d.md)
+  : AFNI To3D
+- [`ni_afni_undump()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_undump.md)
+  : AFNI Undump
+- [`ni_afni_unifize()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_unifize.md)
+  : AFNI Unifize
+- [`ni_afni_volreg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_volreg.md)
+  : AFNI Volreg
+- [`ni_afni_warp()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_warp.md)
+  : AFNI Warp
+- [`ni_afni_z_cut_up()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_z_cut_up.md)
+  : AFNI ZCutUp
+- [`ni_afni_zcat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_zcat.md)
+  : AFNI Zcat
+- [`ni_afni_zeropad()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_zeropad.md)
+  : AFNI Zeropad
+- [`ni_ants_affine_initializer()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_affine_initializer.md)
+  : ANTS AffineInitializer
+- [`ni_ants_ai()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_ai.md)
+  : ANTS AI
+- [`ni_ants_ants()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_ants.md)
+  : ANTS ANTS
+- [`ni_ants_ants_introduction()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_ants_introduction.md)
+  : ANTS antsIntroduction
+- [`ni_ants_apply_transforms()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_apply_transforms.md)
+  : ANTS ApplyTransforms
+- [`ni_ants_apply_transforms_to_points()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_apply_transforms_to_points.md)
+  : ANTS ApplyTransformsToPoints
+- [`ni_ants_atropos()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_atropos.md)
+  : ANTS Atropos
+- [`ni_ants_average_affine_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_average_affine_transform.md)
+  : ANTS AverageAffineTransform
+- [`ni_ants_average_images()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_average_images.md)
+  : ANTS AverageImages
+- [`ni_ants_brain_extraction()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_brain_extraction.md)
+  : ANTS BrainExtraction
+- [`ni_ants_buildtemplateparallel()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_buildtemplateparallel.md)
+  : ANTS buildtemplateparallel
+- [`ni_ants_compose_multi_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_compose_multi_transform.md)
+  : ANTS ComposeMultiTransform
+- [`ni_ants_composite_transform_util()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_composite_transform_util.md)
+  : ANTS CompositeTransformUtil
+- [`ni_ants_convert_scalar_image_to_rgb()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_convert_scalar_image_to_rgb.md)
+  : ANTS ConvertScalarImageToRGB
+- [`ni_ants_cortical_thickness()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_cortical_thickness.md)
+  : ANTS CorticalThickness
+- [`ni_ants_create_jacobian_determinant_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_create_jacobian_determinant_image.md)
+  : ANTS CreateJacobianDeterminantImage
+- [`ni_ants_create_tiled_mosaic()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_create_tiled_mosaic.md)
+  : ANTS CreateTiledMosaic
+- [`ni_ants_denoise_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_denoise_image.md)
+  : ANTS DenoiseImage
+- [`ni_ants_gen_warp_fields()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_gen_warp_fields.md)
+  : ANTS GenWarpFields
+- [`ni_ants_image_math()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_image_math.md)
+  : ANTS ImageMath
+- [`ni_ants_joint_fusion()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_joint_fusion.md)
+  : ANTS JointFusion
+- [`ni_ants_kelly_kapowski()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_kelly_kapowski.md)
+  : ANTS KellyKapowski
+- [`ni_ants_label_geometry()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_label_geometry.md)
+  : ANTS LabelGeometry
+- [`ni_ants_laplacian_thickness()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_laplacian_thickness.md)
+  : ANTS LaplacianThickness
+- [`ni_ants_measure_image_similarity()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_measure_image_similarity.md)
+  : ANTS MeasureImageSimilarity
+- [`ni_ants_multiply_images()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_multiply_images.md)
+  : ANTS MultiplyImages
+- [`ni_ants_n4_bias_field_correction()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_n4_bias_field_correction.md)
+  : ANTS N4BiasFieldCorrection
+- [`ni_ants_registration()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration.md)
+  : ANTS Registration
+- [`ni_ants_registration_syn_quick()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration_syn_quick.md)
+  : ANTS RegistrationSynQuick
+- [`ni_ants_resample_image_by_spacing()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_resample_image_by_spacing.md)
+  : ANTS ResampleImageBySpacing
+- [`ni_ants_threshold_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_threshold_image.md)
+  : ANTS ThresholdImage
+- [`ni_ants_transform_build()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_transform_build.md)
+  : ANTs Composite Transform Build
+- [`ni_ants_warp_image_multi_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_warp_image_multi_transform.md)
+  : ANTS WarpImageMultiTransform
+- [`ni_ants_warp_time_series_image_multi_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_warp_time_series_image_multi_transform.md)
+  : ANTS WarpTimeSeriesImageMultiTransform
+- [`ni_bids_app()`](https://bbuchsbaum.github.io/niflowr/reference/ni_bids_app.md)
+  : Create a bidsappr-based BIDS App pre-configured with niflowr
+- [`ni_bids_inputs()`](https://bbuchsbaum.github.io/niflowr/reference/ni_bids_inputs.md)
+  : Query a BIDS project for inputs matching a spec
+- [`ni_call()`](https://bbuchsbaum.github.io/niflowr/reference/ni_call.md)
+  : Construct an ni_call: bind parameter values to a spec
+- [`ni_cmd()`](https://bbuchsbaum.github.io/niflowr/reference/ni_cmd.md)
+  : Get the command + args that would be executed
+- [`ni_config()`](https://bbuchsbaum.github.io/niflowr/reference/ni_config.md)
+  : Get or update niflowr runtime configuration
+- [`ni_constraints()`](https://bbuchsbaum.github.io/niflowr/reference/ni_constraints.md)
+  : List spec constraints as a table
+- [`ni_dcm2niix_convert()`](https://bbuchsbaum.github.io/niflowr/reference/ni_dcm2niix_convert.md)
+  : dcm2niix Convert
+- [`ni_deriv_path()`](https://bbuchsbaum.github.io/niflowr/reference/ni_deriv_path.md)
+  : Generate a BIDS-derivatives output path
+- [`ni_doctor()`](https://bbuchsbaum.github.io/niflowr/reference/ni_doctor.md)
+  : Run runtime diagnostics
+- [`ni_dry_run()`](https://bbuchsbaum.github.io/niflowr/reference/ni_dry_run.md)
+  : Run a spec as a dry run
+- [`ni_fastsurfer_run()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fastsurfer_run.md)
+  : FastSurfer Run
+- [`ni_fastsurfer_segment()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fastsurfer_segment.md)
+  : FastSurfer Segment
+- [`ni_fmriprep_confounds()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fmriprep_confounds.md)
+  : Read fMRIPrep confounds timeseries
+- [`ni_fmriprep_derivatives()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fmriprep_derivatives.md)
+  : List fMRIPrep derivatives overview
+- [`ni_fmriprep_preproc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fmriprep_preproc.md)
+  : Locate fMRIPrep preprocessed files
+- [`ni_freesurfer_add_x_form_to_header()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_add_x_form_to_header.md)
+  : FREESURFER AddXFormToHeader
+- [`ni_freesurfer_aparc2_aseg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_aparc2_aseg.md)
+  : FREESURFER Aparc2Aseg
+- [`ni_freesurfer_apas2_aseg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_apas2_aseg.md)
+  : FREESURFER Apas2Aseg
+- [`ni_freesurfer_apply_mask()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_apply_mask.md)
+  : FREESURFER ApplyMask
+- [`ni_freesurfer_apply_vol_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_apply_vol_transform.md)
+  : FREESURFER ApplyVolTransform
+- [`ni_freesurfer_bb_register()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_bb_register.md)
+  : FREESURFER BBRegister
+- [`ni_freesurfer_binarize()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_binarize.md)
+  : FREESURFER Binarize
+- [`ni_freesurfer_ca_label()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_ca_label.md)
+  : FREESURFER CALabel
+- [`ni_freesurfer_ca_normalize()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_ca_normalize.md)
+  : FREESURFER CANormalize
+- [`ni_freesurfer_ca_register()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_ca_register.md)
+  : FREESURFER CARegister
+- [`ni_freesurfer_check_talairach_alignment()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_check_talairach_alignment.md)
+  : FREESURFER CheckTalairachAlignment
+- [`ni_freesurfer_concatenate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_concatenate.md)
+  : FREESURFER Concatenate
+- [`ni_freesurfer_concatenate_lta()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_concatenate_lta.md)
+  : FREESURFER ConcatenateLTA
+- [`ni_freesurfer_contrast()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_contrast.md)
+  : FREESURFER Contrast
+- [`ni_freesurfer_curvature()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_curvature.md)
+  : FREESURFER Curvature
+- [`ni_freesurfer_curvature_stats()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_curvature_stats.md)
+  : FREESURFER CurvatureStats
+- [`ni_freesurfer_dicom_convert()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_dicom_convert.md)
+  : FREESURFER DICOMConvert
+- [`ni_freesurfer_edit_w_mwith_aseg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_edit_w_mwith_aseg.md)
+  : FREESURFER EditWMwithAseg
+- [`ni_freesurfer_em_register()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_em_register.md)
+  : FREESURFER EMRegister
+- [`ni_freesurfer_euler_number()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_euler_number.md)
+  : FREESURFER EulerNumber
+- [`ni_freesurfer_extract_main_component()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_extract_main_component.md)
+  : FREESURFER ExtractMainComponent
+- [`ni_freesurfer_fit_ms_params()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_fit_ms_params.md)
+  : FREESURFER FitMSParams
+- [`ni_freesurfer_fix_topology()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_fix_topology.md)
+  : FREESURFER FixTopology
+- [`ni_freesurfer_fuse_segmentations()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_fuse_segmentations.md)
+  : FREESURFER FuseSegmentations
+- [`ni_freesurfer_glm_fit()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_glm_fit.md)
+  : FREESURFER GLMFit
+- [`ni_freesurfer_gtm_seg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_gtm_seg.md)
+  : FREESURFER GTMSeg
+- [`ni_freesurfer_gtmpvc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_gtmpvc.md)
+  : FREESURFER GTMPVC
+- [`ni_freesurfer_image_info()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_image_info.md)
+  : FREESURFER ImageInfo
+- [`ni_freesurfer_jacobian()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_jacobian.md)
+  : FREESURFER Jacobian
+- [`ni_freesurfer_label2_annot()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_label2_annot.md)
+  : FREESURFER Label2Annot
+- [`ni_freesurfer_label2_label()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_label2_label.md)
+  : FREESURFER Label2Label
+- [`ni_freesurfer_label2_vol()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_label2_vol.md)
+  : FREESURFER Label2Vol
+- [`ni_freesurfer_logan()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_logan.md)
+  : FREESURFER Logan
+- [`ni_freesurfer_lta_convert()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_lta_convert.md)
+  : FREESURFER LTAConvert
+- [`ni_freesurfer_make_average_subject()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_make_average_subject.md)
+  : FREESURFER MakeAverageSubject
+- [`ni_freesurfer_make_surfaces()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_make_surfaces.md)
+  : FREESURFER MakeSurfaces
+- [`ni_freesurfer_mni_bias_correction()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mni_bias_correction.md)
+  : FREESURFER MNIBiasCorrection
+- [`ni_freesurfer_mp_rto_mni305()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mp_rto_mni305.md)
+  : FREESURFER MPRtoMNI305
+- [`ni_freesurfer_mr_is_ca_label()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mr_is_ca_label.md)
+  : FREESURFER MRIsCALabel
+- [`ni_freesurfer_mr_is_calc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mr_is_calc.md)
+  : FREESURFER MRIsCalc
+- [`ni_freesurfer_mr_is_combine()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mr_is_combine.md)
+  : FREESURFER MRIsCombine
+- [`ni_freesurfer_mr_is_convert()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mr_is_convert.md)
+  : FREESURFER MRIsConvert
+- [`ni_freesurfer_mr_is_expand()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mr_is_expand.md)
+  : FREESURFER MRIsExpand
+- [`ni_freesurfer_mr_is_inflate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mr_is_inflate.md)
+  : FREESURFER MRIsInflate
+- [`ni_freesurfer_mri_convert()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mri_convert.md)
+  : FREESURFER MRIConvert
+- [`ni_freesurfer_mri_coreg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mri_coreg.md)
+  : FREESURFER MRICoreg
+- [`ni_freesurfer_mri_fill()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mri_fill.md)
+  : FREESURFER MRIFill
+- [`ni_freesurfer_mri_marching_cubes()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mri_marching_cubes.md)
+  : FREESURFER MRIMarchingCubes
+- [`ni_freesurfer_mri_pretess()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mri_pretess.md)
+  : FREESURFER MRIPretess
+- [`ni_freesurfer_mri_tessellate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mri_tessellate.md)
+  : FREESURFER MRITessellate
+- [`ni_freesurfer_mris_preproc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mris_preproc.md)
+  : FREESURFER MRISPreproc
+- [`ni_freesurfer_mris_preproc_recon_all()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mris_preproc_recon_all.md)
+  : FREESURFER MRISPreprocReconAll
+- [`ni_freesurfer_mrtm1()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mrtm1.md)
+  : FREESURFER MRTM1
+- [`ni_freesurfer_mrtm2()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_mrtm2.md)
+  : FREESURFER MRTM2
+- [`ni_freesurfer_ms_lda()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_ms_lda.md)
+  : FREESURFER MS_LDA
+- [`ni_freesurfer_normalize()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_normalize.md)
+  : FREESURFER Normalize
+- [`ni_freesurfer_one_sample_t_test()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_one_sample_t_test.md)
+  : FREESURFER OneSampleTTest
+- [`ni_freesurfer_paint()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_paint.md)
+  : FREESURFER Paint
+- [`ni_freesurfer_parcellation_stats()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_parcellation_stats.md)
+  : FREESURFER ParcellationStats
+- [`ni_freesurfer_parse_dicom_dir()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_parse_dicom_dir.md)
+  : FREESURFER ParseDICOMDir
+- [`ni_freesurfer_recon_all()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_recon_all.md)
+  : FREESURFER ReconAll
+- [`ni_freesurfer_register()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_register.md)
+  : FREESURFER Register
+- [`ni_freesurfer_register_av_ito_talairach()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_register_av_ito_talairach.md)
+  : FREESURFER RegisterAVItoTalairach
+- [`ni_freesurfer_relabel_hypointensities()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_relabel_hypointensities.md)
+  : FREESURFER RelabelHypointensities
+- [`ni_freesurfer_remove_intersection()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_remove_intersection.md)
+  : FREESURFER RemoveIntersection
+- [`ni_freesurfer_remove_neck()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_remove_neck.md)
+  : FREESURFER RemoveNeck
+- [`ni_freesurfer_resample()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_resample.md)
+  : FREESURFER Resample
+- [`ni_freesurfer_robust_register()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_robust_register.md)
+  : FREESURFER RobustRegister
+- [`ni_freesurfer_robust_template()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_robust_template.md)
+  : FREESURFER RobustTemplate
+- [`ni_freesurfer_sample_to_surface()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_sample_to_surface.md)
+  : FREESURFER SampleToSurface
+- [`ni_freesurfer_seg_stats()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_seg_stats.md)
+  : FREESURFER SegStats
+- [`ni_freesurfer_seg_stats_recon_all()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_seg_stats_recon_all.md)
+  : FREESURFER SegStatsReconAll
+- [`ni_freesurfer_segment_cc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_segment_cc.md)
+  : FREESURFER SegmentCC
+- [`ni_freesurfer_segment_wm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_segment_wm.md)
+  : FREESURFER SegmentWM
+- [`ni_freesurfer_smooth()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_smooth.md)
+  : FREESURFER Smooth
+- [`ni_freesurfer_smooth_tessellation()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_smooth_tessellation.md)
+  : FREESURFER SmoothTessellation
+- [`ni_freesurfer_sphere()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_sphere.md)
+  : FREESURFER Sphere
+- [`ni_freesurfer_spherical_average()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_spherical_average.md)
+  : FREESURFER SphericalAverage
+- [`ni_freesurfer_surface2_vol_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_surface2_vol_transform.md)
+  : FREESURFER Surface2VolTransform
+- [`ni_freesurfer_surface_smooth()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_surface_smooth.md)
+  : FREESURFER SurfaceSmooth
+- [`ni_freesurfer_surface_snapshots()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_surface_snapshots.md)
+  : FREESURFER SurfaceSnapshots
+- [`ni_freesurfer_surface_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_surface_transform.md)
+  : FREESURFER SurfaceTransform
+- [`ni_freesurfer_synthesize_flash()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_synthesize_flash.md)
+  : FREESURFER SynthesizeFLASH
+- [`ni_freesurfer_synthmorph_apply()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_synthmorph_apply.md)
+  : FreeSurfer SynthMorph Apply
+- [`ni_freesurfer_synthmorph_register()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_synthmorph_register.md)
+  : FreeSurfer SynthMorph Register
+- [`ni_freesurfer_synthstrip()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_synthstrip.md)
+  : FreeSurfer SynthStrip
+- [`ni_freesurfer_talairach_avi()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_talairach_avi.md)
+  : FREESURFER TalairachAVI
+- [`ni_freesurfer_talairach_qc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_talairach_qc.md)
+  : FREESURFER TalairachQC
+- [`ni_freesurfer_tkregister2()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_tkregister2.md)
+  : FREESURFER Tkregister2
+- [`ni_freesurfer_unpack_sdicom_dir()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_unpack_sdicom_dir.md)
+  : FREESURFER UnpackSDICOMDir
+- [`ni_freesurfer_volume_mask()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_volume_mask.md)
+  : FREESURFER VolumeMask
+- [`ni_freesurfer_watershed_skull_strip()`](https://bbuchsbaum.github.io/niflowr/reference/ni_freesurfer_watershed_skull_strip.md)
+  : FREESURFER WatershedSkullStrip
+- [`ni_from_openneuro()`](https://bbuchsbaum.github.io/niflowr/reference/ni_from_openneuro.md)
+  : Fetch and prepare OpenNeuro dataset
+- [`ni_fsl_apply_mask()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_apply_mask.md)
+  : FSL ApplyMask
+- [`ni_fsl_apply_topup()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_apply_topup.md)
+  : FSL ApplyTOPUP
+- [`ni_fsl_apply_warp()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_apply_warp.md)
+  : FSL ApplyWarp
+- [`ni_fsl_apply_xfm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_apply_xfm.md)
+  : FSL ApplyXFM
+- [`ni_fsl_ar1_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_ar1_image.md)
+  : FSL AR1Image
+- [`ni_fsl_av_scale()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_av_scale.md)
+  : FSL AvScale
+- [`ni_fsl_b0_calc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_b0_calc.md)
+  : FSL B0Calc
+- [`ni_fsl_bedpostx5()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_bedpostx5.md)
+  : FSL BEDPOSTX5
+- [`ni_fsl_bet()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_bet.md)
+  : FSL BET
+- [`ni_fsl_binary_maths()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_binary_maths.md)
+  : FSL BinaryMaths
+- [`ni_fsl_change_data_type()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_change_data_type.md)
+  : FSL ChangeDataType
+- [`ni_fsl_cluster()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_cluster.md)
+  : FSL Cluster
+- [`ni_fsl_complex()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_complex.md)
+  : FSL Complex
+- [`ni_fsl_contrast_mgr()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_contrast_mgr.md)
+  : FSL ContrastMgr
+- [`ni_fsl_convert_warp()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_convert_warp.md)
+  : FSL ConvertWarp
+- [`ni_fsl_convert_xfm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_convert_xfm.md)
+  : FSL ConvertXFM
+- [`ni_fsl_copy_geom()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_copy_geom.md)
+  : FSL CopyGeom
+- [`ni_fsl_dilate_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_dilate_image.md)
+  : FSL DilateImage
+- [`ni_fsl_distance_map()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_distance_map.md)
+  : FSL DistanceMap
+- [`ni_fsl_dti_fit()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_dti_fit.md)
+  : FSL DTIFit
+- [`ni_fsl_dual_regression()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_dual_regression.md)
+  : FSL DualRegression
+- [`ni_fsl_eddy()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_eddy.md)
+  : FSL Eddy
+- [`ni_fsl_eddy_correct()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_eddy_correct.md)
+  : FSL EddyCorrect
+- [`ni_fsl_eddy_quad()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_eddy_quad.md)
+  : FSL EddyQuad
+- [`ni_fsl_epi_de_warp()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_epi_de_warp.md)
+  : FSL EPIDeWarp
+- [`ni_fsl_epi_reg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_epi_reg.md)
+  : FSL EpiReg
+- [`ni_fsl_erode_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_erode_image.md)
+  : FSL ErodeImage
+- [`ni_fsl_extract_roi()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_extract_roi.md)
+  : FSL ExtractROI
+- [`ni_fsl_fast()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_fast.md)
+  : FSL FAST
+- [`ni_fsl_feat()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_feat.md)
+  : FSL FEAT
+- [`ni_fsl_feat_model()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_feat_model.md)
+  : FSL FEATModel
+- [`ni_fsl_filmgls()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_filmgls.md)
+  : FSL FILMGLS
+- [`ni_fsl_filter_regressor()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_filter_regressor.md)
+  : FSL FilterRegressor
+- [`ni_fsl_find_the_biggest()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_find_the_biggest.md)
+  : FSL FindTheBiggest
+- [`ni_fsl_first()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_first.md)
+  : FSL FIRST
+- [`ni_fsl_flameo()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_flameo.md)
+  : FSL FLAMEO
+- [`ni_fsl_flirt()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_flirt.md)
+  : FSL FLIRT
+- [`ni_fsl_fnirt()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_fnirt.md)
+  : FSL FNIRT
+- [`ni_fsl_fugue()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_fugue.md)
+  : FSL FUGUE
+- [`ni_fsl_glm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_glm.md)
+  : FSL GLM
+- [`ni_fsl_ica_aroma()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_ica_aroma.md)
+  : FSL ICA_AROMA
+- [`ni_fsl_image_maths()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_image_maths.md)
+  : FSL ImageMaths
+- [`ni_fsl_image_meants()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_image_meants.md)
+  : FSL ImageMeants
+- [`ni_fsl_image_stats()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_image_stats.md)
+  : FSL ImageStats
+- [`ni_fsl_inv_warp()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_inv_warp.md)
+  : FSL InvWarp
+- [`ni_fsl_isotropic_smooth()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_isotropic_smooth.md)
+  : FSL IsotropicSmooth
+- [`ni_fsl_make_dyadic_vectors()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_make_dyadic_vectors.md)
+  : FSL MakeDyadicVectors
+- [`ni_fsl_maths_command()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_maths_command.md)
+  : FSL MathsCommand
+- [`ni_fsl_max_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_max_image.md)
+  : FSL MaxImage
+- [`ni_fsl_maxn_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_maxn_image.md)
+  : FSL MaxnImage
+- [`ni_fsl_mcflirt()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_mcflirt.md)
+  : FSL MCFLIRT
+- [`ni_fsl_mean_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_mean_image.md)
+  : FSL MeanImage
+- [`ni_fsl_median_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_median_image.md)
+  : FSL MedianImage
+- [`ni_fsl_melodic()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_melodic.md)
+  : FSL MELODIC
+- [`ni_fsl_merge()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_merge.md)
+  : FSL Merge
+- [`ni_fsl_min_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_min_image.md)
+  : FSL MinImage
+- [`ni_fsl_motion_outliers()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_motion_outliers.md)
+  : FSL MotionOutliers
+- [`ni_fsl_multi_image_maths()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_multi_image_maths.md)
+  : FSL MultiImageMaths
+- [`ni_fsl_overlay()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_overlay.md)
+  : FSL Overlay
+- [`ni_fsl_percentile_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_percentile_image.md)
+  : FSL PercentileImage
+- [`ni_fsl_plot_motion_params()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_plot_motion_params.md)
+  : FSL PlotMotionParams
+- [`ni_fsl_plot_time_series()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_plot_time_series.md)
+  : FSL PlotTimeSeries
+- [`ni_fsl_power_spectrum()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_power_spectrum.md)
+  : FSL PowerSpectrum
+- [`ni_fsl_prelude()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_prelude.md)
+  : FSL PRELUDE
+- [`ni_fsl_prepare_fieldmap()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_prepare_fieldmap.md)
+  : FSL PrepareFieldmap
+- [`ni_fsl_prob_track_x()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_prob_track_x.md)
+  : FSL ProbTrackX
+- [`ni_fsl_prob_track_x2()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_prob_track_x2.md)
+  : FSL ProbTrackX2
+- [`ni_fsl_proj_thresh()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_proj_thresh.md)
+  : FSL ProjThresh
+- [`ni_fsl_randomise()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_randomise.md)
+  : FSL Randomise
+- [`ni_fsl_reorient2_std()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_reorient2_std.md)
+  : FSL Reorient2Std
+- [`ni_fsl_robust_fov()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_robust_fov.md)
+  : FSL RobustFOV
+- [`ni_fsl_sig_loss()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_sig_loss.md)
+  : FSL SigLoss
+- [`ni_fsl_slice()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_slice.md)
+  : FSL Slice
+- [`ni_fsl_slice_timer()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_slice_timer.md)
+  : FSL SliceTimer
+- [`ni_fsl_slicer()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_slicer.md)
+  : FSL Slicer
+- [`ni_fsl_smm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_smm.md)
+  : FSL SMM
+- [`ni_fsl_smooth()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_smooth.md)
+  : FSL Smooth
+- [`ni_fsl_smooth_estimate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_smooth_estimate.md)
+  : FSL SmoothEstimate
+- [`ni_fsl_spatial_filter()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_spatial_filter.md)
+  : FSL SpatialFilter
+- [`ni_fsl_split()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_split.md)
+  : FSL Split
+- [`ni_fsl_std_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_std_image.md)
+  : FSL StdImage
+- [`ni_fsl_susan()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_susan.md)
+  : FSL SUSAN
+- [`ni_fsl_swap_dimensions()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_swap_dimensions.md)
+  : FSL SwapDimensions
+- [`ni_fsl_temporal_filter()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_temporal_filter.md)
+  : FSL TemporalFilter
+- [`ni_fsl_text2_vest()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_text2_vest.md)
+  : FSL Text2Vest
+- [`ni_fsl_threshold()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_threshold.md)
+  : FSL Threshold
+- [`ni_fsl_topup()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_topup.md)
+  : FSL TOPUP
+- [`ni_fsl_tract_skeleton()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_tract_skeleton.md)
+  : FSL TractSkeleton
+- [`ni_fsl_unary_maths()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_unary_maths.md)
+  : FSL UnaryMaths
+- [`ni_fsl_vec_reg()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_vec_reg.md)
+  : FSL VecReg
+- [`ni_fsl_vest2_text()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_vest2_text.md)
+  : FSL Vest2Text
+- [`ni_fsl_warp_points()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_warp_points.md)
+  : FSL WarpPoints
+- [`ni_fsl_warp_points_from_std()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_warp_points_from_std.md)
+  : FSL WarpPointsFromStd
+- [`ni_fsl_warp_points_to_std()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_warp_points_to_std.md)
+  : FSL WarpPointsToStd
+- [`ni_fsl_warp_utils()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_warp_utils.md)
+  : FSL WarpUtils
+- [`ni_fsl_x_fibres5()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_x_fibres5.md)
+  : FSL XFibres5
+- [`ni_golden_cmdline_generate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_golden_cmdline_generate.md)
+  : Generate golden command fixtures for all specs
+- [`ni_inputs()`](https://bbuchsbaum.github.io/niflowr/reference/ni_inputs.md)
+  : List spec inputs as a table
+- [`ni_lint_specs()`](https://bbuchsbaum.github.io/niflowr/reference/ni_lint_specs.md)
+  : Lint niflowr specs with optional autofix
+- [`ni_lock_read()`](https://bbuchsbaum.github.io/niflowr/reference/ni_lock_read.md)
+  : Read lockfile
+- [`ni_lock_validate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_lock_validate.md)
+  : Validate current runtime config against lockfile
+- [`ni_outputs()`](https://bbuchsbaum.github.io/niflowr/reference/ni_outputs.md)
+  : Get output file paths from a result
+- [`ni_pin()`](https://bbuchsbaum.github.io/niflowr/reference/ni_pin.md)
+  : Create/update a runtime lockfile
+- [`ni_provenance()`](https://bbuchsbaum.github.io/niflowr/reference/ni_provenance.md)
+  : Get provenance metadata from a result
+- [`ni_provenance_read()`](https://bbuchsbaum.github.io/niflowr/reference/ni_provenance_read.md)
+  : Read a provenance JSON sidecar
+- [`ni_provenance_write()`](https://bbuchsbaum.github.io/niflowr/reference/ni_provenance_write.md)
+  : Write a provenance JSON sidecar
+- [`ni_read_output()`](https://bbuchsbaum.github.io/niflowr/reference/ni_read_output.md)
+  : Read an output from an ni_result as a neuroim2 object
+- [`ni_read_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_read_transform.md)
+  : Read a transform output using neurotransform
+- [`ni_result`](https://bbuchsbaum.github.io/niflowr/reference/ni_result.md)
+  : S3 class for execution results
+- [`ni_run()`](https://bbuchsbaum.github.io/niflowr/reference/ni_run.md)
+  : Execute an ni_call
+- [`ni_run_files()`](https://bbuchsbaum.github.io/niflowr/reference/ni_run_files.md)
+  : Run an niflowr call and return output file paths
+- [`ni_spec_list()`](https://bbuchsbaum.github.io/niflowr/reference/ni_spec_list.md)
+  : List available bundled specs
+- [`ni_spec_read()`](https://bbuchsbaum.github.io/niflowr/reference/ni_spec_read.md)
+  : Read a niflowr interface spec
+- [`tar_ni_step()`](https://bbuchsbaum.github.io/niflowr/reference/tar_ni_step.md)
+  : Create a targets-compatible neuroimaging processing step
