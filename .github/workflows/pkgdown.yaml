@@ -1,0 +1,57 @@
+# Build and deploy the pkgdown site to the gh-pages branch.
+# Based on r-lib/actions/examples/pkgdown.yaml, but the dependency step installs
+# packages explicitly instead of resolving DESCRIPTION: this package's Suggests
+# reference non-CRAN packages (bidsappr, neuroim2, ...) that pak cannot solve.
+name: pkgdown
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pkgdown:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pkgdown-${{ github.event_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      # jsonvalidate's V8 backend needs libnode at runtime.
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libnode-dev
+
+      - name: Install R dependencies
+        run: |
+          install.packages(c(
+            "cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate",
+            "processx", "yaml", "knitr", "rmarkdown", "pkgdown", "remotes",
+            "albersdown"
+          ))
+          remotes::install_local(".", dependencies = FALSE, force = TRUE)
+        shell: Rscript {0}
+
+      - name: Build site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        shell: Rscript {0}
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          clean: false
+          branch: gh-pages
+          folder: docs

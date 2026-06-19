@@ -10,7 +10,7 @@ Description: A lightweight, declarative framework for wrapping neuroimaging
     (never shell strings), executes via 'processx', captures provenance, and
     integrates with 'targets' for pipeline orchestration.
 License: MIT + file LICENSE
-URL: https://github.com/bbuchsbaum/niflowr
+URL: https://bbuchsbaum.github.io/niflowr/, https://github.com/bbuchsbaum/niflowr
 BugReports: https://github.com/bbuchsbaum/niflowr/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -42,3 +42,4 @@ Suggests:
     withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/Needs/website: albersdown

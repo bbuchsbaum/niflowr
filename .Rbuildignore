@@ -11,6 +11,8 @@
 ^\.github$
 ^vignettes/albers\.css$
 ^vignettes/albers\.js$
+^vignettes/albers-header\.html$
+^\.albersdown\.bak$
 ^doc$
 ^Meta$
 ^\.claude$
