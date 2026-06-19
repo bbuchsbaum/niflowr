@@ -1,6 +1,6 @@
 # niflowr
 
-> Spec-driven R wrappers for neuroimaging command-line tools — safe commands, real validation, automatic provenance.
+> Spec-driven R wrappers for neuroimaging command-line tools — validated command building, execution, and provenance.
 
 <!-- badges: start -->
 [![R-universe](https://bbuchsbaum.r-universe.dev/badges/niflowr)](https://bbuchsbaum.r-universe.dev/niflowr)
@@ -31,14 +31,30 @@ That single call validated the inputs, built a **safe argument vector** (no shel
 
 Neuroimaging pipelines stitch together dozens of command-line tools, each with its own flag syntax, validation quirks, and output-naming conventions. Wrapping them in R usually means brittle `system()` calls with `paste()`-assembled shell strings: no input checking, silent failures on a typo'd flag, shell-injection hazards, and no record of what actually ran.
 
-## How niflowr is different
+## What niflowr adds
 
-- **Tools are described, not coded.** Every interface is a declarative JSON spec listing inputs, outputs, CLI-rendering rules, and constraints. One small, well-tested engine turns any spec into a working R function.
-- **Commands are argument vectors, never shell strings.** Values go straight to `processx` as a `character` vector — no quoting, no word-splitting, no injection.
+- **Tools are described, not hand-wrapped.** Every interface is a declarative JSON spec listing inputs, outputs, CLI-rendering rules, and constraints. A shared engine turns those specs into R functions.
+- **Commands are argument vectors, never shell strings.** Values go straight to `processx` as a `character` vector, without shell interpolation or word splitting.
 - **Inputs are validated before anything runs** — required fields, types, enum choices, numeric ranges, and cross-argument constraints (`xor`, `requires`).
-- **Every run is recorded.** A JSON provenance sidecar captures the exact command, engine/container, input checksums, outputs, exit status, and timing.
-- **Reproducible by construction.** Run natively, in Docker, or in Apptainer/Singularity; pin image digests in a lockfile.
-- **Pipelines are someone else's job.** niflowr is the interface layer; [`targets`](https://docs.ropensci.org/targets/) (and `crew`) handle scheduling, caching, and parallelism.
+- **Runs carry provenance metadata.** The returned `ni_result` includes the exact command, engine/container, outputs, exit status, and timing; successful file-producing runs can also write a JSON sidecar.
+- **Reproducibility hooks are explicit.** Run natively, in Docker, or in Apptainer/Singularity; pin image digests in a lockfile when you need a stricter execution record.
+- **Workflow orchestration stays outside niflowr.** niflowr is the command-interface layer; [`targets`](https://docs.ropensci.org/targets/) (and `crew`) handle scheduling, caching, and parallelism.
+
+## Relationship to fMRIPrep and NiPreps
+
+For standard, end-to-end fMRI preprocessing of BIDS datasets, start with
+[fMRIPrep](https://fmriprep.org/) and the broader
+[NiPreps](https://www.nipreps.org/) ecosystem. Those projects provide
+community-maintained preprocessing workflows, reports, BIDS App execution, and
+carefully chosen defaults for anatomical and functional MRI processing.
+
+niflowr does **not** try to reimplement, replace, or outdo fMRIPrep/NiPreps. It
+does not define a recommended preprocessing pipeline, choose algorithms for you,
+or claim production-grade preprocessing. Its narrower job is to make individual
+neuroimaging command-line calls from R safer, more inspectable, and easier to
+compose when you are building custom analyses, wrapping a tool that is not part
+of a NiPreps workflow, using `targets`, or reading/handoffing existing fMRIPrep
+derivatives.
 
 ## Installation
 
@@ -137,11 +153,18 @@ Outputs can be taken straight from an input (`from_input`), built from a [glue](
 
 ### Safe commands and real validation
 
-Arguments are assembled as a vector and handed to `processx`, so spaces, special characters, and untrusted paths can never break out into the shell. Inputs are checked *before* execution against the spec — types, required fields, enum choices, numeric `min`/`max`, regex patterns, and relational constraints (`xor`, `requires`). A bad call fails loudly in R instead of producing a cryptic tool error (or worse, silently wrong output).
+Arguments are assembled as a vector and handed to `processx`, so spaces, special characters, and paths are passed as argument values rather than interpolated by a shell. Inputs are checked *before* execution against the spec — types, required fields, enum choices, numeric `min`/`max`, regex patterns, and relational constraints (`xor`, `requires`). A bad call fails loudly in R instead of producing a cryptic tool error (or worse, silently wrong output).
 
-### Provenance, automatically <a name="provenance"></a>
+### Provenance metadata and sidecars <a name="provenance"></a>
 
-On a successful run, `ni_run()` writes a `*_provenance.json` sidecar next to the primary output capturing the spec id, full command and argument vector, execution engine/profile, input-file checksums (xxhash64), output paths, exit status, and timing. Read it back anytime:
+When `ni_run()` returns an `ni_result`, that result includes provenance metadata
+for the execution. Failed commands can be returned by setting
+`error_on_status = FALSE`; otherwise they raise an error. When `provenance =
+TRUE` (the default), the command exits successfully, and the spec has at least
+one declared output, niflowr also writes a `*_provenance.json` sidecar next to
+the primary output. The sidecar captures the spec id, full command and argument
+vector, execution engine/profile, input-file checksums (xxhash64), output paths,
+exit status, and timing. Read it back anytime:
 
 ```r
 ni_provenance_read("sub-01_desc-brain_T1w.nii.gz_provenance.json")
@@ -164,7 +187,7 @@ profiles:
   ants: { apptainer_uri: "docker://antsx/ants:v2.5.0" }
 ```
 
-For bit-for-bit reproducibility, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, and lock status.
+For stricter execution records, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, and lock status.
 
 ### Pipelines with targets
 
@@ -179,15 +202,19 @@ list(
 )
 ```
 
-### BIDS and the neuroimaging R ecosystem
+### BIDS-facing helpers and the neuroimaging R ecosystem
 
-niflowr speaks BIDS and plays well with adjacent packages (all optional `Suggests`):
+niflowr includes a small BIDS-facing adapter layer and optional integrations with adjacent R packages:
 
 - `ni_deriv_path()` — build BIDS-derivatives output paths with the right entities.
 - `ni_bids_inputs()` / `ni_from_openneuro()` — query a BIDS project (via `bidser`) or pull a dataset from OpenNeuro (via `openneuroR`).
-- `ni_fmriprep_preproc()`, `ni_fmriprep_confounds()`, `ni_fmriprep_derivatives()` — locate and load fMRIPrep outputs.
+- `ni_fmriprep_preproc()`, `ni_fmriprep_confounds()`, `ni_fmriprep_derivatives()` — locate and load outputs from an existing fMRIPrep derivatives directory.
 - `ni_bids_app()` — scaffold a BIDS App (via `bidsappr`).
 - `ni_read_output()` / `ni_read_transform()` — load results as `neuroim2` images or `neurotransform` transforms.
+
+These helpers are adapters around existing BIDS datasets, derivatives, and
+packages. They are not a substitute for running fMRIPrep or another NiPreps app
+when that is the appropriate preprocessing tool.
 
 ### Introspection and diagnostics
 
@@ -231,8 +258,11 @@ Specs that need bespoke argument grammar (e.g. ANTs' staged `antsRegistration`) 
 
 - ✅ A consistent, validated, provenance-tracked R interface to existing neuroimaging CLIs.
 - ✅ A safe command builder and runner with native + container execution.
-- ✅ A foundation for reproducible `targets` pipelines.
+- ✅ A command layer you can use inside reproducible `targets` pipelines.
+- ✅ A handoff layer for reading and composing existing BIDS/fMRIPrep derivatives.
 - ❌ Not an installer or distributor of FSL/AFNI/ANTs/FreeSurfer — you bring the tools (or a container).
+- ❌ Not an fMRIPrep/NiPreps replacement; for standard end-to-end fMRI preprocessing, use those projects.
+- ❌ Not a recommended preprocessing pipeline or algorithm-selection framework — it runs the tools you ask it to run.
 - ❌ Not a workflow engine — that's what `targets`/`crew` are for.
 
 niflowr is **experimental** (v0.1.0): the spec schema and API may still change.
