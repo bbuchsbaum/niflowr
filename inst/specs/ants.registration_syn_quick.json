@@ -58,11 +58,11 @@
     "output_prefix": {
       "type": "string",
       "desc": "A prefix that is prepended to all output files",
-      "required": true,
       "default": "transform",
       "cli": {
         "argstr": "-o %s"
-      }
+      },
+      "required": true
     },
     "precision_type": {
       "type": "enum",
@@ -146,7 +146,11 @@
       "must_exist": false,
       "when": {
         "input": "transform_type",
-        "not_in": ["t", "r", "a"]
+        "not_in": [
+          "t",
+          "r",
+          "a"
+        ]
       }
     },
     "inverse_warp_field": {
@@ -157,7 +161,11 @@
       "must_exist": false,
       "when": {
         "input": "transform_type",
-        "not_in": ["t", "r", "a"]
+        "not_in": [
+          "t",
+          "r",
+          "a"
+        ]
       }
     }
   },

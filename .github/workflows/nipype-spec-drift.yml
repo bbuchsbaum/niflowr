@@ -7,6 +7,8 @@ on:
       - "inst/schema/**"
       - "tools/import_nipype_specs.py"
       - "tools/nipype_manifest.json"
+      - "tools/spec_overrides/**"
+      - "R/ni_forge.R"
       - ".github/workflows/nipype-spec-drift.yml"
   push:
     branches:
@@ -16,6 +18,8 @@ on:
       - "inst/schema/**"
       - "tools/import_nipype_specs.py"
       - "tools/nipype_manifest.json"
+      - "tools/spec_overrides/**"
+      - "R/ni_forge.R"
       - ".github/workflows/nipype-spec-drift.yml"
 
 jobs:
@@ -30,11 +34,28 @@ jobs:
         with:
           python-version: "3.11"
 
+      # Pin nipype: the committed specs are generated against a specific
+      # interface set, so an unpinned nipype would drift on every release.
       - name: Install importer dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install nipype jsonschema
+          python -m pip install "nipype==1.10.0" jsonschema
 
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      # jsonvalidate's V8 backend needs libnode at runtime.
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libnode-dev
+
+      # Only what ni_lint_specs() needs (loaded via pkgload). A plain
+      # install.packages() avoids resolving the package's non-CRAN Suggests.
+      - name: Install R dependencies
+        run: install.packages(c("cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate", "processx", "yaml", "pkgload"))
+        shell: Rscript {0}
+
+      # Stage 1: import raw interfaces from nipype (with tools/spec_overrides
+      # deep-merged for niflowr-only fields the importer can't express).
       - name: Regenerate Nipype specs
         run: |
           python tools/import_nipype_specs.py \
@@ -45,10 +66,15 @@ jobs:
             --overwrite \
             --omit-imported-at
 
+      # Stage 2: apply the same normalization that produces the committed specs
+      # (shell-argstr rewrites, position-collision and xor cleanup).
+      - name: Normalize specs
+        run: Rscript -e 'pkgload::load_all("."); ni_lint_specs("inst/specs", fix = TRUE, write = TRUE)'
+
       - name: Fail on drift
         run: |
           if ! git diff --quiet -- inst/specs; then
-            echo "::error::Nipype-derived specs are out of date. Regenerate with tools/import_nipype_specs.py and commit."
+            echo "::error::Specs are out of date. Run tools/import_nipype_specs.py then ni_lint_specs(fix=TRUE) and commit."
             git --no-pager diff -- inst/specs
             exit 1
           fi

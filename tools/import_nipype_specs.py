@@ -33,6 +33,29 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 SCHEMA_VERSION = "0.1.0"
 SKIP_TRAITS = {"trait_added", "trait_modified"}
 
+# niflowr-only fields that Nipype cannot express (custom renderers, declared
+# outputs, required-input tweaks) live here and are deep-merged onto the
+# generated spec so they survive regeneration.
+OVERRIDES_DIR = pathlib.Path(__file__).resolve().parent / "spec_overrides"
+
+
+def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    """Recursively merge ``override`` into ``base`` in place and return it."""
+    for key, value in override.items():
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+            deep_merge(base[key], value)
+        else:
+            base[key] = value
+    return base
+
+
+def apply_spec_override(spec_id: str, spec: Dict[str, Any]) -> Dict[str, Any]:
+    """Merge tools/spec_overrides/<spec_id>.json onto a generated spec, if present."""
+    override_path = OVERRIDES_DIR / f"{spec_id}.json"
+    if override_path.exists():
+        deep_merge(spec, json.loads(override_path.read_text()))
+    return spec
+
 
 @dataclass
 class InterfaceJob:
@@ -453,11 +476,12 @@ def build_spec(
         "command": command.strip(),
         "inputs": inputs,
         "outputs": outputs,
-        "runtime": {"container": {"type": "none"}},
+        "runtime": {"profile": provider},
         "origin": origin,
     }
     if description:
         spec["description"] = description
+    spec = apply_spec_override(spec_id, spec)
     return spec_id, spec
 
 
