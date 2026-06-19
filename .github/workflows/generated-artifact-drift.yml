@@ -36,12 +36,23 @@ jobs:
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
 
-      # Install only the CRAN packages the codegen scripts need. We deliberately
-      # avoid resolving the package's DESCRIPTION, whose Suggests reference
+      # Install only the packages the codegen scripts need (plus their system
+      # requirements, e.g. libnode for jsonvalidate's V8). An explicit list
+      # avoids resolving the package's DESCRIPTION, whose Suggests reference
       # non-CRAN packages (bidsappr, neuroim2, ...) that pak cannot solve here.
       - name: Install R dependencies
-        run: install.packages(c("cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate", "processx", "yaml", "pkgload"))
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::cli
+            any::digest
+            any::fs
+            any::glue
+            any::jsonlite
+            any::jsonvalidate
+            any::processx
+            any::yaml
+            any::pkgload
 
       - name: Regenerate wrappers
         run: Rscript tools/gen_wrappers.R
