@@ -60,7 +60,7 @@
 <div class="page-header"><h1 id="niflowr">niflowr<a class="anchor" aria-label="anchor" href="#niflowr"></a>
 </h1></div>
 <blockquote>
-<p>Spec-driven R wrappers for neuroimaging command-line tools — safe commands, real validation, automatic provenance.</p>
+<p>Spec-driven R wrappers for neuroimaging command-line tools — validated command building, execution, and provenance.</p>
 </blockquote>
 <!-- badges: start -->
 
@@ -84,22 +84,28 @@
 <p>Neuroimaging pipelines stitch together dozens of command-line tools, each with its own flag syntax, validation quirks, and output-naming conventions. Wrapping them in R usually means brittle <code><a href="https://rdrr.io/r/base/system.html" class="external-link">system()</a></code> calls with <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste()</a></code>-assembled shell strings: no input checking, silent failures on a typo’d flag, shell-injection hazards, and no record of what actually ran.</p>
 </div>
 <div class="section level2">
-<h2 id="how-niflowr-is-different">How niflowr is different<a class="anchor" aria-label="anchor" href="#how-niflowr-is-different"></a>
+<h2 id="what-niflowr-adds">What niflowr adds<a class="anchor" aria-label="anchor" href="#what-niflowr-adds"></a>
 </h2>
 <ul>
 <li>
-<strong>Tools are described, not coded.</strong> Every interface is a declarative JSON spec listing inputs, outputs, CLI-rendering rules, and constraints. One small, well-tested engine turns any spec into a working R function.</li>
+<strong>Tools are described, not hand-wrapped.</strong> Every interface is a declarative JSON spec listing inputs, outputs, CLI-rendering rules, and constraints. A shared engine turns those specs into R functions.</li>
 <li>
-<strong>Commands are argument vectors, never shell strings.</strong> Values go straight to <code>processx</code> as a <code>character</code> vector — no quoting, no word-splitting, no injection.</li>
+<strong>Commands are argument vectors, never shell strings.</strong> Values go straight to <code>processx</code> as a <code>character</code> vector, without shell interpolation or word splitting.</li>
 <li>
 <strong>Inputs are validated before anything runs</strong> — required fields, types, enum choices, numeric ranges, and cross-argument constraints (<code>xor</code>, <code>requires</code>).</li>
 <li>
-<strong>Every run is recorded.</strong> A JSON provenance sidecar captures the exact command, engine/container, input checksums, outputs, exit status, and timing.</li>
+<strong>Runs carry provenance metadata.</strong> The returned <code>ni_result</code> includes the exact command, engine/container, outputs, exit status, and timing; successful file-producing runs can also write a JSON sidecar.</li>
 <li>
-<strong>Reproducible by construction.</strong> Run natively, in Docker, or in Apptainer/Singularity; pin image digests in a lockfile.</li>
+<strong>Reproducibility hooks are explicit.</strong> Run natively, in Docker, or in Apptainer/Singularity; pin image digests in a lockfile when you need a stricter execution record.</li>
 <li>
-<strong>Pipelines are someone else’s job.</strong> niflowr is the interface layer; <a href="https://docs.ropensci.org/targets/" class="external-link"><code>targets</code></a> (and <code>crew</code>) handle scheduling, caching, and parallelism.</li>
+<strong>Workflow orchestration stays outside niflowr.</strong> niflowr is the command-interface layer; <a href="https://docs.ropensci.org/targets/" class="external-link"><code>targets</code></a> (and <code>crew</code>) handle scheduling, caching, and parallelism.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="relationship-to-fmriprep-and-nipreps">Relationship to fMRIPrep and NiPreps<a class="anchor" aria-label="anchor" href="#relationship-to-fmriprep-and-nipreps"></a>
+</h2>
+<p>For standard, end-to-end fMRI preprocessing of BIDS datasets, start with <a href="https://fmriprep.org/" class="external-link">fMRIPrep</a> and the broader <a href="https://www.nipreps.org/" class="external-link">NiPreps</a> ecosystem. Those projects provide community-maintained preprocessing workflows, reports, BIDS App execution, and carefully chosen defaults for anatomical and functional MRI processing.</p>
+<p>niflowr does <strong>not</strong> try to reimplement, replace, or outdo fMRIPrep/NiPreps. It does not define a recommended preprocessing pipeline, choose algorithms for you, or claim production-grade preprocessing. Its narrower job is to make individual neuroimaging command-line calls from R safer, more inspectable, and easier to compose when you are building custom analyses, wrapping a tool that is not part of a NiPreps workflow, using <code>targets</code>, or reading/handoffing existing fMRIPrep derivatives.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -183,13 +189,13 @@
 <div class="section level3">
 <h3 id="safe-commands-and-real-validation">Safe commands and real validation<a class="anchor" aria-label="anchor" href="#safe-commands-and-real-validation"></a>
 </h3>
-<p>Arguments are assembled as a vector and handed to <code>processx</code>, so spaces, special characters, and untrusted paths can never break out into the shell. Inputs are checked <em>before</em> execution against the spec — types, required fields, enum choices, numeric <code>min</code>/<code>max</code>, regex patterns, and relational constraints (<code>xor</code>, <code>requires</code>). A bad call fails loudly in R instead of producing a cryptic tool error (or worse, silently wrong output).</p>
+<p>Arguments are assembled as a vector and handed to <code>processx</code>, so spaces, special characters, and paths are passed as argument values rather than interpolated by a shell. Inputs are checked <em>before</em> execution against the spec — types, required fields, enum choices, numeric <code>min</code>/<code>max</code>, regex patterns, and relational constraints (<code>xor</code>, <code>requires</code>). A bad call fails loudly in R instead of producing a cryptic tool error (or worse, silently wrong output).</p>
 </div>
 <div class="section level3">
-<h3 id="provenance-automatically-">Provenance, automatically <a name="provenance"></a>
-<a class="anchor" aria-label="anchor" href="#provenance-automatically-"></a>
+<h3 id="provenance-metadata-and-sidecars-">Provenance metadata and sidecars <a name="provenance"></a>
+<a class="anchor" aria-label="anchor" href="#provenance-metadata-and-sidecars-"></a>
 </h3>
-<p>On a successful run, <code><a href="reference/ni_run.html">ni_run()</a></code> writes a <code>*_provenance.json</code> sidecar next to the primary output capturing the spec id, full command and argument vector, execution engine/profile, input-file checksums (xxhash64), output paths, exit status, and timing. Read it back anytime:</p>
+<p>When <code><a href="reference/ni_run.html">ni_run()</a></code> returns an <code>ni_result</code>, that result includes provenance metadata for the execution. Failed commands can be returned by setting <code>error_on_status = FALSE</code>; otherwise they raise an error. When <code>provenance = TRUE</code> (the default), the command exits successfully, and the spec has at least one declared output, niflowr also writes a <code>*_provenance.json</code> sidecar next to the primary output. The sidecar captures the spec id, full command and argument vector, execution engine/profile, input-file checksums (xxhash64), output paths, exit status, and timing. Read it back anytime:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/ni_provenance_read.html">ni_provenance_read</a></span><span class="op">(</span><span class="st">"sub-01_desc-brain_T1w.nii.gz_provenance.json"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -205,7 +211,7 @@
 <div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">profiles</span><span class="kw">:</span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="at">  </span><span class="fu">fsl</span><span class="kw">:</span><span class="at">  </span><span class="kw">{</span><span class="at"> </span><span class="fu">docker_image</span><span class="kw">:</span><span class="at"> </span><span class="st">"brainlife/fsl:6.0.4"</span><span class="at"> </span><span class="kw">}</span></span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="at">  </span><span class="fu">ants</span><span class="kw">:</span><span class="at"> </span><span class="kw">{</span><span class="at"> </span><span class="fu">apptainer_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"docker://antsx/ants:v2.5.0"</span><span class="at"> </span><span class="kw">}</span></span></code></pre></div>
-<p>For bit-for-bit reproducibility, <code><a href="reference/ni_pin.html">ni_pin()</a></code> records resolved image <strong>digests</strong> in a lockfile, <code><a href="reference/ni_lock_validate.html">ni_lock_validate()</a></code> checks your environment against it, and <code><a href="reference/ni_doctor.html">ni_doctor()</a></code> reports on binaries, mounts, profiles, and lock status.</p>
+<p>For stricter execution records, <code><a href="reference/ni_pin.html">ni_pin()</a></code> records resolved image <strong>digests</strong> in a lockfile, <code><a href="reference/ni_lock_validate.html">ni_lock_validate()</a></code> checks your environment against it, and <code><a href="reference/ni_doctor.html">ni_doctor()</a></code> reports on binaries, mounts, profiles, and lock status.</p>
 </div>
 <div class="section level3">
 <h3 id="pipelines-with-targets">Pipelines with targets<a class="anchor" aria-label="anchor" href="#pipelines-with-targets"></a>
@@ -220,21 +226,22 @@
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="bids-and-the-neuroimaging-r-ecosystem">BIDS and the neuroimaging R ecosystem<a class="anchor" aria-label="anchor" href="#bids-and-the-neuroimaging-r-ecosystem"></a>
+<h3 id="bids-facing-helpers-and-the-neuroimaging-r-ecosystem">BIDS-facing helpers and the neuroimaging R ecosystem<a class="anchor" aria-label="anchor" href="#bids-facing-helpers-and-the-neuroimaging-r-ecosystem"></a>
 </h3>
-<p>niflowr speaks BIDS and plays well with adjacent packages (all optional <code>Suggests</code>):</p>
+<p>niflowr includes a small BIDS-facing adapter layer and optional integrations with adjacent R packages:</p>
 <ul>
 <li>
 <code><a href="reference/ni_deriv_path.html">ni_deriv_path()</a></code> — build BIDS-derivatives output paths with the right entities.</li>
 <li>
 <code><a href="reference/ni_bids_inputs.html">ni_bids_inputs()</a></code> / <code><a href="reference/ni_from_openneuro.html">ni_from_openneuro()</a></code> — query a BIDS project (via <code>bidser</code>) or pull a dataset from OpenNeuro (via <code>openneuroR</code>).</li>
 <li>
-<code><a href="reference/ni_fmriprep_preproc.html">ni_fmriprep_preproc()</a></code>, <code><a href="reference/ni_fmriprep_confounds.html">ni_fmriprep_confounds()</a></code>, <code><a href="reference/ni_fmriprep_derivatives.html">ni_fmriprep_derivatives()</a></code> — locate and load fMRIPrep outputs.</li>
+<code><a href="reference/ni_fmriprep_preproc.html">ni_fmriprep_preproc()</a></code>, <code><a href="reference/ni_fmriprep_confounds.html">ni_fmriprep_confounds()</a></code>, <code><a href="reference/ni_fmriprep_derivatives.html">ni_fmriprep_derivatives()</a></code> — locate and load outputs from an existing fMRIPrep derivatives directory.</li>
 <li>
 <code><a href="reference/ni_bids_app.html">ni_bids_app()</a></code> — scaffold a BIDS App (via <code>bidsappr</code>).</li>
 <li>
 <code><a href="reference/ni_read_output.html">ni_read_output()</a></code> / <code><a href="reference/ni_read_transform.html">ni_read_transform()</a></code> — load results as <code>neuroim2</code> images or <code>neurotransform</code> transforms.</li>
 </ul>
+<p>These helpers are adapters around existing BIDS datasets, derivatives, and packages. They are not a substitute for running fMRIPrep or another NiPreps app when that is the appropriate preprocessing tool.</p>
 </div>
 <div class="section level3">
 <h3 id="introspection-and-diagnostics">Introspection and diagnostics<a class="anchor" aria-label="anchor" href="#introspection-and-diagnostics"></a>
@@ -323,8 +330,11 @@
 <ul>
 <li>✅ A consistent, validated, provenance-tracked R interface to existing neuroimaging CLIs.</li>
 <li>✅ A safe command builder and runner with native + container execution.</li>
-<li>✅ A foundation for reproducible <code>targets</code> pipelines.</li>
+<li>✅ A command layer you can use inside reproducible <code>targets</code> pipelines.</li>
+<li>✅ A handoff layer for reading and composing existing BIDS/fMRIPrep derivatives.</li>
 <li>❌ Not an installer or distributor of FSL/AFNI/ANTs/FreeSurfer — you bring the tools (or a container).</li>
+<li>❌ Not an fMRIPrep/NiPreps replacement; for standard end-to-end fMRI preprocessing, use those projects.</li>
+<li>❌ Not a recommended preprocessing pipeline or algorithm-selection framework — it runs the tools you ask it to run.</li>
 <li>❌ Not a workflow engine — that’s what <code>targets</code>/<code>crew</code> are for.</li>
 </ul>
 <p>niflowr is <strong>experimental</strong> (v0.1.0): the spec schema and API may still change.</p>
