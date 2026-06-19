@@ -44,22 +44,15 @@ jobs:
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
 
-      # Only what ni_lint_specs() needs (loaded via pkgload), plus system
-      # requirements (e.g. libnode for jsonvalidate's V8). An explicit list
-      # avoids resolving the package's non-CRAN Suggests.
+      # jsonvalidate's V8 backend needs libnode at runtime.
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libnode-dev
+
+      # Only what ni_lint_specs() needs (loaded via pkgload). A plain
+      # install.packages() avoids resolving the package's non-CRAN Suggests.
       - name: Install R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          packages: |
-            any::cli
-            any::digest
-            any::fs
-            any::glue
-            any::jsonlite
-            any::jsonvalidate
-            any::processx
-            any::yaml
-            any::pkgload
+        run: install.packages(c("cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate", "processx", "yaml", "pkgload"))
+        shell: Rscript {0}
 
       # Stage 1: import raw interfaces from nipype (with tools/spec_overrides
       # deep-merged for niflowr-only fields the importer can't express).
