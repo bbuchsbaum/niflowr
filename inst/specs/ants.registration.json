@@ -3,7 +3,6 @@
   "id": "ants.registration",
   "title": "ANTS Registration",
   "command": "antsRegistration",
-  "render": "ants_registration_staged",
   "inputs": {
     "args": {
       "type": "string",
@@ -222,5 +221,6 @@
     "nipype_class": "nipype.interfaces.ants.registration.Registration",
     "nipype_version": "1.10.0"
   },
-  "description": "ANTs Registration command for registration of images"
+  "description": "ANTs Registration command for registration of images",
+  "render": "ants_registration_staged"
 }

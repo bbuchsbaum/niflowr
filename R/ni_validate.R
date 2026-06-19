@@ -179,12 +179,16 @@ validate_xor <- function(input_defs, values) {
     xor_group <- def$constraints$xor
     if (is.null(xor_group)) next
 
-    group_key <- paste(sort(xor_group), collapse = "|")
+    # The xor list may omit the declaring parameter (the normalized convention)
+    # or include it; add it so the full mutually-exclusive group is checked
+    # either way.
+    full_group <- union(nm, xor_group)
+    group_key <- paste(sort(full_group), collapse = "|")
     if (group_key %in% names(seen_groups)) next
     seen_groups[[group_key]] <- TRUE
 
     # Count how many in the group are set
-    set_params <- Filter(function(p) !is_missing_value(values[[p]]), xor_group)
+    set_params <- Filter(function(p) !is_missing_value(values[[p]]), full_group)
 
     if (length(set_params) > 1) {
       errors <- c(errors, cli::format_inline(
