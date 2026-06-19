@@ -1,10 +1,22 @@
 ---
-title: "Building BIDS Apps with niflowr and bidsappr"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Building BIDS Apps with niflowr and bidsappr}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: Building BIDS Apps with niflowr and bidsappr
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+    toc_depth: 2.0
+    css: albers.css
+    includes:
+      in_header: albers-header.html
+params:
+  family: teal
+  preset: homage
+resource_files:
+- albers.css
+- albers.js
+- albers-header.html
+
+vignette: |
+  %\VignetteIndexEntry{Building BIDS Apps with niflowr and bidsappr} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
