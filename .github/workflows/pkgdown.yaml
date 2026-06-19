@@ -22,7 +22,11 @@ jobs:
     concurrency:
       group: pkgdown-${{ github.event_name }}
     steps:
+      # Full history so the incremental gh-pages deploy (clean: false) can find
+      # the previous deploy commit instead of failing with "bad object".
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: r-lib/actions/setup-pandoc@v2
 
