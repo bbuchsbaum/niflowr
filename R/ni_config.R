@@ -118,7 +118,8 @@ ni_config_defaults <- function() {
       engine = "auto",
       prefer = "apptainer",
       lockfile = "niflowr.lock.yml",
-      lock_enforce = FALSE
+      lock_enforce = FALSE,
+      timeout = NULL
     ),
     paths = list(
       in_root = NULL,

@@ -121,7 +121,8 @@
       "type": "file",
       "desc": "base name of output files",
       "cli": {
-        "argstr": "-o %s"
+        "argstr": "-o %s",
+        "strip_ext": true
       }
     },
     "output_biascorrected": {

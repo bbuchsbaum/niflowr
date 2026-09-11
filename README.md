@@ -167,7 +167,7 @@ vector, execution engine/profile, input-file checksums (xxhash64), output paths,
 exit status, and timing. Read it back anytime:
 
 ```r
-ni_provenance_read("sub-01_desc-brain_T1w.nii.gz_provenance.json")
+ni_provenance_read("sub-01_desc-brain_T1w_provenance.json")
 ```
 
 ### Reproducible execution: engines, profiles, lockfiles <a name="reproducible-execution-engines-profiles-lockfiles"></a>
@@ -183,11 +183,16 @@ ni_fsl_bet(in_file = "T1w.nii.gz", out_file = "brain.nii.gz",
 
 ```yaml
 profiles:
-  fsl:  { docker_image: "brainlife/fsl:6.0.4" }
+  fsl:
+    docker_image: "brainlife/fsl:6.0.4"
+    # Optional: force amd64 under Rosetta / multi-arch hosts
+    # platform: "linux/amd64"
+    # Optional: clear a wrapping ENTRYPOINT that would ignore the payload
+    # entrypoint: ""
   ants: { apptainer_uri: "docker://antsx/ants:v2.5.0" }
 ```
 
-For stricter execution records, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, and lock status.
+For stricter execution records, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, and lock status. `ni_run(..., timeout = 600)` (or `runtime.timeout` in `niflowr.yml`) kills hung host/container processes.
 
 ### Pipelines with targets
 

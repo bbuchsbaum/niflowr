@@ -526,25 +526,71 @@ test_that("ni_build_docker_argv handles custom user setting", {
   expect_true("customuser" %in% built$argv)
 })
 
-test_that("ni_build_docker_argv includes extra run args", {
+test_that("ni_build_docker_argv includes platform and entrypoint before image", {
   cfg <- ni_config_defaults()
   cfg$docker$bin <- "echo"
-  cfg$docker$extra_run_args <- c("--network=host", "--privileged")
   mounts <- list()
   env <- character(0)
 
   built <- niflowr:::ni_build_docker_argv(
     cfg = cfg,
-    image = "test/image:1.0",
-    payload_cmd = "bet",
-    payload_args = character(0),
+    image = "example/fsl:1.0",
+    payload_cmd = "fast",
+    payload_args = c("-t", "1"),
     mounts = mounts,
     workdir = "/work",
-    env = env
+    env = env,
+    platform = "linux/amd64",
+    entrypoint = ""
   )
 
-  expect_true("--network=host" %in% built$argv)
-  expect_true("--privileged" %in% built$argv)
+  expect_true("--platform" %in% built$argv)
+  expect_equal(built$argv[which(built$argv == "--platform") + 1], "linux/amd64")
+  expect_true("--entrypoint" %in% built$argv)
+  expect_equal(built$argv[which(built$argv == "--entrypoint") + 1], "")
+  # Flags must come before the image name.
+  image_idx <- which(built$argv == "example/fsl:1.0")
+  expect_true(which(built$argv == "--platform") < image_idx)
+  expect_true(which(built$argv == "--entrypoint") < image_idx)
+})
+
+test_that("ni_build_container_command forwards profile platform/entrypoint", {
+  withr::with_tempdir({
+    cfg <- ni_config_defaults()
+    cfg$docker$bin <- "echo"
+    cfg$paths$in_root <- file.path(getwd(), "in")
+    cfg$paths$out_root <- file.path(getwd(), "out")
+    cfg$paths$work_root <- file.path(getwd(), "work")
+    dir.create(cfg$paths$in_root)
+    dir.create(cfg$paths$out_root)
+    dir.create(cfg$paths$work_root)
+    cfg$profiles <- list(
+      fsl = list(
+        docker_image = "example/fsl:1.0",
+        platform = "linux/amd64",
+        entrypoint = ""
+      )
+    )
+
+    call <- structure(list(
+      runtime = list(profile = "fsl"),
+      spec = structure(list(id = "fsl.fast"), class = "ni_spec"),
+      values = list()
+    ), class = "ni_call")
+
+    built <- niflowr:::ni_build_container_command(
+      engine = "docker",
+      cfg = cfg,
+      call = call,
+      payload_cmd = "fast",
+      payload_args = character(0),
+      env = character(0)
+    )
+
+    expect_true("--platform" %in% built$argv)
+    expect_true("--entrypoint" %in% built$argv)
+    expect_equal(built$argv[which(built$argv == "--entrypoint") + 1], "")
+  })
 })
 
 # Additional coverage tests for ni_build_apptainer_argv

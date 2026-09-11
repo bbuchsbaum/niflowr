@@ -251,6 +251,11 @@ result <- ni_fsl_bet(
 Wrappers always accept host paths; path mapping into container paths is handled
 inside `ni_run()`.
 
+Profiles may also set Docker-only `platform` and `entrypoint` fields (for
+example `platform: "linux/amd64"` under Rosetta, or `entrypoint: ""` to clear a
+wrapping image ENTRYPOINT). `ni_run(..., timeout = ...)` or `runtime.timeout` in
+`niflowr.yml` kills hung host/container processes.
+
 ### FastSurfer: GPU-accelerated segmentation
 
 niflowr includes specs for [FastSurfer](https://deep-mi.org/research/fastsurfer/),
@@ -294,7 +299,8 @@ ni_outputs(seg)
 ### Runtime diagnostics with `ni_doctor()`
 
 Use `ni_doctor()` to check runtime binaries, mounted roots, profile definitions,
-and lockfile consistency:
+lockfile consistency, and (when Docker images are local) that a profile's
+payload command actually runs under its `entrypoint`/`platform`:
 
 ```{r doctor, eval = FALSE}
 report <- ni_doctor()

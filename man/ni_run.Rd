@@ -11,6 +11,7 @@ ni_run(
   echo = interactive(),
   provenance = TRUE,
   error_on_status = TRUE,
+  timeout = NULL,
   return = c("result", "files")
 )
 }
@@ -30,6 +31,11 @@ Defaults to \code{interactive()}.}
 
 \item{error_on_status}{Logical; if \code{TRUE} (default), error when the command
 exits with a non-zero status. If \code{FALSE}, issue a warning instead.}
+
+\item{timeout}{Optional timeout in seconds for the host process
+(\code{docker}/\code{apptainer}/native binary). Falls back to
+\code{call$runtime$timeout}, then \code{cfg$runtime$timeout}. On timeout the process
+is killed and an error is raised.}
 
 \item{return}{One of \code{"result"} (default) or \code{"files"}.}
 }

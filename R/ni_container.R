@@ -292,8 +292,26 @@ ni_env_vector <- function(env) {
   env
 }
 
+#' Normalize a profile `entrypoint` for docker --entrypoint
+#'
+#' Docker accepts a single executable string (use `""` to clear the image
+#' entrypoint). Character vectors longer than one are joined with spaces so a
+#' YAML list like `[/bin/bash, -lc]` still produces a usable flag.
+#'
 #' @keywords internal
-ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, workdir, env) {
+ni_profile_entrypoint <- function(entrypoint) {
+  if (is.null(entrypoint)) return(NULL)
+  if (is.list(entrypoint)) entrypoint <- unlist(entrypoint, use.names = FALSE)
+  entrypoint <- as.character(entrypoint)
+  if (length(entrypoint) == 0L) return(NULL)
+  # Empty string clears the image ENTRYPOINT; keep it as-is.
+  if (length(entrypoint) == 1L) return(entrypoint[[1]])
+  paste(entrypoint, collapse = " ")
+}
+
+#' @keywords internal
+ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, workdir, env,
+                                 platform = NULL, entrypoint = NULL) {
   if (is.null(image) || !nzchar(image)) {
     cli::cli_abort("Docker profile is missing `docker_image`.")
   }
@@ -306,6 +324,15 @@ ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, 
   extra <- as.character(cfg$docker$extra_run_args %||% character(0))
 
   argv <- c("run", "--rm", paste0("--pull=", pull_policy))
+
+  if (is.character(platform) && length(platform) == 1L && nzchar(platform)) {
+    argv <- c(argv, "--platform", platform)
+  }
+
+  entrypoint <- ni_profile_entrypoint(entrypoint)
+  if (!is.null(entrypoint)) {
+    argv <- c(argv, "--entrypoint", entrypoint)
+  }
 
   for (m in mounts) {
     mount_kv <- c(
@@ -404,7 +431,11 @@ ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_a
         cli::cli_abort("Lockfile profile {.val {profile$name}} has no usable docker reference.")
       }
     }
-    built <- ni_build_docker_argv(cfg, image, payload_cmd, payload_args, mounts, workdir, env)
+    built <- ni_build_docker_argv(
+      cfg, image, payload_cmd, payload_args, mounts, workdir, env,
+      platform = profile$config$platform,
+      entrypoint = profile$config$entrypoint
+    )
     return(list(
       engine = "docker",
       profile = profile$name,

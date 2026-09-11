@@ -14,6 +14,10 @@
 #' @param provenance Logical; write a provenance JSON sidecar. Default `TRUE`.
 #' @param error_on_status Logical; if `TRUE` (default), error when the command
 #'   exits with a non-zero status. If `FALSE`, issue a warning instead.
+#' @param timeout Optional timeout in seconds for the host process
+#'   (`docker`/`apptainer`/native binary). Falls back to
+#'   `call$runtime$timeout`, then `cfg$runtime$timeout`. On timeout the process
+#'   is killed and an error is raised.
 #' @param return One of `"result"` (default) or `"files"`.
 #' @return An `ni_result` object, or (when `return = "files"`) a character
 #'   vector of output files with the full result attached as `ni_result`
@@ -21,6 +25,7 @@
 #' @export
 ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
                    provenance = TRUE, error_on_status = TRUE,
+                   timeout = NULL,
                    return = c("result", "files")) {
   if (is.character(call)) {
     call <- ni_call(call, ...)
@@ -43,6 +48,14 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
     call$spec$runtime$env %||% list(),
     runtime$env %||% list()
   ))
+
+  timeout_secs <- timeout %||% runtime$timeout %||% cfg$runtime$timeout
+  if (!is.null(timeout_secs)) {
+    timeout_secs <- suppressWarnings(as.numeric(timeout_secs))
+    if (length(timeout_secs) != 1L || is.na(timeout_secs) || timeout_secs <= 0) {
+      cli::cli_abort("{.arg timeout} must be a positive number of seconds.")
+    }
+  }
 
   stdout_arg <- if (!is.null(payload_host$stdout)) payload_host$stdout else "|"
   stderr_arg <- if (!is.null(payload_host$stderr)) payload_host$stderr else "|"
@@ -103,6 +116,7 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
     cmd_str <- paste(c(exec_command, exec_args), collapse = " ")
     cli::cli_alert_info("Dry run [{engine}]: {.code {cmd_str}}")
     if (!is.null(exec_wd)) cli::cli_text("  Working dir: {.path {exec_wd}}")
+    if (!is.null(timeout_secs)) cli::cli_text("  Timeout: {timeout_secs}s")
     if (!is.null(payload_exec$stdout)) cli::cli_text("  stdout -> {.path {payload_exec$stdout}}")
     if (!is.null(payload_exec$stderr)) cli::cli_text("  stderr -> {.path {payload_exec$stderr}}")
     cli::cli_h3("Expected outputs")
@@ -116,7 +130,7 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
   if (echo && is.null(payload_exec$stderr)) stderr_arg <- ""
 
   start_time <- Sys.time()
-  proc_result <- processx::run(
+  run_args <- list(
     command = exec_command,
     args = exec_args,
     wd = exec_wd,
@@ -125,9 +139,30 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
     stderr = stderr_arg,
     error_on_status = FALSE
   )
+  if (!is.null(timeout_secs)) {
+    run_args$timeout <- timeout_secs
+  }
+  proc_result <- tryCatch(
+    do.call(processx::run, run_args),
+    error = function(e) {
+      if (!is.null(timeout_secs) && grepl("timeout", conditionMessage(e), ignore.case = TRUE)) {
+        cli::cli_abort(c(
+          "Command {.code {call$spec$id}} timed out after {timeout_secs}s.",
+          "i" = "Pass a larger {.arg timeout}, or set {.code runtime.timeout} in niflowr.yml."
+        ), parent = e)
+      }
+      stop(e)
+    }
+  )
   end_time <- Sys.time()
   duration <- as.numeric(difftime(end_time, start_time, units = "secs"))
 
+  if (!is.null(timeout_secs) && isTRUE(proc_result$timeout)) {
+    cli::cli_abort(c(
+      "Command {.code {call$spec$id}} timed out after {timeout_secs}s.",
+      "i" = "Pass a larger {.arg timeout}, or set {.code runtime.timeout} in niflowr.yml."
+    ))
+  }
   output_warnings <- check_outputs(call)
   if (length(output_warnings) > 0) {
     for (w in output_warnings) cli::cli_warn(w)
@@ -172,7 +207,7 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
   if (provenance && proc_result$status == 0 && length(call$outputs) > 0) {
     primary_output <- call$outputs[[1]]
     if (!is.null(primary_output) && is.character(primary_output)) {
-      prov_path <- paste0(fs::path_ext_remove(primary_output), "_provenance.json")
+      prov_path <- paste0(strip_known_extension(primary_output), "_provenance.json")
       tryCatch(
         ni_provenance_write(result, prov_path),
         error = function(e) cli::cli_warn("Could not write provenance sidecar: {e$message}")

@@ -97,7 +97,8 @@
       "desc": "filename for GLM parameter estimates (GLM betas)",
       "cli": {
         "argstr": "-o %s",
-        "position": 3
+        "position": 3,
+        "strip_ext": true
       }
     },
     "out_p_name": {

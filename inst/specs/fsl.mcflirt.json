@@ -79,7 +79,8 @@
       "type": "file",
       "desc": "file to write",
       "cli": {
-        "argstr": "-out %s"
+        "argstr": "-out %s",
+        "strip_ext": true
       }
     },
     "ref_file": {

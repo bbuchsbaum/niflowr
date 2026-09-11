@@ -18,3 +18,21 @@ test_that("fsl.fast in_files maps into containers as files", {
   if (!nzchar(f)) f <- testthat::test_path("..", "..", "inst", "specs", "fsl.fast.json")
   expect_identical(jsonlite::read_json(f)$inputs$in_files$items_type, "file")
 })
+
+test_that("FSL image outs declare cli.strip_ext", {
+  files <- list.files(system.file("specs", package = "niflowr"), "^fsl\\..*[.]json$", full.names = TRUE)
+  if (!length(files)) {
+    files <- list.files(testthat::test_path("..", "..", "inst", "specs"), "^fsl\\..*[.]json$", full.names = TRUE)
+  }
+  missing <- character()
+  for (f in files) {
+    s <- jsonlite::read_json(f)
+    for (nm in names(s$inputs)) {
+      v <- s$inputs[[nm]]
+      a <- v$cli$argstr %||% ""
+      if (!niflowr:::fsl_needs_strip_ext(nm, a)) next
+      if (!isTRUE(v$cli$strip_ext)) missing <- c(missing, paste0(basename(f), ":", nm))
+    }
+  }
+  expect_identical(missing, character())
+})

@@ -65,7 +65,8 @@
       "desc": "filename of B0 output volume",
       "cli": {
         "argstr": "-o %s",
-        "position": 1
+        "position": 1,
+        "strip_ext": true
       }
     },
     "x_b0": {

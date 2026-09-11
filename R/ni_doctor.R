@@ -1,15 +1,21 @@
 #' Run runtime diagnostics
 #'
 #' Performs quick checks for runtime binaries, mount roots, profile shape, and
-#' lockfile availability/consistency.
+#' lockfile availability/consistency. When `probe_profiles = TRUE` and Docker is
+#' available, profiles with a local `docker_image` are probed with a short
+#' `true` command so a wrapping image ENTRYPOINT cannot silently ignore the
+#' payload.
 #'
 #' @param cfg Optional resolved config list. Defaults to current effective
 #'   config.
 #' @param strict Logical; if `TRUE`, abort on any failed checks.
 #' @param check_lock Logical; include lockfile checks.
+#' @param probe_profiles Logical; if `TRUE` (default), probe local Docker images
+#'   so entrypoint/platform misconfiguration is caught early.
 #' @return Data frame with `check`, `status`, and `message` columns.
 #' @export
-ni_doctor <- function(cfg = NULL, strict = FALSE, check_lock = TRUE) {
+ni_doctor <- function(cfg = NULL, strict = FALSE, check_lock = TRUE,
+                      probe_profiles = TRUE) {
   cfg <- cfg %||% ni_config_resolve()
   checks <- list()
 
@@ -25,8 +31,9 @@ ni_doctor <- function(cfg = NULL, strict = FALSE, check_lock = TRUE) {
   # Runtime binaries
   docker_bin <- cfg$docker$bin %||% "docker"
   apptainer_bin <- cfg$apptainer$bin %||% "apptainer"
-  add_check("docker_bin", if (!is.null(ni_which_or_null(docker_bin))) "pass" else "warn",
-            if (!is.null(ni_which_or_null(docker_bin))) sprintf("Found: %s", docker_bin) else sprintf("Not found: %s", docker_bin))
+  docker_ok <- !is.null(ni_which_or_null(docker_bin))
+  add_check("docker_bin", if (docker_ok) "pass" else "warn",
+            if (docker_ok) sprintf("Found: %s", docker_bin) else sprintf("Not found: %s", docker_bin))
   add_check("apptainer_bin", if (!is.null(ni_which_or_null(apptainer_bin))) "pass" else "warn",
             if (!is.null(ni_which_or_null(apptainer_bin))) sprintf("Found: %s", apptainer_bin) else sprintf("Not found: %s", apptainer_bin))
 
@@ -55,6 +62,30 @@ ni_doctor <- function(cfg = NULL, strict = FALSE, check_lock = TRUE) {
         add_check(paste0("profile.", p), "fail", "Missing docker_image/apptainer_uri.")
       } else {
         add_check(paste0("profile.", p), "pass", "Profile has container reference(s).")
+      }
+
+      if (!is.null(pr$platform) && !(is.character(pr$platform) && length(pr$platform) == 1L && nzchar(pr$platform))) {
+        add_check(paste0("profile.", p, ".platform"), "fail",
+                  "`platform` must be a non-empty string (e.g. linux/amd64).")
+      } else if (!is.null(pr$platform)) {
+        add_check(paste0("profile.", p, ".platform"), "pass",
+                  sprintf("platform=%s", pr$platform))
+      }
+
+      if (!is.null(pr$entrypoint)) {
+        ep <- tryCatch(ni_profile_entrypoint(pr$entrypoint), error = function(e) NULL)
+        if (is.null(ep)) {
+          add_check(paste0("profile.", p, ".entrypoint"), "fail",
+                    "`entrypoint` must be a string or character vector.")
+        } else {
+          add_check(paste0("profile.", p, ".entrypoint"), "pass",
+                    sprintf("entrypoint=%s", if (identical(ep, "")) '""' else ep))
+        }
+      }
+
+      if (isTRUE(probe_profiles) && has_docker && docker_ok) {
+        probe <- ni_doctor_probe_docker_profile(cfg, p, pr)
+        add_check(paste0("profile.", p, ".probe"), probe$status, probe$message)
       }
     }
   }
@@ -86,4 +117,75 @@ ni_doctor <- function(cfg = NULL, strict = FALSE, check_lock = TRUE) {
   }
 
   out
+}
+
+#' Probe that a Docker profile actually executes a payload command
+#'
+#' Runs `true` inside the profile image with the same `--platform` /
+#' `--entrypoint` flags `ni_run` would use. Skips when the image is not present
+#' locally so doctor stays offline-friendly.
+#'
+#' @keywords internal
+ni_doctor_probe_docker_profile <- function(cfg, profile_name, profile_cfg,
+                                           timeout = 15) {
+  image <- profile_cfg$docker_image
+  bin <- cfg$docker$bin %||% "docker"
+
+  inspect <- tryCatch(
+    processx::run(bin, c("image", "inspect", image), error_on_status = FALSE, timeout = 10),
+    error = function(e) list(status = 1L, stderr = conditionMessage(e), timeout = grepl("timeout", conditionMessage(e), ignore.case = TRUE))
+  )
+  if (!identical(inspect$status, 0L)) {
+    return(list(
+      status = "warn",
+      message = sprintf("Image not local (%s); skip runtime probe.", image)
+    ))
+  }
+
+  argv <- c("run", "--rm", "--pull=never")
+  if (is.character(profile_cfg$platform) && length(profile_cfg$platform) == 1L &&
+      nzchar(profile_cfg$platform)) {
+    argv <- c(argv, "--platform", profile_cfg$platform)
+  }
+  entrypoint <- ni_profile_entrypoint(profile_cfg$entrypoint)
+  if (!is.null(entrypoint)) {
+    argv <- c(argv, "--entrypoint", entrypoint)
+  }
+  argv <- c(argv, image, "true")
+
+  result <- tryCatch(
+    processx::run(bin, argv, error_on_status = FALSE, timeout = timeout),
+    error = function(e) {
+      list(
+        status = NA_integer_,
+        stdout = "",
+        stderr = conditionMessage(e),
+        timeout = grepl("timeout", conditionMessage(e), ignore.case = TRUE)
+      )
+    }
+  )
+
+  if (isTRUE(result$timeout) || (is.na(result$status) && grepl("timeout", result$stderr %||% "", ignore.case = TRUE))) {
+    return(list(
+      status = "fail",
+      message = sprintf(
+        "Payload command timed out after %ss. Image ENTRYPOINT may wrap a shell; set profiles.%s.entrypoint (often \"\") and/or platform.",
+        timeout, profile_name
+      )
+    ))
+  }
+
+  if (!identical(as.integer(result$status), 0L)) {
+    detail <- trimws(paste(result$stderr %||% "", result$stdout %||% ""))
+    if (!nzchar(detail)) detail <- sprintf("exit status %s", result$status %||% "NA")
+    return(list(
+      status = "fail",
+      message = sprintf(
+        "Payload `true` failed under profile entrypoint/platform: %s",
+        detail
+      )
+    ))
+  }
+
+  list(status = "pass", message = "Payload command runs under profile entrypoint/platform.")
 }

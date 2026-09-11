@@ -126,7 +126,7 @@ test_that("ni_run with file output writes provenance sidecar", {
     expect_equal(result$runtime$exit_status, 0L)
     expect_true(file.exists(out_path))
 
-    prov_path <- paste0(fs::path_ext_remove(out_path), "_provenance.json")
+    prov_path <- paste0(niflowr:::strip_known_extension(out_path), "_provenance.json")
     expect_true(file.exists(prov_path))
   })
 })
@@ -429,4 +429,30 @@ test_that("check_outputs returns empty warnings when no must_exist outputs", {
   ), class = "ni_call")
   warnings <- niflowr:::check_outputs(call)
   expect_equal(length(warnings), 0)
+})
+
+test_that("ni_run timeout kills hung commands", {
+  skip_on_cran()
+  skip_if_no_processx()
+
+  spec <- structure(list(
+    spec_version = "0.1.0",
+    id = "test.sleep",
+    command = "sleep",
+    inputs = list(
+      seconds = list(
+        type = "string",
+        required = TRUE,
+        cli = list(argstr = "%s", position = 0L)
+      )
+    ),
+    outputs = list(),
+    runtime = list()
+  ), class = "ni_spec")
+
+  call <- ni_call(spec, seconds = "30", .validate = FALSE)
+  expect_error(
+    ni_run(call, echo = FALSE, provenance = FALSE, timeout = 1),
+    "timed out"
+  )
 })

@@ -21,7 +21,8 @@
     "out_file": {
       "type": "file",
       "cli": {
-        "argstr": "%s"
+        "argstr": "%s",
+        "strip_ext": true
       }
     }
   },

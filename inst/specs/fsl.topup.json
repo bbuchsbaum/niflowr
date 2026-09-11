@@ -118,7 +118,8 @@
       "type": "file",
       "desc": "base-name of output files (spline coefficients (Hz) and movement parameters)",
       "cli": {
-        "argstr": "--out=%s"
+        "argstr": "--out=%s",
+        "strip_ext": true
       }
     },
     "out_corrected": {
