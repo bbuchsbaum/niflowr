@@ -292,8 +292,71 @@ ni_env_vector <- function(env) {
   env
 }
 
+#' Normalize optional per-profile Docker `--entrypoint` override.
+#'
+#' `NULL` means leave the image ENTRYPOINT unchanged. An empty string or empty
+#' list clears the ENTRYPOINT (useful for images whose entrypoint is a shell
+#' that silently ignores the payload command).
+#'
+#' @return List with `set` (logical) and `value` (character scalar or NULL).
 #' @keywords internal
-ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, workdir, env) {
+ni_normalize_docker_entrypoint <- function(entrypoint, profile = NULL) {
+  label <- if (is.null(profile)) "" else paste0(" for profile '", profile, "'")
+
+  if (is.null(entrypoint)) {
+    return(list(set = FALSE, value = NULL))
+  }
+
+  # YAML `entrypoint: []` → clear ENTRYPOINT
+  if (is.list(entrypoint) && length(entrypoint) == 0L) {
+    return(list(set = TRUE, value = ""))
+  }
+
+  if (is.character(entrypoint) && length(entrypoint) == 0L) {
+    return(list(set = TRUE, value = ""))
+  }
+
+  if (is.character(entrypoint) && length(entrypoint) == 1L && !is.na(entrypoint[[1]])) {
+    return(list(set = TRUE, value = as.character(entrypoint[[1]])))
+  }
+
+  # YAML scalar sometimes arrives as a length-1 list
+  if (is.list(entrypoint) && length(entrypoint) == 1L) {
+    v <- entrypoint[[1]]
+    if (is.character(v) && length(v) == 1L && !is.na(v)) {
+      return(list(set = TRUE, value = as.character(v)))
+    }
+  }
+
+  cli::cli_abort(c(
+    paste0("Invalid profile `entrypoint`", label, "."),
+    "i" = "Use a string (for example \"\" to clear the image ENTRYPOINT), or omit the field."
+  ))
+}
+
+#' Normalize optional per-profile Docker `--platform` override.
+#' @keywords internal
+ni_normalize_docker_platform <- function(platform, profile = NULL) {
+  label <- if (is.null(profile)) "" else paste0(" for profile '", profile, "'")
+
+  if (is.null(platform)) {
+    return(NULL)
+  }
+
+  if (is.character(platform) && length(platform) == 1L && !is.na(platform) && nzchar(platform)) {
+    return(as.character(platform))
+  }
+
+  cli::cli_abort(c(
+    paste0("Invalid profile `platform`", label, "."),
+    "i" = "Use a non-empty string such as \"linux/amd64\", or omit the field."
+  ))
+}
+
+#' @keywords internal
+ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, workdir, env,
+                                 entrypoint = NULL, platform = NULL,
+                                 profile = NULL) {
   if (is.null(image) || !nzchar(image)) {
     cli::cli_abort("Docker profile is missing `docker_image`.")
   }
@@ -304,6 +367,8 @@ ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, 
   }
   pull_policy <- cfg$docker$pull_policy %||% "missing"
   extra <- as.character(cfg$docker$extra_run_args %||% character(0))
+  ep <- ni_normalize_docker_entrypoint(entrypoint, profile = profile)
+  plat <- ni_normalize_docker_platform(platform, profile = profile)
 
   argv <- c("run", "--rm", paste0("--pull=", pull_policy))
 
@@ -345,7 +410,16 @@ ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, 
     }
   }
 
-  argv <- c(argv, extra, image, payload_cmd, payload_args)
+  # Global extra_run_args first; per-profile platform/entrypoint last so they win.
+  argv <- c(argv, extra)
+  if (!is.null(plat)) {
+    argv <- c(argv, "--platform", plat)
+  }
+  if (isTRUE(ep$set)) {
+    # Empty string clears the image ENTRYPOINT.
+    argv <- c(argv, "--entrypoint", ep$value)
+  }
+  argv <- c(argv, image, payload_cmd, payload_args)
   list(bin = bin, argv = as.character(argv))
 }
 
@@ -404,7 +478,18 @@ ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_a
         cli::cli_abort("Lockfile profile {.val {profile$name}} has no usable docker reference.")
       }
     }
-    built <- ni_build_docker_argv(cfg, image, payload_cmd, payload_args, mounts, workdir, env)
+    built <- ni_build_docker_argv(
+      cfg = cfg,
+      image = image,
+      payload_cmd = payload_cmd,
+      payload_args = payload_args,
+      mounts = mounts,
+      workdir = workdir,
+      env = env,
+      entrypoint = profile$config$entrypoint,
+      platform = profile$config$platform,
+      profile = profile$name
+    )
     return(list(
       engine = "docker",
       profile = profile$name,

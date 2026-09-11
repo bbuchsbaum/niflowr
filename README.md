@@ -183,11 +183,16 @@ ni_fsl_bet(in_file = "T1w.nii.gz", out_file = "brain.nii.gz",
 
 ```yaml
 profiles:
-  fsl:  { docker_image: "brainlife/fsl:6.0.4" }
+  fsl:
+    docker_image: "brainlife/fsl:6.0.4"
+    # Many FSL images use a shell ENTRYPOINT that ignores the payload command.
+    entrypoint: ""
+    # Optional on Apple Silicon when the image is amd64-only:
+    # platform: "linux/amd64"
   ants: { apptainer_uri: "docker://antsx/ants:v2.5.0" }
 ```
 
-For stricter execution records, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, and lock status.
+For stricter execution records, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, payload execution, and lock status.
 
 ### Pipelines with targets
 
