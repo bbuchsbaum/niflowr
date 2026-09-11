@@ -77,7 +77,7 @@
       }
     },
     "out_prefix": {
-      "type": "string",
+      "type": "file",
       "desc": "Prefix that is prepended to all output files",
       "default": "highres001_",
       "cli": {

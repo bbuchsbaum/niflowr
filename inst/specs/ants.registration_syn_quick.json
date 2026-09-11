@@ -56,7 +56,7 @@
       }
     },
     "output_prefix": {
-      "type": "string",
+      "type": "file",
       "desc": "A prefix that is prepended to all output files",
       "default": "transform",
       "cli": {

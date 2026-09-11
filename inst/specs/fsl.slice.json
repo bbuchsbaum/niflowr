@@ -21,7 +21,7 @@
       }
     },
     "out_base_name": {
-      "type": "string",
+      "type": "file",
       "desc": "outputs prefix",
       "cli": {
         "argstr": "%s",

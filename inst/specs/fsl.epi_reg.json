@@ -64,7 +64,7 @@
       }
     },
     "out_base": {
-      "type": "string",
+      "type": "file",
       "desc": "output base name",
       "default": "epi2struct",
       "cli": {

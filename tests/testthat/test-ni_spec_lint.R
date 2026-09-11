@@ -18,3 +18,17 @@ test_that("fsl.fast in_files maps into containers as files", {
   if (!nzchar(f)) f <- testthat::test_path("..", "..", "inst", "specs", "fsl.fast.json")
   expect_identical(jsonlite::read_json(f)$inputs$in_files$items_type, "file")
 })
+
+test_that("output prefixes are typed as paths so containers rewrite them", {
+  files <- list.files(system.file("specs", package = "niflowr"), "[.]json$", full.names = TRUE)
+  if (!length(files)) files <- list.files(testthat::test_path("..", "..", "inst", "specs"), "[.]json$", full.names = TRUE)
+  bad <- character()
+  for (f in files) {
+    s <- jsonlite::read_json(f)
+    for (nm in names(s$inputs)) {
+      v <- s$inputs[[nm]]
+      if (identical(v$type, "string") && grepl("(out_base$|out_basename$|_prefix$)", nm)) bad <- c(bad, paste0(basename(f), ":", nm))
+    }
+  }
+  expect_identical(bad, character())
+})

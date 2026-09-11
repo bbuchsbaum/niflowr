@@ -22,7 +22,7 @@
       }
     },
     "output_prefix": {
-      "type": "string",
+      "type": "file",
       "desc": "Prefix prepended to all generated artifacts (e.g. '<prefix>Composite.h5').",
       "required": true
     },
@@ -30,7 +30,12 @@
       "type": "enum",
       "desc": "Registration preset expanded into staged antsRegistration transforms.",
       "default": "rigid_affine_syn",
-      "choices": ["rigid_affine_syn", "rigid_affine", "rigid", "affine"]
+      "choices": [
+        "rigid_affine_syn",
+        "rigid_affine",
+        "rigid",
+        "affine"
+      ]
     },
     "fixed_mask": {
       "type": "file",
@@ -54,13 +59,19 @@
       "type": "enum",
       "desc": "Computation precision; 'float' is faster and lower-memory.",
       "default": "double",
-      "choices": ["double", "float"]
+      "choices": [
+        "double",
+        "float"
+      ]
     },
     "dimension": {
       "type": "enum",
       "desc": "Image dimensionality.",
       "default": 3,
-      "choices": [3, 2]
+      "choices": [
+        3,
+        2
+      ]
     },
     "interpolation": {
       "type": "enum",
