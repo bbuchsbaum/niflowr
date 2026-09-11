@@ -90,7 +90,7 @@
       }
     },
     "prefix": {
-      "type": "string",
+      "type": "file",
       "desc": "the prefix for the output folder containing all output volumes",
       "cli": {
         "argstr": "-prefix %s"

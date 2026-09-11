@@ -282,7 +282,7 @@
       }
     },
     "out_base": {
-      "type": "string",
+      "type": "file",
       "desc": "Basename for output image",
       "default": "eddy_corrected",
       "cli": {

@@ -81,7 +81,7 @@
       }
     },
     "output_transform_prefix": {
-      "type": "string",
+      "type": "file",
       "required": true,
       "default": "out",
       "cli": {

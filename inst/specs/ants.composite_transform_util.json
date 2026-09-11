@@ -29,7 +29,7 @@
       }
     },
     "output_prefix": {
-      "type": "string",
+      "type": "file",
       "desc": "A prefix that is prepended to all output files (only used for assembly).",
       "default": "transform",
       "cli": {
