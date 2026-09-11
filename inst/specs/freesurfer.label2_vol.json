@@ -46,7 +46,7 @@
       }
     },
     "fill_thresh": {
-      "type": "string",
+      "type": "double",
       "desc": "thresh : between 0 and 1",
       "cli": {
         "argstr": "--fillthresh %g"

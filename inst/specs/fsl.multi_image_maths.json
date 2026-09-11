@@ -56,7 +56,8 @@
     "operand_files": {
       "type": "list",
       "desc": "list of file names to plug into op string",
-      "required": true
+      "required": true,
+      "items_type": "file"
     },
     "out_file": {
       "type": "file",

@@ -53,7 +53,8 @@
         "argstr": "%s",
         "position": -1,
         "sep": " "
-      }
+      },
+      "items_type": "file"
     },
     "n_perm": {
       "type": "int",

@@ -16,7 +16,8 @@
       "desc": "List of input 3D datasets to be warped by the adjusted warp datasets.  There must be exactly as many of these datasets as there are input warps.",
       "cli": {
         "argstr": "-source %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_file": {
       "type": "file",

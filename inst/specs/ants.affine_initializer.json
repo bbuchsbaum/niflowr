@@ -70,7 +70,7 @@
       }
     },
     "radian_fraction": {
-      "type": "string",
+      "type": "double",
       "desc": "search this arc +/- principal axes",
       "default": 0.1,
       "cli": {

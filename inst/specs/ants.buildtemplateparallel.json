@@ -46,7 +46,8 @@
       "cli": {
         "argstr": "%s",
         "position": -1
-      }
+      },
+      "items_type": "file"
     },
     "iteration_limit": {
       "type": "int",

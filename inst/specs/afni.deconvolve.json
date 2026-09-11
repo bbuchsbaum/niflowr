@@ -129,7 +129,8 @@
         "argstr": "-input %s",
         "position": 1,
         "sep": " "
-      }
+      },
+      "items_type": "file"
     },
     "input1D": {
       "type": "file",

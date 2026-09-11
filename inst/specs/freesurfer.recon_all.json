@@ -26,7 +26,8 @@
         "requires": [
           "subject_id"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "T2_file": {
       "type": "file",

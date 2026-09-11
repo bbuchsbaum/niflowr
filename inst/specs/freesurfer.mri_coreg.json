@@ -96,7 +96,7 @@
       }
     },
     "max_iters": {
-      "type": "string",
+      "type": "int",
       "desc": "maximum iterations (default: 4)",
       "cli": {
         "argstr": "--nitersmax %d"
@@ -195,7 +195,7 @@
       }
     },
     "saturation_threshold": {
-      "type": "string",
+      "type": "double",
       "desc": "saturation threshold (default=9.999)",
       "cli": {
         "argstr": "--sat %g"

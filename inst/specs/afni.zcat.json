@@ -41,7 +41,8 @@
       "cli": {
         "argstr": "%s",
         "position": -1
-      }
+      },
+      "items_type": "file"
     },
     "nscale": {
       "type": "flag",

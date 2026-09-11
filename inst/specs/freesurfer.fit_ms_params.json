@@ -18,7 +18,8 @@
       "cli": {
         "argstr": "%s",
         "position": -2
-      }
+      },
+      "items_type": "file"
     },
     "out_dir": {
       "type": "dir",

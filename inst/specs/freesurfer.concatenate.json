@@ -45,7 +45,8 @@
       "required": true,
       "cli": {
         "argstr": "--i %s..."
-      }
+      },
+      "items_type": "file"
     },
     "keep_dtype": {
       "type": "flag",

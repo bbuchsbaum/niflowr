@@ -84,7 +84,7 @@
       }
     },
     "perc": {
-      "type": "string",
+      "type": "double",
       "desc": "nth percentile (0-100) of FULL RANGE across dimension",
       "cli": {
         "argstr": "%f",

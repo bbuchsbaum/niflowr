@@ -47,7 +47,8 @@
       "desc": "undocumented flag used in longitudinal processing",
       "cli": {
         "argstr": "-l %s"
-      }
+      },
+      "items_type": "file"
     },
     "levels": {
       "type": "int",
