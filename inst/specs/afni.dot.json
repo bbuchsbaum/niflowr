@@ -73,7 +73,8 @@
       "cli": {
         "argstr": "%s ...",
         "position": -2
-      }
+      },
+      "items_type": "file"
     },
     "mask": {
       "type": "file",

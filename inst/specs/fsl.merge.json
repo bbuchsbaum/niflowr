@@ -33,7 +33,8 @@
       "cli": {
         "argstr": "%s",
         "position": 2
-      }
+      },
+      "items_type": "file"
     },
     "merged_file": {
       "type": "file",

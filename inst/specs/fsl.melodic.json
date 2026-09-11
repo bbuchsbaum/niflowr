@@ -82,7 +82,8 @@
         "argstr": "-i %s",
         "position": 0,
         "sep": ","
-      }
+      },
+      "items_type": "file"
     },
     "log_power": {
       "type": "flag",

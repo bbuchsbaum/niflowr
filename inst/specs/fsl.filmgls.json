@@ -44,7 +44,7 @@
       }
     },
     "brightness_threshold": {
-      "type": "string",
+      "type": "int",
       "desc": "susan brightness threshold, otherwise it is estimated",
       "cli": {
         "argstr": "-epith %d"
@@ -136,7 +136,7 @@
       }
     },
     "threshold": {
-      "type": "string",
+      "type": "double",
       "desc": "threshold",
       "default": 1000,
       "cli": {

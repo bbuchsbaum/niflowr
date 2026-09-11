@@ -102,7 +102,8 @@
       "cli": {
         "argstr": "-input \"%s\"",
         "sep": " "
-      }
+      },
+      "items_type": "file"
     },
     "mask": {
       "type": "file",

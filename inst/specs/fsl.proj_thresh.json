@@ -18,7 +18,8 @@
       "cli": {
         "argstr": "%s",
         "position": 0
-      }
+      },
+      "items_type": "file"
     },
     "threshold": {
       "type": "int",

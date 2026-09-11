@@ -18,7 +18,8 @@
       "cli": {
         "argstr": "--combinesurfs %s",
         "position": 1
-      }
+      },
+      "items_type": "file"
     },
     "out_file": {
       "type": "file",

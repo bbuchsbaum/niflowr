@@ -17,7 +17,8 @@
       "cli": {
         "argstr": "%s",
         "position": -2
-      }
+      },
+      "items_type": "file"
     },
     "keepfree": {
       "type": "flag",

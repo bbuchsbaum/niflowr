@@ -959,3 +959,12 @@ test_that("ni_runtime_detect errors when auto mode finds no runtime", {
 # Note: Testing file.copy failure (line 122 in ni_container.R) is challenging
 # across platforms without mocking frameworks. The error path is covered by
 # the logic being present in the code.
+
+test_that("ni_norm resolves relative paths that do not exist yet under existing roots", {
+  root <- withr::local_tempdir()
+  withr::local_dir(root)
+  dir.create("out")
+  p <- niflowr:::ni_norm("out/sub-01/new_file.nii.gz")
+  expect_identical(p, file.path(normalizePath("out", winslash = "/"), "sub-01", "new_file.nii.gz"))
+  expect_false(is.null(niflowr:::ni_relpath(p, normalizePath("out", winslash = "/"))))
+})

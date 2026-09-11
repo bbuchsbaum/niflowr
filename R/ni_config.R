@@ -155,7 +155,9 @@ ni_config_defaults <- function() {
 #' Recursive list merge where values in `y` override `x`
 #' @keywords internal
 ni_config_merge <- function(x, y) {
-  if (is.null(y)) return(x)
+  # An empty override (e.g. the initial `.ni_config$overrides`) leaves `x` unchanged;
+  # returning it would discard the whole resolved config, including niflowr.yml.
+  if (is.null(y) || (is.list(y) && length(y) == 0L)) return(x)
   if (!is.list(x) || !is.list(y)) return(y)
 
   out <- x

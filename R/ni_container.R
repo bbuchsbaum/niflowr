@@ -10,7 +10,19 @@ ni_which_or_null <- function(bin) {
 
 #' @keywords internal
 ni_norm <- function(path) {
-  normalizePath(path, winslash = "/", mustWork = FALSE)
+  # normalizePath() leaves a path that does not exist yet unchanged (possibly relative), so
+  # output files would fail the mount-root prefix match. Resolve the deepest existing ancestor
+  # (consistent symlink resolution with the roots) and append the remaining components.
+  out <- normalizePath(path, winslash = "/", mustWork = FALSE)
+  if (file.exists(path) || !nzchar(path)) return(out)
+  abs <- if (grepl("^(/|[A-Za-z]:)", path)) path else file.path(getwd(), path)
+  rest <- character()
+  cur <- abs
+  while (!file.exists(cur) && dirname(cur) != cur) {
+    rest <- c(basename(cur), rest)
+    cur <- dirname(cur)
+  }
+  do.call(file.path, as.list(c(normalizePath(cur, winslash = "/", mustWork = FALSE), rest)))
 }
 
 #' @keywords internal

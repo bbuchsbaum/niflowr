@@ -20,7 +20,7 @@
       }
     },
     "num_iters": {
-      "type": "string",
+      "type": "int",
       "desc": "number of iterations instead of fwhm",
       "required": true,
       "cli": {
@@ -72,7 +72,7 @@
       }
     },
     "surface_fwhm": {
-      "type": "string",
+      "type": "double",
       "desc": "surface FWHM in mm",
       "required": true,
       "cli": {
@@ -88,7 +88,7 @@
       }
     },
     "vol_fwhm": {
-      "type": "string",
+      "type": "double",
       "desc": "volume smoothing outside of surface",
       "cli": {
         "argstr": "--vol-fwhm %f"

@@ -12,14 +12,14 @@
       }
     },
     "bias_iters": {
-      "type": "string",
+      "type": "int",
       "desc": "number of main-loop iterations during bias-field removal",
       "cli": {
         "argstr": "-I %d"
       }
     },
     "bias_lowpass": {
-      "type": "string",
+      "type": "int",
       "desc": "bias field smoothing extent (FWHM) in mm",
       "cli": {
         "argstr": "-l %d"
@@ -51,7 +51,8 @@
       "cli": {
         "argstr": "%s",
         "position": -1
-      }
+      },
+      "items_type": "file"
     },
     "init_seg_smooth": {
       "type": "string",
@@ -68,7 +69,7 @@
       }
     },
     "iters_afterbias": {
-      "type": "string",
+      "type": "int",
       "desc": "number of main-loop iterations after bias-field removal",
       "cli": {
         "argstr": "-O %d"
@@ -103,7 +104,7 @@
       }
     },
     "number_classes": {
-      "type": "string",
+      "type": "int",
       "desc": "number of tissue-type classes",
       "cli": {
         "argstr": "-n %d"
@@ -145,7 +146,7 @@
       }
     },
     "segment_iters": {
-      "type": "string",
+      "type": "int",
       "desc": "number of segmentation-initialisation iterations",
       "cli": {
         "argstr": "-W %d"

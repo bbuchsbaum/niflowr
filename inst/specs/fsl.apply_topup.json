@@ -40,7 +40,8 @@
       "cli": {
         "argstr": "--imain=%s",
         "sep": ","
-      }
+      },
+      "items_type": "file"
     },
     "in_index": {
       "type": "list",

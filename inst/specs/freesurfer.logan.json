@@ -165,7 +165,7 @@
       }
     },
     "fwhm": {
-      "type": "string",
+      "type": "double",
       "desc": "smooth input by fwhm",
       "cli": {
         "argstr": "--fwhm %f"
@@ -435,7 +435,7 @@
       }
     },
     "var_fwhm": {
-      "type": "string",
+      "type": "double",
       "desc": "smooth variance by fwhm",
       "cli": {
         "argstr": "--var-fwhm %f"

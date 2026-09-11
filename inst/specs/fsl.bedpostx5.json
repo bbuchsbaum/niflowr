@@ -24,7 +24,7 @@
       }
     },
     "burn_in": {
-      "type": "string",
+      "type": "int",
       "desc": "Total num of jumps at start of MCMC to be discarded",
       "default": 0,
       "cli": {
@@ -32,7 +32,7 @@
       }
     },
     "burn_in_no_ard": {
-      "type": "string",
+      "type": "int",
       "desc": "num of burnin jumps before the ard is imposed",
       "default": 0,
       "cli": {
@@ -138,7 +138,7 @@
       }
     },
     "n_fibres": {
-      "type": "string",
+      "type": "int",
       "desc": "Maximum number of fibres to fit in each voxel",
       "required": true,
       "default": 2,
@@ -210,7 +210,7 @@
       }
     },
     "sample_every": {
-      "type": "string",
+      "type": "int",
       "desc": "Num of jumps for each sample (MCMC)",
       "default": 1,
       "cli": {
@@ -225,7 +225,7 @@
       }
     },
     "update_proposal_every": {
-      "type": "string",
+      "type": "int",
       "desc": "Num of jumps for each update to the proposal density std (MCMC)",
       "default": 40,
       "cli": {

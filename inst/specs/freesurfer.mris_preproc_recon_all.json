@@ -205,7 +205,8 @@
       "cli": {
         "argstr": "--surfreg %s"
       },
-      "constraints": {}
+      "constraints": {},
+      "items_type": "file"
     },
     "target": {
       "type": "string",
