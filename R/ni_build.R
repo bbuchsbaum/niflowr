@@ -70,15 +70,19 @@ build_command <- function(call) {
     }
   }
 
-  # Sort: positional args first (by position), then non-positional in alphabetical order
+  # Sort: non-negative positions first (ascending), then non-positional args in
+  # alphabetical order, then negative positions counted from the end (-1 is last),
+  # following the Nipype convention the specs were generated from.
   has_pos <- vapply(arg_entries, function(e) !is.null(e$position), logical(1))
   positional <- arg_entries[has_pos]
   non_positional <- arg_entries[!has_pos]
 
-  # Sort positional by position value
+  head_pos <- list()
+  tail_pos <- list()
   if (length(positional) > 0) {
-    pos_vals <- vapply(positional, function(e) e$position, integer(1))
-    positional <- positional[order(pos_vals)]
+    pos_vals <- vapply(positional, function(e) as.integer(e$position), integer(1))
+    head_pos <- positional[pos_vals >= 0L][order(pos_vals[pos_vals >= 0L])]
+    tail_pos <- positional[pos_vals < 0L][order(pos_vals[pos_vals < 0L])]
   }
 
   # Sort non-positional by name for stable, locale-independent ordering
@@ -87,8 +91,7 @@ build_command <- function(call) {
     non_positional <- non_positional[order(np_names, method = "radix")]
   }
 
-  # Assemble final args vector
-  sorted <- c(positional, non_positional)
+  sorted <- c(head_pos, non_positional, tail_pos)
   args <- unlist(c(
     list(prefix_args),
     lapply(sorted, function(e) e$tokens)
