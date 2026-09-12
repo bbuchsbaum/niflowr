@@ -197,7 +197,7 @@
 </h3>
 <p>When <code><a href="reference/ni_run.html">ni_run()</a></code> returns an <code>ni_result</code>, that result includes provenance metadata for the execution. Failed commands can be returned by setting <code>error_on_status = FALSE</code>; otherwise they raise an error. When <code>provenance = TRUE</code> (the default), the command exits successfully, and the spec has at least one declared output, niflowr also writes a <code>*_provenance.json</code> sidecar next to the primary output. The sidecar captures the spec id, full command and argument vector, execution engine/profile, input-file checksums (xxhash64), output paths, exit status, and timing. Read it back anytime:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ni_provenance_read.html">ni_provenance_read</a></span><span class="op">(</span><span class="st">"sub-01_desc-brain_T1w.nii.gz_provenance.json"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ni_provenance_read.html">ni_provenance_read</a></span><span class="op">(</span><span class="st">"sub-01_desc-brain_T1w_provenance.json"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="reproducible-execution-engines-profiles-lockfiles-">Reproducible execution: engines, profiles, lockfiles <a name="reproducible-execution-engines-profiles-lockfiles"></a>

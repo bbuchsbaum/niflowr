@@ -502,7 +502,7 @@ ranges, mutual exclusion constraints:</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── ni_call: fsl.bet</span></span>
-<span><span class="co">#&gt; Command: `bet /tmp/t1.nii.gz /tmp/brain.nii.gz -f 1.50`</span></span>
+<span><span class="co">#&gt; Command: `bet /tmp/t1.nii.gz /tmp/brain -f 1.50`</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Expected outputs</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span>: <span style="color: #0000BB;">/tmp/brain.nii.gz</span></span></span></code></pre></div>
@@ -519,7 +519,7 @@ inspect:</p>
 <span><span class="va">call</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── ni_call: fsl.bet</span></span>
-<span><span class="co">#&gt; Command: `bet /tmp/t1.nii.gz /tmp/brain.nii.gz -f 0.30 -m`</span></span>
+<span><span class="co">#&gt; Command: `bet /tmp/t1.nii.gz /tmp/brain -f 0.30 -m`</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Expected outputs</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span>: <span style="color: #0000BB;">/tmp/brain.nii.gz</span></span></span></code></pre></div>
@@ -535,8 +535,8 @@ executed. niflowr never hides what it’s doing:</p>
 <span><span class="co">#&gt; [1] "bet"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $args</span></span>
-<span><span class="co">#&gt; [1] "/tmp/t1.nii.gz"    "/tmp/brain.nii.gz" "-f"               </span></span>
-<span><span class="co">#&gt; [4] "0.30"              "-m"               </span></span>
+<span><span class="co">#&gt; [1] "/tmp/t1.nii.gz" "/tmp/brain"     "-f"             "0.30"          </span></span>
+<span><span class="co">#&gt; [5] "-m"            </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $wd</span></span>
 <span><span class="co">#&gt; NULL</span></span>
@@ -588,7 +588,7 @@ never concatenated into a shell string.</p>
 <span>  frac     <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  .engine  <span class="op">=</span> <span class="st">"native"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Dry run [native]: `bet /tmp/t1.nii.gz /tmp/brain.nii.gz -f 0.50`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Dry run [native]: `bet /tmp/t1.nii.gz /tmp/brain -f 0.50`</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Expected outputs</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span>: <span style="color: #0000BB;">/tmp/brain.nii.gz</span></span></span></code></pre></div>

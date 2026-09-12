@@ -433,7 +433,7 @@ ni_call("fsl.bet",
 )
 #> 
 #> ── ni_call: fsl.bet
-#> Command: `bet /tmp/t1.nii.gz /tmp/brain.nii.gz -f 1.50`
+#> Command: `bet /tmp/t1.nii.gz /tmp/brain -f 1.50`
 #> 
 #> ── Expected outputs
 #> out_file: /tmp/brain.nii.gz
@@ -453,7 +453,7 @@ call <- ni_call("fsl.bet",
 call
 #> 
 #> ── ni_call: fsl.bet
-#> Command: `bet /tmp/t1.nii.gz /tmp/brain.nii.gz -f 0.30 -m`
+#> Command: `bet /tmp/t1.nii.gz /tmp/brain -f 0.30 -m`
 #> 
 #> ── Expected outputs
 #> out_file: /tmp/brain.nii.gz
@@ -471,8 +471,8 @@ ni_cmd(call)
 #> [1] "bet"
 #> 
 #> $args
-#> [1] "/tmp/t1.nii.gz"    "/tmp/brain.nii.gz" "-f"               
-#> [4] "0.30"              "-m"               
+#> [1] "/tmp/t1.nii.gz" "/tmp/brain"     "-f"             "0.30"          
+#> [5] "-m"            
 #> 
 #> $wd
 #> NULL
@@ -529,7 +529,7 @@ ni_dry_run("fsl.bet",
   frac     = 0.5,
   .engine  = "native"
 )
-#> ℹ Dry run [native]: `bet /tmp/t1.nii.gz /tmp/brain.nii.gz -f 0.50`
+#> ℹ Dry run [native]: `bet /tmp/t1.nii.gz /tmp/brain -f 0.50`
 #> 
 #> ── Expected outputs
 #> out_file: /tmp/brain.nii.gz
