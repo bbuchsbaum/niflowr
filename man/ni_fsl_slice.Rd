@@ -21,7 +21,7 @@ ni_fsl_slice(
 
 \item{args}{Character. Additional parameters to the command}
 
-\item{out_base_name}{Character. outputs prefix}
+\item{out_base_name}{Character; file path. outputs prefix}
 
 \item{.cwd}{Working directory override.}
 

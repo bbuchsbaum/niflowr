@@ -4,7 +4,7 @@
 \alias{get_tool_version}
 \title{Probe tool version using spec runtime info}
 \usage{
-get_tool_version(spec)
+get_tool_version(spec, plan = NULL)
 }
 \description{
 Probe tool version using spec runtime info

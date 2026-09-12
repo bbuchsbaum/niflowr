@@ -9,7 +9,7 @@ ni_fsl_x_fibres5(
   bvecs,
   dwi,
   mask,
-  n_fibres,
+  n_fibres = 2,
   all_ard = NULL,
   args = NULL,
   burn_in = 0,
@@ -47,15 +47,15 @@ ni_fsl_x_fibres5(
 
 \item{mask}{Character; file path. brain binary mask file (i.e. from BET) \strong{Required.}}
 
-\item{n_fibres}{Character. Maximum number of fibres to fit in each voxel \strong{Required.}}
+\item{n_fibres}{Integer. Maximum number of fibres to fit in each voxel}
 
 \item{all_ard}{Logical. Turn ARD on on all fibres}
 
 \item{args}{Character. Additional parameters to the command}
 
-\item{burn_in}{Character. Total num of jumps at start of MCMC to be discarded}
+\item{burn_in}{Integer. Total num of jumps at start of MCMC to be discarded}
 
-\item{burn_in_no_ard}{Character. num of burnin jumps before the ard is imposed}
+\item{burn_in_no_ard}{Integer. num of burnin jumps before the ard is imposed}
 
 \item{cnlinear}{Logical. Initialise with constrained nonlinear fitting}
 
@@ -83,11 +83,11 @@ ni_fsl_x_fibres5(
 
 \item{rician}{Logical. use Rician noise modeling}
 
-\item{sample_every}{Character. Num of jumps for each sample (MCMC)}
+\item{sample_every}{Integer. Num of jumps for each sample (MCMC)}
 
 \item{seed}{Integer. seed for pseudo random number generator}
 
-\item{update_proposal_every}{Character. Num of jumps for each update to the proposal density std (MCMC)}
+\item{update_proposal_every}{Integer. Num of jumps for each update to the proposal density std (MCMC)}
 
 \item{.cwd}{Working directory override.}
 

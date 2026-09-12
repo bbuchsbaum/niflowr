@@ -7,7 +7,7 @@ regeneration. That keeps the imported interfaces honest, but Nipype cannot
 express **niflowr-only** fields — custom renderers (`render`), declared
 `outputs`, or input tweaks like `required`.
 
-Each `<spec_id>.json` file here is **deep-merged onto the generated spec** for
+Each `<spec_id>.json` file here is **deep-merged onto the generated spec** (the `outputs` and `constraints` maps are replaced as a whole to remove invalid imported declarations) for
 that id during import (see `apply_spec_override()` in the importer). This lets
 niflowr-specific additions survive regeneration instead of being overwritten.
 
@@ -33,3 +33,7 @@ An override is a partial spec; only the keys you set are merged. Examples:
 
 To customize a Nipype spec, add or edit the matching file here, rerun the
 pipeline above, and commit the regenerated `inst/specs/<id>.json`.
+
+Overrides also preserve adopted path, list-element, and numeric-type corrections
+that Nipype trait inference cannot reproduce. These do not broaden interface
+qualification; they prevent regeneration from reverting existing fixes.

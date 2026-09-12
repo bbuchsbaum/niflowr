@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "fwhm": {
+      "type": "double"
+    },
+    "var_fwhm": {
+      "type": "double"
+    }
+  }
+}

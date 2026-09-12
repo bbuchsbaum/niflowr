@@ -48,7 +48,7 @@ ni_afni_seg(
 
 \item{mixfrac}{Character. MIXFRAC sets up the volume-wide (within mask) tissue fractions while initializing the segmentation (see IGNORE for exception)}
 
-\item{prefix}{Character. the prefix for the output folder containing all output volumes}
+\item{prefix}{Character; file path. the prefix for the output folder containing all output volumes}
 
 \item{.cwd}{Working directory override.}
 

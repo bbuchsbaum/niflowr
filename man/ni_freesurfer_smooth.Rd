@@ -25,11 +25,11 @@ ni_freesurfer_smooth(
 \arguments{
 \item{in_file}{Character; file path. source volume \strong{Required.}}
 
-\item{num_iters}{Character. number of iterations instead of fwhm \strong{Required.}}
+\item{num_iters}{Integer. number of iterations instead of fwhm \strong{Required.}}
 
 \item{reg_file}{Character; file path. registers volume to surface anatomical \strong{Required.}}
 
-\item{surface_fwhm}{Character. surface FWHM in mm \strong{Required.}}
+\item{surface_fwhm}{Numeric. surface FWHM in mm \strong{Required.}}
 
 \item{args}{Character. Additional parameters to the command}
 
@@ -39,7 +39,7 @@ ni_freesurfer_smooth(
 
 \item{smoothed_file}{Character; file path. output volume}
 
-\item{vol_fwhm}{Character. volume smoothing outside of surface}
+\item{vol_fwhm}{Numeric. volume smoothing outside of surface}
 
 \item{.cwd}{Working directory override.}
 

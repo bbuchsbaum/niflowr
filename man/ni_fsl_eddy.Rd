@@ -121,7 +121,7 @@ ni_fsl_eddy(
 
 \item{nvoxhp}{Integer. # of voxels used to estimate the hyperparameters}
 
-\item{out_base}{Character. Basename for output image}
+\item{out_base}{Character; file path. Basename for output image}
 
 \item{outlier_nstd}{Integer. Number of std off to qualify as outlier}
 

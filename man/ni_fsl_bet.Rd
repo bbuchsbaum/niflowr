@@ -12,7 +12,7 @@ ni_fsl_bet(
   functional = NULL,
   mask = NULL,
   mesh = NULL,
-  no_output = NULL,
+  no_output = FALSE,
   out_file = NULL,
   outline = NULL,
   padding = NULL,

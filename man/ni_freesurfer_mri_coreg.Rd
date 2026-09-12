@@ -73,7 +73,7 @@ ni_freesurfer_mri_coreg(
 
 \item{linmintol}{Numeric}
 
-\item{max_iters}{Character. maximum iterations (default: 4)}
+\item{max_iters}{Integer. maximum iterations (default: 4)}
 
 \item{no_brute_force}{Logical. do not brute force search}
 
@@ -97,7 +97,7 @@ ni_freesurfer_mri_coreg(
 
 \item{reference_mask}{Character or numeric vector. mask reference volume with given mask, or None if \code{False}}
 
-\item{saturation_threshold}{Character. saturation threshold (default=9.999)}
+\item{saturation_threshold}{Numeric. saturation threshold (default=9.999)}
 
 \item{sep}{Character or numeric vector. set spatial scales, in voxels (default [2, 4])}
 

@@ -44,7 +44,7 @@ ni_ants_brain_extraction(
 
 \item{keep_temporary_files}{Integer. Keep brain extraction/segmentation warps, etc (default = 0).}
 
-\item{out_prefix}{Character. Prefix that is prepended to all output files}
+\item{out_prefix}{Character; file path. Prefix that is prepended to all output files}
 
 \item{use_floatingpoint_precision}{Character; one of: "0", "1". Use floating point precision in registrations (default = 0)}
 

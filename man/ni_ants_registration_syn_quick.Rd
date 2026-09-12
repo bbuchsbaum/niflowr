@@ -7,7 +7,7 @@
 ni_ants_registration_syn_quick(
   fixed_image,
   moving_image,
-  output_prefix,
+  output_prefix = "transform",
   args = NULL,
   dimension = 3,
   histogram_bins = 32,
@@ -30,7 +30,7 @@ ni_ants_registration_syn_quick(
 
 \item{moving_image}{Character or numeric vector. Moving image or target image \strong{Required.}}
 
-\item{output_prefix}{Character. A prefix that is prepended to all output files \strong{Required.}}
+\item{output_prefix}{Character; file path. A prefix that is prepended to all output files}
 
 \item{args}{Character. Additional parameters to the command}
 

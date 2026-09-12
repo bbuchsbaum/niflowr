@@ -25,7 +25,7 @@ ni_ants_composite_transform_util(
 
 \item{out_file}{Character; file path. Output file path (only used for disassembly).}
 
-\item{output_prefix}{Character. A prefix that is prepended to all output files (only used for assembly).}
+\item{output_prefix}{Character; file path. A prefix that is prepended to all output files (only used for assembly).}
 
 \item{process}{Character; one of: "assemble", "disassemble". What to do with the transform inputs (assemble or disassemble)}
 

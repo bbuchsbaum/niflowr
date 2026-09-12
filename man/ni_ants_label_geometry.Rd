@@ -5,7 +5,7 @@
 \title{ANTS LabelGeometry}
 \usage{
 ni_ants_label_geometry(
-  intensity_image,
+  intensity_image = "[]",
   label_image,
   args = NULL,
   dimension = 3,
@@ -19,7 +19,7 @@ ni_ants_label_geometry(
 )
 }
 \arguments{
-\item{intensity_image}{Character; file path. Intensity image to extract values from. This is an optional input \strong{Required.}}
+\item{intensity_image}{Character; file path. Intensity image to extract values from. This is an optional input}
 
 \item{label_image}{Character; file path. label image to use for extracting geometry measures \strong{Required.}}
 

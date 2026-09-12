@@ -174,14 +174,14 @@
       "path": {
         "from_input": "out_file"
       },
-      "must_exist": false
+      "must_exist": true
     },
     "par_file": {
       "type": "file",
       "path": {
         "template": "{out_file}.par"
       },
-      "must_exist": false,
+      "must_exist": true,
       "when": {
         "input": "save_plots",
         "in": [
@@ -194,7 +194,7 @@
       "path": {
         "template": "{out_file}.mat"
       },
-      "must_exist": false,
+      "must_exist": true,
       "when": {
         "input": "save_mats",
         "in": [
@@ -207,7 +207,7 @@
       "path": {
         "template": "{out_file}_mean_reg.nii.gz"
       },
-      "must_exist": false,
+      "must_exist": true,
       "when": {
         "input": "mean_vol",
         "in": [
@@ -220,7 +220,7 @@
       "path": {
         "template": "{out_file}_variance.nii.gz"
       },
-      "must_exist": false,
+      "must_exist": true,
       "when": {
         "input": "stats_imgs",
         "in": [
@@ -233,7 +233,7 @@
       "path": {
         "template": "{out_file}_sigma.nii.gz"
       },
-      "must_exist": false,
+      "must_exist": true,
       "when": {
         "input": "stats_imgs",
         "in": [
@@ -246,7 +246,7 @@
       "path": {
         "template": "{out_file}_abs.rms"
       },
-      "must_exist": false,
+      "must_exist": true,
       "when": {
         "input": "save_rms",
         "in": [
@@ -259,7 +259,7 @@
       "path": {
         "template": "{out_file}_rel.rms"
       },
-      "must_exist": false,
+      "must_exist": true,
       "when": {
         "input": "save_rms",
         "in": [
@@ -269,7 +269,10 @@
     }
   },
   "runtime": {
-    "profile": "fsl"
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
   },
   "origin": {
     "source": "nipype",

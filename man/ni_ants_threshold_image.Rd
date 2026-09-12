@@ -5,7 +5,7 @@
 \title{ANTS ThresholdImage}
 \usage{
 ni_ants_threshold_image(
-  copy_header,
+  copy_header = TRUE,
   input_image,
   args = NULL,
   dimension = 3,
@@ -26,7 +26,7 @@ ni_ants_threshold_image(
 )
 }
 \arguments{
-\item{copy_header}{Logical. copy headers of the original image into the output (corrected) file \strong{Required.}}
+\item{copy_header}{Logical. copy headers of the original image into the output (corrected) file}
 
 \item{input_image}{Character; file path. input image file \strong{Required.}}
 

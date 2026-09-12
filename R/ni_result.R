@@ -29,7 +29,7 @@ ni_provenance <- function(result) {
 #' @export
 print.ni_result <- function(x, ...) {
   status <- x$runtime$exit_status
-  status_label <- if (status == 0) "success" else "FAILED"
+  status_label <- if (isTRUE(x$runtime$success %||% (status == 0))) "success" else "FAILED"
 
   cli::cli_h3("ni_result: {x$spec_id} [{status_label}]")
   cli::cli_text("Exit status: {status}")
@@ -39,12 +39,12 @@ print.ni_result <- function(x, ...) {
     cli::cli_h3("Outputs")
     for (nm in names(x$outputs)) {
       path <- x$outputs[[nm]]
-      exists_tag <- if (file.exists(path)) "" else " [MISSING]"
+      exists_tag <- if (all(file.exists(path))) "" else " [MISSING]"
       cli::cli_text("  {.field {nm}}: {.path {path}}{exists_tag}")
     }
   }
 
-  if (status != 0 && nzchar(x$runtime$stderr)) {
+  if (!isTRUE(status == 0) && nzchar(x$runtime$stderr)) {
     cli::cli_h3("Stderr (last 10 lines)")
     lines <- utils::tail(strsplit(x$runtime$stderr, "\n")[[1]], 10)
     for (line in lines) {

@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "out_jac_prefix": {
+      "type": "file"
+    },
+    "out_mat_prefix": {
+      "type": "file"
+    },
+    "out_warp_prefix": {
+      "type": "file"
+    }
+  }
+}

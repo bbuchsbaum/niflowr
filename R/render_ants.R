@@ -16,6 +16,8 @@ dispatch_custom_render <- function(name, call) {
   fn <- switch(name,
     ants_registration_staged = render_ants_registration,
     ants_transform_build = render_ants_transform_build,
+    ants_n4 = render_ants_n4,
+    fsl_fast = render_fsl_fast,
     NULL
   )
   if (is.null(fn)) {

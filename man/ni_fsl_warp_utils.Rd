@@ -7,7 +7,7 @@
 ni_fsl_warp_utils(
   in_file,
   reference,
-  write_jacobian,
+  write_jacobian = FALSE,
   args = NULL,
   knot_space = NULL,
   out_file = NULL,
@@ -28,7 +28,7 @@ ni_fsl_warp_utils(
 
 \item{reference}{Character; file path. Name of a file in target space. Note that the target space is now different from the target space that was used to create the --warp file. It would typically be the file that was specified with the --in argument when running fnirt. \strong{Required.}}
 
-\item{write_jacobian}{Logical. Switch on --jac flag with automatically generated filename \strong{Required.}}
+\item{write_jacobian}{Logical. Switch on --jac flag with automatically generated filename}
 
 \item{args}{Character. Additional parameters to the command}
 

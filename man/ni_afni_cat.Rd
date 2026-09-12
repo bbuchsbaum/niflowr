@@ -6,7 +6,7 @@
 \usage{
 ni_afni_cat(
   in_files,
-  out_file,
+  out_file = "catout.1d",
   args = NULL,
   keepfree = NULL,
   omitconst = NULL,
@@ -28,7 +28,7 @@ ni_afni_cat(
 \arguments{
 \item{in_files}{Character or numeric vector \strong{Required.}}
 
-\item{out_file}{Character; file path. output (concatenated) file name \strong{Required.}}
+\item{out_file}{Character; file path. output (concatenated) file name}
 
 \item{args}{Character. Additional parameters to the command}
 

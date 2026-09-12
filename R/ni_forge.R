@@ -177,6 +177,19 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     )
   }
 
+  for (nm in names(inputs)) {
+    def <- inputs[[nm]]
+    if (is.null(def$cli) && is.null(spec$render) && !identical(def$role, "output")) {
+      add_finding("warning", "unimplemented_input", nm,
+                  "Input has no CLI rendering or custom implementation; audit imported behavior.")
+    }
+  }
+  for (nm in names(spec$outputs)) {
+    source <- spec$outputs[[nm]]$path$from_input
+    if (!is.null(source) && !inputs[[source]]$type %in% c("file", "dir", "list"))
+      add_finding("warning", "incompatible_output_input", source, "Output references a non-path input; automatic inference is disabled.")
+  }
+
   # 1) Shell metacharacters in argstr
   for (nm in names(inputs)) {
     def <- inputs[[nm]]
@@ -531,6 +544,7 @@ synthesize_values_for_spec <- function(spec) {
     out[[nm]] <- synthesize_value(nm, def)
   }
 
+  if (identical(spec$render, "ants_n4") && !isTRUE(out$save_bias)) out$bias_image <- NULL
   out
 }
 

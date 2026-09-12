@@ -194,7 +194,7 @@ test_that("ni_fastsurfer_run dry_run returns NULL invisibly", {
     .engine = "native",
     dry_run = TRUE
   )
-  expect_null(result)
+  expect_s3_class(result, "ni_execution_plan")
 })
 
 test_that("ni_fastsurfer_segment dry_run returns NULL invisibly", {
@@ -206,7 +206,7 @@ test_that("ni_fastsurfer_segment dry_run returns NULL invisibly", {
     .engine = "native",
     dry_run = TRUE
   )
-  expect_null(result)
+  expect_s3_class(result, "ni_execution_plan")
 })
 
 # ---- Spec appears in ni_spec_list ----

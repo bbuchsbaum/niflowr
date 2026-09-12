@@ -63,7 +63,7 @@ ni_ants_cortical_thickness(
 
 \item{max_iterations}{Integer. ANTS registration max iterations (default = 100x100x70x20)}
 
-\item{out_prefix}{Character. Prefix that is prepended to all output files}
+\item{out_prefix}{Character; file path. Prefix that is prepended to all output files}
 
 \item{posterior_formulation}{Character. Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[1]' (default) or 'Aristotle[1]'. Choose the latter if you want use the distance priors (see also the -l option for label propagation control).}
 

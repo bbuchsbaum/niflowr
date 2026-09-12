@@ -1,36 +1,61 @@
 {
   "inputs": {
     "output_prefix": {
-      "required": true
+      "required": true,
+      "type": "file"
     }
   },
   "outputs": {
     "out_matrix": {
       "type": "file",
-      "path": { "template": "{output_prefix}0GenericAffine.mat" },
+      "path": {
+        "template": "{output_prefix}0GenericAffine.mat"
+      },
       "must_exist": false
     },
     "warped_image": {
       "type": "file",
-      "path": { "template": "{output_prefix}Warped.nii.gz" },
+      "path": {
+        "template": "{output_prefix}Warped.nii.gz"
+      },
       "must_exist": false
     },
     "inverse_warped_image": {
       "type": "file",
-      "path": { "template": "{output_prefix}InverseWarped.nii.gz" },
+      "path": {
+        "template": "{output_prefix}InverseWarped.nii.gz"
+      },
       "must_exist": false
     },
     "forward_warp_field": {
       "type": "file",
-      "path": { "template": "{output_prefix}1Warp.nii.gz" },
+      "path": {
+        "template": "{output_prefix}1Warp.nii.gz"
+      },
       "must_exist": false,
-      "when": { "input": "transform_type", "not_in": ["t", "r", "a"] }
+      "when": {
+        "input": "transform_type",
+        "not_in": [
+          "t",
+          "r",
+          "a"
+        ]
+      }
     },
     "inverse_warp_field": {
       "type": "file",
-      "path": { "template": "{output_prefix}1InverseWarp.nii.gz" },
+      "path": {
+        "template": "{output_prefix}1InverseWarp.nii.gz"
+      },
       "must_exist": false,
-      "when": { "input": "transform_type", "not_in": ["t", "r", "a"] }
+      "when": {
+        "input": "transform_type",
+        "not_in": [
+          "t",
+          "r",
+          "a"
+        ]
+      }
     }
   }
 }

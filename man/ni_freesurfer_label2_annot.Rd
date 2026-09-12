@@ -9,7 +9,7 @@ ni_freesurfer_label2_annot(
   in_labels,
   orig,
   out_annot,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   color_table = NULL,
   keep_max = NULL,
@@ -31,7 +31,7 @@ ni_freesurfer_label2_annot(
 
 \item{out_annot}{Character. Name of the annotation to create \strong{Required.}}
 
-\item{subject_id}{Character. Subject name/ID \strong{Required.}}
+\item{subject_id}{Character. Subject name/ID}
 
 \item{args}{Character. Additional parameters to the command}
 

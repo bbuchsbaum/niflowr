@@ -202,14 +202,13 @@ test_that("ni_env_vector converts named list to character vector", {
   # and names(env) <- names(env) doesn't restore them (names are already NULL)
   result <- niflowr:::ni_env_vector(list(A = "1", B = "2"))
   expect_type(result, "character")
-  expect_equal(result, c("1", "2"))
+  expect_equal(result, c(A = "1", B = "2"))
   # Names are lost due to as.character() - this is the current behavior
-  expect_null(names(result))
+  expect_equal(names(result), c("A", "B"))
 })
 
 test_that("ni_env_vector returns empty character for unnamed vector", {
-  result <- niflowr:::ni_env_vector(c("a", "b"))
-  expect_equal(result, character(0))
+  expect_error(niflowr:::ni_env_vector(c("a", "b")), "variable names")
 })
 
 # Additional coverage tests for ni_relpath
@@ -547,6 +546,91 @@ test_that("ni_build_docker_argv includes extra run args", {
   expect_true("--privileged" %in% built$argv)
 })
 
+test_that("ni_build_docker_argv includes per-profile entrypoint and platform", {
+  cfg <- ni_config_defaults()
+  cfg$docker$bin <- "echo"
+  cfg$docker$extra_run_args <- c("--platform", "linux/arm64")
+  mounts <- list()
+  env <- character(0)
+
+  built <- niflowr:::ni_build_docker_argv(
+    cfg = cfg,
+    image = "test/image:1.0",
+    payload_cmd = "bet",
+    payload_args = character(0),
+    mounts = mounts,
+    workdir = "/work",
+    env = env,
+    entrypoint = "",
+    platform = "linux/amd64",
+    profile = "fsl"
+  )
+
+  expect_true("--entrypoint" %in% built$argv)
+  ep_idx <- which(built$argv == "--entrypoint")[1]
+  expect_identical(built$argv[[ep_idx + 1L]], "")
+
+  plat_idx <- which(built$argv == "--platform")
+  expect_true(length(plat_idx) >= 1)
+  # Profile platform is appended after extra_run_args so it wins.
+  expect_identical(built$argv[[max(plat_idx) + 1L]], "linux/amd64")
+
+  img_idx <- which(built$argv == "test/image:1.0")[1]
+  expect_true(max(plat_idx) < img_idx)
+  expect_true(ep_idx < img_idx)
+})
+
+test_that("ni_build_docker_argv treats empty-list entrypoint as clear", {
+  cfg <- ni_config_defaults()
+  cfg$docker$bin <- "echo"
+
+  built <- niflowr:::ni_build_docker_argv(
+    cfg = cfg,
+    image = "test/image:1.0",
+    payload_cmd = "bet",
+    payload_args = character(0),
+    mounts = list(),
+    workdir = "/work",
+    env = character(0),
+    entrypoint = list()
+  )
+
+  ep_idx <- which(built$argv == "--entrypoint")[1]
+  expect_identical(built$argv[[ep_idx + 1L]], "")
+})
+
+test_that("ni_build_docker_argv omits entrypoint/platform when unset", {
+  cfg <- ni_config_defaults()
+  cfg$docker$bin <- "echo"
+
+  built <- niflowr:::ni_build_docker_argv(
+    cfg = cfg,
+    image = "test/image:1.0",
+    payload_cmd = "bet",
+    payload_args = character(0),
+    mounts = list(),
+    workdir = "/work",
+    env = character(0)
+  )
+
+  expect_false("--entrypoint" %in% built$argv)
+  expect_false("--platform" %in% built$argv)
+})
+
+test_that("ni_normalize_docker_entrypoint rejects invalid values", {
+  expect_error(
+    niflowr:::ni_normalize_docker_entrypoint(1L, profile = "fsl"),
+    "Invalid profile `entrypoint`"
+  )
+})
+
+test_that("ni_normalize_docker_platform rejects invalid values", {
+  expect_error(
+    niflowr:::ni_normalize_docker_platform("", profile = "fsl"),
+    "Invalid profile `platform`"
+  )
+})
+
 # Additional coverage tests for ni_build_apptainer_argv
 test_that("ni_build_apptainer_argv errors when container_ref is missing", {
   cfg <- ni_config_defaults()
@@ -876,6 +960,47 @@ test_that("ni_build_container_command builds docker command", {
     expect_equal(result$profile, "test_prof")
     expect_equal(result$container_ref, "test/img:1.0")
     expect_true("bet" %in% result$argv)
+  })
+})
+
+test_that("ni_build_container_command passes profile entrypoint and platform", {
+  withr::with_tempdir({
+    cfg <- ni_config_defaults()
+    cfg$docker$bin <- "echo"
+    cfg$profiles <- list(
+      test_prof = list(
+        docker_image = "test/img:1.0",
+        entrypoint = "",
+        platform = "linux/amd64"
+      )
+    )
+    cfg$paths$in_root <- file.path(getwd(), "in")
+    cfg$paths$out_root <- file.path(getwd(), "out")
+    cfg$paths$work_root <- file.path(getwd(), "work")
+    dir.create(cfg$paths$in_root)
+    dir.create(cfg$paths$out_root)
+    dir.create(cfg$paths$work_root)
+
+    call <- list(
+      runtime = list(profile = "test_prof"),
+      spec = list(runtime = list())
+    )
+
+    result <- niflowr:::ni_build_container_command(
+      engine = "docker",
+      cfg = cfg,
+      call = call,
+      payload_cmd = "bet",
+      payload_args = c("-i", "input.nii"),
+      env = character(0)
+    )
+
+    expect_true("--entrypoint" %in% result$argv)
+    ep_idx <- which(result$argv == "--entrypoint")[1]
+    expect_identical(result$argv[[ep_idx + 1L]], "")
+    expect_true("--platform" %in% result$argv)
+    plat_idx <- which(result$argv == "--platform")[1]
+    expect_identical(result$argv[[plat_idx + 1L]], "linux/amd64")
   })
 })
 

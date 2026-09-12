@@ -37,7 +37,7 @@ ni_ants_affine_initializer(
 
 \item{principal_axes}{Logical. whether the rotation is searched around an initial principal axis alignment.}
 
-\item{radian_fraction}{Character. search this arc +/- principal axes}
+\item{radian_fraction}{Numeric. search this arc +/- principal axes}
 
 \item{search_factor}{Numeric. increments (degrees) for affine search}
 

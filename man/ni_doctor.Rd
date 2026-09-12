@@ -4,7 +4,7 @@
 \alias{ni_doctor}
 \title{Run runtime diagnostics}
 \usage{
-ni_doctor(cfg = NULL, strict = FALSE, check_lock = TRUE)
+ni_doctor(cfg = NULL, strict = FALSE, check_lock = TRUE, check_payload = TRUE)
 }
 \arguments{
 \item{cfg}{Optional resolved config list. Defaults to current effective
@@ -13,11 +13,18 @@ config.}
 \item{strict}{Logical; if \code{TRUE}, abort on any failed checks.}
 
 \item{check_lock}{Logical; include lockfile checks.}
+
+\item{check_payload}{Logical; when \code{TRUE} (default), probe configured Docker
+profile images that are already present locally to verify the payload
+command executes. Skips profiles whose images are not available locally
+(does not pull).}
 }
 \value{
 Data frame with \code{check}, \code{status}, and \code{message} columns.
 }
 \description{
 Performs quick checks for runtime binaries, mount roots, profile shape, and
-lockfile availability/consistency.
+lockfile availability/consistency. When Docker is available, optionally
+probes each profile image to confirm the payload command actually runs
+(catching shell ENTRYPOINTs that silently ignore the command).
 }

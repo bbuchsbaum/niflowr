@@ -47,7 +47,7 @@ test_that("ni_run dry_run prints but does not execute", {
 
   call <- ni_call(spec, message = "hello", .validate = FALSE)
   result <- ni_run(call, dry_run = TRUE)
-  expect_null(result)
+  expect_s3_class(result, "ni_execution_plan")
 })
 
 test_that("ni_run warns on non-zero exit when error_on_status = FALSE", {
@@ -385,7 +385,7 @@ test_that("ni_dry_run is a shorthand for dry_run=TRUE", {
 
   call <- ni_call(spec, message = "hello", .validate = FALSE)
   result <- ni_run(call, dry_run = TRUE)
-  expect_null(result)
+  expect_s3_class(result, "ni_execution_plan")
 })
 
 test_that("ni_run with return='files' returns character vector", {

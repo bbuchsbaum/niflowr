@@ -132,7 +132,7 @@ validate_constraints_single <- function(name, value, validate_block, type = NULL
 
   if (isTRUE(validate_block$exists) && is.character(value)) {
     exists_check <- if (identical(type, "dir")) dir.exists(value) else file.exists(value)
-    if (!exists_check) {
+    if (any(!exists_check)) {
       label <- if (identical(type, "dir")) "Directory" else "File"
       errors <- c(errors, cli::format_inline(
         "{label} for {.arg {name}} does not exist: {.path {value}}"

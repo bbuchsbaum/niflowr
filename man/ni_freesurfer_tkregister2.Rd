@@ -6,7 +6,7 @@
 \usage{
 ni_freesurfer_tkregister2(
   moving_image,
-  reg_file,
+  reg_file = "register.dat",
   args = NULL,
   fsl_in_matrix = NULL,
   fsl_out = NULL,
@@ -32,7 +32,7 @@ ni_freesurfer_tkregister2(
 \arguments{
 \item{moving_image}{Character; file path. moving volume \strong{Required.}}
 
-\item{reg_file}{Character; file path. freesurfer-style registration file \strong{Required.}}
+\item{reg_file}{Character; file path. freesurfer-style registration file}
 
 \item{args}{Character. Additional parameters to the command}
 

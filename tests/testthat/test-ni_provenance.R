@@ -141,7 +141,7 @@ test_that("ni_provenance_write with auto-derived path", {
   })
 })
 
-test_that("ni_provenance_write with file inputs includes input_hashes", {
+test_that("ni_provenance_write does not invent pre-execution hashes", {
   withr::with_tempdir({
     in_file <- file.path(getwd(), "input.txt")
     out_file <- file.path(getwd(), "output.nii.gz")
@@ -187,7 +187,6 @@ test_that("ni_provenance_write with file inputs includes input_hashes", {
     written <- ni_provenance_write(result, prov_path)
 
     prov <- ni_provenance_read(written)
-    expect_true(!is.null(prov$input_hashes))
-    expect_true("in_file" %in% names(prov$input_hashes))
+    expect_null(prov$input_hashes)
   })
 })

@@ -7,9 +7,9 @@
 ni_ants_ants(
   fixed_image,
   metric,
-  metric_weight,
+  metric_weight = 1,
   moving_image,
-  output_transform_prefix,
+  output_transform_prefix = "out",
   radius,
   transformation_model,
   affine_gradient_descent_option = NULL,
@@ -35,11 +35,11 @@ ni_ants_ants(
 
 \item{metric}{Character or numeric vector \strong{Required.}}
 
-\item{metric_weight}{Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage. \strong{Required.}}
+\item{metric_weight}{Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage.}
 
 \item{moving_image}{Character or numeric vector. image to apply transformation to (generally a coregisteredfunctional) \strong{Required.}}
 
-\item{output_transform_prefix}{Character \strong{Required.}}
+\item{output_transform_prefix}{Character; file path}
 
 \item{radius}{Character or numeric vector. radius of the region (i.e. number of layers around a voxel/pixel) that is used for computing cross correlation \strong{Required.}}
 

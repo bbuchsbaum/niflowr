@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "brightness_threshold": {
+      "type": "int"
+    },
+    "threshold": {
+      "type": "double"
+    }
+  }
+}

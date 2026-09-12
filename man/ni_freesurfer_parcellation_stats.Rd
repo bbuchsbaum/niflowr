@@ -13,7 +13,7 @@ ni_freesurfer_parcellation_stats(
   rh_pial,
   rh_white,
   ribbon,
-  subject_id,
+  subject_id = "subject_id",
   thickness,
   transform,
   wm,
@@ -52,7 +52,7 @@ ni_freesurfer_parcellation_stats(
 
 \item{ribbon}{Character; file path. Input file must be <subject_id>/mri/ribbon.mgz \strong{Required.}}
 
-\item{subject_id}{Character. Subject being processed \strong{Required.}}
+\item{subject_id}{Character. Subject being processed}
 
 \item{thickness}{Character; file path. Input file must be <subject_id>/surf/?h.thickness \strong{Required.}}
 

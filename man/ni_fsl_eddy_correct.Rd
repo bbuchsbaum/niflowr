@@ -6,7 +6,7 @@
 \usage{
 ni_fsl_eddy_correct(
   in_file,
-  ref_num,
+  ref_num = 0,
   args = NULL,
   out_file = NULL,
   .cwd = NULL,
@@ -20,7 +20,7 @@ ni_fsl_eddy_correct(
 \arguments{
 \item{in_file}{Character; file path. 4D input file \strong{Required.}}
 
-\item{ref_num}{Integer. reference number \strong{Required.}}
+\item{ref_num}{Integer. reference number}
 
 \item{args}{Character. Additional parameters to the command}
 

@@ -71,13 +71,13 @@ ni_fsl_topup(
 
 \item{out_field}{Character; file path. name of image file with field (Hz)}
 
-\item{out_jac_prefix}{Character. prefix for the warpfield images}
+\item{out_jac_prefix}{Character; file path. prefix for the warpfield images}
 
 \item{out_logfile}{Character; file path. name of log-file}
 
-\item{out_mat_prefix}{Character. prefix for the realignment matrices}
+\item{out_mat_prefix}{Character; file path. prefix for the realignment matrices}
 
-\item{out_warp_prefix}{Character. prefix for the warpfield images (in mm)}
+\item{out_warp_prefix}{Character; file path. prefix for the warpfield images (in mm)}
 
 \item{reg_lambda}{Numeric. Weight of regularisation, default depending on --ssqlambda and --regmod switches.}
 
