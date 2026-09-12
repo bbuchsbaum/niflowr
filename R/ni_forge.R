@@ -404,7 +404,8 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     }
   }
 
-  # 7) FSL image outs need strip_ext so tools do not double-append FSLOUTPUTTYPE
+  # 7) FSL image outs need strip_ext so tools do not double-append FSLOUTPUTTYPE.
+  # Text/matrix outs must keep their full filename (e.g. fslmeants .txt).
   if (grepl("^fsl\\.", spec_id)) {
     for (nm in names(inputs)) {
       def <- inputs[[nm]]
@@ -416,8 +417,32 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
       }
       cli <- def$cli
       if (is.null(cli) || is.null(cli$argstr) || !nzchar(cli$argstr)) next
+      needs <- fsl_needs_strip_ext(nm, cli$argstr, def$desc)
+
+      if (isTRUE(cli$strip_ext) && !needs) {
+        if (fix) {
+          inputs[[nm]]$cli$strip_ext <- NULL
+          fixed <- TRUE
+          add_finding(
+            level = "warning",
+            code = "fsl_strip_ext_clear",
+            param = nm,
+            message = "Cleared cli.strip_ext so text/matrix outs keep their full filename.",
+            fixed_flag = TRUE
+          )
+        } else {
+          add_finding(
+            level = "warning",
+            code = "fsl_strip_ext_clear",
+            param = nm,
+            message = "cli.strip_ext=TRUE is incorrect for this non-image FSL output."
+          )
+        }
+        next
+      }
+
       if (isTRUE(cli$strip_ext)) next
-      if (!fsl_needs_strip_ext(nm, cli$argstr)) next
+      if (!needs) next
 
       if (fix) {
         inputs[[nm]]$cli$strip_ext <- TRUE
@@ -449,14 +474,29 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
 }
 
 #' Whether an FSL input should strip known extensions before CLI rendering
+#'
+#' Image outs (BET/MCFLIRT `-out`, FAST basenames, …) strip `.nii.gz` so FSL
+#' does not double-append `FSLOUTPUTTYPE`. Text/matrix outs keep the full path
+#' (e.g. `fslmeants -o mean.txt`).
+#'
 #' @keywords internal
-fsl_needs_strip_ext <- function(name, argstr) {
+fsl_needs_strip_ext <- function(name, argstr, desc = NULL) {
   argstr <- as.character(argstr %||% "")
+  desc <- as.character(desc %||% "")
   # Matrix / schedule outs keep their full filename (including .mat).
   if (grepl("omat|outmat|matrix|\\.mat|schedule", argstr, ignore.case = TRUE)) {
     return(FALSE)
   }
   if (grepl("omat|outmat|matrix|schedule", name, ignore.case = TRUE)) {
+    return(FALSE)
+  }
+  # Text / tabular outs keep .txt/.tsv (fslmeants, Vest2Text, …).
+  if (grepl("text|\\.txt|\\.tsv|\\btsv\\b|\\bcsv\\b|tabular", desc, ignore.case = TRUE)) {
+    return(FALSE)
+  }
+  # Matrix-format outs described only in the trait text (e.g. Text2Vest).
+  if (grepl("matrix|\\.mat", desc, ignore.case = TRUE) &&
+      !grepl("nifti|image|volume|warp", desc, ignore.case = TRUE)) {
     return(FALSE)
   }
   if (grepl("(^|\\s)-out(\\s|=|%|$)|--out=", argstr)) {
@@ -554,6 +594,7 @@ synthesize_value <- function(name, def) {
   lname <- tolower(name)
 
   if (type == "file") {
+    desc <- tolower(as.character(def$desc %||% ""))
     ext <- if (grepl("matrix|mat|xfm|transform", lname)) {
       ".mat"
     } else if (grepl("json", lname)) {
@@ -562,7 +603,9 @@ synthesize_value <- function(name, def) {
       ".csv"
     } else if (grepl("tsv", lname)) {
       ".tsv"
-    } else if (grepl("txt|text|log|report", lname)) {
+    } else if (grepl("txt|text|log|report", lname) ||
+               (grepl("^out", lname) &&
+                  grepl("text matrix|text output|\\.txt\\b|tabular", desc))) {
       ".txt"
     } else {
       ".nii.gz"

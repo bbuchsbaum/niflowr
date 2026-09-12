@@ -1005,7 +1005,7 @@
   },
   "fsl.image_meants": {
     "command": "fslmeants",
-    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "args_value", "-m", "/tmp/niflowr/mask.nii.gz", "--order=1", "-o", "/tmp/niflowr/out_file", "-c", "item1,item2"]
+    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "args_value", "-m", "/tmp/niflowr/mask.nii.gz", "--order=1", "-o", "/tmp/niflowr/out_file.txt", "-c", "item1,item2"]
   },
   "fsl.image_stats": {
     "command": "fslstats",
@@ -1173,7 +1173,7 @@
   },
   "fsl.text2_vest": {
     "command": "Text2Vest",
-    "args": ["/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/out_file", "args_value"]
+    "args": ["/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/out_file.nii.gz", "args_value"]
   },
   "fsl.threshold": {
     "command": "fslmaths",
@@ -1197,7 +1197,7 @@
   },
   "fsl.vest2_text": {
     "command": "Vest2Text",
-    "args": ["/tmp/niflowr/in_file.nii.gz", "design", "args_value"]
+    "args": ["/tmp/niflowr/in_file.nii.gz", "design.txt", "args_value"]
   },
   "fsl.warp_points": {
     "command": "img2imgcoord",

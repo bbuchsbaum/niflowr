@@ -26,8 +26,7 @@
       "required": true,
       "cli": {
         "argstr": "%s",
-        "position": 1,
-        "strip_ext": true
+        "position": 1
       }
     }
   },
