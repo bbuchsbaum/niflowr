@@ -94,7 +94,8 @@
       "desc": "image to write",
       "cli": {
         "argstr": "%s",
-        "position": -2
+        "position": -2,
+        "strip_ext": true
       }
     },
     "output_datatype": {

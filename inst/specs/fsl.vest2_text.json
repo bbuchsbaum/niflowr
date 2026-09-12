@@ -26,7 +26,8 @@
       "default": "design.txt",
       "cli": {
         "argstr": "%s",
-        "position": 1
+        "position": 1,
+        "strip_ext": true
       }
     }
   },

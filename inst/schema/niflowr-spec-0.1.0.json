@@ -103,6 +103,11 @@
         "stderr_to": {
           "type": "string",
           "description": "Input name whose value is used as stderr redirect path (runner-level)"
+        },
+        "strip_ext": {
+          "type": "boolean",
+          "default": false,
+          "description": "Strip known neuroimaging extensions (.nii.gz, .nii, ...) from the value before CLI rendering. Use for FSL -out / out_basename style arguments that append FSLOUTPUTTYPE themselves."
         }
       },
       "additionalProperties": false

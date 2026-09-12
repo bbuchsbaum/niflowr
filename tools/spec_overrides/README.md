@@ -28,6 +28,7 @@ An override is a partial spec; only the keys you set are merged. Examples:
 
 - `ants.registration.json` — adds the staged `render` hook.
 - `ants.registration_syn_quick.json` — declares prefix-derived `outputs` and marks `output_prefix` required.
+- `fsl.mcflirt.json` — marks `out_file` with `cli.strip_ext` and declares gated side outputs (`.par`, `.mat/`, `_mean_reg`, …).
 - `freesurfer.mp_rto_mni305.json` — restores a hand-written input description Nipype doesn't provide.
 
 To customize a Nipype spec, add or edit the matching file here, rerun the

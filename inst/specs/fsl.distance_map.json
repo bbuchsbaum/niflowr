@@ -15,7 +15,8 @@
       "type": "file",
       "desc": "distance map to write",
       "cli": {
-        "argstr": "--out=%s"
+        "argstr": "--out=%s",
+        "strip_ext": true
       }
     },
     "in_file": {

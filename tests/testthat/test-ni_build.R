@@ -7,7 +7,7 @@ test_that("build_command renders positional args in order", {
   expect_equal(built$command, "bet")
   # First two args should be positional (in_file at 0, out_file at 1)
   expect_equal(built$args[1], "/tmp/t1.nii.gz")
-  expect_equal(built$args[2], "/tmp/brain.nii.gz")
+  expect_equal(built$args[2], "/tmp/brain")
 })
 
 test_that("build_command renders flags only when TRUE", {
@@ -188,4 +188,30 @@ test_that("negative positions are placed after options (Nipype convention)", {
   expect_identical(x$command, "fast")
   expect_identical(utils::tail(x$args, 1), "x.nii.gz")
   expect_true(match("-o", x$args) < match("x.nii.gz", x$args))
+})
+
+test_that("cli.strip_ext strips .nii.gz for FSL -out while keeping outputs extended", {
+  call <- ni_call(
+    "fsl.mcflirt",
+    in_file = "/tmp/bold.nii.gz",
+    out_file = "/tmp/bold_mc.nii.gz",
+    .validate = FALSE
+  )
+  built <- niflowr:::build_command(call)
+  out_idx <- which(built$args == "-out")
+  expect_length(out_idx, 1L)
+  expect_equal(built$args[[out_idx + 1L]], "/tmp/bold_mc")
+  expect_equal(call$outputs$out_file, "/tmp/bold_mc.nii.gz")
+})
+
+test_that("fsl.bet out_file strips extension for CLI", {
+  call <- ni_call(
+    "fsl.bet",
+    in_file = "/tmp/t1.nii.gz",
+    out_file = "/tmp/brain.nii.gz",
+    .validate = FALSE
+  )
+  built <- niflowr:::build_command(call)
+  expect_equal(built$args[[2]], "/tmp/brain")
+  expect_equal(call$outputs$out_file, "/tmp/brain.nii.gz")
 })

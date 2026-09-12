@@ -25,7 +25,8 @@
       "desc": "name of output 4D file for power spectrum",
       "cli": {
         "argstr": "%s",
-        "position": 1
+        "position": 1,
+        "strip_ext": true
       }
     }
   },

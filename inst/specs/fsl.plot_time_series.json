@@ -38,7 +38,8 @@
       "type": "file",
       "desc": "image to write",
       "cli": {
-        "argstr": "-o %s"
+        "argstr": "-o %s",
+        "strip_ext": true
       }
     },
     "plot_finish": {

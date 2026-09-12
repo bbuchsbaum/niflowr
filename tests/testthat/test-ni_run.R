@@ -126,7 +126,7 @@ test_that("ni_run with file output writes provenance sidecar", {
     expect_equal(result$runtime$exit_status, 0L)
     expect_true(file.exists(out_path))
 
-    prov_path <- paste0(fs::path_ext_remove(out_path), "_provenance.json")
+    prov_path <- paste0(niflowr:::strip_known_extension(out_path), "_provenance.json")
     expect_true(file.exists(prov_path))
   })
 })

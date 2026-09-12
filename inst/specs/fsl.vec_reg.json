@@ -50,7 +50,8 @@
       "type": "file",
       "desc": "filename for output registered vector or tensor field",
       "cli": {
-        "argstr": "-o %s"
+        "argstr": "-o %s",
+        "strip_ext": true
       }
     },
     "ref_mask": {
