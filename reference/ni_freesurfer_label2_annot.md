@@ -10,7 +10,7 @@ ni_freesurfer_label2_annot(
   in_labels,
   orig,
   out_annot,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   color_table = NULL,
   keep_max = NULL,
@@ -44,7 +44,7 @@ ni_freesurfer_label2_annot(
 
 - subject_id:
 
-  Character. Subject name/ID **Required.**
+  Character. Subject name/ID
 
 - args:
 

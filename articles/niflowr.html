@@ -468,8 +468,9 @@ inspect any spec to see what inputs and outputs it defines:</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">vertical_gradient</span> (double) - vertical gradient in fractional intensity</span></span>
 <span><span class="co">#&gt; threshold (-1, 1)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Outputs (1)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span> (file)</span></span></code></pre></div>
+<span><span class="co">#&gt; ── Outputs (2)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span> (file)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">mask_file</span> (file)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-core-workflow">The core workflow<a class="anchor" aria-label="anchor" href="#the-core-workflow"></a>
@@ -522,7 +523,8 @@ inspect:</p>
 <span><span class="co">#&gt; Command: `bet /tmp/t1.nii.gz /tmp/brain -f 0.30 -m`</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Expected outputs</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span>: <span style="color: #0000BB;">/tmp/brain.nii.gz</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span>: <span style="color: #0000BB;">/tmp/brain.nii.gz</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">mask_file</span>: <span style="color: #0000BB;">/tmp/brain_mask.nii.gz</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-2-inspect-the-command">Step 2: Inspect the command<a class="anchor" aria-label="anchor" href="#step-2-inspect-the-command"></a>
@@ -588,10 +590,7 @@ never concatenated into a shell string.</p>
 <span>  frac     <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  .engine  <span class="op">=</span> <span class="st">"native"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Dry run [native]: `bet /tmp/t1.nii.gz /tmp/brain -f 0.50`</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Expected outputs</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">out_file</span>: <span style="color: #0000BB;">/tmp/brain.nii.gz</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Dry run [native]: `bet /tmp/t1.nii.gz /tmp/brain -f 0.50`</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -708,6 +707,16 @@ profile in <code>niflowr.yml</code>:</p>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="at">  </span><span class="fu">fastsurfer</span><span class="kw">:</span></span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="at">    </span><span class="fu">docker_image</span><span class="kw">:</span><span class="at"> </span><span class="st">"deepmi/fastsurfer:cpu-v2.4.2"</span></span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="at">    </span><span class="fu">apptainer_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"docker://deepmi/fastsurfer:cpu-v2.4.2"</span></span></code></pre></div>
+<p>Optional per-profile Docker fields:</p>
+<ul>
+<li>
+<code>entrypoint</code>: overwrite or clear the image
+<code>ENTRYPOINT</code> (use <code>""</code> or <code>[]</code> when a
+shell entrypoint would silently ignore the niflowr command).</li>
+<li>
+<code>platform</code>: e.g. <code>"linux/amd64"</code> for
+amd64-only images on Apple Silicon.</li>
+</ul>
 <p>Then call the wrapper:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Full pipeline: segmentation + surface reconstruction</span></span>
@@ -736,7 +745,8 @@ profile in <code>niflowr.yml</code>:</p>
 <h3 id="runtime-diagnostics-with-ni_doctor">Runtime diagnostics with <code>ni_doctor()</code><a class="anchor" aria-label="anchor" href="#runtime-diagnostics-with-ni_doctor"></a>
 </h3>
 <p>Use <code><a href="../reference/ni_doctor.html">ni_doctor()</a></code> to check runtime binaries, mounted
-roots, profile definitions, and lockfile consistency:</p>
+roots, profile definitions, lockfile consistency, and (for local Docker
+images) whether the payload command actually executes:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ni_doctor.html">ni_doctor</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">report</span></span>

@@ -7,7 +7,7 @@ Convert scalar images to RGB.
 ``` r
 ni_ants_convert_scalar_image_to_rgb(
   colormap,
-  dimension,
+  dimension = 3,
   input_image,
   maximum_input,
   minimum_input,
@@ -36,7 +36,7 @@ ni_ants_convert_scalar_image_to_rgb(
 
 - dimension:
 
-  Character; one of: "3", "2". image dimension (2 or 3) **Required.**
+  Character; one of: "3", "2". image dimension (2 or 3)
 
 - input_image:
 

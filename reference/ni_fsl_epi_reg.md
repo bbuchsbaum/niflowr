@@ -7,6 +7,7 @@ Runs FSL epi_reg script for simultaneous coregistration and fieldmap
 ``` r
 ni_fsl_epi_reg(
   epi,
+  out_base = "epi2struct",
   t1_brain,
   t1_head,
   args = NULL,
@@ -16,7 +17,6 @@ ni_fsl_epi_reg(
   fmapmagbrain = NULL,
   no_clean = TRUE,
   no_fmapreg = NULL,
-  out_base = "epi2struct",
   pedir = NULL,
   weight_image = NULL,
   wmseg = NULL,
@@ -34,6 +34,10 @@ ni_fsl_epi_reg(
 - epi:
 
   Character; file path. EPI image **Required.**
+
+- out_base:
+
+  Character; file path. output base name
 
 - t1_brain:
 
@@ -72,10 +76,6 @@ ni_fsl_epi_reg(
 
   Logical. do not perform registration of fmap to T1 (use if fmap
   already registered)
-
-- out_base:
-
-  Character. output base name
 
 - pedir:
 

@@ -67,8 +67,8 @@ ni_ants_ants_introduction(
 
 - out_prefix:
 
-  Character. Prefix that is prepended to all output files (default =
-  ants\_)
+  Character; file path. Prefix that is prepended to all output files
+  (default = ants\_)
 
 - quality_check:
 

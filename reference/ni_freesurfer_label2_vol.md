@@ -63,7 +63,7 @@ ni_freesurfer_label2_vol(
 
 - fill_thresh:
 
-  Character. thresh : between 0 and 1
+  Numeric. thresh : between 0 and 1
 
 - hemi:
 

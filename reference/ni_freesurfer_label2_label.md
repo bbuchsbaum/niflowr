@@ -12,7 +12,7 @@ ni_freesurfer_label2_label(
   source_subject,
   source_white,
   sphere_reg,
-  subject_id,
+  subject_id = "subject_id",
   white,
   args = NULL,
   out_file = NULL,
@@ -54,7 +54,7 @@ ni_freesurfer_label2_label(
 
 - subject_id:
 
-  Character. Target subject **Required.**
+  Character. Target subject
 
 - white:
 

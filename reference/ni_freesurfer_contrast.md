@@ -11,7 +11,7 @@ ni_freesurfer_contrast(
   hemisphere,
   orig,
   rawavg,
-  subject_id,
+  subject_id = "subject_id",
   thickness,
   white,
   args = NULL,
@@ -51,7 +51,7 @@ ni_freesurfer_contrast(
 
 - subject_id:
 
-  Character. Subject being processed **Required.**
+  Character. Subject being processed
 
 - thickness:
 

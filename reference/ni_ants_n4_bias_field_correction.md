@@ -6,9 +6,9 @@ Bias field correction.
 
 ``` r
 ni_ants_n4_bias_field_correction(
-  copy_header,
+  copy_header = FALSE,
   input_image,
-  save_bias,
+  save_bias = FALSE,
   args = NULL,
   bspline_fitting_distance = NULL,
   dimension = 3,
@@ -19,6 +19,7 @@ ni_ants_n4_bias_field_correction(
   rescale_intensities = FALSE,
   shrink_factor = NULL,
   weight_image = NULL,
+  bias_image = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -32,8 +33,7 @@ ni_ants_n4_bias_field_correction(
 
 - copy_header:
 
-  Logical. copy headers of the original image into the output
-  (corrected) file **Required.**
+  Logical. Header copying is unsupported; TRUE raises an error.
 
 - input_image:
 
@@ -44,7 +44,6 @@ ni_ants_n4_bias_field_correction(
 - save_bias:
 
   Logical. True if the estimated bias should be saved to file.
-  **Required.**
 
 - args:
 
@@ -77,7 +76,7 @@ ni_ants_n4_bias_field_correction(
 
 - output_image:
 
-  Character. output file name
+  Character; file path. output file name
 
 - rescale_intensities:
 
@@ -96,6 +95,11 @@ ni_ants_n4_bias_field_correction(
 
   Character; file path. image for relative weighting (e.g. probability
   map of the white matter) of voxels during the B-spline fitting.
+
+- bias_image:
+
+  Character; file path. Bias-field destination when save_bias is TRUE;
+  inferred beside the corrected image if omitted.
 
 - .cwd:
 

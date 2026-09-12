@@ -7,7 +7,7 @@
 ``` r
 ni_afni_cat(
   in_files,
-  out_file,
+  out_file = "catout.1d",
   args = NULL,
   keepfree = NULL,
   omitconst = NULL,
@@ -35,7 +35,7 @@ ni_afni_cat(
 
 - out_file:
 
-  Character; file path. output (concatenated) file name **Required.**
+  Character; file path. output (concatenated) file name
 
 - args:
 

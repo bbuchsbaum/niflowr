@@ -10,8 +10,8 @@ ni_fsl_bedpostx5(
   bvecs,
   dwi,
   mask,
-  n_fibres,
-  out_dir,
+  n_fibres = 2,
+  out_dir = "bedpostx",
   all_ard = NULL,
   args = NULL,
   burn_in = 0,
@@ -61,11 +61,11 @@ ni_fsl_bedpostx5(
 
 - n_fibres:
 
-  Character. Maximum number of fibres to fit in each voxel **Required.**
+  Integer. Maximum number of fibres to fit in each voxel
 
 - out_dir:
 
-  Character; directory path. output directory **Required.**
+  Character; directory path. output directory
 
 - all_ard:
 
@@ -77,11 +77,11 @@ ni_fsl_bedpostx5(
 
 - burn_in:
 
-  Character. Total num of jumps at start of MCMC to be discarded
+  Integer. Total num of jumps at start of MCMC to be discarded
 
 - burn_in_no_ard:
 
-  Character. num of burnin jumps before the ard is imposed
+  Integer. num of burnin jumps before the ard is imposed
 
 - cnlinear:
 
@@ -141,7 +141,7 @@ ni_fsl_bedpostx5(
 
 - sample_every:
 
-  Character. Num of jumps for each sample (MCMC)
+  Integer. Num of jumps for each sample (MCMC)
 
 - seed:
 
@@ -149,7 +149,7 @@ ni_fsl_bedpostx5(
 
 - update_proposal_every:
 
-  Character. Num of jumps for each update to the proposal density std
+  Integer. Num of jumps for each update to the proposal density std
   (MCMC)
 
 - .cwd:

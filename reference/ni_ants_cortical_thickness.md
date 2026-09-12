@@ -117,7 +117,7 @@ ni_ants_cortical_thickness(
 
 - out_prefix:
 
-  Character. Prefix that is prepended to all output files
+  Character; file path. Prefix that is prepended to all output files
 
 - posterior_formulation:
 

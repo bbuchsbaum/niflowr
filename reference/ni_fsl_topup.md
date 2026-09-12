@@ -113,7 +113,7 @@ ni_fsl_topup(
 
 - out_jac_prefix:
 
-  Character. prefix for the warpfield images
+  Character; file path. prefix for the warpfield images
 
 - out_logfile:
 
@@ -121,11 +121,11 @@ ni_fsl_topup(
 
 - out_mat_prefix:
 
-  Character. prefix for the realignment matrices
+  Character; file path. prefix for the realignment matrices
 
 - out_warp_prefix:
 
-  Character. prefix for the warpfield images (in mm)
+  Character; file path. prefix for the warpfield images (in mm)
 
 - reg_lambda:
 

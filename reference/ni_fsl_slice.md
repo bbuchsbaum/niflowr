@@ -30,7 +30,7 @@ ni_fsl_slice(
 
 - out_base_name:
 
-  Character. outputs prefix
+  Character; file path. outputs prefix
 
 - .cwd:
 

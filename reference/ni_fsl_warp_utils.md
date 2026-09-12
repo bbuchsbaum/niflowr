@@ -9,7 +9,7 @@ Use FSL
 ni_fsl_warp_utils(
   in_file,
   reference,
-  write_jacobian,
+  write_jacobian = FALSE,
   args = NULL,
   knot_space = NULL,
   out_file = NULL,
@@ -45,7 +45,6 @@ ni_fsl_warp_utils(
 - write_jacobian:
 
   Logical. Switch on –jac flag with automatically generated filename
-  **Required.**
 
 - args:
 

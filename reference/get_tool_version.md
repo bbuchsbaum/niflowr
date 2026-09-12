@@ -5,5 +5,5 @@ Probe tool version using spec runtime info
 ## Usage
 
 ``` r
-get_tool_version(spec)
+get_tool_version(spec, plan = NULL)
 ```

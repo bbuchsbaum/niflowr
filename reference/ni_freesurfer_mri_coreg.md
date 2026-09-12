@@ -110,7 +110,7 @@ ni_freesurfer_mri_coreg(
 
 - max_iters:
 
-  Character. maximum iterations (default: 4)
+  Integer. maximum iterations (default: 4)
 
 - no_brute_force:
 
@@ -160,7 +160,7 @@ ni_freesurfer_mri_coreg(
 
 - saturation_threshold:
 
-  Character. saturation threshold (default=9.999)
+  Numeric. saturation threshold (default=9.999)
 
 - sep:
 

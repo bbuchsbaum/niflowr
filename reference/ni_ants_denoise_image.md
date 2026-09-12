@@ -7,7 +7,7 @@ Examples
 ``` r
 ni_ants_denoise_image(
   input_image,
-  save_noise,
+  save_noise = FALSE,
   args = NULL,
   dimension = NULL,
   noise_model = "Gaussian",
@@ -33,7 +33,6 @@ ni_ants_denoise_image(
 - save_noise:
 
   Logical. True if the estimated noise should be saved to file.
-  **Required.**
 
 - args:
 

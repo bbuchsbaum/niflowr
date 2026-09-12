@@ -7,7 +7,7 @@
 ``` r
 ni_fsl_eddy_correct(
   in_file,
-  ref_num,
+  ref_num = 0,
   args = NULL,
   out_file = NULL,
   .cwd = NULL,
@@ -27,7 +27,7 @@ ni_fsl_eddy_correct(
 
 - ref_num:
 
-  Integer. reference number **Required.**
+  Integer. reference number
 
 - args:
 

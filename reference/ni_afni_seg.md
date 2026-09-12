@@ -84,8 +84,8 @@ ni_afni_seg(
 
 - prefix:
 
-  Character. the prefix for the output folder containing all output
-  volumes
+  Character; file path. the prefix for the output folder containing all
+  output volumes
 
 - .cwd:
 

@@ -11,7 +11,7 @@ ni_freesurfer_mr_is_ca_label(
   curv,
   hemisphere,
   smoothwm,
-  subject_id,
+  subject_id = "subject_id",
   sulc,
   args = NULL,
   aseg = NULL,
@@ -52,7 +52,7 @@ ni_freesurfer_mr_is_ca_label(
 
 - subject_id:
 
-  Character. Subject name or ID **Required.**
+  Character. Subject name or ID
 
 - sulc:
 

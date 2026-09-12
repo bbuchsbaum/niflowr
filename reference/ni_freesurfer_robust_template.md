@@ -8,7 +8,7 @@ construct an unbiased robust template for longitudinal volumes
 ni_freesurfer_robust_template(
   auto_detect_sensitivity,
   in_files,
-  out_file,
+  out_file = "mri_robust_template_out.mgz",
   outlier_sensitivity,
   args = NULL,
   average_metric = NULL,
@@ -45,7 +45,6 @@ ni_freesurfer_robust_template(
 - out_file:
 
   Character; file path. output template volume (final mean/median image)
-  **Required.**
 
 - outlier_sensitivity:
 

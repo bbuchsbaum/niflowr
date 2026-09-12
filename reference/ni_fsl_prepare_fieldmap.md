@@ -6,7 +6,7 @@ Interface for the fsl_prepare_fieldmap script (FSL 5.0)
 
 ``` r
 ni_fsl_prepare_fieldmap(
-  delta_TE,
+  delta_TE = 2.46,
   in_magnitude,
   in_phase,
   args = NULL,
@@ -27,7 +27,7 @@ ni_fsl_prepare_fieldmap(
 - delta_TE:
 
   Numeric. echo time difference of the fieldmap sequence in ms. (usually
-  2.46ms in Siemens) **Required.**
+  2.46ms in Siemens)
 
 - in_magnitude:
 

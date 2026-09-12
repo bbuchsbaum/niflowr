@@ -159,7 +159,7 @@ ni_freesurfer_one_sample_t_test(
 
 - fwhm:
 
-  Character. smooth input by fwhm
+  Numeric. smooth input by fwhm
 
 - glm_dir:
 
@@ -297,7 +297,7 @@ ni_freesurfer_one_sample_t_test(
 
 - var_fwhm:
 
-  Character. smooth variance by fwhm
+  Numeric. smooth variance by fwhm
 
 - vox_dump:
 

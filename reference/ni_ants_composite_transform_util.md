@@ -37,8 +37,8 @@ ni_ants_composite_transform_util(
 
 - output_prefix:
 
-  Character. A prefix that is prepended to all output files (only used
-  for assembly).
+  Character; file path. A prefix that is prepended to all output files
+  (only used for assembly).
 
 - process:
 

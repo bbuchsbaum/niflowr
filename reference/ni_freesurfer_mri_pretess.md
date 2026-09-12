@@ -8,7 +8,7 @@ Uses Freesurfer's mri_pretess to prepare volumes to be tessellated.
 ni_freesurfer_mri_pretess(
   in_filled,
   in_norm,
-  label,
+  label = "wm",
   args = NULL,
   keep = NULL,
   nocorners = NULL,
@@ -38,7 +38,7 @@ ni_freesurfer_mri_pretess(
 
   Character or numeric vector. label to be picked up, can be a
   Freesurfer's string like 'wm' or a label value (e.g. 127 for rh or 255
-  for lh) **Required.**
+  for lh)
 
 - args:
 

@@ -60,7 +60,7 @@
 <span>  mixel_smooth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  no_bias <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  no_pve <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  number_classes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  number_classes <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  other_priors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  out_basename <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_biascorrected <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -92,15 +92,15 @@
 
 
 <dt id="arg-bias-iters">bias_iters<a class="anchor" aria-label="anchor" href="#arg-bias-iters"></a></dt>
-<dd><p>Character. number of main-loop iterations during bias-field removal</p></dd>
+<dd><p>Integer. number of main-loop iterations during bias-field removal</p></dd>
 
 
 <dt id="arg-bias-lowpass">bias_lowpass<a class="anchor" aria-label="anchor" href="#arg-bias-lowpass"></a></dt>
-<dd><p>Character. bias field smoothing extent (FWHM) in mm</p></dd>
+<dd><p>Integer. bias field smoothing extent (FWHM) in mm</p></dd>
 
 
 <dt id="arg-hyper">hyper<a class="anchor" aria-label="anchor" href="#arg-hyper"></a></dt>
-<dd><p>Character. segmentation spatial smoothness</p></dd>
+<dd><p>Numeric. segmentation spatial smoothness</p></dd>
 
 
 <dt id="arg-img-type">img_type<a class="anchor" aria-label="anchor" href="#arg-img-type"></a></dt>
@@ -108,7 +108,7 @@
 
 
 <dt id="arg-init-seg-smooth">init_seg_smooth<a class="anchor" aria-label="anchor" href="#arg-init-seg-smooth"></a></dt>
-<dd><p>Character. initial segmentation spatial smoothness (during bias field estimation)</p></dd>
+<dd><p>Numeric. initial segmentation spatial smoothness (during bias field estimation)</p></dd>
 
 
 <dt id="arg-init-transform">init_transform<a class="anchor" aria-label="anchor" href="#arg-init-transform"></a></dt>
@@ -116,7 +116,7 @@
 
 
 <dt id="arg-iters-afterbias">iters_afterbias<a class="anchor" aria-label="anchor" href="#arg-iters-afterbias"></a></dt>
-<dd><p>Character. number of main-loop iterations after bias-field removal</p></dd>
+<dd><p>Integer. number of main-loop iterations after bias-field removal</p></dd>
 
 
 <dt id="arg-manual-seg">manual_seg<a class="anchor" aria-label="anchor" href="#arg-manual-seg"></a></dt>
@@ -124,7 +124,7 @@
 
 
 <dt id="arg-mixel-smooth">mixel_smooth<a class="anchor" aria-label="anchor" href="#arg-mixel-smooth"></a></dt>
-<dd><p>Character. spatial smoothness for mixeltype</p></dd>
+<dd><p>Numeric. spatial smoothness for mixeltype</p></dd>
 
 
 <dt id="arg-no-bias">no_bias<a class="anchor" aria-label="anchor" href="#arg-no-bias"></a></dt>
@@ -136,7 +136,7 @@
 
 
 <dt id="arg-number-classes">number_classes<a class="anchor" aria-label="anchor" href="#arg-number-classes"></a></dt>
-<dd><p>Character. number of tissue-type classes</p></dd>
+<dd><p>Integer. number of tissue-type classes</p></dd>
 
 
 <dt id="arg-other-priors">other_priors<a class="anchor" aria-label="anchor" href="#arg-other-priors"></a></dt>
@@ -160,7 +160,7 @@
 
 
 <dt id="arg-segment-iters">segment_iters<a class="anchor" aria-label="anchor" href="#arg-segment-iters"></a></dt>
-<dd><p>Character. number of segmentation-initialisation iterations</p></dd>
+<dd><p>Integer. number of segmentation-initialisation iterations</p></dd>
 
 
 <dt id="arg-segments">segments<a class="anchor" aria-label="anchor" href="#arg-segments"></a></dt>

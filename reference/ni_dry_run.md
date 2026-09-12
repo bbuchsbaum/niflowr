@@ -1,6 +1,6 @@
 # Run a spec as a dry run
 
-Shorthand for `ni_run(ni_call(spec, ...), dry_run = TRUE)`.
+Run a spec as a dry run
 
 ## Usage
 

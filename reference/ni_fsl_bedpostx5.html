@@ -51,8 +51,8 @@
 <span>  <span class="va">bvecs</span>,</span>
 <span>  <span class="va">dwi</span>,</span>
 <span>  <span class="va">mask</span>,</span>
-<span>  <span class="va">n_fibres</span>,</span>
-<span>  <span class="va">out_dir</span>,</span>
+<span>  n_fibres <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  out_dir <span class="op">=</span> <span class="st">"bedpostx"</span>,</span>
 <span>  all_ard <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  burn_in <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -103,11 +103,11 @@
 
 
 <dt id="arg-n-fibres">n_fibres<a class="anchor" aria-label="anchor" href="#arg-n-fibres"></a></dt>
-<dd><p>Character. Maximum number of fibres to fit in each voxel <strong>Required.</strong></p></dd>
+<dd><p>Integer. Maximum number of fibres to fit in each voxel</p></dd>
 
 
 <dt id="arg-out-dir">out_dir<a class="anchor" aria-label="anchor" href="#arg-out-dir"></a></dt>
-<dd><p>Character; directory path. output directory <strong>Required.</strong></p></dd>
+<dd><p>Character; directory path. output directory</p></dd>
 
 
 <dt id="arg-all-ard">all_ard<a class="anchor" aria-label="anchor" href="#arg-all-ard"></a></dt>
@@ -119,11 +119,11 @@
 
 
 <dt id="arg-burn-in">burn_in<a class="anchor" aria-label="anchor" href="#arg-burn-in"></a></dt>
-<dd><p>Character. Total num of jumps at start of MCMC to be discarded</p></dd>
+<dd><p>Integer. Total num of jumps at start of MCMC to be discarded</p></dd>
 
 
 <dt id="arg-burn-in-no-ard">burn_in_no_ard<a class="anchor" aria-label="anchor" href="#arg-burn-in-no-ard"></a></dt>
-<dd><p>Character. num of burnin jumps before the ard is imposed</p></dd>
+<dd><p>Integer. num of burnin jumps before the ard is imposed</p></dd>
 
 
 <dt id="arg-cnlinear">cnlinear<a class="anchor" aria-label="anchor" href="#arg-cnlinear"></a></dt>
@@ -179,7 +179,7 @@
 
 
 <dt id="arg-sample-every">sample_every<a class="anchor" aria-label="anchor" href="#arg-sample-every"></a></dt>
-<dd><p>Character. Num of jumps for each sample (MCMC)</p></dd>
+<dd><p>Integer. Num of jumps for each sample (MCMC)</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
@@ -187,7 +187,7 @@
 
 
 <dt id="arg-update-proposal-every">update_proposal_every<a class="anchor" aria-label="anchor" href="#arg-update-proposal-every"></a></dt>
-<dd><p>Character. Num of jumps for each update to the proposal density std (MCMC)</p></dd>
+<dd><p>Integer. Num of jumps for each update to the proposal density std (MCMC)</p></dd>
 
 
 <dt id="arg--cwd">.cwd<a class="anchor" aria-label="anchor" href="#arg--cwd"></a></dt>

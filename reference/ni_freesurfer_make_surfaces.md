@@ -10,7 +10,7 @@ ni_freesurfer_make_surfaces(
   in_filled,
   in_orig,
   in_wm,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   fix_mtl = NULL,
   in_T1 = NULL,
@@ -54,7 +54,7 @@ ni_freesurfer_make_surfaces(
 
 - subject_id:
 
-  Character. Subject being processed **Required.**
+  Character. Subject being processed
 
 - args:
 

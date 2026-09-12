@@ -16,7 +16,7 @@ ni_freesurfer_seg_stats_recon_all(
   rh_white,
   ribbon,
   segmentation_file,
-  subject_id,
+  subject_id = "subject_id",
   surf_label,
   transform,
   args = NULL,
@@ -108,7 +108,7 @@ ni_freesurfer_seg_stats_recon_all(
 
 - subject_id:
 
-  Character. Subject id being processed **Required.**
+  Character. Subject id being processed
 
 - surf_label:
 

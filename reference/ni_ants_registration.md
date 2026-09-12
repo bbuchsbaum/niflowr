@@ -8,7 +8,7 @@ ANTs Registration command for registration of images
 ni_ants_registration(
   fixed_image,
   metric,
-  metric_weight,
+  metric_weight = 1,
   moving_image,
   shrink_factors,
   smoothing_sigmas,
@@ -55,7 +55,7 @@ ni_ants_registration(
 - metric_weight:
 
   Character or numeric vector. the metric weight(s) for each stage. The
-  weights must sum to 1 per stage. **Required.**
+  weights must sum to 1 per stage.
 
 - moving_image:
 
@@ -129,7 +129,7 @@ ni_ants_registration(
 
 - output_transform_prefix:
 
-  Character
+  Character; file path
 
 - random_seed:
 

@@ -9,7 +9,7 @@ ni_freesurfer_curvature_stats(
   curvfile1,
   curvfile2,
   hemisphere,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   min_max = NULL,
   out_file = NULL,
@@ -42,7 +42,7 @@ ni_freesurfer_curvature_stats(
 
 - subject_id:
 
-  Character. Subject being processed **Required.**
+  Character. Subject being processed
 
 - args:
 

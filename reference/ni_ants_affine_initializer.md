@@ -58,7 +58,7 @@ ni_ants_affine_initializer(
 
 - radian_fraction:
 
-  Character. search this arc +/- principal axes
+  Numeric. search this arc +/- principal axes
 
 - search_factor:
 

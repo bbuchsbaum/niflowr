@@ -202,7 +202,7 @@ ni_fsl_eddy(
 
 - out_base:
 
-  Character. Basename for output image
+  Character; file path. Basename for output image
 
 - outlier_nstd:
 

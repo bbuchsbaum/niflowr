@@ -51,7 +51,7 @@ ni_fsl_filmgls(
 
 - brightness_threshold:
 
-  Character. susan brightness threshold, otherwise it is estimated
+  Integer. susan brightness threshold, otherwise it is estimated
 
 - design_file:
 
@@ -89,7 +89,7 @@ ni_fsl_filmgls(
 
 - threshold:
 
-  Character. threshold
+  Numeric. threshold
 
 - tukey_window:
 

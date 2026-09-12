@@ -14,7 +14,7 @@ ni_freesurfer_parcellation_stats(
   rh_pial,
   rh_white,
   ribbon,
-  subject_id,
+  subject_id = "subject_id",
   thickness,
   transform,
   wm,
@@ -81,7 +81,7 @@ ni_freesurfer_parcellation_stats(
 
 - subject_id:
 
-  Character. Subject being processed **Required.**
+  Character. Subject being processed
 
 - thickness:
 

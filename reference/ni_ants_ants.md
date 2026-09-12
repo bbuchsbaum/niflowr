@@ -8,9 +8,9 @@ ANTS wrapper for registration of images
 ni_ants_ants(
   fixed_image,
   metric,
-  metric_weight,
+  metric_weight = 1,
   moving_image,
-  output_transform_prefix,
+  output_transform_prefix = "out",
   radius,
   transformation_model,
   affine_gradient_descent_option = NULL,
@@ -46,7 +46,7 @@ ni_ants_ants(
 - metric_weight:
 
   Character or numeric vector. the metric weight(s) for each stage. The
-  weights must sum to 1 per stage. **Required.**
+  weights must sum to 1 per stage.
 
 - moving_image:
 
@@ -55,7 +55,7 @@ ni_ants_ants(
 
 - output_transform_prefix:
 
-  Character **Required.**
+  Character; file path
 
 - radius:
 

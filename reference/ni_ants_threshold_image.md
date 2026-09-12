@@ -6,7 +6,7 @@ Apply thresholds on images.
 
 ``` r
 ni_ants_threshold_image(
-  copy_header,
+  copy_header = TRUE,
   input_image,
   args = NULL,
   dimension = 3,
@@ -32,7 +32,7 @@ ni_ants_threshold_image(
 - copy_header:
 
   Logical. copy headers of the original image into the output
-  (corrected) file **Required.**
+  (corrected) file
 
 - input_image:
 

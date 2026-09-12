@@ -70,8 +70,8 @@ ni_ants_buildtemplateparallel(
 
 - out_prefix:
 
-  Character. Prefix that is prepended to all output files (default =
-  antsTMPL\_)
+  Character; file path. Prefix that is prepended to all output files
+  (default = antsTMPL\_)
 
 - parallelization:
 

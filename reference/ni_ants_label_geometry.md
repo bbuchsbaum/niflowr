@@ -6,7 +6,7 @@ Extracts geometry measures using a label file and an optional image file
 
 ``` r
 ni_ants_label_geometry(
-  intensity_image,
+  intensity_image = "[]",
   label_image,
   args = NULL,
   dimension = 3,
@@ -25,7 +25,7 @@ ni_ants_label_geometry(
 - intensity_image:
 
   Character; file path. Intensity image to extract values from. This is
-  an optional input **Required.**
+  an optional input
 
 - label_image:
 

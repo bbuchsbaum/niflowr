@@ -7,7 +7,7 @@ FSL run_first_all wrapper for segmentation of subcortical volumes
 ``` r
 ni_fsl_first(
   in_file,
-  out_file,
+  out_file = "segmented",
   affine_file = NULL,
   args = NULL,
   brain_extracted = NULL,
@@ -33,7 +33,7 @@ ni_fsl_first(
 
 - out_file:
 
-  Character; file path. output data file **Required.**
+  Character; file path. output data file
 
 - affine_file:
 

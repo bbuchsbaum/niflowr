@@ -15,16 +15,17 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ants_n_levels.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ants_preset_stages.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ants_recycle.html</loc></url>
-<url><loc>https://bbuchsbaum.github.io/niflowr/reference/apply_spec_defaults.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/apply_required_defaults.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/apply_strip_ext.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/build_app_template.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/build_command.html</loc></url>
-<url><loc>https://bbuchsbaum.github.io/niflowr/reference/check_outputs.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/coerce_enum_value.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/coerce_for_argstr.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/coerce_input_value.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/dispatch_custom_render.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/enum_pick_choice.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/extract_pipeline_path.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/fsl_needs_strip_ext.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/generate_tool_example.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/get_tool_version.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/index.html</loc></url>
@@ -157,6 +158,8 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_dcm2niix_convert.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_deriv_path.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_doctor.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_doctor_probe_docker_payload.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_doctor_profile_docker_fields.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_dry_run.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_fastsurfer_run.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_fastsurfer_segment.html</loc></url>
@@ -357,8 +360,11 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_lint_specs.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_lock_read.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_lock_validate.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_normalize_docker_entrypoint.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_normalize_docker_platform.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_outputs.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_pin.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_plan.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_provenance.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_provenance_read.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_provenance_write.html</loc></url>
@@ -389,5 +395,6 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/validate_requires.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/validate_type.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/validate_xor.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/values_for_output_templates.html</loc></url>
 </urlset>
 

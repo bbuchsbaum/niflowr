@@ -32,7 +32,7 @@ ni_freesurfer_smooth(
 
 - num_iters:
 
-  Character. number of iterations instead of fwhm **Required.**
+  Integer. number of iterations instead of fwhm **Required.**
 
 - reg_file:
 
@@ -41,7 +41,7 @@ ni_freesurfer_smooth(
 
 - surface_fwhm:
 
-  Character. surface FWHM in mm **Required.**
+  Numeric. surface FWHM in mm **Required.**
 
 - args:
 
@@ -61,7 +61,7 @@ ni_freesurfer_smooth(
 
 - vol_fwhm:
 
-  Character. volume smoothing outside of surface
+  Numeric. volume smoothing outside of surface
 
 - .cwd:
 

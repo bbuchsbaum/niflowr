@@ -16,7 +16,7 @@ ni_freesurfer_aparc2_aseg(
   rh_ribbon,
   rh_white,
   ribbon,
-  subject_id,
+  subject_id = "subject_id",
   a2009s = NULL,
   args = NULL,
   aseg = NULL,
@@ -88,7 +88,7 @@ ni_freesurfer_aparc2_aseg(
 
 - subject_id:
 
-  Character. Subject being processed **Required.**
+  Character. Subject being processed
 
 - a2009s:
 

@@ -6,11 +6,11 @@ Interface for the ICA_AROMA.py script.
 
 ``` r
 ni_fsl_ica_aroma(
-  denoise_type,
+  denoise_type = "nonaggr",
   feat_dir,
   in_file,
   motion_parameters,
-  out_dir,
+  out_dir = "out",
   TR = NULL,
   args = NULL,
   dim = NULL,
@@ -35,7 +35,7 @@ ni_fsl_ica_aroma(
   strategy: -no: only classification, no denoising -nonaggr (default):
   non-aggresssive denoising, i.e. partial component regression -aggr:
   aggressive denoising, i.e. full component regression -both: both
-  aggressive and non-aggressive denoising (two outputs) **Required.**
+  aggressive and non-aggressive denoising (two outputs)
 
 - feat_dir:
 
@@ -53,7 +53,7 @@ ni_fsl_ica_aroma(
 
 - out_dir:
 
-  Character; directory path. output directory **Required.**
+  Character; directory path. output directory
 
 - TR:
 

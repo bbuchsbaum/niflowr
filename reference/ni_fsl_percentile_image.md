@@ -57,7 +57,7 @@ ni_fsl_percentile_image(
 
 - perc:
 
-  Character. nth percentile (0-100) of FULL RANGE across dimension
+  Numeric. nth percentile (0-100) of FULL RANGE across dimension
 
 - .cwd:
 

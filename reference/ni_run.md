@@ -15,7 +15,9 @@ ni_run(
   echo = interactive(),
   provenance = TRUE,
   error_on_status = TRUE,
-  return = c("result", "files")
+  return = c("result", "files"),
+  timeout = Inf,
+  log_dir = NULL
 )
 ```
 
@@ -34,8 +36,8 @@ ni_run(
 
 - dry_run:
 
-  Logical; if `TRUE`, print the resolved command and return without
-  executing.
+  Logical; if `TRUE`, print the resolved command and return the
+  inspectable execution plan without executing.
 
 - echo:
 
@@ -54,6 +56,15 @@ ni_run(
 - return:
 
   One of `"result"` (default) or `"files"`.
+
+- timeout:
+
+  Wall-time limit in seconds; `Inf` disables the limit.
+
+- log_dir:
+
+  Directory for per-invocation logs and provenance. Defaults to
+  `.niflowr/runs` beside the first output, or in the working directory.
 
 ## Value
 

@@ -42,8 +42,8 @@ ni_ants_transform_build(
 
 - output_prefix:
 
-  Character. Prefix prepended to all generated artifacts (e.g.
-  'Composite.h5'). **Required.**
+  Character; file path. Prefix prepended to all generated artifacts
+  (e.g. 'Composite.h5'). **Required.**
 
 - preset:
 

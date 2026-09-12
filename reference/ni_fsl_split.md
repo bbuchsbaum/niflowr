@@ -36,7 +36,7 @@ ni_fsl_split(
 
 - out_base_name:
 
-  Character. outputs prefix
+  Character; file path. outputs prefix
 
 - .cwd:
 

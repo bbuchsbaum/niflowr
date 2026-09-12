@@ -163,7 +163,7 @@ ni_freesurfer_mrtm2(
 
 - fwhm:
 
-  Character. smooth input by fwhm
+  Numeric. smooth input by fwhm
 
 - glm_dir:
 
@@ -296,7 +296,7 @@ ni_freesurfer_mrtm2(
 
 - var_fwhm:
 
-  Character. smooth variance by fwhm
+  Numeric. smooth variance by fwhm
 
 - vox_dump:
 

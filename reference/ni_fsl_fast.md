@@ -19,7 +19,7 @@ ni_fsl_fast(
   mixel_smooth = NULL,
   no_bias = NULL,
   no_pve = NULL,
-  number_classes = NULL,
+  number_classes = 3,
   other_priors = NULL,
   out_basename = NULL,
   output_biascorrected = NULL,
@@ -51,15 +51,15 @@ ni_fsl_fast(
 
 - bias_iters:
 
-  Character. number of main-loop iterations during bias-field removal
+  Integer. number of main-loop iterations during bias-field removal
 
 - bias_lowpass:
 
-  Character. bias field smoothing extent (FWHM) in mm
+  Integer. bias field smoothing extent (FWHM) in mm
 
 - hyper:
 
-  Character. segmentation spatial smoothness
+  Numeric. segmentation spatial smoothness
 
 - img_type:
 
@@ -68,7 +68,7 @@ ni_fsl_fast(
 
 - init_seg_smooth:
 
-  Character. initial segmentation spatial smoothness (during bias field
+  Numeric. initial segmentation spatial smoothness (during bias field
   estimation)
 
 - init_transform:
@@ -77,7 +77,7 @@ ni_fsl_fast(
 
 - iters_afterbias:
 
-  Character. number of main-loop iterations after bias-field removal
+  Integer. number of main-loop iterations after bias-field removal
 
 - manual_seg:
 
@@ -85,7 +85,7 @@ ni_fsl_fast(
 
 - mixel_smooth:
 
-  Character. spatial smoothness for mixeltype
+  Numeric. spatial smoothness for mixeltype
 
 - no_bias:
 
@@ -97,7 +97,7 @@ ni_fsl_fast(
 
 - number_classes:
 
-  Character. number of tissue-type classes
+  Integer. number of tissue-type classes
 
 - other_priors:
 
@@ -121,7 +121,7 @@ ni_fsl_fast(
 
 - segment_iters:
 
-  Character. number of segmentation-initialisation iterations
+  Integer. number of segmentation-initialisation iterations
 
 - segments:
 

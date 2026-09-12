@@ -49,7 +49,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ni_ants_registration</span><span class="op">(</span></span>
 <span>  <span class="va">fixed_image</span>,</span>
 <span>  <span class="va">metric</span>,</span>
-<span>  <span class="va">metric_weight</span>,</span>
+<span>  metric_weight <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">moving_image</span>,</span>
 <span>  <span class="va">shrink_factors</span>,</span>
 <span>  <span class="va">smoothing_sigmas</span>,</span>
@@ -93,7 +93,7 @@
 
 
 <dt id="arg-metric-weight">metric_weight<a class="anchor" aria-label="anchor" href="#arg-metric-weight"></a></dt>
-<dd><p>Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage. <strong>Required.</strong></p></dd>
+<dd><p>Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage.</p></dd>
 
 
 <dt id="arg-moving-image">moving_image<a class="anchor" aria-label="anchor" href="#arg-moving-image"></a></dt>
@@ -149,7 +149,7 @@
 
 
 <dt id="arg-output-transform-prefix">output_transform_prefix<a class="anchor" aria-label="anchor" href="#arg-output-transform-prefix"></a></dt>
-<dd><p>Character</p></dd>
+<dd><p>Character; file path</p></dd>
 
 
 <dt id="arg-random-seed">random_seed<a class="anchor" aria-label="anchor" href="#arg-random-seed"></a></dt>

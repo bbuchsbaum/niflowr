@@ -7,7 +7,7 @@ This program strips skull and other outer non-brain tissue and
 ``` r
 ni_freesurfer_watershed_skull_strip(
   in_file,
-  out_file,
+  out_file = "brainmask.auto.mgz",
   args = NULL,
   brain_atlas = NULL,
   t1 = NULL,
@@ -29,7 +29,7 @@ ni_freesurfer_watershed_skull_strip(
 
 - out_file:
 
-  Character; file path. output volume **Required.**
+  Character; file path. output volume
 
 - args:
 

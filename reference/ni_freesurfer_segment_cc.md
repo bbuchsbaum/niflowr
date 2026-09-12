@@ -9,7 +9,7 @@ ni_freesurfer_segment_cc(
   in_file,
   in_norm,
   out_rotation,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   out_file = NULL,
   .cwd = NULL,
@@ -40,7 +40,7 @@ ni_freesurfer_segment_cc(
 
 - subject_id:
 
-  Character. Subject name **Required.**
+  Character. Subject name
 
 - args:
 

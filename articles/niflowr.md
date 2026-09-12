@@ -402,8 +402,9 @@ spec
 #> vertical_gradient (double) - vertical gradient in fractional intensity
 #> threshold (-1, 1)
 #> 
-#> ── Outputs (1)
+#> ── Outputs (2)
 #> out_file (file)
+#> mask_file (file)
 ```
 
 ## The core workflow
@@ -457,6 +458,7 @@ call
 #> 
 #> ── Expected outputs
 #> out_file: /tmp/brain.nii.gz
+#> mask_file: /tmp/brain_mask.nii.gz
 ```
 
 ### Step 2: Inspect the command
@@ -530,9 +532,6 @@ ni_dry_run("fsl.bet",
   .engine  = "native"
 )
 #> ℹ Dry run [native]: `bet /tmp/t1.nii.gz /tmp/brain -f 0.50`
-#> 
-#> ── Expected outputs
-#> out_file: /tmp/brain.nii.gz
 ```
 
 ## Using the convenience wrappers
@@ -632,6 +631,14 @@ profiles:
     apptainer_uri: "docker://deepmi/fastsurfer:cpu-v2.4.2"
 ```
 
+Optional per-profile Docker fields:
+
+- `entrypoint`: overwrite or clear the image `ENTRYPOINT` (use `""` or
+  `[]` when a shell entrypoint would silently ignore the niflowr
+  command).
+- `platform`: e.g. `"linux/amd64"` for amd64-only images on Apple
+  Silicon.
+
 Then call the wrapper:
 
 ``` r
@@ -663,8 +670,9 @@ ni_outputs(seg)
 
 Use
 [`ni_doctor()`](https://bbuchsbaum.github.io/niflowr/reference/ni_doctor.md)
-to check runtime binaries, mounted roots, profile definitions, and
-lockfile consistency:
+to check runtime binaries, mounted roots, profile definitions, lockfile
+consistency, and (for local Docker images) whether the payload command
+actually executes:
 
 ``` r
 

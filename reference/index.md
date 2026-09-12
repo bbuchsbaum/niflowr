@@ -652,6 +652,8 @@
   : Get output file paths from a result
 - [`ni_pin()`](https://bbuchsbaum.github.io/niflowr/reference/ni_pin.md)
   : Create/update a runtime lockfile
+- [`ni_plan()`](https://bbuchsbaum.github.io/niflowr/reference/ni_plan.md)
+  : Resolve an inspectable execution plan
 - [`ni_provenance()`](https://bbuchsbaum.github.io/niflowr/reference/ni_provenance.md)
   : Get provenance metadata from a result
 - [`ni_provenance_read()`](https://bbuchsbaum.github.io/niflowr/reference/ni_provenance_read.md)

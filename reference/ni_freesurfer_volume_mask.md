@@ -14,7 +14,7 @@ ni_freesurfer_volume_mask(
   rh_white,
   right_ribbonlabel,
   right_whitelabel,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   in_aseg = NULL,
   save_ribbon = NULL,
@@ -65,7 +65,7 @@ ni_freesurfer_volume_mask(
 
 - subject_id:
 
-  Character. Subject being processed **Required.**
+  Character. Subject being processed
 
 - args:
 

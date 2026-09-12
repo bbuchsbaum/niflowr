@@ -159,7 +159,7 @@ ni_freesurfer_glm_fit(
 
 - fwhm:
 
-  Character. smooth input by fwhm
+  Numeric. smooth input by fwhm
 
 - glm_dir:
 
@@ -297,7 +297,7 @@ ni_freesurfer_glm_fit(
 
 - var_fwhm:
 
-  Character. smooth variance by fwhm
+  Numeric. smooth variance by fwhm
 
 - vox_dump:
 

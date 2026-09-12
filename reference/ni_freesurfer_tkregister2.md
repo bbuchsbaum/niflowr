@@ -7,7 +7,7 @@ Examples
 ``` r
 ni_freesurfer_tkregister2(
   moving_image,
-  reg_file,
+  reg_file = "register.dat",
   args = NULL,
   fsl_in_matrix = NULL,
   fsl_out = NULL,
@@ -39,7 +39,7 @@ ni_freesurfer_tkregister2(
 
 - reg_file:
 
-  Character; file path. freesurfer-style registration file **Required.**
+  Character; file path. freesurfer-style registration file
 
 - args:
 
