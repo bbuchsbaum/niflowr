@@ -31,7 +31,8 @@
       "cli": {
         "argstr": "%s",
         "position": -2
-      }
+      },
+      "items_type": "file"
     },
     "matrix": {
       "type": "flag",

@@ -36,7 +36,8 @@
       "required": true,
       "cli": {
         "argstr": "-source %s"
-      }
+      },
+      "items_type": "file"
     },
     "interp": {
       "type": "enum",

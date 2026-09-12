@@ -17,7 +17,8 @@
       "required": true,
       "cli": {
         "argstr": "-n %s"
-      }
+      },
+      "items_type": "file"
     },
     "in_segmentations": {
       "type": "list",
@@ -25,7 +26,8 @@
       "required": true,
       "cli": {
         "argstr": "-a %s"
-      }
+      },
+      "items_type": "file"
     },
     "in_segmentations_noCC": {
       "type": "list",
@@ -33,7 +35,8 @@
       "required": true,
       "cli": {
         "argstr": "-c %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_file": {
       "type": "file",

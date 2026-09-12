@@ -79,7 +79,8 @@
       "desc": "save image with number of hits at each voxel",
       "cli": {
         "argstr": "--srchit %s"
-      }
+      },
+      "items_type": "file"
     },
     "hits_type": {
       "type": "enum",
@@ -354,7 +355,8 @@
       "desc": "text file with the number of voxels intersecting the surface",
       "cli": {
         "argstr": "--nvox %s"
-      }
+      },
+      "items_type": "file"
     }
   },
   "outputs": {

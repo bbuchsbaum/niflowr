@@ -66,7 +66,8 @@
       "desc": "Specifies the resolution/knot-spacing of the splines pertaining to the coefficients in the --out file. This parameter is only relevant if --outformat is set to spline. It should be noted that if the --in file has a higher resolution, the resulting coefficients will pertain to the closest (in a least-squares sense) file in the space of fields with the --warpres resolution. It should also be noted that the resolution will always be an integer multiple of the voxel size.",
       "cli": {
         "argstr": "--warpres=%0.4f,%0.4f,%0.4f"
-      }
+      },
+      "items_type": "file"
     },
     "with_affine": {
       "type": "flag",

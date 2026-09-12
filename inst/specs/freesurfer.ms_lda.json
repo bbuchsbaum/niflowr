@@ -25,7 +25,8 @@
       "cli": {
         "argstr": "%s",
         "position": -1
-      }
+      },
+      "items_type": "file"
     },
     "label_file": {
       "type": "file",

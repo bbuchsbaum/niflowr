@@ -56,7 +56,8 @@
       "desc": "contrast file",
       "cli": {
         "argstr": "--C %s..."
-      }
+      },
+      "items_type": "file"
     },
     "default_color_table": {
       "type": "flag",

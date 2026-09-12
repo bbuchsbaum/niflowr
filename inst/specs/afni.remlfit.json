@@ -17,7 +17,8 @@
       "cli": {
         "argstr": "-addbase %s",
         "sep": " "
-      }
+      },
+      "items_type": "file"
     },
     "args": {
       "type": "string",
@@ -86,7 +87,8 @@
       "desc": "read a symbolic GLT from input file and associate it with a label. As in Deconvolve, you can also use the 'SYM:' method to provide the definition of the GLT directly as a string (e.g., with 'SYM: +Label1 -Label2'). Unlike Deconvolve, you MUST specify 'SYM: ' if providing the GLT directly as a string instead of from a file",
       "cli": {
         "argstr": "-gltsym \"%s\" %s..."
-      }
+      },
+      "items_type": "file"
     },
     "goforit": {
       "type": "flag",
@@ -246,14 +248,16 @@
       "desc": "similar to 'addbase' in concept, BUT each specified file must have an integer multiple of the number of slices in the input dataset(s); then, separate regression matrices are generated for each slice, with the first column of the file appended to the matrix for the first slice of the dataset, the second column of the file appended to the matrix for the first slice of the dataset, and so on. Intended to help model physiological noise in FMRI, or other effects you want to regress out that might change significantly in the inter-slice time intervals. This will slow the program down, and make it use a lot more memory (to hold all the matrix stuff).",
       "cli": {
         "argstr": "-slibase %s"
-      }
+      },
+      "items_type": "file"
     },
     "slibase_sm": {
       "type": "list",
       "desc": "similar to 'slibase', BUT each file much be in slice major order (i.e. all slice0 columns come first, then all slice1 columns, etc).",
       "cli": {
         "argstr": "-slibase_sm %s"
-      }
+      },
+      "items_type": "file"
     },
     "tout": {
       "type": "flag",

@@ -40,7 +40,8 @@
       "desc": "weights for each voxel specified by a file with an optional volume number (defaults to 0)",
       "cli": {
         "argstr": "-weight '%s[%d]'"
-      }
+      },
+      "items_type": "file"
     },
     "interp": {
       "type": "enum",

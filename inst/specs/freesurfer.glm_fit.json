@@ -65,7 +65,8 @@
       "desc": "contrast file",
       "cli": {
         "argstr": "--C %s..."
-      }
+      },
+      "items_type": "file"
     },
     "cortex": {
       "type": "flag",
@@ -162,7 +163,8 @@
           "design",
           "one_sample"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "fwhm": {
       "type": "double",

@@ -84,56 +84,64 @@
       "desc": "output of cluster index (in size order)",
       "cli": {
         "argstr": "--oindex=%s"
-      }
+      },
+      "items_type": "file"
     },
     "out_localmax_txt_file": {
       "type": "list",
       "desc": "local maxima text file",
       "cli": {
         "argstr": "--olmax=%s"
-      }
+      },
+      "items_type": "file"
     },
     "out_localmax_vol_file": {
       "type": "list",
       "desc": "output of local maxima volume",
       "cli": {
         "argstr": "--olmaxim=%s"
-      }
+      },
+      "items_type": "file"
     },
     "out_max_file": {
       "type": "list",
       "desc": "filename for output of max image",
       "cli": {
         "argstr": "--omax=%s"
-      }
+      },
+      "items_type": "file"
     },
     "out_mean_file": {
       "type": "list",
       "desc": "filename for output of mean image",
       "cli": {
         "argstr": "--omean=%s"
-      }
+      },
+      "items_type": "file"
     },
     "out_pval_file": {
       "type": "list",
       "desc": "filename for image output of log pvals",
       "cli": {
         "argstr": "--opvals=%s"
-      }
+      },
+      "items_type": "file"
     },
     "out_size_file": {
       "type": "list",
       "desc": "filename for output of size image",
       "cli": {
         "argstr": "--osize=%s"
-      }
+      },
+      "items_type": "file"
     },
     "out_threshold_file": {
       "type": "list",
       "desc": "thresholded image",
       "cli": {
         "argstr": "--othresh=%s"
-      }
+      },
+      "items_type": "file"
     },
     "peak_distance": {
       "type": "double",

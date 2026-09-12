@@ -13,7 +13,7 @@
     },
     "default_value": {
       "type": "double",
-      "default": 0.0,
+      "default": 0,
       "cli": {
         "argstr": "--default-value %g"
       }
@@ -99,7 +99,8 @@
       "required": true,
       "cli": {
         "argstr": "%s"
-      }
+      },
+      "items_type": "file"
     }
   },
   "outputs": {

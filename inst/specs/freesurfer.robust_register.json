@@ -50,7 +50,8 @@
       "desc": "write source volume mapped to halfway space",
       "cli": {
         "argstr": "--halfmov %s"
-      }
+      },
+      "items_type": "file"
     },
     "half_source_xfm": {
       "type": "list",
@@ -64,7 +65,8 @@
       "desc": "write target volume mapped to halfway space",
       "cli": {
         "argstr": "--halfdst %s"
-      }
+      },
+      "items_type": "file"
     },
     "half_targ_xfm": {
       "type": "list",
@@ -78,7 +80,8 @@
       "desc": "write weights volume mapped to halfway space",
       "cli": {
         "argstr": "--halfweights %s"
-      }
+      },
+      "items_type": "file"
     },
     "high_iterations": {
       "type": "int",
@@ -156,7 +159,8 @@
       "default": true,
       "cli": {
         "argstr": "--lta %s"
-      }
+      },
+      "items_type": "file"
     },
     "outlier_limit": {
       "type": "double",
@@ -183,7 +187,8 @@
       "desc": "registered image; either True or filename",
       "cli": {
         "argstr": "--warp %s"
-      }
+      },
+      "items_type": "file"
     },
     "source_file": {
       "type": "file",
@@ -220,7 +225,8 @@
       "desc": "weights image to write; either True or filename",
       "cli": {
         "argstr": "--weights %s"
-      }
+      },
+      "items_type": "file"
     },
     "write_vo2vox": {
       "type": "flag",

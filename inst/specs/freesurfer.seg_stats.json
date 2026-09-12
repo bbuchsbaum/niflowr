@@ -30,14 +30,16 @@
       "desc": "Save as binary volume (bool or filename)",
       "cli": {
         "argstr": "--avgwfvol %s"
-      }
+      },
+      "items_type": "file"
     },
     "avgwf_txt_file": {
       "type": "list",
       "desc": "Save average waveform into file (bool or filename)",
       "cli": {
         "argstr": "--avgwf %s"
-      }
+      },
+      "items_type": "file"
     },
     "brain_vol": {
       "type": "enum",
@@ -267,7 +269,8 @@
       "desc": "Save mean across space and time",
       "cli": {
         "argstr": "--sfavg %s"
-      }
+      },
+      "items_type": "file"
     },
     "subcort_gm": {
       "type": "flag",

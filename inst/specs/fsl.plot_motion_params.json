@@ -18,7 +18,8 @@
       "cli": {
         "argstr": "%s",
         "position": 1
-      }
+      },
+      "items_type": "file"
     },
     "in_source": {
       "type": "enum",
@@ -42,7 +43,8 @@
       "desc": "plot image height and width",
       "cli": {
         "argstr": "%s"
-      }
+      },
+      "items_type": "file"
     },
     "plot_type": {
       "type": "enum",

@@ -78,7 +78,8 @@
       "cli": {
         "argstr": "-input %s",
         "position": -1
-      }
+      },
+      "items_type": "file"
     },
     "inter": {
       "type": "flag",

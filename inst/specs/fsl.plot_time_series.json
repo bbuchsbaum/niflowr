@@ -18,7 +18,8 @@
       "cli": {
         "argstr": "%s",
         "position": 1
-      }
+      },
+      "items_type": "file"
     },
     "labels": {
       "type": "list",
@@ -65,14 +66,16 @@
           "plot_start",
           "plot_finish"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "plot_size": {
       "type": "list",
       "desc": "plot image height and width",
       "cli": {
         "argstr": "%s"
-      }
+      },
+      "items_type": "file"
     },
     "plot_start": {
       "type": "int",

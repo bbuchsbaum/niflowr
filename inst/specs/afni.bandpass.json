@@ -114,7 +114,8 @@
       "desc": "Also orthogonalize input to columns in f.1D. Multiple '-ort' options are allowed.",
       "cli": {
         "argstr": "-ort %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_file": {
       "type": "file",

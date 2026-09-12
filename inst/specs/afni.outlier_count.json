@@ -98,7 +98,7 @@
       }
     },
     "qthr": {
-      "type": "string",
+      "type": "double",
       "desc": "indicate a value for q to compute alpha",
       "default": 0.001,
       "cli": {

@@ -39,7 +39,8 @@
       "desc": "write an image of the local maxima",
       "cli": {
         "argstr": "--localmax=%s"
-      }
+      },
+      "items_type": "file"
     },
     "mask_file": {
       "type": "file",
