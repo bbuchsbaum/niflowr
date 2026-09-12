@@ -46,7 +46,7 @@
     "extendboundary": {
       "type": "double",
       "desc": "Relative proportion to extend voxels at boundary",
-      "default": 1.0,
+      "default": 1,
       "cli": {
         "argstr": "--extendboundary=%0.2f"
       }
@@ -65,13 +65,14 @@
       "desc": "filename of B0 output volume",
       "cli": {
         "argstr": "-o %s",
-        "position": 1
+        "position": 1,
+        "strip_ext": true
       }
     },
     "x_b0": {
       "type": "double",
       "desc": "Value for zeroth-order b0 field (x-component), in Tesla",
-      "default": 0.0,
+      "default": 0,
       "cli": {
         "argstr": "--b0x=%0.2f"
       },
@@ -84,7 +85,7 @@
     "x_grad": {
       "type": "double",
       "desc": "Value for zeroth-order x-gradient field (per mm)",
-      "default": 0.0,
+      "default": 0,
       "cli": {
         "argstr": "--gx=%0.4f"
       }
@@ -106,7 +107,7 @@
     "y_b0": {
       "type": "double",
       "desc": "Value for zeroth-order b0 field (y-component), in Tesla",
-      "default": 0.0,
+      "default": 0,
       "cli": {
         "argstr": "--b0y=%0.2f"
       },
@@ -119,7 +120,7 @@
     "y_grad": {
       "type": "double",
       "desc": "Value for zeroth-order y-gradient field (per mm)",
-      "default": 0.0,
+      "default": 0,
       "cli": {
         "argstr": "--gy=%0.4f"
       }
@@ -127,7 +128,7 @@
     "z_b0": {
       "type": "double",
       "desc": "Value for zeroth-order b0 field (z-component), in Tesla",
-      "default": 1.0,
+      "default": 1,
       "cli": {
         "argstr": "--b0=%0.2f"
       },
@@ -140,7 +141,7 @@
     "z_grad": {
       "type": "double",
       "desc": "Value for zeroth-order z-gradient field (per mm)",
-      "default": 0.0,
+      "default": 0,
       "cli": {
         "argstr": "--gz=%0.4f"
       }

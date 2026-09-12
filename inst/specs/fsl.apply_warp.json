@@ -79,7 +79,8 @@
       "desc": "output filename",
       "cli": {
         "argstr": "--out=%s",
-        "position": 2
+        "position": 2,
+        "strip_ext": true
       }
     },
     "postmat": {

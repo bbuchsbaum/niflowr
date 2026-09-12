@@ -59,7 +59,8 @@
       "type": "file",
       "desc": "filename of output timeseries",
       "cli": {
-        "argstr": "--out=%s"
+        "argstr": "--out=%s",
+        "strip_ext": true
       }
     },
     "slice_direction": {

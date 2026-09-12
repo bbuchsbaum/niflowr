@@ -37,7 +37,8 @@
       "type": "file",
       "desc": "output signal loss estimate file",
       "cli": {
-        "argstr": "-s %s"
+        "argstr": "-s %s",
+        "strip_ext": true
       }
     },
     "slice_direction": {

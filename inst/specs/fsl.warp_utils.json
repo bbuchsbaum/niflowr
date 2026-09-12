@@ -31,7 +31,8 @@
       "desc": "Name of output file. The format of the output depends on what other parameters are set. The default format is a (4D) field-file. If the --outformat is set to spline the format will be a (4D) file of spline coefficients.",
       "cli": {
         "argstr": "--out=%s",
-        "position": -1
+        "position": -1,
+        "strip_ext": true
       }
     },
     "out_format": {

@@ -324,6 +324,9 @@ output_when_holds <- function(when, values) {
 resolve_outputs <- function(spec, values) {
   out <- list()
   values <- apply_spec_defaults(spec, values)
+  # Templates for side products of strip_ext outs (e.g. mcflirt .par) must use
+  # the basename FSL actually receives, not the user-facing .nii.gz path.
+  template_values <- values_for_output_templates(spec, values)
 
   for (nm in names(spec$outputs)) {
     odef <- spec$outputs[[nm]]
@@ -332,14 +335,14 @@ resolve_outputs <- function(spec, values) {
     if (!output_when_holds(odef$when, values)) next
 
     if (!is.null(path_spec$from_input)) {
-      # Path taken directly from an input value
+      # Path taken directly from an input value (keep user-facing extension)
       input_name <- path_spec$from_input
       out[[nm]] <- values[[input_name]]
     } else if (!is.null(path_spec$template)) {
       # Glue-style template using input values
       tmpl <- path_spec$template
       out[[nm]] <- as.character(tryCatch(
-        glue::glue(tmpl, .envir = as.environment(values)),
+        glue::glue(tmpl, .envir = as.environment(template_values)),
         error = function(e) {
           cli::cli_abort(c(
             "Failed to resolve output template for {.field {nm}}.",
@@ -354,6 +357,19 @@ resolve_outputs <- function(spec, values) {
     }
   }
 
+  out
+}
+
+#' Values for glue output templates; strip extensions when cli.strip_ext is set
+#' @keywords internal
+values_for_output_templates <- function(spec, values) {
+  out <- values
+  for (nm in names(spec$inputs)) {
+    def <- spec$inputs[[nm]]
+    if (!isTRUE(def$cli$strip_ext)) next
+    if (is.null(values[[nm]])) next
+    out[[nm]] <- apply_strip_ext(values[[nm]])
+  }
   out
 }
 

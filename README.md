@@ -167,7 +167,7 @@ vector, execution engine/profile, input-file checksums (xxhash64), output paths,
 exit status, and timing. Read it back anytime:
 
 ```r
-ni_provenance_read("sub-01_desc-brain_T1w.nii.gz_provenance.json")
+ni_provenance_read("sub-01_desc-brain_T1w_provenance.json")
 ```
 
 ### Reproducible execution: engines, profiles, lockfiles <a name="reproducible-execution-engines-profiles-lockfiles"></a>

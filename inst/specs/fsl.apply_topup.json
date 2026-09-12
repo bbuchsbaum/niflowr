@@ -85,7 +85,8 @@
       "type": "file",
       "desc": "output (warped) image",
       "cli": {
-        "argstr": "--out=%s"
+        "argstr": "--out=%s",
+        "strip_ext": true
       }
     }
   },

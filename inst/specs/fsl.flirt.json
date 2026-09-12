@@ -252,7 +252,8 @@
       "desc": "registered output file",
       "cli": {
         "argstr": "-out %s",
-        "position": 2
+        "position": 2,
+        "strip_ext": true
       }
     },
     "out_matrix_file": {

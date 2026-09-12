@@ -31,7 +31,8 @@
       "type": "file",
       "desc": "image to write",
       "cli": {
-        "argstr": "%s"
+        "argstr": "%s",
+        "strip_ext": true
       }
     }
   },

@@ -286,7 +286,8 @@
       "desc": "Basename for output image",
       "default": "eddy_corrected",
       "cli": {
-        "argstr": "--out=%s"
+        "argstr": "--out=%s",
+        "strip_ext": true
       }
     },
     "outlier_nstd": {

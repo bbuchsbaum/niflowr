@@ -134,10 +134,10 @@ test_that("ni_provenance_write with auto-derived path", {
       ), class = "ni_call")
     ), class = "ni_result")
 
-    # Auto-derive path from primary output
+    # Auto-derive path from primary output (strip .nii.gz, not only .gz)
     written <- ni_provenance_write(result, path = NULL)
     expect_true(file.exists(written))
-    expect_true(grepl("_provenance\\.json$", written))
+    expect_equal(basename(written), "output_provenance.json")
   })
 })
 

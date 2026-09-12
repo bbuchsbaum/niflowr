@@ -56,7 +56,8 @@
       "desc": "output file name",
       "cli": {
         "argstr": "%s",
-        "position": -1
+        "position": -1,
+        "strip_ext": true
       }
     },
     "use_median": {

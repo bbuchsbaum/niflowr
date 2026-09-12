@@ -111,6 +111,11 @@ build_command <- function(call) {
 #' @keywords internal
 render_arg <- function(value, def, argstr) {
   type <- def$type
+  cli_def <- def$cli
+
+  if (isTRUE(cli_def$strip_ext)) {
+    value <- apply_strip_ext(value)
+  }
 
   # Flag type: include argstr only if TRUE
 
@@ -160,7 +165,6 @@ render_arg <- function(value, def, argstr) {
 
   # List type with sep or repeat
   if (type == "list" && length(value) > 1) {
-    cli_def <- def$cli
     if (isTRUE(cli_def$`repeat`)) {
       # Repeat the flag for each element
       tokens <- character(0)
@@ -178,6 +182,17 @@ render_arg <- function(value, def, argstr) {
 
   # Single value
   render_single(value, argstr)
+}
+
+#' Strip known neuroimaging extensions from path-like CLI values
+#' @keywords internal
+apply_strip_ext <- function(value) {
+  if (is.null(value)) return(value)
+  if (is.list(value)) {
+    return(lapply(value, apply_strip_ext))
+  }
+  if (!is.character(value)) return(value)
+  vapply(value, strip_known_extension, character(1), USE.NAMES = FALSE)
 }
 
 #' Coerce a value to match the printf conversion in an argstr

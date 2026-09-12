@@ -172,7 +172,7 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
   if (provenance && proc_result$status == 0 && length(call$outputs) > 0) {
     primary_output <- call$outputs[[1]]
     if (!is.null(primary_output) && is.character(primary_output)) {
-      prov_path <- paste0(fs::path_ext_remove(primary_output), "_provenance.json")
+      prov_path <- paste0(strip_known_extension(primary_output), "_provenance.json")
       tryCatch(
         ni_provenance_write(result, prov_path),
         error = function(e) cli::cli_warn("Could not write provenance sidecar: {e$message}")

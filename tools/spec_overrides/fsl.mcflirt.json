@@ -1,0 +1,59 @@
+{
+  "inputs": {
+    "out_file": {
+      "cli": {
+        "argstr": "-out %s",
+        "strip_ext": true
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": { "from_input": "out_file" },
+      "must_exist": false
+    },
+    "par_file": {
+      "type": "file",
+      "path": { "template": "{out_file}.par" },
+      "must_exist": false,
+      "when": { "input": "save_plots", "in": [true] }
+    },
+    "mat_dir": {
+      "type": "dir",
+      "path": { "template": "{out_file}.mat" },
+      "must_exist": false,
+      "when": { "input": "save_mats", "in": [true] }
+    },
+    "mean_img": {
+      "type": "file",
+      "path": { "template": "{out_file}_mean_reg.nii.gz" },
+      "must_exist": false,
+      "when": { "input": "mean_vol", "in": [true] }
+    },
+    "variance_img": {
+      "type": "file",
+      "path": { "template": "{out_file}_variance.nii.gz" },
+      "must_exist": false,
+      "when": { "input": "stats_imgs", "in": [true] }
+    },
+    "std_img": {
+      "type": "file",
+      "path": { "template": "{out_file}_sigma.nii.gz" },
+      "must_exist": false,
+      "when": { "input": "stats_imgs", "in": [true] }
+    },
+    "rms_abs_file": {
+      "type": "file",
+      "path": { "template": "{out_file}_abs.rms" },
+      "must_exist": false,
+      "when": { "input": "save_rms", "in": [true] }
+    },
+    "rms_rel_file": {
+      "type": "file",
+      "path": { "template": "{out_file}_rel.rms" },
+      "must_exist": false,
+      "when": { "input": "save_rms", "in": [true] }
+    }
+  }
+}

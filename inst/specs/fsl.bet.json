@@ -77,7 +77,8 @@
       "desc": "name of output skull stripped image",
       "cli": {
         "argstr": "%s",
-        "position": 1
+        "position": 1,
+        "strip_ext": true
       }
     },
     "outline": {

@@ -68,7 +68,8 @@
       "desc": "Name of output file, containing warps that are the combination of all those given as arguments. The format of this will be a field-file (rather than spline coefficients) with any affine components included.",
       "cli": {
         "argstr": "--out=%s",
-        "position": -1
+        "position": -1,
+        "strip_ext": true
       }
     },
     "out_relwarp": {

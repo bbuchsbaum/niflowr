@@ -13,7 +13,7 @@ ni_provenance_write <- function(result, path = NULL) {
     if (is.null(primary)) {
       cli::cli_abort("No output path available for provenance sidecar.")
     }
-    path <- paste0(fs::path_ext_remove(primary), "_provenance.json")
+    path <- paste0(strip_known_extension(primary), "_provenance.json")
   }
 
   prov <- result$provenance

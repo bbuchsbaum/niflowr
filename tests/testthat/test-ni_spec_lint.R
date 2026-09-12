@@ -32,3 +32,21 @@ test_that("output prefixes are typed as paths so containers rewrite them", {
   }
   expect_identical(bad, character())
 })
+
+test_that("FSL image outs declare cli.strip_ext", {
+  files <- list.files(system.file("specs", package = "niflowr"), "^fsl\\..*[.]json$", full.names = TRUE)
+  if (!length(files)) {
+    files <- list.files(testthat::test_path("..", "..", "inst", "specs"), "^fsl\\..*[.]json$", full.names = TRUE)
+  }
+  missing <- character()
+  for (f in files) {
+    s <- jsonlite::read_json(f)
+    for (nm in names(s$inputs)) {
+      v <- s$inputs[[nm]]
+      a <- v$cli$argstr %||% ""
+      if (!niflowr:::fsl_needs_strip_ext(nm, a)) next
+      if (!isTRUE(v$cli$strip_ext)) missing <- c(missing, paste0(basename(f), ":", nm))
+    }
+  }
+  expect_identical(missing, character())
+})

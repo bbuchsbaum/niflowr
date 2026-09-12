@@ -391,12 +391,69 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     }
   }
 
+  # 7) FSL image outs need strip_ext so tools do not double-append FSLOUTPUTTYPE
+  if (grepl("^fsl\\.", spec_id)) {
+    for (nm in names(inputs)) {
+      def <- inputs[[nm]]
+      # Basename outs are often typed string (eddy/epi_reg out_base); still strip.
+      if (!(identical(def$type, "file") ||
+            identical(def$type, "string") ||
+            (identical(def$type, "list") && identical(def$items_type, "file")))) {
+        next
+      }
+      cli <- def$cli
+      if (is.null(cli) || is.null(cli$argstr) || !nzchar(cli$argstr)) next
+      if (isTRUE(cli$strip_ext)) next
+      if (!fsl_needs_strip_ext(nm, cli$argstr)) next
+
+      if (fix) {
+        inputs[[nm]]$cli$strip_ext <- TRUE
+        fixed <- TRUE
+        add_finding(
+          level = "warning",
+          code = "fsl_strip_ext",
+          param = nm,
+          message = "Marked cli.strip_ext=TRUE so FSL receives a basename without .nii.gz.",
+          fixed_flag = TRUE
+        )
+      } else {
+        add_finding(
+          level = "warning",
+          code = "fsl_strip_ext",
+          param = nm,
+          message = "FSL image output should set cli.strip_ext=TRUE to avoid doubled extensions."
+        )
+      }
+    }
+  }
+
   if (fixed) {
     spec$inputs <- inputs
     list(findings = findings, spec_fixed = spec)
   } else {
     list(findings = findings, spec_fixed = NULL)
   }
+}
+
+#' Whether an FSL input should strip known extensions before CLI rendering
+#' @keywords internal
+fsl_needs_strip_ext <- function(name, argstr) {
+  argstr <- as.character(argstr %||% "")
+  # Matrix / schedule outs keep their full filename (including .mat).
+  if (grepl("omat|outmat|matrix|\\.mat|schedule", argstr, ignore.case = TRUE)) {
+    return(FALSE)
+  }
+  if (grepl("omat|outmat|matrix|schedule", name, ignore.case = TRUE)) {
+    return(FALSE)
+  }
+  if (grepl("(^|\\s)-out(\\s|=|%|$)|--out=", argstr)) {
+    return(TRUE)
+  }
+  # BET-style positional out and FAST/eddy-style basename outs.
+  if (name %in% c("out_file", "out_basename", "out_base")) {
+    return(TRUE)
+  }
+  FALSE
 }
 
 #' @keywords internal
