@@ -27,6 +27,12 @@ ni_call <- function(spec_id, ..., .cwd = NULL, .env = NULL,
 
   values <- normalize_input_values(spec, list(...))
 
+  # A required input that also declares a default is otherwise unusable: validation rejects the call
+  # unless the caller repeats the value the spec already specifies. Nipype, which these specs were
+  # generated from, renders mandatory traits using their default. Optional inputs are untouched, so
+  # rendered commands for them are unchanged (see apply_spec_defaults below).
+  values <- apply_required_defaults(spec, values)
+
   # Validate
   if (.validate) {
     validate_inputs(spec, values)
@@ -293,6 +299,17 @@ is_bids_like_path <- function(path) {
 #' where defaults are genuinely needed, e.g. resolving output templates and
 #' conditional outputs, and inside custom renderers.
 #'
+#' @keywords internal
+apply_required_defaults <- function(spec, values) {
+  for (nm in names(spec$inputs)) {
+    def <- spec$inputs[[nm]]
+    if (isTRUE(def$required) && is_missing_value(values[[nm]]) && !is.null(def$default)) {
+      values[[nm]] <- def$default
+    }
+  }
+  values
+}
+
 #' @keywords internal
 apply_spec_defaults <- function(spec, values) {
   for (nm in names(spec$inputs)) {
