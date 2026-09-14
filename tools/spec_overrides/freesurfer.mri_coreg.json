@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "max_iters": {
+      "type": "int"
+    },
+    "saturation_threshold": {
+      "type": "double"
+    }
+  }
+}

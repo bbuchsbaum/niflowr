@@ -265,6 +265,12 @@ profiles:
     apptainer_uri: "docker://deepmi/fastsurfer:cpu-v2.4.2"
 ```
 
+Optional per-profile Docker fields:
+
+- `entrypoint`: overwrite or clear the image `ENTRYPOINT` (use `""` or `[]`
+  when a shell entrypoint would silently ignore the niflowr command).
+- `platform`: e.g. `"linux/amd64"` for amd64-only images on Apple Silicon.
+
 Then call the wrapper:
 
 ```{r fastsurfer-example, eval = FALSE}
@@ -294,7 +300,8 @@ ni_outputs(seg)
 ### Runtime diagnostics with `ni_doctor()`
 
 Use `ni_doctor()` to check runtime binaries, mounted roots, profile definitions,
-and lockfile consistency:
+lockfile consistency, and (for local Docker images) whether the payload command
+actually executes:
 
 ```{r doctor, eval = FALSE}
 report <- ni_doctor()

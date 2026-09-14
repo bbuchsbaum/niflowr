@@ -5,7 +5,7 @@
 \title{FSL PrepareFieldmap}
 \usage{
 ni_fsl_prepare_fieldmap(
-  delta_TE,
+  delta_TE = 2.46,
   in_magnitude,
   in_phase,
   args = NULL,
@@ -21,7 +21,7 @@ ni_fsl_prepare_fieldmap(
 )
 }
 \arguments{
-\item{delta_TE}{Numeric. echo time difference of the fieldmap sequence in ms. (usually 2.46ms in Siemens) \strong{Required.}}
+\item{delta_TE}{Numeric. echo time difference of the fieldmap sequence in ms. (usually 2.46ms in Siemens)}
 
 \item{in_magnitude}{Character; file path. Magnitude difference map, brain extracted \strong{Required.}}
 

@@ -142,7 +142,7 @@ test_that("ni_dcm2niix_convert wrapper exists and supports dry_run", {
     .engine = "native",
     dry_run = TRUE
   )
-  expect_null(result)
+  expect_s3_class(result, "ni_execution_plan")
 })
 
 test_that("dcm2niix.convert appears in ni_spec_list", {

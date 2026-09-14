@@ -6,7 +6,7 @@
 \usage{
 ni_ants_convert_scalar_image_to_rgb(
   colormap,
-  dimension,
+  dimension = 3,
   input_image,
   maximum_input,
   minimum_input,
@@ -27,7 +27,7 @@ ni_ants_convert_scalar_image_to_rgb(
 \arguments{
 \item{colormap}{Character; one of: "grey", "red", "green", "blue", "copper", "jet", "hsv", "spring", "summer", "autumn", "winter", "hot", "cool", "overunder", "custom". Select a colormap \strong{Required.}}
 
-\item{dimension}{Character; one of: "3", "2". image dimension (2 or 3) \strong{Required.}}
+\item{dimension}{Character; one of: "3", "2". image dimension (2 or 3)}
 
 \item{input_image}{Character; file path. Main input is a 3-D grayscale image. \strong{Required.}}
 

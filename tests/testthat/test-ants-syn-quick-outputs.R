@@ -31,14 +31,9 @@ test_that("syn_quick omits warp fields for affine-only transform types (#4)", {
   expect_length(call$outputs, 3L)
 })
 
-test_that("syn_quick requires output_prefix so outputs match the command (#4)", {
-  # output_prefix is required: omitting it errors rather than silently
-  # declaring `transform*` outputs that the command would not request.
-  expect_error(
-    ni_call("ants.registration_syn_quick",
-      fixed_image = "f.nii.gz", moving_image = "m.nii.gz"),
-    "output_prefix"
-  )
+test_that("syn_quick uses its required output-prefix default", {
+  call <- ni_call("ants.registration_syn_quick", fixed_image = "fixed.nii.gz", moving_image = "moving.nii.gz")
+  expect_equal(call$values$output_prefix, call$spec$inputs$output_prefix$default)
 })
 
 test_that("syn_quick declared outputs match the rendered -o argument (#4)", {

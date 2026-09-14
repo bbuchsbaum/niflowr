@@ -5,9 +5,9 @@
 \title{ANTS N4BiasFieldCorrection}
 \usage{
 ni_ants_n4_bias_field_correction(
-  copy_header,
+  copy_header = FALSE,
   input_image,
-  save_bias,
+  save_bias = FALSE,
   args = NULL,
   bspline_fitting_distance = NULL,
   dimension = 3,
@@ -18,6 +18,7 @@ ni_ants_n4_bias_field_correction(
   rescale_intensities = FALSE,
   shrink_factor = NULL,
   weight_image = NULL,
+  bias_image = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -27,11 +28,11 @@ ni_ants_n4_bias_field_correction(
 )
 }
 \arguments{
-\item{copy_header}{Logical. copy headers of the original image into the output (corrected) file \strong{Required.}}
+\item{copy_header}{Logical. Header copying is unsupported; TRUE raises an error.}
 
 \item{input_image}{Character; file path. input for bias correction. Negative values or values close to zero should be processed prior to correction \strong{Required.}}
 
-\item{save_bias}{Logical. True if the estimated bias should be saved to file. \strong{Required.}}
+\item{save_bias}{Logical. True if the estimated bias should be saved to file.}
 
 \item{args}{Character. Additional parameters to the command}
 
@@ -45,13 +46,15 @@ ni_ants_n4_bias_field_correction(
 
 \item{n_iterations}{Character or numeric vector}
 
-\item{output_image}{Character. output file name}
+\item{output_image}{Character; file path. output file name}
 
 \item{rescale_intensities}{Logical. [NOTE: Only ANTs>=2.1.0] At each iteration, a new intensity mapping is calculated and applied but there is nothing which constrains the new intensity range to be within certain values. The result is that the range can "drift" from the original at each iteration. This option rescales to the [min,max] range of the original image intensities within the user-specified mask.}
 
 \item{shrink_factor}{Integer}
 
 \item{weight_image}{Character; file path. image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting.}
+
+\item{bias_image}{Character; file path. Bias-field destination when save_bias is TRUE; inferred beside the corrected image if omitted.}
 
 \item{.cwd}{Working directory override.}
 

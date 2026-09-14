@@ -697,7 +697,7 @@ ni_afni_cat_matvec <- function(in_file,
 #' 1dcat takes as input one or more 1D files, and writes out a 1D file
 #'
 #' @param in_files Character or numeric vector **Required.**
-#' @param out_file Character; file path. output (concatenated) file name **Required.**
+#' @param out_file Character; file path. output (concatenated) file name
 #' @param args Character. Additional parameters to the command
 #' @param keepfree Logical. Keep only columns that are marked as 'free' in the 3dAllineate header from '-1Dparam_save'. If there is no such header, all columns are kept.
 #' @param omitconst Logical. Omit columns that are identically constant from output.
@@ -717,7 +717,7 @@ ni_afni_cat_matvec <- function(in_file,
 #' @return An `ni_result` object.
 #' @export
 ni_afni_cat <- function(in_files,
-                     out_file,
+                     out_file = "catout.1d",
                      args = NULL,
                      keepfree = NULL,
                      omitconst = NULL,
@@ -3768,9 +3768,9 @@ ni_ants_ants_introduction <- function(input_image,
 #'
 #' @param fixed_image Character or numeric vector. image to which the moving image is warped **Required.**
 #' @param metric Character or numeric vector **Required.**
-#' @param metric_weight Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage. **Required.**
+#' @param metric_weight Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage.
 #' @param moving_image Character or numeric vector. image to apply transformation to (generally a coregisteredfunctional) **Required.**
-#' @param output_transform_prefix Character; file path **Required.**
+#' @param output_transform_prefix Character; file path
 #' @param radius Character or numeric vector. radius of the region (i.e. number of layers around a voxel/pixel) that is used for computing cross correlation **Required.**
 #' @param transformation_model Character; one of: "Diff", "Elast", "Exp", "Greedy Exp", "SyN" **Required.**
 #' @param affine_gradient_descent_option Character or numeric vector
@@ -3793,9 +3793,9 @@ ni_ants_ants_introduction <- function(input_image,
 #' @export
 ni_ants_ants <- function(fixed_image,
                      metric,
-                     metric_weight,
+                     metric_weight = 1,
                      moving_image,
-                     output_transform_prefix,
+                     output_transform_prefix = "out",
                      radius,
                      transformation_model,
                      affine_gradient_descent_option = NULL,
@@ -4165,7 +4165,7 @@ ni_ants_composite_transform_util <- function(in_file,
 #' Convert scalar images to RGB.
 #'
 #' @param colormap Character; one of: "grey", "red", "green", "blue", "copper", "jet", "hsv", "spring", "summer", "autumn", "winter", "hot", "cool", "overunder", "custom". Select a colormap **Required.**
-#' @param dimension Character; one of: "3", "2". image dimension (2 or 3) **Required.**
+#' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
 #' @param input_image Character; file path. Main input is a 3-D grayscale image. **Required.**
 #' @param maximum_input Integer. maximum input **Required.**
 #' @param minimum_input Integer. minimum input **Required.**
@@ -4184,7 +4184,7 @@ ni_ants_composite_transform_util <- function(in_file,
 #' @return An `ni_result` object.
 #' @export
 ni_ants_convert_scalar_image_to_rgb <- function(colormap,
-                     dimension,
+                     dimension = 3,
                      input_image,
                      maximum_input,
                      minimum_input,
@@ -4353,7 +4353,7 @@ ni_ants_create_tiled_mosaic <- function(input_image,
 #' Examples
 #'
 #' @param input_image Character; file path. A scalar image is expected as input for noise correction. **Required.**
-#' @param save_noise Logical. True if the estimated noise should be saved to file. **Required.**
+#' @param save_noise Logical. True if the estimated noise should be saved to file.
 #' @param args Character. Additional parameters to the command
 #' @param dimension Character; one of: "2", "3", "4". This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
 #' @param noise_model Character; one of: "Gaussian", "Rician". Employ a Rician or Gaussian noise model.
@@ -4369,7 +4369,7 @@ ni_ants_create_tiled_mosaic <- function(input_image,
 #' @return An `ni_result` object.
 #' @export
 ni_ants_denoise_image <- function(input_image,
-                     save_noise,
+                     save_noise = FALSE,
                      args = NULL,
                      dimension = NULL,
                      noise_model = "Gaussian",
@@ -4578,7 +4578,7 @@ ni_ants_kelly_kapowski <- function(segmentation_image,
 #'
 #' Extracts geometry measures using a label file and an optional image file
 #'
-#' @param intensity_image Character; file path. Intensity image to extract values from. This is an optional input **Required.**
+#' @param intensity_image Character; file path. Intensity image to extract values from. This is an optional input
 #' @param label_image Character; file path. label image to use for extracting geometry measures **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
@@ -4591,7 +4591,7 @@ ni_ants_kelly_kapowski <- function(segmentation_image,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_ants_label_geometry <- function(intensity_image,
+ni_ants_label_geometry <- function(intensity_image = "[]",
                      label_image,
                      args = NULL,
                      dimension = 3,
@@ -4720,19 +4720,20 @@ ni_ants_multiply_images <- function(dimension,
 #'
 #' Bias field correction.
 #'
-#' @param copy_header Logical. copy headers of the original image into the output (corrected) file **Required.**
+#' @param copy_header Logical. Header copying is unsupported; TRUE raises an error.
 #' @param input_image Character; file path. input for bias correction. Negative values or values close to zero should be processed prior to correction **Required.**
-#' @param save_bias Logical. True if the estimated bias should be saved to file. **Required.**
+#' @param save_bias Logical. True if the estimated bias should be saved to file.
 #' @param args Character. Additional parameters to the command
 #' @param bspline_fitting_distance Numeric
 #' @param dimension Character; one of: "3", "2", "4". image dimension (2, 3 or 4)
 #' @param histogram_sharpening Character or numeric vector. Three-values tuple of histogram sharpening parameters (FWHM, wienerNose, numberOfHistogramBins). These options describe the histogram sharpening parameters, i.e. the deconvolution step parameters described in the original N3 algorithm. The default values have been shown to work fairly well.
 #' @param mask_image Character; file path. image to specify region to perform final bias correction in
 #' @param n_iterations Character or numeric vector
-#' @param output_image Character. output file name
+#' @param output_image Character; file path. output file name
 #' @param rescale_intensities Logical. \[NOTE: Only ANTs>=2.1.0\] At each iteration, a new intensity mapping is calculated and applied but there is nothing which constrains the new intensity range to be within certain values. The result is that the range can "drift" from the original at each iteration. This option rescales to the \[min,max\] range of the original image intensities within the user-specified mask.
 #' @param shrink_factor Integer
 #' @param weight_image Character; file path. image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting.
+#' @param bias_image Character; file path. Bias-field destination when save_bias is TRUE; inferred beside the corrected image if omitted.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .engine Execution engine override.
@@ -4741,9 +4742,9 @@ ni_ants_multiply_images <- function(dimension,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_ants_n4_bias_field_correction <- function(copy_header,
+ni_ants_n4_bias_field_correction <- function(copy_header = FALSE,
                      input_image,
-                     save_bias,
+                     save_bias = FALSE,
                      args = NULL,
                      bspline_fitting_distance = NULL,
                      dimension = 3,
@@ -4754,13 +4755,14 @@ ni_ants_n4_bias_field_correction <- function(copy_header,
                      rescale_intensities = FALSE,
                      shrink_factor = NULL,
                      weight_image = NULL,
+                     bias_image = NULL,
                      .cwd = NULL,
                      .env = NULL,
                      .engine = NULL,
                      .profile = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("ants.n4_bias_field_correction", copy_header = copy_header, input_image = input_image, save_bias = save_bias, args = args, bspline_fitting_distance = bspline_fitting_distance, dimension = dimension, histogram_sharpening = histogram_sharpening, mask_image = mask_image, n_iterations = n_iterations, output_image = output_image, rescale_intensities = rescale_intensities, shrink_factor = shrink_factor, weight_image = weight_image, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
+  call <- ni_call("ants.n4_bias_field_correction", copy_header = copy_header, input_image = input_image, save_bias = save_bias, args = args, bspline_fitting_distance = bspline_fitting_distance, dimension = dimension, histogram_sharpening = histogram_sharpening, mask_image = mask_image, n_iterations = n_iterations, output_image = output_image, rescale_intensities = rescale_intensities, shrink_factor = shrink_factor, weight_image = weight_image, bias_image = bias_image, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -4770,7 +4772,7 @@ ni_ants_n4_bias_field_correction <- function(copy_header,
 #'
 #' @param fixed_image Character or numeric vector. Fixed image or source image or reference image **Required.**
 #' @param moving_image Character or numeric vector. Moving image or target image **Required.**
-#' @param output_prefix Character; file path. A prefix that is prepended to all output files **Required.**
+#' @param output_prefix Character; file path. A prefix that is prepended to all output files
 #' @param args Character. Additional parameters to the command
 #' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
 #' @param histogram_bins Integer. histogram bins for mutual information in SyN stage (default = 32)
@@ -4790,7 +4792,7 @@ ni_ants_n4_bias_field_correction <- function(copy_header,
 #' @export
 ni_ants_registration_syn_quick <- function(fixed_image,
                      moving_image,
-                     output_prefix,
+                     output_prefix = "transform",
                      args = NULL,
                      dimension = 3,
                      histogram_bins = 32,
@@ -4816,7 +4818,7 @@ ni_ants_registration_syn_quick <- function(fixed_image,
 #'
 #' @param fixed_image Character or numeric vector. Image to which the moving_image should be transformed(usually a structural image) **Required.**
 #' @param metric Character or numeric vector. the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier. **Required.**
-#' @param metric_weight Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage. **Required.**
+#' @param metric_weight Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage.
 #' @param moving_image Character or numeric vector. Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to **Required.**
 #' @param shrink_factors Character or numeric vector **Required.**
 #' @param smoothing_sigmas Character or numeric vector **Required.**
@@ -4848,7 +4850,7 @@ ni_ants_registration_syn_quick <- function(fixed_image,
 #' @export
 ni_ants_registration <- function(fixed_image,
                      metric,
-                     metric_weight,
+                     metric_weight = 1,
                      moving_image,
                      shrink_factors,
                      smoothing_sigmas,
@@ -4922,7 +4924,7 @@ ni_ants_resample_image_by_spacing <- function(input_image,
 #'
 #' Apply thresholds on images.
 #'
-#' @param copy_header Logical. copy headers of the original image into the output (corrected) file **Required.**
+#' @param copy_header Logical. copy headers of the original image into the output (corrected) file
 #' @param input_image Character; file path. input image file **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param dimension Integer. dimension of output image
@@ -4942,7 +4944,7 @@ ni_ants_resample_image_by_spacing <- function(input_image,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_ants_threshold_image <- function(copy_header,
+ni_ants_threshold_image <- function(copy_header = TRUE,
                      input_image,
                      args = NULL,
                      dimension = 3,
@@ -5324,7 +5326,7 @@ ni_freesurfer_add_x_form_to_header <- function(in_file,
 #' @param rh_ribbon Character; file path. Input file must be <subject_id>/mri/rh.ribbon.mgz **Required.**
 #' @param rh_white Character; file path. Input file must be <subject_id>/surf/rh.white **Required.**
 #' @param ribbon Character; file path. Input file must be <subject_id>/mri/ribbon.mgz **Required.**
-#' @param subject_id Character. Subject being processed **Required.**
+#' @param subject_id Character. Subject being processed
 #' @param a2009s Logical. Using the a2009s atlas
 #' @param args Character. Additional parameters to the command
 #' @param aseg Character; file path. Input aseg file
@@ -5351,7 +5353,7 @@ ni_freesurfer_aparc2_aseg <- function(lh_annotation,
                      rh_ribbon,
                      rh_white,
                      ribbon,
-                     subject_id,
+                     subject_id = "subject_id",
                      a2009s = NULL,
                      args = NULL,
                      aseg = NULL,
@@ -5913,7 +5915,7 @@ ni_freesurfer_concatenate <- function(in_files,
 #' @param hemisphere Character; one of: "lh", "rh". Hemisphere being processed **Required.**
 #' @param orig Character; file path. Implicit input file mri/orig.mgz **Required.**
 #' @param rawavg Character; file path. Implicit input file mri/rawavg.mgz **Required.**
-#' @param subject_id Character. Subject being processed **Required.**
+#' @param subject_id Character. Subject being processed
 #' @param thickness Character; file path. Input file must be <subject_id>/surf/?h.thickness **Required.**
 #' @param white Character; file path. Input file must be <subject_id>/surf/<hemisphere>.white **Required.**
 #' @param args Character. Additional parameters to the command
@@ -5930,7 +5932,7 @@ ni_freesurfer_contrast <- function(annotation,
                      hemisphere,
                      orig,
                      rawavg,
-                     subject_id,
+                     subject_id = "subject_id",
                      thickness,
                      white,
                      args = NULL,
@@ -5951,7 +5953,7 @@ ni_freesurfer_contrast <- function(annotation,
 #' @param curvfile1 Character; file path. Input file for CurvatureStats **Required.**
 #' @param curvfile2 Character; file path. Input file for CurvatureStats **Required.**
 #' @param hemisphere Character; one of: "lh", "rh". Hemisphere being processed **Required.**
-#' @param subject_id Character. Subject being processed **Required.**
+#' @param subject_id Character. Subject being processed
 #' @param args Character. Additional parameters to the command
 #' @param min_max Logical. Output min / max information for the processed curvature.
 #' @param out_file Character; file path. Output curvature stats file
@@ -5969,7 +5971,7 @@ ni_freesurfer_contrast <- function(annotation,
 ni_freesurfer_curvature_stats <- function(curvfile1,
                      curvfile2,
                      hemisphere,
-                     subject_id,
+                     subject_id = "subject_id",
                      args = NULL,
                      min_max = NULL,
                      out_file = NULL,
@@ -6214,7 +6216,7 @@ ni_freesurfer_fit_ms_params <- function(in_files,
 #' @param in_inflated Character; file path. Undocumented input file <hemisphere>.inflated **Required.**
 #' @param in_orig Character; file path. Undocumented input file <hemisphere>.orig **Required.**
 #' @param in_wm Character; file path. Implicit input wm.mgz **Required.**
-#' @param subject_id Character. Subject being processed **Required.**
+#' @param subject_id Character. Subject being processed
 #' @param args Character. Additional parameters to the command
 #' @param ga Logical. No documentation. Direct questions to analysis-bugs@nmr.mgh.harvard.edu
 #' @param mgz Logical. No documentation. Direct questions to analysis-bugs@nmr.mgh.harvard.edu
@@ -6234,7 +6236,7 @@ ni_freesurfer_fix_topology <- function(copy_inputs,
                      in_inflated,
                      in_orig,
                      in_wm,
-                     subject_id,
+                     subject_id = "subject_id",
                      args = NULL,
                      ga = NULL,
                      mgz = NULL,
@@ -6680,7 +6682,7 @@ ni_freesurfer_jacobian <- function(in_mappedsurf,
 #' @param in_labels Character or numeric vector. List of input label files **Required.**
 #' @param orig Character; file path. implicit \{hemisphere\}.orig **Required.**
 #' @param out_annot Character. Name of the annotation to create **Required.**
-#' @param subject_id Character. Subject name/ID **Required.**
+#' @param subject_id Character. Subject name/ID
 #' @param args Character. Additional parameters to the command
 #' @param color_table Character; file path. File that defines the structure names, their indices, and their color
 #' @param keep_max Logical. Keep label with highest 'stat' value
@@ -6697,7 +6699,7 @@ ni_freesurfer_label2_annot <- function(hemisphere,
                      in_labels,
                      orig,
                      out_annot,
-                     subject_id,
+                     subject_id = "subject_id",
                      args = NULL,
                      color_table = NULL,
                      keep_max = NULL,
@@ -6722,7 +6724,7 @@ ni_freesurfer_label2_annot <- function(hemisphere,
 #' @param source_subject Character. Source subject name **Required.**
 #' @param source_white Character; file path. Implicit input <hemisphere>.white **Required.**
 #' @param sphere_reg Character; file path. Implicit input <hemisphere>.sphere.reg **Required.**
-#' @param subject_id Character. Target subject **Required.**
+#' @param subject_id Character. Target subject
 #' @param white Character; file path. Implicit input <hemisphere>.white **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param out_file Character; file path. Target label
@@ -6741,7 +6743,7 @@ ni_freesurfer_label2_label <- function(hemisphere,
                      source_subject,
                      source_white,
                      sphere_reg,
-                     subject_id,
+                     subject_id = "subject_id",
                      white,
                      args = NULL,
                      out_file = NULL,
@@ -7048,7 +7050,7 @@ ni_freesurfer_make_average_subject <- function(subjects_ids,
 #' @param in_filled Character; file path. Implicit input file filled.mgz **Required.**
 #' @param in_orig Character; file path. Implicit input file <hemisphere>.orig **Required.**
 #' @param in_wm Character; file path. Implicit input file wm.mgz **Required.**
-#' @param subject_id Character. Subject being processed **Required.**
+#' @param subject_id Character. Subject being processed
 #' @param args Character. Additional parameters to the command
 #' @param fix_mtl Logical. Undocumented flag
 #' @param in_T1 Character; file path. Input brain or T1 file
@@ -7074,7 +7076,7 @@ ni_freesurfer_make_surfaces <- function(hemisphere,
                      in_filled,
                      in_orig,
                      in_wm,
-                     subject_id,
+                     subject_id = "subject_id",
                      args = NULL,
                      fix_mtl = NULL,
                      in_T1 = NULL,
@@ -7181,7 +7183,7 @@ ni_freesurfer_mp_rto_mni305 <- function(reference_dir,
 #' @param curv Character; file path. implicit input \{hemisphere\}.curv **Required.**
 #' @param hemisphere Character; one of: "lh", "rh". Hemisphere ('lh' or 'rh') **Required.**
 #' @param smoothwm Character; file path. implicit input \{hemisphere\}.smoothwm **Required.**
-#' @param subject_id Character. Subject name or ID **Required.**
+#' @param subject_id Character. Subject name or ID
 #' @param sulc Character; file path. implicit input \{hemisphere\}.sulc **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param aseg Character; file path. Undocumented flag. Autorecon3 uses ../mri/aseg.presurf.mgz as input file
@@ -7201,7 +7203,7 @@ ni_freesurfer_mr_is_ca_label <- function(canonsurf,
                      curv,
                      hemisphere,
                      smoothwm,
-                     subject_id,
+                     subject_id = "subject_id",
                      sulc,
                      args = NULL,
                      aseg = NULL,
@@ -7768,7 +7770,7 @@ ni_freesurfer_mri_marching_cubes <- function(in_file,
 #'
 #' @param in_filled Character; file path. filled volume, usually wm.mgz **Required.**
 #' @param in_norm Character; file path. the normalized, brain-extracted T1w image. Usually norm.mgz **Required.**
-#' @param label Character or numeric vector. label to be picked up, can be a Freesurfer's string like 'wm' or a label value (e.g. 127 for rh or 255 for lh) **Required.**
+#' @param label Character or numeric vector. label to be picked up, can be a Freesurfer's string like 'wm' or a label value (e.g. 127 for rh or 255 for lh)
 #' @param args Character. Additional parameters to the command
 #' @param keep Logical. keep WM edits
 #' @param nocorners Logical. do not remove corner configurations in addition to edge ones.
@@ -7784,7 +7786,7 @@ ni_freesurfer_mri_marching_cubes <- function(in_file,
 #' @export
 ni_freesurfer_mri_pretess <- function(in_filled,
                      in_norm,
-                     label,
+                     label = "wm",
                      args = NULL,
                      keep = NULL,
                      nocorners = NULL,
@@ -8492,7 +8494,7 @@ ni_freesurfer_paint <- function(in_surf,
 #' @param rh_pial Character; file path. Input file must be <subject_id>/surf/rh.pial **Required.**
 #' @param rh_white Character; file path. Input file must be <subject_id>/surf/rh.white **Required.**
 #' @param ribbon Character; file path. Input file must be <subject_id>/mri/ribbon.mgz **Required.**
-#' @param subject_id Character. Subject being processed **Required.**
+#' @param subject_id Character. Subject being processed
 #' @param thickness Character; file path. Input file must be <subject_id>/surf/?h.thickness **Required.**
 #' @param transform Character; file path. Input file must be <subject_id>/mri/transforms/talairach.xfm **Required.**
 #' @param wm Character; file path. Input file must be <subject_id>/mri/wm.mgz **Required.**
@@ -8522,7 +8524,7 @@ ni_freesurfer_parcellation_stats <- function(aseg,
                      rh_pial,
                      rh_white,
                      ribbon,
-                     subject_id,
+                     subject_id = "subject_id",
                      thickness,
                      transform,
                      wm,
@@ -8930,7 +8932,7 @@ ni_freesurfer_robust_register <- function(auto_sens,
 #'
 #' @param auto_detect_sensitivity Logical. auto-detect good sensitivity (recommended for head or full brain scans) **Required.**
 #' @param in_files Character or numeric vector. input movable volumes to be aligned to common mean/median template **Required.**
-#' @param out_file Character; file path. output template volume (final mean/median image) **Required.**
+#' @param out_file Character; file path. output template volume (final mean/median image)
 #' @param outlier_sensitivity Numeric. set outlier sensitivity manually (e.g. "--sat 4.685" ). Higher values mean less sensitivity. **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param average_metric Character; one of: "median", "mean". construct template from: 0 Mean, 1 Median (default)
@@ -8953,7 +8955,7 @@ ni_freesurfer_robust_register <- function(auto_sens,
 #' @export
 ni_freesurfer_robust_template <- function(auto_detect_sensitivity,
                      in_files,
-                     out_file,
+                     out_file = "mri_robust_template_out.mgz",
                      outlier_sensitivity,
                      args = NULL,
                      average_metric = NULL,
@@ -9077,7 +9079,7 @@ ni_freesurfer_sample_to_surface <- function(hemi,
 #' @param rh_white Character; file path. Input file must be <subject_id>/surf/rh.white **Required.**
 #' @param ribbon Character; file path. Input file mri/ribbon.mgz **Required.**
 #' @param segmentation_file Character; file path. segmentation volume path **Required.**
-#' @param subject_id Character. Subject id being processed **Required.**
+#' @param subject_id Character. Subject id being processed
 #' @param surf_label Character or numeric vector. subject hemi label : use surface label **Required.**
 #' @param transform Character; file path. Input transform file **Required.**
 #' @param args Character. Additional parameters to the command
@@ -9132,7 +9134,7 @@ ni_freesurfer_seg_stats_recon_all <- function(annot,
                      rh_white,
                      ribbon,
                      segmentation_file,
-                     subject_id,
+                     subject_id = "subject_id",
                      surf_label,
                      transform,
                      args = NULL,
@@ -9285,7 +9287,7 @@ ni_freesurfer_seg_stats <- function(annot,
 #' @param in_file Character; file path. Input aseg file to read from subjects directory **Required.**
 #' @param in_norm Character; file path. Required undocumented input \{subject\}/mri/norm.mgz **Required.**
 #' @param out_rotation Character; file path. Global filepath for writing rotation lta **Required.**
-#' @param subject_id Character. Subject name **Required.**
+#' @param subject_id Character. Subject name
 #' @param args Character. Additional parameters to the command
 #' @param out_file Character; file path. Filename to write aseg including CC
 #' @param .cwd Working directory override.
@@ -9299,7 +9301,7 @@ ni_freesurfer_seg_stats <- function(annot,
 ni_freesurfer_segment_cc <- function(in_file,
                      in_norm,
                      out_rotation,
-                     subject_id,
+                     subject_id = "subject_id",
                      args = NULL,
                      out_file = NULL,
                      .cwd = NULL,
@@ -9947,7 +9949,7 @@ ni_freesurfer_talairach_qc <- function(log_file,
 #' Examples
 #'
 #' @param moving_image Character; file path. moving volume **Required.**
-#' @param reg_file Character; file path. freesurfer-style registration file **Required.**
+#' @param reg_file Character; file path. freesurfer-style registration file
 #' @param args Character. Additional parameters to the command
 #' @param fsl_in_matrix Character; file path. fsl-style registration input matrix
 #' @param fsl_out Character or numeric vector. compute an FSL-compatible resgitration matrix
@@ -9971,7 +9973,7 @@ ni_freesurfer_talairach_qc <- function(log_file,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_tkregister2 <- function(moving_image,
-                     reg_file,
+                     reg_file = "register.dat",
                      args = NULL,
                      fsl_in_matrix = NULL,
                      fsl_out = NULL,
@@ -10054,7 +10056,7 @@ ni_freesurfer_unpack_sdicom_dir <- function(config,
 #' @param rh_white Character; file path. Implicit input right white matter surface **Required.**
 #' @param right_ribbonlabel Integer. Right cortical ribbon label **Required.**
 #' @param right_whitelabel Integer. Right white matter label **Required.**
-#' @param subject_id Character. Subject being processed **Required.**
+#' @param subject_id Character. Subject being processed
 #' @param args Character. Additional parameters to the command
 #' @param in_aseg Character; file path. Input aseg file for VolumeMask
 #' @param save_ribbon Logical. option to save just the ribbon for the hemispheres in the format ?h.ribbon.mgz
@@ -10074,7 +10076,7 @@ ni_freesurfer_volume_mask <- function(left_ribbonlabel,
                      rh_white,
                      right_ribbonlabel,
                      right_whitelabel,
-                     subject_id,
+                     subject_id = "subject_id",
                      args = NULL,
                      in_aseg = NULL,
                      save_ribbon = NULL,
@@ -10093,7 +10095,7 @@ ni_freesurfer_volume_mask <- function(left_ribbonlabel,
 #' This program strips skull and other outer non-brain tissue and
 #'
 #' @param in_file Character; file path. input volume **Required.**
-#' @param out_file Character; file path. output volume **Required.**
+#' @param out_file Character; file path. output volume
 #' @param args Character. Additional parameters to the command
 #' @param brain_atlas Character; file path
 #' @param t1 Logical. specify T1 input volume (T1 grey value = 110)
@@ -10107,7 +10109,7 @@ ni_freesurfer_volume_mask <- function(left_ribbonlabel,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_watershed_skull_strip <- function(in_file,
-                     out_file,
+                     out_file = "brainmask.auto.mgz",
                      args = NULL,
                      brain_atlas = NULL,
                      t1 = NULL,
@@ -10488,8 +10490,8 @@ ni_fsl_b0_calc <- function(in_file,
 #' @param bvecs Character; file path. b vectors file **Required.**
 #' @param dwi Character; file path. diffusion weighted image data file **Required.**
 #' @param mask Character; file path. bet binary mask file **Required.**
-#' @param n_fibres Integer. Maximum number of fibres to fit in each voxel **Required.**
-#' @param out_dir Character; directory path. output directory **Required.**
+#' @param n_fibres Integer. Maximum number of fibres to fit in each voxel
+#' @param out_dir Character; directory path. output directory
 #' @param all_ard Logical. Turn ARD on on all fibres
 #' @param args Character. Additional parameters to the command
 #' @param burn_in Integer. Total num of jumps at start of MCMC to be discarded
@@ -10522,8 +10524,8 @@ ni_fsl_bedpostx5 <- function(bvals,
                      bvecs,
                      dwi,
                      mask,
-                     n_fibres,
-                     out_dir,
+                     n_fibres = 2,
+                     out_dir = "bedpostx",
                      all_ard = NULL,
                      args = NULL,
                      burn_in = 0,
@@ -10593,7 +10595,7 @@ ni_fsl_bet <- function(in_file,
                      functional = NULL,
                      mask = NULL,
                      mesh = NULL,
-                     no_output = NULL,
+                     no_output = FALSE,
                      out_file = NULL,
                      outline = NULL,
                      padding = NULL,
@@ -11165,7 +11167,7 @@ ni_fsl_dual_regression <- function(group_IC_maps_4D,
 #' .. warning:: Deprecated in FSL. Please use
 #'
 #' @param in_file Character; file path. 4D input file **Required.**
-#' @param ref_num Integer. reference number **Required.**
+#' @param ref_num Integer. reference number
 #' @param args Character. Additional parameters to the command
 #' @param out_file Character; file path. 4D output file
 #' @param .cwd Working directory override.
@@ -11177,7 +11179,7 @@ ni_fsl_dual_regression <- function(group_IC_maps_4D,
 #' @return An `ni_result` object.
 #' @export
 ni_fsl_eddy_correct <- function(in_file,
-                     ref_num,
+                     ref_num = 0,
                      args = NULL,
                      out_file = NULL,
                      .cwd = NULL,
@@ -11401,6 +11403,7 @@ ni_fsl_epi_de_warp <- function(dph_file,
 #' Runs FSL epi_reg script for simultaneous coregistration and fieldmap
 #'
 #' @param epi Character; file path. EPI image **Required.**
+#' @param out_base Character; file path. output base name
 #' @param t1_brain Character; file path. brain extracted T1 image **Required.**
 #' @param t1_head Character; file path. wholehead T1 image **Required.**
 #' @param args Character. Additional parameters to the command
@@ -11410,7 +11413,6 @@ ni_fsl_epi_de_warp <- function(dph_file,
 #' @param fmapmagbrain Character; file path. fieldmap magnitude image - brain extracted
 #' @param no_clean Logical. do not clean up intermediate files
 #' @param no_fmapreg Logical. do not perform registration of fmap to T1 (use if fmap already registered)
-#' @param out_base Character; file path. output base name
 #' @param pedir Character; one of: "x", "y", "z", "-x", "-y", "-z". phase encoding direction, dir = x/y/z/-x/-y/-z
 #' @param weight_image Character; file path. weighting image (in T1 space)
 #' @param wmseg Character; file path. white matter segmentation of T1 image, has to be named like the t1brain and end on _wmseg
@@ -11423,6 +11425,7 @@ ni_fsl_epi_de_warp <- function(dph_file,
 #' @return An `ni_result` object.
 #' @export
 ni_fsl_epi_reg <- function(epi,
+                     out_base = "epi2struct",
                      t1_brain,
                      t1_head,
                      args = NULL,
@@ -11432,7 +11435,6 @@ ni_fsl_epi_reg <- function(epi,
                      fmapmagbrain = NULL,
                      no_clean = TRUE,
                      no_fmapreg = NULL,
-                     out_base = "epi2struct",
                      pedir = NULL,
                      weight_image = NULL,
                      wmseg = NULL,
@@ -11442,7 +11444,7 @@ ni_fsl_epi_reg <- function(epi,
                      .profile = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("fsl.epi_reg", epi = epi, t1_brain = t1_brain, t1_head = t1_head, args = args, echospacing = echospacing, fmap = fmap, fmapmag = fmapmag, fmapmagbrain = fmapmagbrain, no_clean = no_clean, no_fmapreg = no_fmapreg, out_base = out_base, pedir = pedir, weight_image = weight_image, wmseg = wmseg, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
+  call <- ni_call("fsl.epi_reg", epi = epi, out_base = out_base, t1_brain = t1_brain, t1_head = t1_head, args = args, echospacing = echospacing, fmap = fmap, fmapmag = fmapmag, fmapmagbrain = fmapmagbrain, no_clean = no_clean, no_fmapreg = no_fmapreg, pedir = pedir, weight_image = weight_image, wmseg = wmseg, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -11582,7 +11584,7 @@ ni_fsl_fast <- function(in_files,
                      mixel_smooth = NULL,
                      no_bias = NULL,
                      no_pve = NULL,
-                     number_classes = NULL,
+                     number_classes = 3,
                      other_priors = NULL,
                      out_basename = NULL,
                      output_biascorrected = NULL,
@@ -11783,7 +11785,7 @@ ni_fsl_find_the_biggest <- function(in_files,
 #' FSL run_first_all wrapper for segmentation of subcortical volumes
 #'
 #' @param in_file Character; file path. input data file **Required.**
-#' @param out_file Character; file path. output data file **Required.**
+#' @param out_file Character; file path. output data file
 #' @param affine_file Character; file path. Affine matrix to use (e.g. img2std.mat) (does not re-run registration)
 #' @param args Character. Additional parameters to the command
 #' @param brain_extracted Logical. Input structural image is already brain-extracted
@@ -11801,7 +11803,7 @@ ni_fsl_find_the_biggest <- function(in_files,
 #' @return An `ni_result` object.
 #' @export
 ni_fsl_first <- function(in_file,
-                     out_file,
+                     out_file = "segmented",
                      affine_file = NULL,
                      args = NULL,
                      brain_extracted = NULL,
@@ -12252,11 +12254,11 @@ ni_fsl_glm <- function(design,
 #'
 #' Interface for the ICA_AROMA.py script.
 #'
-#' @param denoise_type Character; one of: "nonaggr", "aggr", "both", "no". Type of denoising strategy: -no: only classification, no denoising -nonaggr (default): non-aggresssive denoising, i.e. partial component regression -aggr: aggressive denoising, i.e. full component regression -both: both aggressive and non-aggressive denoising (two outputs) **Required.**
+#' @param denoise_type Character; one of: "nonaggr", "aggr", "both", "no". Type of denoising strategy: -no: only classification, no denoising -nonaggr (default): non-aggresssive denoising, i.e. partial component regression -aggr: aggressive denoising, i.e. full component regression -both: both aggressive and non-aggressive denoising (two outputs)
 #' @param feat_dir Character; directory path. If a feat directory exists and temporal filtering has not been run yet, ICA_AROMA can use the files in this directory. **Required.**
 #' @param in_file Character; file path. volume to be denoised **Required.**
 #' @param motion_parameters Character; file path. motion parameters file **Required.**
-#' @param out_dir Character; directory path. output directory **Required.**
+#' @param out_dir Character; directory path. output directory
 #' @param TR Numeric. TR in seconds. If this is not specified the TR will be extracted from the header of the fMRI nifti file.
 #' @param args Character. Additional parameters to the command
 #' @param dim Integer. Dimensionality reduction when running MELODIC (default is automatic estimation)
@@ -12272,11 +12274,11 @@ ni_fsl_glm <- function(design,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_ica_aroma <- function(denoise_type,
+ni_fsl_ica_aroma <- function(denoise_type = "nonaggr",
                      feat_dir,
                      in_file,
                      motion_parameters,
-                     out_dir,
+                     out_dir = "out",
                      TR = NULL,
                      args = NULL,
                      dim = NULL,
@@ -13296,7 +13298,7 @@ ni_fsl_prelude <- function(complex_phase_file,
 #'
 #' Interface for the fsl_prepare_fieldmap script (FSL 5.0)
 #'
-#' @param delta_TE Numeric. echo time difference of the fieldmap sequence in ms. (usually 2.46ms in Siemens) **Required.**
+#' @param delta_TE Numeric. echo time difference of the fieldmap sequence in ms. (usually 2.46ms in Siemens)
 #' @param in_magnitude Character; file path. Magnitude difference map, brain extracted **Required.**
 #' @param in_phase Character; file path. Phase difference map, in SIEMENS format range from 0-4096 or 0-8192) **Required.**
 #' @param args Character. Additional parameters to the command
@@ -13311,7 +13313,7 @@ ni_fsl_prelude <- function(complex_phase_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_prepare_fieldmap <- function(delta_TE,
+ni_fsl_prepare_fieldmap <- function(delta_TE = 2.46,
                      in_magnitude,
                      in_phase,
                      args = NULL,
@@ -14586,7 +14588,7 @@ ni_fsl_warp_points <- function(dest_file,
 #'
 #' @param in_file Character; file path. Name of file containing warp-coefficients/fields. This would typically be the output from the --cout switch of fnirt (but can also use fields, like the output from --fout). **Required.**
 #' @param reference Character; file path. Name of a file in target space. Note that the target space is now different from the target space that was used to create the --warp file. It would typically be the file that was specified with the --in argument when running fnirt. **Required.**
-#' @param write_jacobian Logical. Switch on --jac flag with automatically generated filename **Required.**
+#' @param write_jacobian Logical. Switch on --jac flag with automatically generated filename
 #' @param args Character. Additional parameters to the command
 #' @param knot_space Character or numeric vector. Alternative (to --warpres) specification of the resolution of the output spline-field.
 #' @param out_file Character; file path. Name of output file. The format of the output depends on what other parameters are set. The default format is a (4D) field-file. If the --outformat is set to spline the format will be a (4D) file of spline coefficients.
@@ -14604,7 +14606,7 @@ ni_fsl_warp_points <- function(dest_file,
 #' @export
 ni_fsl_warp_utils <- function(in_file,
                      reference,
-                     write_jacobian,
+                     write_jacobian = FALSE,
                      args = NULL,
                      knot_space = NULL,
                      out_file = NULL,
@@ -14630,7 +14632,7 @@ ni_fsl_warp_utils <- function(in_file,
 #' @param bvecs Character; file path. b vectors file **Required.**
 #' @param dwi Character; file path. diffusion weighted image data file **Required.**
 #' @param mask Character; file path. brain binary mask file (i.e. from BET) **Required.**
-#' @param n_fibres Integer. Maximum number of fibres to fit in each voxel **Required.**
+#' @param n_fibres Integer. Maximum number of fibres to fit in each voxel
 #' @param all_ard Logical. Turn ARD on on all fibres
 #' @param args Character. Additional parameters to the command
 #' @param burn_in Integer. Total num of jumps at start of MCMC to be discarded
@@ -14663,7 +14665,7 @@ ni_fsl_x_fibres5 <- function(bvals,
                      bvecs,
                      dwi,
                      mask,
-                     n_fibres,
+                     n_fibres = 2,
                      all_ard = NULL,
                      args = NULL,
                      burn_in = 0,

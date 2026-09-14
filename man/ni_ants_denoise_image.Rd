@@ -6,7 +6,7 @@
 \usage{
 ni_ants_denoise_image(
   input_image,
-  save_noise,
+  save_noise = FALSE,
   args = NULL,
   dimension = NULL,
   noise_model = "Gaussian",
@@ -24,7 +24,7 @@ ni_ants_denoise_image(
 \arguments{
 \item{input_image}{Character; file path. A scalar image is expected as input for noise correction. \strong{Required.}}
 
-\item{save_noise}{Logical. True if the estimated noise should be saved to file. \strong{Required.}}
+\item{save_noise}{Logical. True if the estimated noise should be saved to file.}
 
 \item{args}{Character. Additional parameters to the command}
 

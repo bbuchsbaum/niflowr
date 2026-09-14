@@ -11,7 +11,7 @@ ni_freesurfer_fix_topology(
   in_inflated,
   in_orig,
   in_wm,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   ga = NULL,
   mgz = NULL,
@@ -38,7 +38,7 @@ ni_freesurfer_fix_topology(
 
 \item{in_wm}{Character; file path. Implicit input wm.mgz \strong{Required.}}
 
-\item{subject_id}{Character. Subject being processed \strong{Required.}}
+\item{subject_id}{Character. Subject being processed}
 
 \item{args}{Character. Additional parameters to the command}
 

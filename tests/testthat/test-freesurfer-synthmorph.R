@@ -103,15 +103,15 @@ test_that("ni_freesurfer_synthmorph_register/apply wrappers exist and dry_run", 
   trans <- withr::local_tempfile(fileext = ".lta")
   file.create(moving, fixed, trans)
 
-  expect_null(ni_freesurfer_synthmorph_register(
+  expect_s3_class(ni_freesurfer_synthmorph_register(
     moving = moving, fixed = fixed,
     trans = "/tmp/trans.lta",
     .engine = "native", dry_run = TRUE
-  ))
-  expect_null(ni_freesurfer_synthmorph_apply(
+  ), "ni_execution_plan")
+  expect_s3_class(ni_freesurfer_synthmorph_apply(
     trans = trans, moving = moving, moved = "/tmp/moved.nii.gz",
     .engine = "native", dry_run = TRUE
-  ))
+  ), "ni_execution_plan")
 })
 
 test_that("freesurfer synthmorph specs appear in ni_spec_list()", {

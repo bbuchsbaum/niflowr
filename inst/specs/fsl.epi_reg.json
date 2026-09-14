@@ -71,7 +71,9 @@
         "argstr": "--out=%s",
         "position": -1,
         "strip_ext": true
-      }
+      },
+      "required": true,
+      "role": "output"
     },
     "pedir": {
       "type": "enum",
@@ -122,21 +124,53 @@
     }
   },
   "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "epi2str_mat": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
     "wmseg": {
       "type": "file",
       "path": {
-        "from_input": "wmseg"
+        "computed": true
       },
-      "must_exist": false
+      "must_exist": true
+    },
+    "wmedge": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "seg": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
     }
   },
   "runtime": {
-    "profile": "fsl"
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
   },
   "origin": {
     "source": "nipype",
     "nipype_class": "nipype.interfaces.fsl.epi.EpiReg",
     "nipype_version": "1.10.0"
   },
-  "description": "Runs FSL epi_reg script for simultaneous coregistration and fieldmap"
+  "description": "Runs FSL epi_reg script for simultaneous coregistration and fieldmap",
+  "output_resolver": "fsl_epi_reg"
 }

@@ -13,5 +13,5 @@ ni_dry_run(spec_id, ...)
 \item{...}{Named parameter values.}
 }
 \description{
-Shorthand for \code{ni_run(ni_call(spec, ...), dry_run = TRUE)}.
+Run a spec as a dry run
 }

@@ -105,5 +105,5 @@ test_that("ni_ants_transform_build wrapper exists and supports dry_run (#5)", {
     .engine = "native",
     dry_run = TRUE
   )
-  expect_null(result)
+  expect_s3_class(result, "ni_execution_plan")
 })

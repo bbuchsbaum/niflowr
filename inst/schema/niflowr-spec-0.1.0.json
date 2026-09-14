@@ -33,6 +33,7 @@
       "type": "string",
       "description": "Name of a registered custom renderer to build the argument vector instead of the generic per-input loop (e.g. 'ants_registration_staged')."
     },
+    "output_resolver": { "type": "string", "description": "Registered resolver for computed output collections." },
     "inputs": {
       "type": "object",
       "additionalProperties": { "$ref": "#/$defs/param" },
@@ -56,6 +57,7 @@
           "type": "string",
           "enum": ["file", "dir", "string", "int", "double", "bool", "flag", "enum", "list"]
         },
+        "role": { "enum": ["input", "output", "inout"] },
         "desc": { "type": "string" },
         "required": { "type": "boolean", "default": false },
         "default": {},
@@ -156,10 +158,17 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["file", "dir", "text"]
+          "enum": ["file", "dir", "text", "list"]
         },
         "path": {
           "oneOf": [
+            {
+              "type": "object",
+              "required": ["computed"],
+              "properties": { "computed": { "const": true } },
+              "additionalProperties": false,
+              "description": "The registered output_resolver supplies these paths."
+            },
             {
               "type": "object",
               "required": ["from_input"],

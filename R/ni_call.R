@@ -27,6 +27,13 @@ ni_call <- function(spec_id, ..., .cwd = NULL, .env = NULL,
 
   values <- normalize_input_values(spec, list(...))
 
+  # A required input that also declares a default is otherwise unusable: validation rejects the call
+  # unless the caller repeats the value the spec already specifies. Nipype, which these specs were
+  # generated from, renders mandatory traits using their default. Optional inputs are untouched, so
+  # rendered commands for them are unchanged (see apply_spec_defaults below).
+  values <- apply_required_defaults(spec, values)
+  if (!is.null(.cwd %||% spec$runtime$cwd)) values <- ni_absolute_values(spec, values, ni_norm(.cwd %||% spec$runtime$cwd))
+
   # Validate
   if (.validate) {
     validate_inputs(spec, values)
@@ -35,8 +42,17 @@ ni_call <- function(spec_id, ..., .cwd = NULL, .env = NULL,
   # Fill missing output-driving inputs (e.g. out_file) from primary input
   values <- populate_auto_output_inputs(spec, values)
 
+  if (.validate) validate_inputs(spec, values)
+
   # Resolve output paths
   outputs <- resolve_outputs(spec, values)
+  if (identical(spec$runtime$profile, "fsl")) {
+    env <- ni_env_vector(c(ni_config_resolve()$env %||% list(), spec$runtime$env %||% list(), .env %||% list()))
+    format <- if ("FSLOUTPUTTYPE" %in% names(env)) env[["FSLOUTPUTTYPE"]] else Sys.getenv("FSLOUTPUTTYPE", "NIFTI_GZ")
+    ext <- switch(format, NIFTI_GZ = ".nii.gz", NIFTI = ".nii", NULL)
+    if (is.null(ext) && !is.null(spec$output_resolver)) cli::cli_abort("Supported FSL output formats are NIFTI and NIFTI_GZ.")
+    if (!is.null(ext)) outputs <- lapply(outputs, function(x) sub("\\.nii\\.gz$", ext, x))
+  }
 
   call <- structure(
     list(
@@ -180,6 +196,8 @@ populate_auto_output_inputs <- function(spec, values) {
     path_spec <- spec$outputs[[out_name]]$path
     input_name <- path_spec$from_input
     if (is.null(input_name)) next
+    if (!spec$inputs[[input_name]]$type %in% c("file", "dir")) next
+    if (!output_when_holds(spec$outputs[[out_name]]$when, apply_spec_defaults(spec, values))) next
     if (!is_missing_value(values[[input_name]])) next
 
     inferred <- infer_output_path(spec, values, out_name, input_name)
@@ -294,6 +312,17 @@ is_bids_like_path <- function(path) {
 #' conditional outputs, and inside custom renderers.
 #'
 #' @keywords internal
+apply_required_defaults <- function(spec, values) {
+  for (nm in names(spec$inputs)) {
+    def <- spec$inputs[[nm]]
+    if (isTRUE(def$required) && is_missing_value(values[[nm]]) && !is.null(def$default)) {
+      values[[nm]] <- def$default
+    }
+  }
+  values
+}
+
+#' @keywords internal
 apply_spec_defaults <- function(spec, values) {
   for (nm in names(spec$inputs)) {
     if (is_missing_value(values[[nm]]) && !is.null(spec$inputs[[nm]]$default)) {
@@ -323,6 +352,7 @@ output_when_holds <- function(when, values) {
 #' @keywords internal
 resolve_outputs <- function(spec, values) {
   out <- list()
+  if (!is.null(spec$output_resolver)) return(resolve_tool_outputs(spec, values))
   values <- apply_spec_defaults(spec, values)
   # Templates for side products of strip_ext outs (e.g. mcflirt .par) must use
   # the basename FSL actually receives, not the user-facing .nii.gz path.

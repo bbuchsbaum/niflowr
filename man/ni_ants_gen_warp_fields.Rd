@@ -42,7 +42,7 @@ ni_ants_gen_warp_fields(
 
 \item{max_iterations}{Character or numeric vector. maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations}
 
-\item{out_prefix}{Character. Prefix that is prepended to all output files (default = ants_)}
+\item{out_prefix}{Character; file path. Prefix that is prepended to all output files (default = ants_)}
 
 \item{quality_check}{Logical. Perform a quality check of the result}
 

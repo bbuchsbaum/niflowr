@@ -5,11 +5,11 @@
 \title{FSL ICA_AROMA}
 \usage{
 ni_fsl_ica_aroma(
-  denoise_type,
+  denoise_type = "nonaggr",
   feat_dir,
   in_file,
   motion_parameters,
-  out_dir,
+  out_dir = "out",
   TR = NULL,
   args = NULL,
   dim = NULL,
@@ -26,7 +26,7 @@ ni_fsl_ica_aroma(
 )
 }
 \arguments{
-\item{denoise_type}{Character; one of: "nonaggr", "aggr", "both", "no". Type of denoising strategy: -no: only classification, no denoising -nonaggr (default): non-aggresssive denoising, i.e. partial component regression -aggr: aggressive denoising, i.e. full component regression -both: both aggressive and non-aggressive denoising (two outputs) \strong{Required.}}
+\item{denoise_type}{Character; one of: "nonaggr", "aggr", "both", "no". Type of denoising strategy: -no: only classification, no denoising -nonaggr (default): non-aggresssive denoising, i.e. partial component regression -aggr: aggressive denoising, i.e. full component regression -both: both aggressive and non-aggressive denoising (two outputs)}
 
 \item{feat_dir}{Character; directory path. If a feat directory exists and temporal filtering has not been run yet, ICA_AROMA can use the files in this directory. \strong{Required.}}
 
@@ -34,7 +34,7 @@ ni_fsl_ica_aroma(
 
 \item{motion_parameters}{Character; file path. motion parameters file \strong{Required.}}
 
-\item{out_dir}{Character; directory path. output directory \strong{Required.}}
+\item{out_dir}{Character; directory path. output directory}
 
 \item{TR}{Numeric. TR in seconds. If this is not specified the TR will be extracted from the header of the fMRI nifti file.}
 

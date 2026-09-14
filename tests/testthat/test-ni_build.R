@@ -184,7 +184,7 @@ test_that("%s... argstr expands per element instead of appending an ellipsis (#2
 
 test_that("negative positions are placed after options (Nipype convention)", {
   x <- ni_cmd(ni_call("fsl.fast", in_files = list("x.nii.gz"), out_basename = "seg",
-                      img_type = 1L, number_classes = 3L))
+                      img_type = 1L, number_classes = 3L, .validate = FALSE))
   expect_identical(x$command, "fast")
   expect_identical(utils::tail(x$args, 1), "x.nii.gz")
   expect_true(match("-o", x$args) < match("x.nii.gz", x$args))

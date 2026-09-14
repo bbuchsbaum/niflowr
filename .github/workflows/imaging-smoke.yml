@@ -1,0 +1,40 @@
+name: Imaging smoke tests
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ["R/**", "inst/specs/**", "tests/smoke/**", ".github/workflows/imaging-smoke.yml"]
+  push:
+    branches: [main]
+    paths: ["R/**", "inst/specs/**", "tests/smoke/**", ".github/workflows/imaging-smoke.yml"]
+permissions:
+  contents: read
+jobs:
+  preprocessing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y libnode-dev
+      - shell: Rscript {0}
+        run: install.packages(c("cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate", "processx", "yaml", "pkgload"))
+      - run: python -m pip install numpy==2.2.6 nibabel==5.3.2
+      - name: Pull pinned Linux images
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          for p in json.load(open('tests/smoke/images.json')).values():
+              subprocess.run(['docker','pull','--platform',p['platform'],p['image']],check=True,timeout=900)
+          PY
+      - name: Run complete mechanical preprocessing chain
+        run: Rscript tests/smoke/run.R smoke-results
+      - name: Upload evidence including failed invocations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: imaging-smoke-evidence
+          path: smoke-results/
+          include-hidden-files: true

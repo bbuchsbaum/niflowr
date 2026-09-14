@@ -1,0 +1,13 @@
+{
+  "inputs": {
+    "num_iters": {
+      "type": "int"
+    },
+    "surface_fwhm": {
+      "type": "double"
+    },
+    "vol_fwhm": {
+      "type": "double"
+    }
+  }
+}

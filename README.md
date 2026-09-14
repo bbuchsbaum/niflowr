@@ -183,11 +183,16 @@ ni_fsl_bet(in_file = "T1w.nii.gz", out_file = "brain.nii.gz",
 
 ```yaml
 profiles:
-  fsl:  { docker_image: "brainlife/fsl:6.0.4" }
+  fsl:
+    docker_image: "brainlife/fsl:6.0.4"
+    # Many FSL images use a shell ENTRYPOINT that ignores the payload command.
+    entrypoint: ""
+    # Optional on Apple Silicon when the image is amd64-only:
+    # platform: "linux/amd64"
   ants: { apptainer_uri: "docker://antsx/ants:v2.5.0" }
 ```
 
-For stricter execution records, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, and lock status.
+For stricter execution records, `ni_pin()` records resolved image **digests** in a lockfile, `ni_lock_validate()` checks your environment against it, and `ni_doctor()` reports on binaries, mounts, profiles, payload execution, and lock status.
 
 ### Pipelines with targets
 
@@ -278,3 +283,52 @@ niflowr is **experimental** (v0.1.0): the spec schema and API may still change.
 ## License
 
 MIT © Bradley Buchsbaum. See [LICENSE](LICENSE).
+
+### Execution contracts and supported smoke coverage
+
+`ni_plan(call)` and `ni_run(call, dry_run = TRUE)` return an inspectable
+`ni_execution_plan`. It records the host and container payloads separately from
+the executable/argv, effective environment overrides, host/container working
+directories, mounts, profile settings, image identity when available, and spec
+and package source hashes. Native processes inherit the host environment;
+explicit settings take precedence in the order configuration, spec, call.
+Container image environment defaults remain image-defined. Plans do not pull
+Apptainer images or launch the workload; they may create mount directories or
+stage explicitly permitted inputs.
+
+```r
+call <- ni_call("ants.n4_bias_field_correction",
+                input_image = "input.nii.gz", output_image = "corrected.nii.gz",
+                save_bias = TRUE, .engine = "native")
+plan <- ni_plan(call)
+result <- ni_run(call, timeout = 300)
+```
+
+A zero process exit does not override a failed required-output check. Required
+outputs must use fresh paths; an existing file is not an admitted cache entry.
+Specs can explicitly mark an input `role = "inout"` for in-place processing;
+its original content is hashed before execution and unchanged output is rejected.
+Only outputs declared `must_exist = TRUE` are required. This enforcement is
+currently enabled for the smoke subset (N4, BET, FAST, MCFLIRT, FLIRT, epi_reg),
+not asserted for the entire imported catalog.
+
+Each invocation keeps stdout, stderr, and (unless disabled) provenance under
+`.niflowr/runs` beside the first output, or the effective cwd when there are no
+outputs. Set `log_dir` to choose another location. Failure conditions of class
+`ni_execution_error` contain `$result` and `$stderr`; the result includes log
+and provenance paths. `error_on_status = FALSE` returns a failed result with a
+warning, but `return = "files"` always rejects a failed execution. A wall-time
+limit also removes the invocation's uniquely named Docker container. Container
+naming and detached execution cannot be overridden through `extra_run_args`.
+
+N4 maps both corrected-image and bias-field paths. `save_bias = TRUE` emits the
+native two-output form; `copy_header = TRUE` raises an explicit unsupported
+error. FAST returns partial-volume and requested probability/binary/restored/bias
+collections. epi_reg returns the final image and matrix and treats supplied WM
+segmentation as an input. These FSL output resolvers support `NIFTI_GZ` and
+`NIFTI`; other formats fail explicitly.
+
+The [smoke harness](tests/smoke/README.md) runs a synthetic preprocessing chain
+with digest-pinned images and independently reads its products with NiBabel.
+This establishes mechanical interface behavior, not scientific equivalence or
+preprocessing efficacy. Unit CI and imaging smoke CI report separately.

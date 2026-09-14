@@ -6,7 +6,7 @@
 \usage{
 ni_fsl_first(
   in_file,
-  out_file,
+  out_file = "segmented",
   affine_file = NULL,
   args = NULL,
   brain_extracted = NULL,
@@ -26,7 +26,7 @@ ni_fsl_first(
 \arguments{
 \item{in_file}{Character; file path. input data file \strong{Required.}}
 
-\item{out_file}{Character; file path. output data file \strong{Required.}}
+\item{out_file}{Character; file path. output data file}
 
 \item{affine_file}{Character; file path. Affine matrix to use (e.g. img2std.mat) (does not re-run registration)}
 

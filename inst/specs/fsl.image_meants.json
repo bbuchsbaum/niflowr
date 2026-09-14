@@ -54,7 +54,7 @@
       "desc": "name of output text matrix",
       "cli": {
         "argstr": "-o %s",
-        "strip_ext": true
+        "strip_ext": false
       }
     },
     "show_all": {
@@ -92,7 +92,7 @@
       "path": {
         "from_input": "out_file"
       },
-      "must_exist": false
+      "must_exist": true
     }
   },
   "runtime": {

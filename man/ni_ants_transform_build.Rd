@@ -28,7 +28,7 @@ ni_ants_transform_build(
 
 \item{moving_image}{Character; file path. Moving (source) image to register into the fixed image space. \strong{Required.}}
 
-\item{output_prefix}{Character. Prefix prepended to all generated artifacts (e.g. '\if{html}{\out{<prefix>}}Composite.h5'). \strong{Required.}}
+\item{output_prefix}{Character; file path. Prefix prepended to all generated artifacts (e.g. '\if{html}{\out{<prefix>}}Composite.h5'). \strong{Required.}}
 
 \item{preset}{Character; one of: "rigid_affine_syn", "rigid_affine", "rigid", "affine". Registration preset expanded into staged antsRegistration transforms.}
 

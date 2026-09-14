@@ -425,7 +425,7 @@
   },
   "ants.n4_bias_field_correction": {
     "command": "N4BiasFieldCorrection",
-    "args": ["args_value", "--bspline-fitting", "1", "-d", "3", "--histogram-sharpening", "[%g,%g,%d] item1,item2", "--input-image", "/tmp/niflowr/input_image.nii.gz", "--mask-image", "/tmp/niflowr/mask_image.nii.gz", "--convergence", "item1,item2", "--output", "output_image_value", "--shrink-factor", "1", "--weight-image", "/tmp/niflowr/weight_image.nii.gz"]
+    "args": ["args_value", "--bspline-fitting", "1", "-d", "3", "--histogram-sharpening", "[%g,%g,%d] item1,item2", "--input-image", "/tmp/niflowr/input_image.nii.gz", "--mask-image", "/tmp/niflowr/mask_image.nii.gz", "--convergence", "item1xitem2", "--output", "/tmp/niflowr/output_image.nii.gz", "-r", "0", "--shrink-factor", "1", "--weight-image", "/tmp/niflowr/weight_image.nii.gz"]
   },
   "ants.registration": {
     "command": "antsRegistration",
@@ -949,7 +949,7 @@
   },
   "fsl.fast": {
     "command": "fast",
-    "args": ["args_value", "-I", "1", "-l", "1", "-H", "1.00", "-t", "1", "-f", "1.000", "-a", "/tmp/niflowr/init_transform.mat", "-O", "1", "-s", "/tmp/niflowr/manual_seg.nii.gz", "-R", "1.00", "-n", "1", "-A", "item1,item2", "-o", "/tmp/niflowr/out_basename", "-W", "1", "item1,item2"]
+    "args": ["-S", "2", "args_value", "-I", "1", "-l", "1", "-H", "1.00", "-t", "1", "-f", "1.000", "-a", "/tmp/niflowr/init_transform.mat", "-O", "1", "-s", "/tmp/niflowr/manual_seg.nii.gz", "-R", "1.00", "-n", "3", "-A", "item1,item2", "-o", "/tmp/niflowr/out_basename", "-W", "1", "item1,item2"]
   },
   "fsl.feat": {
     "command": "feat",
@@ -1005,7 +1005,7 @@
   },
   "fsl.image_meants": {
     "command": "fslmeants",
-    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "args_value", "-m", "/tmp/niflowr/mask.nii.gz", "--order=1", "-o", "/tmp/niflowr/out_file", "-c", "item1,item2"]
+    "args": ["-i", "/tmp/niflowr/in_file.nii.gz", "args_value", "-m", "/tmp/niflowr/mask.nii.gz", "--order=1", "-o", "/tmp/niflowr/out_file.txt", "-c", "item1,item2"]
   },
   "fsl.image_stats": {
     "command": "fslstats",
@@ -1173,7 +1173,7 @@
   },
   "fsl.text2_vest": {
     "command": "Text2Vest",
-    "args": ["/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/out_file", "args_value"]
+    "args": ["/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/out_file.nii.gz", "args_value"]
   },
   "fsl.threshold": {
     "command": "fslmaths",
@@ -1197,7 +1197,7 @@
   },
   "fsl.vest2_text": {
     "command": "Vest2Text",
-    "args": ["/tmp/niflowr/in_file.nii.gz", "design", "args_value"]
+    "args": ["/tmp/niflowr/in_file.nii.gz", "design.txt", "args_value"]
   },
   "fsl.warp_points": {
     "command": "img2imgcoord",

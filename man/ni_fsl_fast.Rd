@@ -18,7 +18,7 @@ ni_fsl_fast(
   mixel_smooth = NULL,
   no_bias = NULL,
   no_pve = NULL,
-  number_classes = NULL,
+  number_classes = 3,
   other_priors = NULL,
   out_basename = NULL,
   output_biascorrected = NULL,
@@ -41,29 +41,29 @@ ni_fsl_fast(
 
 \item{args}{Character. Additional parameters to the command}
 
-\item{bias_iters}{Character. number of main-loop iterations during bias-field removal}
+\item{bias_iters}{Integer. number of main-loop iterations during bias-field removal}
 
-\item{bias_lowpass}{Character. bias field smoothing extent (FWHM) in mm}
+\item{bias_lowpass}{Integer. bias field smoothing extent (FWHM) in mm}
 
-\item{hyper}{Character. segmentation spatial smoothness}
+\item{hyper}{Numeric. segmentation spatial smoothness}
 
 \item{img_type}{Character; one of: "1", "2", "3". int specifying type of image: (1 = T1, 2 = T2, 3 = PD)}
 
-\item{init_seg_smooth}{Character. initial segmentation spatial smoothness (during bias field estimation)}
+\item{init_seg_smooth}{Numeric. initial segmentation spatial smoothness (during bias field estimation)}
 
 \item{init_transform}{Character; file path. <standard2input.mat> initialise using priors}
 
-\item{iters_afterbias}{Character. number of main-loop iterations after bias-field removal}
+\item{iters_afterbias}{Integer. number of main-loop iterations after bias-field removal}
 
 \item{manual_seg}{Character; file path. Filename containing intensities}
 
-\item{mixel_smooth}{Character. spatial smoothness for mixeltype}
+\item{mixel_smooth}{Numeric. spatial smoothness for mixeltype}
 
 \item{no_bias}{Logical. do not remove bias field}
 
 \item{no_pve}{Logical. turn off PVE (partial volume estimation)}
 
-\item{number_classes}{Character. number of tissue-type classes}
+\item{number_classes}{Integer. number of tissue-type classes}
 
 \item{other_priors}{Character or numeric vector. alternative prior images}
 
@@ -75,7 +75,7 @@ ni_fsl_fast(
 
 \item{probability_maps}{Logical. outputs individual probability maps}
 
-\item{segment_iters}{Character. number of segmentation-initialisation iterations}
+\item{segment_iters}{Integer. number of segmentation-initialisation iterations}
 
 \item{segments}{Logical. outputs a separate binary image for each tissue type}
 

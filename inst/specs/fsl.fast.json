@@ -52,7 +52,10 @@
         "argstr": "%s",
         "position": -1
       },
-      "items_type": "file"
+      "items_type": "file",
+      "validate": {
+        "exists": true
+      }
     },
     "init_seg_smooth": {
       "type": "double",
@@ -108,6 +111,11 @@
       "desc": "number of tissue-type classes",
       "cli": {
         "argstr": "-n %d"
+      },
+      "default": 3,
+      "validate": {
+        "min": 1,
+        "max": 10
       }
     },
     "other_priors": {
@@ -124,7 +132,8 @@
       "cli": {
         "argstr": "-o %s",
         "strip_ext": true
-      }
+      },
+      "role": "output"
     },
     "output_biascorrected": {
       "type": "flag",
@@ -177,21 +186,75 @@
     }
   },
   "outputs": {
-    "probability_maps": {
-      "type": "text",
+    "tissue_class_map": {
+      "type": "file",
       "path": {
-        "from_input": "probability_maps"
+        "computed": true
       },
-      "must_exist": false
+      "must_exist": true
+    },
+    "partial_volume_files": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "partial_volume_map": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "mixeltype": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "tissue_class_files": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "restored_image": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "bias_field": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "probability_maps": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
     }
   },
   "runtime": {
-    "profile": "fsl"
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
   },
   "origin": {
     "source": "nipype",
     "nipype_class": "nipype.interfaces.fsl.preprocess.FAST",
     "nipype_version": "1.10.0"
   },
-  "description": "FSL FAST wrapper for segmentation and bias correction"
+  "description": "FSL FAST wrapper for segmentation and bias correction",
+  "render": "fsl_fast",
+  "output_resolver": "fsl_fast"
 }

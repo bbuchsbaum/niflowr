@@ -54,7 +54,9 @@ test_that("wrapper functions execute ni_call for all specs", {
             "mutually exclusive",
             "matched by multiple actual arguments",
             "values must be type",
-            "argument not used by format"
+            "argument not used by format",
+            "copy_header = TRUE is unsupported",
+            "FAST number_classes"
           )
           if (any(sapply(expected_patterns, function(p) grepl(p, msg)))) {
             expected_error_count <<- expected_error_count + 1
@@ -103,7 +105,7 @@ test_that("wrapper dry_run returns NULL invisibly", {
       )
     )
 
-    expect_null(result$value)
+    expect_s3_class(result$value, "ni_execution_plan")
     expect_false(result$visible)
   })
 })
@@ -142,7 +144,7 @@ test_that("wrappers pass through all standard parameters", {
       echo = FALSE
     )
 
-    expect_null(result)
+    expect_s3_class(result, "ni_execution_plan")
   })
 })
 
@@ -157,7 +159,7 @@ test_that("wrappers create ni_call objects via ni_call()", {
       dry_run = TRUE,
       echo = FALSE
     )
-    expect_null(result)
+    expect_s3_class(result, "ni_execution_plan")
   })
 })
 
@@ -195,7 +197,7 @@ test_that("sample wrappers with minimal parameters work in dry_run", {
           ))
         }
 
-        expect_null(result)
+        expect_s3_class(result, "ni_execution_plan")
       }
     })
   })
@@ -217,6 +219,6 @@ test_that("wrappers handle all parameter types", {
       echo = FALSE
     )
 
-    expect_null(result)
+    expect_s3_class(result, "ni_execution_plan")
   })
 })

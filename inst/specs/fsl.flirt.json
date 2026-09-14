@@ -390,18 +390,21 @@
       "path": {
         "from_input": "out_file"
       },
-      "must_exist": false
+      "must_exist": true
     },
     "out_matrix_file": {
       "type": "file",
       "path": {
         "from_input": "out_matrix_file"
       },
-      "must_exist": false
+      "must_exist": true
     }
   },
   "runtime": {
-    "profile": "fsl"
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
   },
   "origin": {
     "source": "nipype",

@@ -1,0 +1,22 @@
+{
+  "inputs": {
+    "out_file": {
+      "cli": {
+        "argstr": "-o %s",
+        "strip_ext": false
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": true
+    }
+  },
+  "runtime": {
+    "profile": "fsl"
+  }
+}

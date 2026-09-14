@@ -11,7 +11,9 @@ ni_run(
   echo = interactive(),
   provenance = TRUE,
   error_on_status = TRUE,
-  return = c("result", "files")
+  return = c("result", "files"),
+  timeout = Inf,
+  log_dir = NULL
 )
 }
 \arguments{
@@ -21,7 +23,7 @@ args are passed to \code{\link[=ni_call]{ni_call()}}).}
 \item{...}{If \code{call} is a spec ID, passed to \code{\link[=ni_call]{ni_call()}}.}
 
 \item{dry_run}{Logical; if \code{TRUE}, print the resolved command and return
-without executing.}
+the inspectable execution plan without executing.}
 
 \item{echo}{Logical; if \code{TRUE}, print stdout/stderr in real time.
 Defaults to \code{interactive()}.}
@@ -32,6 +34,11 @@ Defaults to \code{interactive()}.}
 exits with a non-zero status. If \code{FALSE}, issue a warning instead.}
 
 \item{return}{One of \code{"result"} (default) or \code{"files"}.}
+
+\item{timeout}{Wall-time limit in seconds; \code{Inf} disables the limit.}
+
+\item{log_dir}{Directory for per-invocation logs and provenance. Defaults to
+\code{.niflowr/runs} beside the first output, or in the working directory.}
 }
 \value{
 An \code{ni_result} object, or (when \code{return = "files"}) a character
