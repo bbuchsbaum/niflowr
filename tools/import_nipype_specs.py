@@ -42,7 +42,7 @@ OVERRIDES_DIR = pathlib.Path(__file__).resolve().parent / "spec_overrides"
 def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
     """Recursively merge ``override`` into ``base`` in place and return it."""
     for key, value in override.items():
-        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+        if key not in {"outputs", "constraints"} and key in base and isinstance(base[key], dict) and isinstance(value, dict):
             deep_merge(base[key], value)
         else:
             base[key] = value

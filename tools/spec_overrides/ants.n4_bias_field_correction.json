@@ -1,0 +1,48 @@
+{
+  "inputs": {
+    "copy_header": {
+      "desc": "Header copying is unsupported; TRUE raises an error."
+    },
+    "input_image": {
+      "validate": {
+        "exists": true
+      }
+    },
+    "output_image": {
+      "type": "file",
+      "role": "output"
+    },
+    "bias_image": {
+      "type": "file",
+      "role": "output",
+      "desc": "Bias-field destination when save_bias is TRUE; inferred beside the corrected image if omitted."
+    },
+    "save_bias": {
+      "constraints": {}
+    },
+    "rescale_intensities": {
+      "type": "bool",
+      "cli": {
+        "argstr": "-r %d"
+      }
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": true
+    },
+    "bias_image": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    }
+  },
+  "render": "ants_n4",
+  "output_resolver": "ants_n4"
+}

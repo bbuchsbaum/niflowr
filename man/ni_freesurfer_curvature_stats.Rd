@@ -8,7 +8,7 @@ ni_freesurfer_curvature_stats(
   curvfile1,
   curvfile2,
   hemisphere,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   min_max = NULL,
   out_file = NULL,
@@ -30,7 +30,7 @@ ni_freesurfer_curvature_stats(
 
 \item{hemisphere}{Character; one of: "lh", "rh". Hemisphere being processed \strong{Required.}}
 
-\item{subject_id}{Character. Subject being processed \strong{Required.}}
+\item{subject_id}{Character. Subject being processed}
 
 \item{args}{Character. Additional parameters to the command}
 

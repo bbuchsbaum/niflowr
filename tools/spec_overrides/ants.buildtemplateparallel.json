@@ -1,0 +1,10 @@
+{
+  "inputs": {
+    "in_files": {
+      "items_type": "file"
+    },
+    "out_prefix": {
+      "type": "file"
+    }
+  }
+}

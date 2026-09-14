@@ -70,14 +70,16 @@
       "desc": "Don't generate segmented output",
       "cli": {
         "argstr": "-n"
-      }
+      },
+      "default": false
     },
     "out_file": {
       "type": "file",
       "desc": "name of output skull stripped image",
       "cli": {
         "argstr": "%s",
-        "position": 1
+        "position": 1,
+        "strip_ext": true
       }
     },
     "outline": {
@@ -224,11 +226,33 @@
       "path": {
         "from_input": "out_file"
       },
-      "must_exist": false
+      "must_exist": true,
+      "when": {
+        "input": "no_output",
+        "not_in": [
+          true
+        ]
+      }
+    },
+    "mask_file": {
+      "type": "file",
+      "path": {
+        "template": "{out_file}_mask.nii.gz"
+      },
+      "when": {
+        "input": "mask",
+        "in": [
+          true
+        ]
+      },
+      "must_exist": true
     }
   },
   "runtime": {
-    "profile": "fsl"
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
   },
   "origin": {
     "source": "nipype",

@@ -11,7 +11,7 @@ ni_freesurfer_label2_label(
   source_subject,
   source_white,
   sphere_reg,
-  subject_id,
+  subject_id = "subject_id",
   white,
   args = NULL,
   out_file = NULL,
@@ -37,7 +37,7 @@ ni_freesurfer_label2_label(
 
 \item{sphere_reg}{Character; file path. Implicit input \if{html}{\out{<hemisphere>}}.sphere.reg \strong{Required.}}
 
-\item{subject_id}{Character. Target subject \strong{Required.}}
+\item{subject_id}{Character. Target subject}
 
 \item{white}{Character; file path. Implicit input \if{html}{\out{<hemisphere>}}.white \strong{Required.}}
 

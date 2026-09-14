@@ -36,7 +36,7 @@ ni_fsl_percentile_image(
 
 \item{output_datatype}{Character; one of: "float", "char", "int", "short", "double", "input". datatype to use for output (default uses input type)}
 
-\item{perc}{Character. nth percentile (0-100) of FULL RANGE across dimension}
+\item{perc}{Numeric. nth percentile (0-100) of FULL RANGE across dimension}
 
 \item{.cwd}{Working directory override.}
 

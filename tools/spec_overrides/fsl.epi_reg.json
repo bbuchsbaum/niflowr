@@ -1,0 +1,52 @@
+{
+  "inputs": {
+    "out_base": {
+      "required": true,
+      "role": "output",
+      "type": "file"
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "epi2str_mat": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "wmseg": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "wmedge": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "seg": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    }
+  },
+  "runtime": {
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
+  },
+  "output_resolver": "fsl_epi_reg"
+}

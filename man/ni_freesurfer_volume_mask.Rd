@@ -13,7 +13,7 @@ ni_freesurfer_volume_mask(
   rh_white,
   right_ribbonlabel,
   right_whitelabel,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   in_aseg = NULL,
   save_ribbon = NULL,
@@ -42,7 +42,7 @@ ni_freesurfer_volume_mask(
 
 \item{right_whitelabel}{Integer. Right white matter label \strong{Required.}}
 
-\item{subject_id}{Character. Subject being processed \strong{Required.}}
+\item{subject_id}{Character. Subject being processed}
 
 \item{args}{Character. Additional parameters to the command}
 

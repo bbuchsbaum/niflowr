@@ -194,6 +194,7 @@ ni_doctor_probe_docker_payload <- function(cfg, profile_name, profile,
   # Avoid inheriting user pull_policy for probes; never pull here.
   probe_cfg <- cfg
   probe_cfg$docker$pull_policy <- "never"
+  probe_cfg$docker$extra_run_args <- ni_without_pull_args(probe_cfg$docker$extra_run_args %||% character())
   # Empty user disables -u injection for the probe.
   probe_cfg$docker$user <- ""
 
@@ -221,7 +222,7 @@ ni_doctor_probe_docker_payload <- function(cfg, profile_name, profile,
   }
 
   res <- tryCatch(
-    processx::run(built$bin, built$argv, error_on_status = FALSE, timeout = timeout),
+    ni_docker_probe_run(built$bin, built$argv, timeout = timeout),
     error = function(e) list(status = 1L, stdout = "", stderr = conditionMessage(e))
   )
 

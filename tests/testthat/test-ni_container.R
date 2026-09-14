@@ -202,14 +202,13 @@ test_that("ni_env_vector converts named list to character vector", {
   # and names(env) <- names(env) doesn't restore them (names are already NULL)
   result <- niflowr:::ni_env_vector(list(A = "1", B = "2"))
   expect_type(result, "character")
-  expect_equal(result, c("1", "2"))
+  expect_equal(result, c(A = "1", B = "2"))
   # Names are lost due to as.character() - this is the current behavior
-  expect_null(names(result))
+  expect_equal(names(result), c("A", "B"))
 })
 
 test_that("ni_env_vector returns empty character for unnamed vector", {
-  result <- niflowr:::ni_env_vector(c("a", "b"))
-  expect_equal(result, character(0))
+  expect_error(niflowr:::ni_env_vector(c("a", "b")), "variable names")
 })
 
 # Additional coverage tests for ni_relpath

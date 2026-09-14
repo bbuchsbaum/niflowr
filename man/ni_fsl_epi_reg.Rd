@@ -6,6 +6,7 @@
 \usage{
 ni_fsl_epi_reg(
   epi,
+  out_base = "epi2struct",
   t1_brain,
   t1_head,
   args = NULL,
@@ -15,7 +16,6 @@ ni_fsl_epi_reg(
   fmapmagbrain = NULL,
   no_clean = TRUE,
   no_fmapreg = NULL,
-  out_base = "epi2struct",
   pedir = NULL,
   weight_image = NULL,
   wmseg = NULL,
@@ -29,6 +29,8 @@ ni_fsl_epi_reg(
 }
 \arguments{
 \item{epi}{Character; file path. EPI image \strong{Required.}}
+
+\item{out_base}{Character; file path. output base name}
 
 \item{t1_brain}{Character; file path. brain extracted T1 image \strong{Required.}}
 
@@ -47,8 +49,6 @@ ni_fsl_epi_reg(
 \item{no_clean}{Logical. do not clean up intermediate files}
 
 \item{no_fmapreg}{Logical. do not perform registration of fmap to T1 (use if fmap already registered)}
-
-\item{out_base}{Character. output base name}
 
 \item{pedir}{Character; one of: "x", "y", "z", "-x", "-y", "-z". phase encoding direction, dir = x/y/z/-x/-y/-z}
 

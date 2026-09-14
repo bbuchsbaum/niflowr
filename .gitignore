@@ -12,3 +12,5 @@ src/*.dll
 docs/
 .albersdown.bak/
 vignettes/extending-niflowr.html
+.niflowr/
+smoke-results/

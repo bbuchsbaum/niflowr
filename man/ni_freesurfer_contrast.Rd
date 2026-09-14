@@ -10,7 +10,7 @@ ni_freesurfer_contrast(
   hemisphere,
   orig,
   rawavg,
-  subject_id,
+  subject_id = "subject_id",
   thickness,
   white,
   args = NULL,
@@ -33,7 +33,7 @@ ni_freesurfer_contrast(
 
 \item{rawavg}{Character; file path. Implicit input file mri/rawavg.mgz \strong{Required.}}
 
-\item{subject_id}{Character. Subject being processed \strong{Required.}}
+\item{subject_id}{Character. Subject being processed}
 
 \item{thickness}{Character; file path. Input file must be <subject_id>/surf/?h.thickness \strong{Required.}}
 

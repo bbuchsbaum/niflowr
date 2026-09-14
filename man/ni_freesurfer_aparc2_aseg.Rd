@@ -15,7 +15,7 @@ ni_freesurfer_aparc2_aseg(
   rh_ribbon,
   rh_white,
   ribbon,
-  subject_id,
+  subject_id = "subject_id",
   a2009s = NULL,
   args = NULL,
   aseg = NULL,
@@ -53,7 +53,7 @@ ni_freesurfer_aparc2_aseg(
 
 \item{ribbon}{Character; file path. Input file must be <subject_id>/mri/ribbon.mgz \strong{Required.}}
 
-\item{subject_id}{Character. Subject being processed \strong{Required.}}
+\item{subject_id}{Character. Subject being processed}
 
 \item{a2009s}{Logical. Using the a2009s atlas}
 

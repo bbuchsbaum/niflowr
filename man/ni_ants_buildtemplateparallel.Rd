@@ -43,7 +43,7 @@ ni_ants_buildtemplateparallel(
 
 \item{num_cores}{Integer. Requires parallelization = 2 (PEXEC). Sets number of cpu cores to use}
 
-\item{out_prefix}{Character. Prefix that is prepended to all output files (default = antsTMPL_)}
+\item{out_prefix}{Character; file path. Prefix that is prepended to all output files (default = antsTMPL_)}
 
 \item{parallelization}{Character; one of: "0", "1", "2". control for parallel processing (0 = serial, 1 = use PBS, 2 = use PEXEC, 3 = use Apple XGrid}
 

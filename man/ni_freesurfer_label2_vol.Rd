@@ -46,7 +46,7 @@ ni_freesurfer_label2_vol(
 
 \item{args}{Character. Additional parameters to the command}
 
-\item{fill_thresh}{Character. thresh : between 0 and 1}
+\item{fill_thresh}{Numeric. thresh : between 0 and 1}
 
 \item{hemi}{Character; one of: "lh", "rh". hemisphere to use lh or rh}
 

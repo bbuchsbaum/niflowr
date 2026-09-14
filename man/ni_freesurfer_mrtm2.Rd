@@ -114,7 +114,7 @@ ni_freesurfer_mrtm2(
 
 \item{fsgd}{Character or numeric vector. freesurfer descriptor file}
 
-\item{fwhm}{Character. smooth input by fwhm}
+\item{fwhm}{Numeric. smooth input by fwhm}
 
 \item{glm_dir}{Character. save outputs to dir}
 
@@ -178,7 +178,7 @@ ni_freesurfer_mrtm2(
 
 \item{uniform}{Character or numeric vector. use uniform distribution instead of gaussian}
 
-\item{var_fwhm}{Character. smooth variance by fwhm}
+\item{var_fwhm}{Numeric. smooth variance by fwhm}
 
 \item{vox_dump}{Character or numeric vector. dump voxel GLM and exit}
 

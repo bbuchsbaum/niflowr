@@ -7,7 +7,7 @@
 ni_freesurfer_robust_template(
   auto_detect_sensitivity,
   in_files,
-  out_file,
+  out_file = "mri_robust_template_out.mgz",
   outlier_sensitivity,
   args = NULL,
   average_metric = NULL,
@@ -33,7 +33,7 @@ ni_freesurfer_robust_template(
 
 \item{in_files}{Character or numeric vector. input movable volumes to be aligned to common mean/median template \strong{Required.}}
 
-\item{out_file}{Character; file path. output template volume (final mean/median image) \strong{Required.}}
+\item{out_file}{Character; file path. output template volume (final mean/median image)}
 
 \item{outlier_sensitivity}{Numeric. set outlier sensitivity manually (e.g. "--sat 4.685" ). Higher values mean less sensitivity. \strong{Required.}}
 

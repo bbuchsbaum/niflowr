@@ -100,6 +100,7 @@ ni_relpath <- function(path, root) {
   root <- ni_norm(root)
   root2 <- if (grepl("/$", root)) root else paste0(root, "/")
 
+  if (identical(path, root)) return("")
   if (!startsWith(path, root2)) return(NULL)
 
   escaped <- gsub("([\\^\\$\\.\\|\\(\\)\\[\\]\\*\\+\\?\\\\])", "\\\\\\1", root2)
@@ -146,14 +147,12 @@ ni_map_host_to_container <- function(host_path, cfg) {
   cout <- cfg$container_paths[["out"]] %||% "/out"
   cwork <- cfg$container_paths[["work"]] %||% "/work"
 
-  if (!is.null(r <- ni_relpath(host_path, roots$in_root))) {
-    return(file.path(cin, r, fsep = "/"))
-  }
-  if (!is.null(r <- ni_relpath(host_path, roots$out_root))) {
-    return(file.path(cout, r, fsep = "/"))
-  }
-  if (!is.null(r <- ni_relpath(host_path, roots$work_root))) {
-    return(file.path(cwork, r, fsep = "/"))
+  mounts <- list(list(host = roots$in_root, cont = cin), list(host = roots$out_root, cont = cout), list(host = roots$work_root, cont = cwork))
+  # More specific nested roots take precedence over broad parent mounts.
+  mounts <- mounts[order(vapply(mounts, function(m) nchar(m$host), integer(1)), decreasing = TRUE)]
+  for (m in mounts) {
+    r <- ni_relpath(host_path, m$host)
+    if (!is.null(r)) return(sub("/$", "", paste0(m$cont, "/", r)))
   }
 
   if (isTRUE(cfg$paths$stage_unmapped_inputs)) {
@@ -237,7 +236,7 @@ ni_apptainer_sif_path <- function(cfg, profile_name, profile_info) {
 }
 
 #' @keywords internal
-ni_apptainer_pull_if_needed <- function(cfg, sif_path, uri) {
+ni_apptainer_pull_if_needed <- function(cfg, sif_path, uri, timeout = Inf) {
   if (file.exists(sif_path)) return(invisible(sif_path))
   if (is.null(uri) || !nzchar(uri)) {
     cli::cli_abort("Cannot pull SIF: missing apptainer URI.")
@@ -248,7 +247,7 @@ ni_apptainer_pull_if_needed <- function(cfg, sif_path, uri) {
     cli::cli_abort("Apptainer binary not found: {.val {bin}}")
   }
   args <- c("pull", cfg$apptainer$pull_args %||% character(0), sif_path, uri)
-  res <- processx::run(bin, args, error_on_status = FALSE)
+  res <- processx::run(bin, args, error_on_status = FALSE, timeout = timeout)
   if (res$status != 0) {
     cli::cli_abort(c(
       "Apptainer pull failed.",
@@ -259,7 +258,7 @@ ni_apptainer_pull_if_needed <- function(cfg, sif_path, uri) {
 }
 
 #' @keywords internal
-ni_resolve_apptainer_container_ref <- function(cfg, profile_name, profile_info) {
+ni_resolve_apptainer_container_ref <- function(cfg, profile_name, profile_info, prepare = TRUE) {
   use_sif <- isTRUE(cfg$apptainer$use_sif)
   uri <- profile_info$apptainer_uri
   if (is.null(uri) && !is.null(profile_info$docker_image)) {
@@ -274,7 +273,7 @@ ni_resolve_apptainer_container_ref <- function(cfg, profile_name, profile_info) 
   }
 
   sif <- ni_apptainer_sif_path(cfg, profile_name, profile_info)
-  ni_apptainer_pull_if_needed(cfg, sif, uri)
+  if (prepare) ni_apptainer_pull_if_needed(cfg, sif, uri)
   list(ref = sif, source = uri, sif = sif)
 }
 
@@ -282,14 +281,17 @@ ni_resolve_apptainer_container_ref <- function(cfg, profile_name, profile_info) 
 ni_env_vector <- function(env) {
   if (is.null(env) || length(env) == 0) return(character(0))
 
-  if (is.list(env)) {
-    env <- unlist(env, use.names = TRUE)
+  nms <- names(env)
+  if (is.null(nms) || anyNA(nms) || any(!grepl("^[A-Za-z_][A-Za-z0-9_]*$", nms))) {
+    cli::cli_abort("Environment must have valid, nonempty variable names.")
   }
-  if (is.null(names(env))) return(character(0))
-
-  env <- as.character(env)
-  names(env) <- names(env)
-  env
+  if (is.list(env) && any(!vapply(env, function(x) is.atomic(x) && length(x) == 1L && !is.na(x), logical(1)))) {
+    cli::cli_abort("Environment values must be non-missing scalars.")
+  }
+  if (anyNA(env)) cli::cli_abort("Environment values must not be missing.")
+  env <- stats::setNames(as.character(unlist(env, use.names = FALSE)), nms)
+  # Last occurrence wins: configuration < specification < call.
+  env[!duplicated(names(env), fromLast = TRUE)]
 }
 
 #' Normalize optional per-profile Docker `--entrypoint` override.
@@ -367,6 +369,8 @@ ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, 
   }
   pull_policy <- cfg$docker$pull_policy %||% "missing"
   extra <- as.character(cfg$docker$extra_run_args %||% character(0))
+  if (any(grepl("^(--name|--cidfile|--detach)(=|$)|^-d$", extra)))
+    cli::cli_abort("docker.extra_run_args cannot override managed container naming or detach execution.")
   ep <- ni_normalize_docker_entrypoint(entrypoint, profile = profile)
   plat <- ni_normalize_docker_platform(platform, profile = profile)
 
@@ -458,10 +462,17 @@ ni_build_apptainer_argv <- function(cfg, container_ref, payload_cmd, payload_arg
 }
 
 #' @keywords internal
-ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_args, env) {
+ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_args, env, prepare = TRUE) {
   profile <- ni_profile_resolve(cfg, call)
   mounts <- ni_mounts_from_cfg(cfg)
-  workdir <- cfg$container_paths[["work"]] %||% "/work"
+  cwd <- call$runtime$cwd %||% call$spec$runtime$cwd %||% cfg$paths$work_root
+  cwd <- ni_norm(cwd)
+  # Cwd must map to a writable mount; never stage a directory as an input.
+  writable <- Filter(function(m) identical(m$mode, "rw") && !is.null(ni_relpath(cwd, m$host)), mounts)
+  if (!length(writable)) cli::cli_abort("Working directory is outside writable mounts: {.path {cwd}}")
+  m <- writable[[which.max(vapply(writable, function(m) nchar(m$host), integer(1)))]]
+  workdir <- sub("/$", "", paste0(m$cont, "/", ni_relpath(cwd, m$host)))
+  fs::dir_create(cwd)
   lock_profile <- NULL
   if (isTRUE(cfg$runtime$lock_enforce)) {
     lock_profile <- ni_lock_profile_entry(cfg, profile$name)
@@ -497,7 +508,9 @@ ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_a
       container_ref = image,
       bin = built$bin,
       argv = built$argv,
-      mounts = mounts
+      mounts = mounts,
+      host_cwd = cwd,
+      container_cwd = workdir
     ))
   }
 
@@ -514,7 +527,7 @@ ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_a
 
       if (!is.null(locked_sif) && nzchar(locked_sif)) {
         # Keep lock-enforced SIF paths bootstrappable by pulling from locked URI.
-        if (!file.exists(locked_sif) && !is.null(locked_uri) && nzchar(locked_uri)) {
+        if (prepare && !file.exists(locked_sif) && !is.null(locked_uri) && nzchar(locked_uri)) {
           ni_apptainer_pull_if_needed(cfg, locked_sif, locked_uri)
         }
         ref <- list(ref = locked_sif, source = locked_uri %||% locked_ref, sif = locked_sif)
@@ -525,7 +538,7 @@ ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_a
         ref <- list(ref = locked_ref, source = locked_uri %||% locked_ref, sif = NULL)
       }
     } else {
-      ref <- ni_resolve_apptainer_container_ref(cfg, profile$name, profile$config)
+      ref <- ni_resolve_apptainer_container_ref(cfg, profile$name, profile$config, prepare = prepare)
     }
     built <- ni_build_apptainer_argv(cfg, ref$ref, payload_cmd, payload_args, mounts, workdir, env)
     return(list(
@@ -537,9 +550,35 @@ ni_build_container_command <- function(engine, cfg, call, payload_cmd, payload_a
       sif_path = ref$sif,
       bin = built$bin,
       argv = built$argv,
-      mounts = mounts
+      mounts = mounts,
+      host_cwd = cwd,
+      container_cwd = workdir
     ))
   }
 
   cli::cli_abort("Unsupported container engine: {.val {engine}}")
+}
+
+# processx receives a complete environment; supplying only overrides drops PATH.
+ni_process_env <- function(overrides) {
+  env <- Sys.getenv()
+  if (length(overrides)) env[names(overrides)] <- unlist(overrides, use.names = FALSE)
+  env
+}
+
+# Bounded probes own and remove exactly one uniquely named container, including
+# when processx times out or the user interrupts the probe.
+ni_docker_probe_run <- function(bin, argv, timeout = 5, env = NULL) {
+  name <- paste0("niflowr-probe-", Sys.getpid(), "-", basename(tempfile()))
+  argv <- append(argv, c("--name", name), after = 1L)
+  on.exit(try(processx::run(bin, c("rm", "-f", name), timeout = 10,
+                           error_on_status = FALSE), silent = TRUE), add = TRUE)
+  processx::run(bin, argv, env = env, timeout = timeout, error_on_status = FALSE)
+}
+
+ni_without_pull_args <- function(args) {
+  remove <- grepl("^--pull=", args) | args == "--pull"
+  paired <- which(args == "--pull") + 1L
+  remove[paired[paired <= length(args)]] <- TRUE
+  args[!remove]
 }

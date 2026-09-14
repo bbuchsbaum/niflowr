@@ -8,7 +8,7 @@ ni_freesurfer_segment_cc(
   in_file,
   in_norm,
   out_rotation,
-  subject_id,
+  subject_id = "subject_id",
   args = NULL,
   out_file = NULL,
   .cwd = NULL,
@@ -26,7 +26,7 @@ ni_freesurfer_segment_cc(
 
 \item{out_rotation}{Character; file path. Global filepath for writing rotation lta \strong{Required.}}
 
-\item{subject_id}{Character. Subject name \strong{Required.}}
+\item{subject_id}{Character. Subject name}
 
 \item{args}{Character. Additional parameters to the command}
 

@@ -38,7 +38,7 @@ ni_fsl_filmgls(
 
 \item{autocorr_noestimate}{Logical. do not estimate autocorrs}
 
-\item{brightness_threshold}{Character. susan brightness threshold, otherwise it is estimated}
+\item{brightness_threshold}{Integer. susan brightness threshold, otherwise it is estimated}
 
 \item{design_file}{Character; file path. design matrix file}
 
@@ -56,7 +56,7 @@ ni_fsl_filmgls(
 
 \item{smooth_autocorr}{Logical. Smooth auto corr estimates}
 
-\item{threshold}{Character. threshold}
+\item{threshold}{Numeric. threshold}
 
 \item{tukey_window}{Integer. tukey window size to estimate autocorr}
 

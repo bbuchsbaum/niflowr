@@ -6,7 +6,7 @@
 \usage{
 ni_freesurfer_watershed_skull_strip(
   in_file,
-  out_file,
+  out_file = "brainmask.auto.mgz",
   args = NULL,
   brain_atlas = NULL,
   t1 = NULL,
@@ -22,7 +22,7 @@ ni_freesurfer_watershed_skull_strip(
 \arguments{
 \item{in_file}{Character; file path. input volume \strong{Required.}}
 
-\item{out_file}{Character; file path. output volume \strong{Required.}}
+\item{out_file}{Character; file path. output volume}
 
 \item{args}{Character. Additional parameters to the command}
 

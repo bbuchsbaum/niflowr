@@ -68,7 +68,8 @@
       "desc": "output file name for the filtered data",
       "cli": {
         "argstr": "-o %s",
-        "position": 2
+        "position": 2,
+        "strip_ext": true
       }
     },
     "out_vnscales": {

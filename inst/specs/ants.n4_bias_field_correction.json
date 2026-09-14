@@ -19,7 +19,7 @@
     },
     "copy_header": {
       "type": "bool",
-      "desc": "copy headers of the original image into the output (corrected) file",
+      "desc": "Header copying is unsupported; TRUE raises an error.",
       "required": true,
       "default": false
     },
@@ -49,6 +49,9 @@
       "required": true,
       "cli": {
         "argstr": "--input-image %s"
+      },
+      "validate": {
+        "exists": true
       }
     },
     "mask_image": {
@@ -65,18 +68,19 @@
       }
     },
     "output_image": {
-      "type": "string",
+      "type": "file",
       "desc": "output file name",
       "cli": {
         "argstr": "--output %s"
-      }
+      },
+      "role": "output"
     },
     "rescale_intensities": {
-      "type": "flag",
+      "type": "bool",
       "desc": "[NOTE: Only ANTs>=2.1.0]\nAt each iteration, a new intensity mapping is calculated and applied but there\nis nothing which constrains the new intensity range to be within certain values.\nThe result is that the range can \"drift\" from the original at each iteration.\nThis option rescales to the [min,max] range of the original image intensities\nwithin the user-specified mask.",
       "default": false,
       "cli": {
-        "argstr": "-r"
+        "argstr": "-r %d"
       }
     },
     "save_bias": {
@@ -98,6 +102,11 @@
       "cli": {
         "argstr": "--weight-image %s"
       }
+    },
+    "bias_image": {
+      "type": "file",
+      "role": "output",
+      "desc": "Bias-field destination when save_bias is TRUE; inferred beside the corrected image if omitted."
     }
   },
   "outputs": {
@@ -106,7 +115,14 @@
       "path": {
         "from_input": "output_image"
       },
-      "must_exist": false
+      "must_exist": true
+    },
+    "bias_image": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
     }
   },
   "runtime": {
@@ -117,5 +133,7 @@
     "nipype_class": "nipype.interfaces.ants.segmentation.N4BiasFieldCorrection",
     "nipype_version": "1.10.0"
   },
-  "description": "Bias field correction."
+  "description": "Bias field correction.",
+  "render": "ants_n4",
+  "output_resolver": "ants_n4"
 }

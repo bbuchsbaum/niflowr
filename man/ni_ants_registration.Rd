@@ -7,7 +7,7 @@
 ni_ants_registration(
   fixed_image,
   metric,
-  metric_weight,
+  metric_weight = 1,
   moving_image,
   shrink_factors,
   smoothing_sigmas,
@@ -42,7 +42,7 @@ ni_ants_registration(
 
 \item{metric}{Character or numeric vector. the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier. \strong{Required.}}
 
-\item{metric_weight}{Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage. \strong{Required.}}
+\item{metric_weight}{Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage.}
 
 \item{moving_image}{Character or numeric vector. Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to \strong{Required.}}
 
@@ -70,7 +70,7 @@ ni_ants_registration(
 
 \item{interpolation}{Character; one of: "Linear", "NearestNeighbor", "CosineWindowedSinc", "WelchWindowedSinc", "HammingWindowedSinc", "LanczosWindowedSinc", "BSpline", "MultiLabel", "Gaussian", "GenericLabel"}
 
-\item{output_transform_prefix}{Character}
+\item{output_transform_prefix}{Character; file path}
 
 \item{random_seed}{Integer. Fixed seed for random number generation}
 

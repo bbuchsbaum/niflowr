@@ -1,0 +1,110 @@
+{
+  "inputs": {
+    "hyper": {
+      "type": "double"
+    },
+    "in_files": {
+      "validate": {
+        "exists": true
+      },
+      "items_type": "file"
+    },
+    "init_seg_smooth": {
+      "type": "double"
+    },
+    "mixel_smooth": {
+      "type": "double"
+    },
+    "number_classes": {
+      "default": 3,
+      "validate": {
+        "min": 1,
+        "max": 10
+      },
+      "type": "int"
+    },
+    "other_priors": {
+      "items_type": "file"
+    },
+    "out_basename": {
+      "role": "output"
+    },
+    "bias_iters": {
+      "type": "int"
+    },
+    "bias_lowpass": {
+      "type": "int"
+    },
+    "iters_afterbias": {
+      "type": "int"
+    },
+    "segment_iters": {
+      "type": "int"
+    }
+  },
+  "outputs": {
+    "tissue_class_map": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "partial_volume_files": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "partial_volume_map": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "mixeltype": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "tissue_class_files": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "restored_image": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "bias_field": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    },
+    "probability_maps": {
+      "type": "list",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true
+    }
+  },
+  "runtime": {
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
+  },
+  "render": "fsl_fast",
+  "output_resolver": "fsl_fast"
+}

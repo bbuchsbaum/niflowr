@@ -1,0 +1,19 @@
+{
+  "inputs": {
+    "burn_in": {
+      "type": "int"
+    },
+    "burn_in_no_ard": {
+      "type": "int"
+    },
+    "n_fibres": {
+      "type": "int"
+    },
+    "sample_every": {
+      "type": "int"
+    },
+    "update_proposal_every": {
+      "type": "int"
+    }
+  }
+}

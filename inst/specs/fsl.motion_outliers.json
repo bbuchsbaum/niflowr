@@ -58,7 +58,8 @@
       "type": "file",
       "desc": "output outlier file name",
       "cli": {
-        "argstr": "-o %s"
+        "argstr": "-o %s",
+        "strip_ext": true
       }
     },
     "out_metric_plot": {

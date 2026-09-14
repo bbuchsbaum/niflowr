@@ -1,3 +1,8 @@
 {
-  "render": "ants_registration_staged"
+  "render": "ants_registration_staged",
+  "inputs": {
+    "output_transform_prefix": {
+      "type": "file"
+    }
+  }
 }
