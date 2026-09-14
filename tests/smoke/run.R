@@ -3,7 +3,16 @@ root <- as.character(fs::path_abs(commandArgs(trailingOnly = TRUE)[1]))
 fs::dir_create(root)
 stopifnot(!dir.exists(file.path(root, "out"))) # Never reuse stale products.
 for (d in c("in", "out", "work")) fs::dir_create(file.path(root, d))
-python <- Sys.which("python3")
+# Prefer setup-python's interpreter (pythonLocation) so pip-installed deps resolve.
+python_root <- Sys.getenv("pythonLocation", unset = "")
+python <- if (nzchar(python_root)) {
+  file.path(python_root, "bin", "python")
+} else {
+  Sys.which("python3")
+}
+if (!nzchar(python) || !file.exists(python)) {
+  stop("Could not find a Python interpreter with smoke dependencies installed.")
+}
 processx::run(python, c("tests/smoke/fixture.py", file.path(root, "in")))
 images <- jsonlite::read_json(Sys.getenv("NIFLOWR_SMOKE_IMAGES", "tests/smoke/images.json"), simplifyVector = TRUE)
 profiles <- lapply(images, function(x) list(docker_image = x$image, platform = x$platform, entrypoint = x$entrypoint))
