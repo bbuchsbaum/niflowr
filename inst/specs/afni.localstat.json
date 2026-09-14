@@ -134,7 +134,8 @@
       "required": true,
       "cli": {
         "argstr": "-stat %s..."
-      }
+      },
+      "items_type": "file"
     }
   },
   "outputs": {

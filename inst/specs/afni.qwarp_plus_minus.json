@@ -102,7 +102,8 @@
       "desc": "Gaussian blur the input images by 'bb' (FWHM) voxels before\ndoing the alignment (the output dataset will not be blurred).\nThe default is 2.345 (for no good reason).\n\n* Optionally, you can provide 2 values for 'bb', and then\n  the first one is applied to the base volume, the second\n  to the source volume.\n  e.g., '-blur 0 3' to skip blurring the base image\n  (if the base is a blurry template, for example).\n* A negative blur radius means to use 3D median filtering,\n  rather than Gaussian blurring.  This type of filtering will\n  better preserve edges, which can be important in alignment.\n* If the base is a template volume that is already blurry,\n  you probably don't want to blur it again, but blurring\n  the source volume a little is probably a good idea, to\n  help the program avoid trying to match tiny features.\n* Note that -duplo will blur the volumes some extra\n  amount for the initial small-scale warping, to make\n  that phase of the program converge more rapidly.",
       "cli": {
         "argstr": "-blur %s"
-      }
+      },
+      "items_type": "file"
     },
     "duplo": {
       "type": "flag",
@@ -199,7 +200,8 @@
         "xor": [
           "duplo"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "iwarp": {
       "type": "flag",
@@ -393,7 +395,8 @@
       "desc": "Use progressive blurring; that is, for larger patch sizes,\nthe amount of blurring is larger.  The general idea is to\navoid trying to match finer details when the patch size\nand incremental warps are coarse.  When '-blur' is used\nas well, it sets a minimum amount of blurring that will\nbe used. [06 Aug 2014 -- '-pblur' may become the default someday].\n\n* You can optionally give the fraction of the patch size that\n  is used for the progressive blur by providing a value between\n  0 and 0.25 after '-pblur'.  If you provide TWO values, the\n  the first fraction is used for progressively blurring the\n  base image and the second for the source image.  The default\n  parameters when just '-pblur' is given is the same as giving\n  the options as '-pblur 0.09 0.09'.\n* '-pblur' is useful when trying to match 2 volumes with high\n  amounts of detail; e.g, warping one subject's brain image to\n  match another's, or trying to warp to match a detailed template.\n* Note that using negative values with '-blur' means that the\n  progressive blurring will be done with median filters, rather\n  than Gaussian linear blurring.\n\nNote: The combination of the -allineate and -pblur options will make\nthe results of using 3dQwarp to align to a template somewhat\nless sensitive to initial head position and scaling.",
       "cli": {
         "argstr": "-pblur %s"
-      }
+      },
+      "items_type": "file"
     },
     "pear": {
       "type": "flag",
@@ -473,7 +476,8 @@
         "xor": [
           "wmask"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "weight": {
       "type": "file",
@@ -492,7 +496,8 @@
         "xor": [
           "wball"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "workhard": {
       "type": "flag",

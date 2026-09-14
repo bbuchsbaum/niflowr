@@ -96,7 +96,8 @@
           "seg_file",
           "aparc_aseg"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "label_hit_file": {
       "type": "file",

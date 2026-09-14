@@ -54,7 +54,8 @@
       "required": true,
       "cli": {
         "argstr": "--intensity-image %s..."
-      }
+      },
+      "items_type": "file"
     },
     "likelihood_model": {
       "type": "string",

@@ -29,7 +29,8 @@
       "required": true,
       "cli": {
         "argstr": "-f %s..."
-      }
+      },
+      "items_type": "file"
     },
     "histogram_bins": {
       "type": "int",
@@ -45,7 +46,8 @@
       "required": true,
       "cli": {
         "argstr": "-m %s..."
-      }
+      },
+      "items_type": "file"
     },
     "num_threads": {
       "type": "int",

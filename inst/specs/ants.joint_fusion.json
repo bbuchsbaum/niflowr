@@ -25,7 +25,8 @@
       "required": true,
       "cli": {
         "argstr": "-g %s..."
-      }
+      },
+      "items_type": "file"
     },
     "atlas_segmentation_image": {
       "type": "list",
@@ -33,7 +34,8 @@
       "required": true,
       "cli": {
         "argstr": "-l %s..."
-      }
+      },
+      "items_type": "file"
     },
     "beta": {
       "type": "double",
@@ -134,7 +136,8 @@
       ],
       "cli": {
         "argstr": "-s %s"
-      }
+      },
+      "items_type": "file"
     },
     "target_image": {
       "type": "list",
@@ -142,7 +145,8 @@
       "required": true,
       "cli": {
         "argstr": "-t %s"
-      }
+      },
+      "items_type": "file"
     },
     "verbose": {
       "type": "flag",

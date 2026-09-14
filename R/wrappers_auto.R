@@ -2014,7 +2014,7 @@ ni_afni_one_d_tool_py <- function(in_file,
 #' @param mask Character; file path. only count voxels within the given mask
 #' @param outliers_file Character; file path. output image file name
 #' @param polort Integer. detrend each voxel timeseries with polynomials
-#' @param qthr Character. indicate a value for q to compute alpha
+#' @param qthr Numeric. indicate a value for q to compute alpha
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .engine Execution engine override.

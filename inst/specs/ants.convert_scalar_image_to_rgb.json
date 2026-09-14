@@ -76,7 +76,8 @@
       "cli": {
         "argstr": "%s",
         "position": 3
-      }
+      },
+      "items_type": "file"
     },
     "maximum_RGB_output": {
       "type": "int",

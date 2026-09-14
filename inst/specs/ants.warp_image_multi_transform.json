@@ -80,7 +80,8 @@
       "cli": {
         "argstr": "%s",
         "position": -1
-      }
+      },
+      "items_type": "file"
     },
     "use_bspline": {
       "type": "flag",

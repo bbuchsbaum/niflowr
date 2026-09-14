@@ -62,7 +62,8 @@
       "desc": "After cost functional optimization is done, start at the final parameters and RE-optimize using this new cost functions. If the results are too different, a warning message will be printed. However, the final parameters from the original optimization will be used to create the output dataset.",
       "cli": {
         "argstr": "-check %s"
-      }
+      },
+      "items_type": "file"
     },
     "convergence": {
       "type": "double",
@@ -452,7 +453,8 @@
       "desc": "Set the weighting for each voxel in the base dataset; larger weights mean that voxel count more in the cost function. If an image file is given, the volume must be defined on the same grid as the base dataset",
       "cli": {
         "argstr": "-weight %s"
-      }
+      },
+      "items_type": "file"
     },
     "weight_file": {
       "type": "file",

@@ -150,21 +150,24 @@
       "default": true,
       "cli": {
         "argstr": "--lta %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_params_file": {
       "type": "list",
       "desc": "output parameters file",
       "cli": {
         "argstr": "--params %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_reg_file": {
       "type": "list",
       "desc": "output registration file (REG format)",
       "cli": {
         "argstr": "--regdat %s"
-      }
+      },
+      "items_type": "file"
     },
     "ref_fwhm": {
       "type": "double",
@@ -192,7 +195,8 @@
       "cli": {
         "argstr": "--ref-mask %s",
         "position": 2
-      }
+      },
+      "items_type": "file"
     },
     "saturation_threshold": {
       "type": "double",

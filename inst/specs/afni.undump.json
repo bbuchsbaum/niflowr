@@ -76,7 +76,8 @@
       "desc": "Specifies the coordinate order used by -xyz. The code must be 3 letters, one each from the pairs {R,L} {A,P} {I,S}.  The first letter gives the orientation of the x-axis, the second the orientation of the y-axis, the third the z-axis: R = right-to-left         L = left-to-right A = anterior-to-posterior P = posterior-to-anterior I = inferior-to-superior  S = superior-to-inferior If -orient isn't used, then the coordinate order of the -master (in_file) dataset is used to interpret (x,y,z) inputs.",
       "cli": {
         "argstr": "-orient %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_file": {
       "type": "file",

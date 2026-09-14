@@ -76,7 +76,8 @@
       "desc": "output initial registration cost file",
       "cli": {
         "argstr": "--initcost %s"
-      }
+      },
+      "items_type": "file"
     },
     "init_reg_file": {
       "type": "file",
@@ -102,14 +103,16 @@
       "desc": "write the transformation matrix in FSL FLIRT format",
       "cli": {
         "argstr": "--fslmat %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_lta_file": {
       "type": "list",
       "desc": "write the transformation matrix in LTA format",
       "cli": {
         "argstr": "--lta %s"
-      }
+      },
+      "items_type": "file"
     },
     "out_reg_file": {
       "type": "file",
@@ -147,7 +150,8 @@
       "desc": "output warped sourcefile either True or filename",
       "cli": {
         "argstr": "--o %s"
-      }
+      },
+      "items_type": "file"
     },
     "source_file": {
       "type": "file",

@@ -75,7 +75,8 @@
       "desc": "output registration file (LTA format)",
       "cli": {
         "argstr": "--ltaout %s"
-      }
+      },
+      "items_type": "file"
     },
     "moving_image": {
       "type": "file",

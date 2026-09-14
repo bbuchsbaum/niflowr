@@ -465,6 +465,87 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     }
   }
 
+  # 8) String inputs with numeric printf formats must be typed int/double
+  for (nm in names(inputs)) {
+    def <- inputs[[nm]]
+    if (!identical(def$type, "string")) next
+    argstr <- def$cli$argstr %||% ""
+    new_type <- numeric_type_for_argstr(argstr)
+    if (is.null(new_type)) next
+
+    if (fix) {
+      inputs[[nm]]$type <- new_type
+      fixed <- TRUE
+      add_finding(
+        level = "warning",
+        code = "numeric_argstr_type",
+        param = nm,
+        message = sprintf("Typed as %s to match numeric argstr format.", new_type),
+        fixed_flag = TRUE
+      )
+    } else {
+      add_finding(
+        level = "warning",
+        code = "numeric_argstr_type",
+        param = nm,
+        message = sprintf("Input renders numeric format but is typed string; prefer %s.", new_type)
+      )
+    }
+  }
+
+  # 9) Output-prefix inputs must be typed file so containers rewrite host paths
+  for (nm in names(inputs)) {
+    def <- inputs[[nm]]
+    if (!identical(def$type, "string")) next
+    if (!is_output_prefix_name(nm)) next
+
+    if (fix) {
+      inputs[[nm]]$type <- "file"
+      fixed <- TRUE
+      add_finding(
+        level = "warning",
+        code = "output_prefix_type",
+        param = nm,
+        message = "Typed output prefix as file so container runs rewrite the host path.",
+        fixed_flag = TRUE
+      )
+    } else {
+      add_finding(
+        level = "warning",
+        code = "output_prefix_type",
+        param = nm,
+        message = "Output prefix input should be typed file for container path rewriting."
+      )
+    }
+  }
+
+  # 10) Path-like list inputs need items_type=file for container mapping
+  for (nm in names(inputs)) {
+    def <- inputs[[nm]]
+    if (!identical(def$type, "list")) next
+    if (!is.null(def$items_type) && nzchar(def$items_type)) next
+    if (!is_path_list_input(nm, def)) next
+
+    if (fix) {
+      inputs[[nm]]$items_type <- "file"
+      fixed <- TRUE
+      add_finding(
+        level = "warning",
+        code = "path_list_items_type",
+        param = nm,
+        message = "Set items_type=file so container runs rewrite path list elements.",
+        fixed_flag = TRUE
+      )
+    } else {
+      add_finding(
+        level = "warning",
+        code = "path_list_items_type",
+        param = nm,
+        message = "Path-like list input should set items_type=file."
+      )
+    }
+  }
+
   if (fixed) {
     spec$inputs <- inputs
     list(findings = findings, spec_fixed = spec)
@@ -504,6 +585,39 @@ fsl_needs_strip_ext <- function(name, argstr, desc = NULL) {
   }
   # BET-style positional out and FAST/eddy-style basename outs.
   if (name %in% c("out_file", "out_basename", "out_base")) {
+    return(TRUE)
+  }
+  FALSE
+}
+
+#' Map a printf conversion in argstr to int/double, or NULL if not numeric
+#' @keywords internal
+numeric_type_for_argstr <- function(argstr) {
+  argstr <- as.character(argstr %||% "")
+  if (!nzchar(argstr)) return(NULL)
+  m <- regexpr("%[-+ #0-9.*]*[diouxXeEfgGaAs]", argstr)
+  if (m < 0) return(NULL)
+  conv <- regmatches(argstr, m)
+  letter <- substr(conv, nchar(conv), nchar(conv))
+  if (letter %in% c("d", "i", "o", "u", "x", "X")) return("int")
+  if (letter %in% c("f", "F", "e", "E", "g", "G", "a", "A")) return("double")
+  NULL
+}
+
+#' Output-prefix / basename inputs that containers must treat as paths
+#' @keywords internal
+is_output_prefix_name <- function(name) {
+  grepl("(^prefix$|out_base$|out_basename$|out_base_name$|_prefix$)", name)
+}
+
+#' Heuristic: list input carries file paths and needs items_type=file
+#' @keywords internal
+is_path_list_input <- function(name, def) {
+  if (grepl("(^|_)(in_)?files?$|_files$|operand_files|images?$|volumes?$", name)) {
+    return(TRUE)
+  }
+  desc <- as.character(def$desc %||% "")
+  if (grepl("\\b(file|files|image|images|volume|volumes|dataset|nifti)\\b", desc, ignore.case = TRUE)) {
     return(TRUE)
   }
   FALSE

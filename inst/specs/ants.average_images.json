@@ -31,7 +31,8 @@
       "cli": {
         "argstr": "%s",
         "position": 3
-      }
+      },
+      "items_type": "file"
     },
     "normalize": {
       "type": "bool",

@@ -46,7 +46,8 @@
       "desc": "write out skeleton image",
       "cli": {
         "argstr": "-o %s"
-      }
+      },
+      "items_type": "file"
     }
   },
   "outputs": {

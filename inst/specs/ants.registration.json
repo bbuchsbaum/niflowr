@@ -34,7 +34,8 @@
     "fixed_image": {
       "type": "list",
       "desc": "Image to which the moving_image should be transformed(usually a structural image)",
-      "required": true
+      "required": true,
+      "items_type": "file"
     },
     "fixed_image_mask": {
       "type": "file",
@@ -128,7 +129,8 @@
     "moving_image": {
       "type": "list",
       "desc": "Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to",
-      "required": true
+      "required": true,
+      "items_type": "file"
     },
     "output_transform_prefix": {
       "type": "file",

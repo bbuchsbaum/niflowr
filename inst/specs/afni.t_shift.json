@@ -72,7 +72,8 @@
         "xor": [
           "tpattern"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "tpattern": {
       "type": "list",

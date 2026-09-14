@@ -51,7 +51,8 @@
       "desc": "save number of hits in ascii file (hits, ntotvox, pct)",
       "cli": {
         "argstr": "--count %s"
-      }
+      },
+      "items_type": "file"
     },
     "dilate": {
       "type": "int",

@@ -16,7 +16,8 @@
       "desc": "Copy AFNI header attribute from the given file into the header of the dataset(s) being modified. For more information on AFNI header attributes, see documentation file README.attributes. More than one '-atrcopy' option can be used. For AFNI advanced users only. Do NOT use -atrcopy or -atrstring with other modification options. See also -copyaux.",
       "cli": {
         "argstr": "-atrcopy %s %s"
-      }
+      },
+      "items_type": "file"
     },
     "atrfloat": {
       "type": "list",
@@ -37,7 +38,8 @@
       "desc": "Copy the last given string into the dataset(s) being modified, giving it the attribute name given by the last string.To be safe, the last string should be in quotes.",
       "cli": {
         "argstr": "-atrstring %s %s"
-      }
+      },
+      "items_type": "file"
     },
     "deoblique": {
       "type": "flag",

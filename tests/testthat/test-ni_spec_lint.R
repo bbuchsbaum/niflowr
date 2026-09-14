@@ -27,7 +27,8 @@ test_that("output prefixes are typed as paths so containers rewrite them", {
     s <- jsonlite::read_json(f)
     for (nm in names(s$inputs)) {
       v <- s$inputs[[nm]]
-      if (identical(v$type, "string") && grepl("(out_base$|out_basename$|_prefix$)", nm)) bad <- c(bad, paste0(basename(f), ":", nm))
+      if (!niflowr:::is_output_prefix_name(nm)) next
+      if (!identical(v$type, "file")) bad <- c(bad, paste0(basename(f), ":", nm))
     }
   }
   expect_identical(bad, character())

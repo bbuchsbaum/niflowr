@@ -32,7 +32,8 @@
     "fixed_image": {
       "type": "list",
       "desc": "image to which the moving image is warped",
-      "required": true
+      "required": true,
+      "items_type": "file"
     },
     "metric": {
       "type": "list",
@@ -43,7 +44,7 @@
       "desc": "the metric weight(s) for each stage. The weights must sum to 1 per stage.",
       "required": true,
       "default": [
-        1.0
+        1
       ],
       "constraints": {
         "requires": [
@@ -64,7 +65,8 @@
       "required": true,
       "cli": {
         "argstr": "%s"
-      }
+      },
+      "items_type": "file"
     },
     "number_of_affine_iterations": {
       "type": "list",

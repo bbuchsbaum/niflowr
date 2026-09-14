@@ -182,7 +182,8 @@
           "surf_measure",
           "surf_area"
         ]
-      }
+      },
+      "items_type": "file"
     },
     "target": {
       "type": "string",
@@ -197,7 +198,8 @@
       "desc": "list of volume measure and reg file tuples",
       "cli": {
         "argstr": "--iv %s %s..."
-      }
+      },
+      "items_type": "file"
     }
   },
   "outputs": {
