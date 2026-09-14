@@ -9,7 +9,9 @@
 #' @return A neuroim2 object (`NeuroVol` or `NeuroVec`).
 #' @export
 ni_read_output <- function(result, output_name = NULL, ...) {
-  stopifnot(inherits(result, "ni_result"))
+  if (!inherits(result, "ni_result")) {
+    cli::cli_abort("{.arg result} must be an {.cls ni_result}.")
+  }
 
   if (!requireNamespace("neuroim2", quietly = TRUE)) {
     cli::cli_abort("Package {.pkg neuroim2} is required. Install from: ~/code/neuroim2")
@@ -52,7 +54,9 @@ ni_read_output <- function(result, output_name = NULL, ...) {
 #' @return A neurotransform morphism object.
 #' @export
 ni_read_transform <- function(result, output_name = NULL, type = NULL, ...) {
-  stopifnot(inherits(result, "ni_result"))
+  if (!inherits(result, "ni_result")) {
+    cli::cli_abort("{.arg result} must be an {.cls ni_result}.")
+  }
 
   if (!requireNamespace("neurotransform", quietly = TRUE)) {
     cli::cli_abort("Package {.pkg neurotransform} is required. Install from: ~/code/neurotransform")
