@@ -81,7 +81,7 @@
     "search_factor": {
       "type": "double",
       "desc": "increments (degrees) for affine search",
-      "default": 15,
+      "default": 15.0,
       "cli": {
         "argstr": "%f",
         "position": 4

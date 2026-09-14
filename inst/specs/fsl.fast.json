@@ -52,10 +52,10 @@
         "argstr": "%s",
         "position": -1
       },
-      "items_type": "file",
       "validate": {
         "exists": true
-      }
+      },
+      "items_type": "file"
     },
     "init_seg_smooth": {
       "type": "double",
