@@ -105,6 +105,7 @@ ni_input_identities <- function(call) {
   for (nm in names(call$values)) {
     def <- call$spec$inputs[[nm]]
     if (is.null(def)) next
+    if (is_path_sentinel(call$values[[nm]], def)) next
     role <- def$role %||% if (nm %in% outputs) "output" else "input"
     if (role == "output") next
     if (def$type %in% c("file", "dir") ||

@@ -1,0 +1,117 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.allineate_estimate",
+  "title": "AFNI 3dAllineate affine estimation",
+  "description": "Estimate an affine mapping and save its AFNI base-to-source matrix without requiring a resampled image.",
+  "command": "3dAllineate",
+  "output_resolver": "afni_allineate_estimate",
+  "inputs": {
+    "in_file": {
+      "type": "file",
+      "desc": "Source image to align.",
+      "required": true,
+      "validate": { "exists": true },
+      "cli": { "argstr": "-source %s" }
+    },
+    "reference": {
+      "type": "file",
+      "desc": "Fixed base image defining the reference frame.",
+      "required": true,
+      "validate": { "exists": true },
+      "cli": { "argstr": "-base %s" }
+    },
+    "out_matrix": {
+      "type": "file",
+      "desc": "Destination for AFNI base-to-source affine rows.",
+      "required": true,
+      "role": "output",
+      "cli": { "argstr": "-1Dmatrix_save %s" }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Optional resampled image; NULL suppresses image output.",
+      "required": true,
+      "default": "NULL",
+      "role": "output",
+      "path_sentinels": ["NULL"],
+      "cli": { "argstr": "-prefix %s" }
+    },
+    "cost": {
+      "type": "enum",
+      "desc": "Cost function used for estimation.",
+      "required": true,
+      "choices": ["lpa+ZZ", "lpa+", "lpa", "lpc+ZZ", "lpc+", "lpc", "nmi", "mi", "hel", "crA", "crM", "crU", "ls"],
+      "cli": { "argstr": "-cost %s" }
+    },
+    "warp_type": {
+      "type": "enum",
+      "desc": "Degrees of freedom for the estimated mapping.",
+      "required": true,
+      "default": "affine_general",
+      "choices": ["shift_only", "shift_rotate", "shift_rotate_scale", "affine_general"],
+      "cli": { "argstr": "-warp %s" }
+    },
+    "interpolation": {
+      "type": "enum",
+      "desc": "Interpolation used during the fine estimation pass.",
+      "required": true,
+      "default": "linear",
+      "choices": ["NN", "linear", "cubic", "quintic"],
+      "cli": { "argstr": "-interp %s" }
+    },
+    "weight_file": {
+      "type": "file",
+      "desc": "Optional weight image on the reference grid.",
+      "validate": { "exists": true },
+      "cli": { "argstr": "-weight %s" }
+    },
+    "source_mask": {
+      "type": "file",
+      "desc": "Optional mask on the source grid.",
+      "validate": { "exists": true },
+      "cli": { "argstr": "-source_mask %s" }
+    },
+    "floatize": {
+      "type": "flag",
+      "desc": "Write a requested image output in floating-point format.",
+      "required": true,
+      "default": true,
+      "cli": { "argstr": "-float" }
+    },
+    "no_pad": {
+      "type": "flag",
+      "desc": "Disable base-image zero padding.",
+      "required": true,
+      "default": false,
+      "cli": { "argstr": "-nopad" }
+    },
+    "zclip": {
+      "type": "flag",
+      "desc": "Replace negative source and base values with zero.",
+      "required": true,
+      "default": false,
+      "cli": { "argstr": "-zclip" }
+    },
+    "overwrite": {
+      "type": "flag",
+      "desc": "Permit AFNI to overwrite existing output datasets.",
+      "cli": { "argstr": "-overwrite" }
+    }
+  },
+  "outputs": {
+    "out_matrix": {
+      "type": "file",
+      "path": { "computed": true },
+      "must_exist": true,
+      "nonempty": true
+    },
+    "out_file": {
+      "type": "file",
+      "path": { "computed": true },
+      "must_exist": true,
+      "nonempty": true
+    }
+  },
+  "runtime": { "profile": "afni" },
+  "origin": { "source": "manual" }
+}

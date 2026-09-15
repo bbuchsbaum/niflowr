@@ -1,0 +1,83 @@
+{
+  "spec_version": "0.1.0",
+  "id": "afni.allineate_apply",
+  "title": "AFNI 3dAllineate affine application",
+  "description": "Apply one or more AFNI affine rows to a source series on an explicit master grid.",
+  "command": "3dAllineate",
+  "inputs": {
+    "in_file": {
+      "type": "file",
+      "desc": "Source image or timeseries to resample.",
+      "required": true,
+      "validate": { "exists": true },
+      "cli": { "argstr": "-source %s" }
+    },
+    "in_matrix": {
+      "type": "file",
+      "desc": "AFNI base-to-source affine rows to apply.",
+      "required": true,
+      "validate": { "exists": true },
+      "cli": { "argstr": "-1Dmatrix_apply %s" }
+    },
+    "master": {
+      "type": "file",
+      "desc": "Image defining the complete output sampling grid.",
+      "required": true,
+      "validate": { "exists": true },
+      "cli": { "argstr": "-master %s" }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Destination image or timeseries.",
+      "required": true,
+      "role": "output",
+      "cli": { "argstr": "-prefix %s" }
+    },
+    "final_interpolation": {
+      "type": "enum",
+      "desc": "Interpolation used only for final output sampling.",
+      "required": true,
+      "choices": ["NN", "linear", "cubic", "quintic", "wsinc5"],
+      "cli": { "argstr": "-final %s" }
+    },
+    "floatize": {
+      "type": "flag",
+      "desc": "Write output in floating-point format.",
+      "required": true,
+      "default": true,
+      "cli": { "argstr": "-float" }
+    },
+    "no_pad": {
+      "type": "flag",
+      "desc": "Disable base-image zero padding.",
+      "required": true,
+      "default": false,
+      "cli": { "argstr": "-nopad" }
+    },
+    "zclip": {
+      "type": "flag",
+      "desc": "Replace negative source and base values with zero.",
+      "required": true,
+      "default": false,
+      "cli": { "argstr": "-zclip" }
+    },
+    "overwrite": {
+      "type": "flag",
+      "desc": "Permit AFNI to overwrite an existing output dataset.",
+      "cli": { "argstr": "-overwrite" }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": { "from_input": "out_file" },
+      "must_exist": true,
+      "nonempty": true
+    }
+  },
+  "runtime": {
+    "profile": "afni",
+    "env": { "AFNI_WSINC5_SILENT": "YES" }
+  },
+  "origin": { "source": "manual" }
+}

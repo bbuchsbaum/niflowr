@@ -176,6 +176,7 @@ ni_rewrite_values_for_container <- function(spec, values, cfg) {
     def <- spec$inputs[[nm]]
     val <- values[[nm]]
     if (is_missing_value(val)) next
+    if (is_path_sentinel(val, def)) next
 
     if (def$type %in% c("file", "dir")) {
       out[[nm]] <- ni_map_host_to_container(val, cfg)

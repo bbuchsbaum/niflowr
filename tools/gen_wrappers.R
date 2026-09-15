@@ -10,7 +10,10 @@ library(jsonlite)
 spec_dir <- "inst/specs"
 output_file <- "R/wrappers_auto.R"
 
-spec_files <- list.files(spec_dir, pattern = "\\.json$", full.names = TRUE)
+spec_files <- sort(
+  list.files(spec_dir, pattern = "\\.json$", full.names = TRUE),
+  method = "radix"
+)
 
 # Map spec type to R default value representation
 type_default <- function(def) {

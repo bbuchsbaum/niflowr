@@ -16,6 +16,9 @@
       "desc": "ignore the first set of points specified",
       "cli": {
         "argstr": "-ignore %s"
+      },
+      "validate": {
+        "min": 0
       }
     },
     "in_file": {
@@ -25,6 +28,9 @@
       "cli": {
         "argstr": "%s",
         "position": -1
+      },
+      "validate": {
+        "exists": true
       }
     },
     "interp": {
@@ -46,13 +52,20 @@
       "desc": "output image file name",
       "cli": {
         "argstr": "-prefix %s"
-      }
+      },
+      "required": true,
+      "role": "output"
     },
     "rlt": {
       "type": "flag",
       "desc": "Before shifting, remove the mean and linear trend",
       "cli": {
         "argstr": "-rlt"
+      },
+      "constraints": {
+        "xor": [
+          "rltplus"
+        ]
       }
     },
     "rltplus": {
@@ -60,11 +73,16 @@
       "desc": "Before shifting, remove the mean and linear trend and later put back the mean",
       "cli": {
         "argstr": "-rlt+"
+      },
+      "constraints": {
+        "xor": [
+          "rlt"
+        ]
       }
     },
     "slice_timing": {
-      "type": "list",
-      "desc": "time offsets from the volume acquisition onset for each slice",
+      "type": "file",
+      "desc": "1D file containing one slice offset per slice, in seconds.",
       "cli": {
         "argstr": "-tpattern @%s"
       },
@@ -73,7 +91,9 @@
           "tpattern"
         ]
       },
-      "items_type": "file"
+      "validate": {
+        "exists": true
+      }
     },
     "tpattern": {
       "type": "list",
@@ -88,10 +108,13 @@
       }
     },
     "tr": {
-      "type": "string",
-      "desc": "manually set the TR. You can attach suffix \"s\" for seconds or \"ms\" for milliseconds.",
+      "type": "double",
+      "desc": "Repetition time in seconds; rendered with an explicit seconds suffix.",
       "cli": {
-        "argstr": "-TR %s"
+        "argstr": "-TR %gs"
+      },
+      "validate": {
+        "min": 1e-12
       }
     },
     "tslice": {
@@ -104,6 +127,9 @@
         "xor": [
           "tzero"
         ]
+      },
+      "validate": {
+        "min": 0
       }
     },
     "tzero": {
@@ -116,6 +142,9 @@
         "xor": [
           "tslice"
         ]
+      },
+      "validate": {
+        "min": 0
       }
     }
   },
@@ -125,7 +154,8 @@
       "path": {
         "from_input": "out_file"
       },
-      "must_exist": false
+      "must_exist": true,
+      "nonempty": true
     }
   },
   "runtime": {

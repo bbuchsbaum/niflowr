@@ -73,6 +73,7 @@ ni_absolute_values <- function(spec, values, wd) {
   for (nm in names(values)) {
     def <- spec$inputs[[nm]]
     if (is.null(def) || is.null(values[[nm]])) next
+    if (is_path_sentinel(values[[nm]], def)) next
     if (def$type %in% c("file", "dir") ||
         (def$type == "list" && (def$items_type %||% "") %in% c("file", "dir"))) {
       values[[nm]] <- as.character(fs::path_abs(values[[nm]], start = wd))

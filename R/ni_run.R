@@ -187,8 +187,14 @@ check_outputs <- function(call) {
     }
     exists <- if (identical(def$type, "dir")) dir.exists(path) else file.exists(path) & !dir.exists(path)
     if (any(!exists)) errors <- c(errors, paste("Expected output", nm, "not found:", paste(path[!exists], collapse = ", ")))
-    if (identical(def$type, "dir") && any(exists) && !length(list.files(path[exists], all.files = FALSE)))
-      errors <- c(errors, paste("Expected output directory is empty:", path))
+    if (isTRUE(def$nonempty) && identical(def$type, "dir") && any(exists)) {
+      empty <- path[exists][vapply(path[exists], function(x) !length(list.files(x, all.files = FALSE)), logical(1))]
+      if (length(empty)) errors <- c(errors, paste("Expected output directory is empty:", paste(empty, collapse = ", ")))
+    }
+    if (isTRUE(def$nonempty) && !identical(def$type, "dir") && any(exists)) {
+      empty <- path[exists][file.info(path[exists])$size <= 0]
+      if (length(empty)) errors <- c(errors, paste("Expected output file is empty:", paste(empty, collapse = ", ")))
+    }
   }
   errors
 }

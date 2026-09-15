@@ -251,19 +251,95 @@ render_nosplit <- function(value, argstr) {
   }
 }
 
-#' Render a single scalar value with sprintf then split on whitespace
-#' @keywords internal
-render_single <- function(value, argstr) {
-  value <- coerce_for_argstr(value, argstr)
-  # Use sprintf to render the value into the argstr template
-  rendered <- tryCatch(
-    sprintf(argstr, value),
-    error = function(e) {
-      # Fallback: just paste
-      paste(argstr, value)
-    }
-  )
+# Split a CLI template without invoking a shell. Quotes group static template
+# text and are removed from the resulting argv. Backslash escapes the following
+# character outside single quotes.
+tokenize_cli_template <- function(template) {
+  chars <- strsplit(template, "", fixed = TRUE)[[1]]
+  tokens <- character(0)
+  current <- ""
+  quote <- NULL
+  escaped <- FALSE
+  started <- FALSE
 
-  # Split on whitespace to get individual tokens
-  strsplit(trimws(rendered), "\\s+")[[1]]
+  flush <- function() {
+    if (started) tokens <<- c(tokens, current)
+    current <<- ""
+    started <<- FALSE
+  }
+
+  for (ch in chars) {
+    if (escaped) {
+      current <- paste0(current, ch)
+      started <- TRUE
+      escaped <- FALSE
+    } else if (identical(ch, "\\") && !identical(quote, "'")) {
+      escaped <- TRUE
+      started <- TRUE
+    } else if (!is.null(quote)) {
+      if (identical(ch, quote)) quote <- NULL else current <- paste0(current, ch)
+      started <- TRUE
+    } else if (ch %in% c("'", "\"")) {
+      quote <- ch
+      started <- TRUE
+    } else if (grepl("[[:space:]]", ch)) {
+      flush()
+    } else {
+      current <- paste0(current, ch)
+      started <- TRUE
+    }
+  }
+  if (escaped) current <- paste0(current, "\\")
+  if (!is.null(quote)) cli::cli_abort("Unclosed quote in CLI template: {.code {template}}")
+  flush()
+  tokens
+}
+
+# Replace one fixed placeholder without replacement-string interpolation.
+replace_cli_placeholder <- function(token, placeholder, value) {
+  pos <- regexpr(placeholder, token, fixed = TRUE)[1]
+  if (pos < 0L) return(token)
+  before <- if (pos > 1L) substr(token, 1L, pos - 1L) else ""
+  after_start <- pos + nchar(placeholder)
+  after <- if (after_start <= nchar(token)) substr(token, after_start, nchar(token)) else ""
+  paste0(before, value, after)
+}
+
+# Render a scalar or tuple template into safe argv tokens.
+render_single <- function(value, argstr) {
+  matches <- gregexpr("%[-+ #0-9.*]*[diouxXeEfgGaAs]", argstr, perl = TRUE)[[1]]
+  legacy <- function() {
+    converted <- coerce_for_argstr(value, argstr)
+    rendered <- tryCatch(sprintf(argstr, converted), error = function(e) paste(argstr, converted))
+    strsplit(trimws(rendered), "\\s+")[[1]]
+  }
+  if (matches[1] < 0L) return(legacy())
+  lengths <- attr(matches, "match.length")
+  n <- length(matches)
+  # Imported tuple traits are not yet represented consistently in the schema.
+  # Preserve their historical rendering while making the common one-value
+  # case safe for paths containing whitespace.
+  if (n != 1L || length(value) != 1L) return(legacy())
+
+  conversions <- substring(argstr, matches, matches + lengths - 1L)
+  rendered_values <- tryCatch(vapply(seq_len(n), function(i) {
+    converted <- coerce_for_argstr(value[[i]], conversions[[i]])
+    sprintf(conversions[[i]], converted)
+  }, character(1)), error = function(e) NULL)
+  if (is.null(rendered_values)) return(legacy())
+
+  placeholders <- paste0("__NIFLOWR_ARG_", seq_len(n), "__")
+  template <- argstr
+  for (i in rev(seq_len(n))) {
+    before <- if (matches[[i]] > 1L) substr(template, 1L, matches[[i]] - 1L) else ""
+    after_start <- matches[[i]] + lengths[[i]]
+    after <- if (after_start <= nchar(template)) substr(template, after_start, nchar(template)) else ""
+    template <- paste0(before, placeholders[[i]], after)
+  }
+  tokens <- tokenize_cli_template(template)
+  for (i in seq_len(n)) {
+    tokens <- vapply(tokens, replace_cli_placeholder, character(1),
+      placeholder = placeholders[[i]], value = rendered_values[[i]], USE.NAMES = FALSE)
+  }
+  tokens
 }

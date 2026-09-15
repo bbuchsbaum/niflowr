@@ -72,6 +72,16 @@
           "enum": ["file", "dir", "string", "int", "double", "bool", "enum"],
           "description": "Element type for list inputs."
         },
+        "path_sentinels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Exact backend literals accepted in place of a file or directory path. Sentinels are rendered verbatim and are never resolved, staged, mounted, or identity-checked as paths."
+        },
         "cli": { "$ref": "#/$defs/cli" },
         "validate": { "$ref": "#/$defs/validate" },
         "constraints": { "$ref": "#/$defs/constraints" }
@@ -202,6 +212,11 @@
           "type": "boolean",
           "default": true,
           "description": "Whether to verify this output exists after execution"
+        },
+        "nonempty": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether an existing output must also contain data (positive file size or at least one directory entry)."
         },
         "when": { "$ref": "#/$defs/when" }
       },

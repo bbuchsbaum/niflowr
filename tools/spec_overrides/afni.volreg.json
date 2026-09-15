@@ -1,0 +1,53 @@
+{
+  "output_resolver": "afni_volreg",
+  "inputs": {
+    "in_file": { "validate": { "exists": true } },
+    "basefile": { "validate": { "exists": true } },
+    "out_file": {
+      "required": true,
+      "default": "NULL",
+      "role": "output",
+      "path_sentinels": ["NULL"]
+    },
+    "oned_file": { "role": "output" },
+    "oned_matrix_save": { "role": "output" },
+    "md1d_file": { "role": "output" },
+    "floatize": {
+      "type": "flag",
+      "desc": "Force an image output to floating-point storage.",
+      "cli": { "argstr": "-float" }
+    }
+  },
+  "outputs": {
+    "oned_file": {
+      "type": "file",
+      "path": { "computed": true },
+      "must_exist": true,
+      "nonempty": true
+    },
+    "oned_matrix_save": {
+      "type": "file",
+      "path": { "computed": true },
+      "must_exist": true,
+      "nonempty": true
+    },
+    "md1d_file": {
+      "type": "file",
+      "path": { "computed": true },
+      "must_exist": true,
+      "nonempty": true
+    },
+    "md1d_delta_file": {
+      "type": "file",
+      "path": { "computed": true },
+      "must_exist": true,
+      "nonempty": true
+    },
+    "out_file": {
+      "type": "file",
+      "path": { "computed": true },
+      "must_exist": true,
+      "nonempty": true
+    }
+  }
+}

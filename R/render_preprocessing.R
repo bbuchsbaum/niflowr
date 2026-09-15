@@ -4,6 +4,30 @@
 resolve_tool_outputs <- function(spec, values) {
   v <- apply_spec_defaults(spec, values)
   switch(spec$output_resolver,
+    afni_volreg = {
+      out <- list()
+      if (!is.null(v$oned_file)) out$oned_file <- v$oned_file
+      if (!is.null(v$oned_matrix_save)) {
+        out$oned_matrix_save <- if (grepl("\\.1D$", v$oned_matrix_save, ignore.case = TRUE)) {
+          v$oned_matrix_save
+        } else {
+          paste0(v$oned_matrix_save, ".aff12.1D")
+        }
+      }
+      if (!is.null(v$md1d_file)) {
+        out$md1d_file <- v$md1d_file
+        out$md1d_delta_file <- paste0(v$md1d_file, "_delt")
+      }
+      if (!is.null(v$out_file) && !identical(v$out_file, "NULL")) out$out_file <- v$out_file
+      out
+    },
+    afni_allineate_estimate = {
+      matrix <- v$out_matrix
+      if (!grepl("\\.1D$", matrix, ignore.case = TRUE)) matrix <- paste0(matrix, ".aff12.1D")
+      out <- list(out_matrix = matrix)
+      if (!is.null(v$out_file) && !identical(v$out_file, "NULL")) out$out_file <- v$out_file
+      out
+    },
     ants_n4 = {
       out <- list(output_image = v$output_image)
       if (isTRUE(v$save_bias)) out$bias_image <- v$bias_image %||%

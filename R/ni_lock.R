@@ -245,11 +245,16 @@ ni_pin_docker_entry <- function(cfg, image, pull = TRUE) {
     processx::run(bin, c("pull", image), error_on_status = FALSE)
   }
 
-  inspect <- processx::run(
+  inspect <- tryCatch(processx::run(
     bin,
     c("image", "inspect", image, "--format", "{{index .RepoDigests 0}}"),
-    error_on_status = FALSE
-  )
+    error_on_status = FALSE,
+    timeout = 5
+  ), error = function(e) NULL)
+  if (is.null(inspect)) {
+    out$note <- "could not resolve docker digest from local daemon within 5 seconds."
+    return(out)
+  }
   candidate <- trimws(inspect$stdout %||% "")
   if (inspect$status == 0 && nzchar(candidate) && !grepl("<no value>", candidate, fixed = TRUE)) {
     out$resolved_ref <- candidate

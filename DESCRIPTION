@@ -34,6 +34,7 @@ Suggests:
     neuroim2,
     neurotransform,
     openneuroR,
+    RNifti,
     rmarkdown,
     targets,
     tarchetypes,

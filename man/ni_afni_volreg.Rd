@@ -6,6 +6,7 @@
 \usage{
 ni_afni_volreg(
   in_file,
+  out_file = "NULL",
   args = NULL,
   basefile = NULL,
   copyorigin = NULL,
@@ -14,10 +15,10 @@ ni_afni_volreg(
   md1d_file = NULL,
   oned_file = NULL,
   oned_matrix_save = NULL,
-  out_file = NULL,
   timeshift = NULL,
   verbose = NULL,
   zpad = NULL,
+  floatize = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -28,6 +29,8 @@ ni_afni_volreg(
 }
 \arguments{
 \item{in_file}{Character; file path. input file to 3dvolreg \strong{Required.}}
+
+\item{out_file}{Character; file path. output image file name}
 
 \item{args}{Character. Additional parameters to the command}
 
@@ -45,13 +48,13 @@ ni_afni_volreg(
 
 \item{oned_matrix_save}{Character; file path. Save the matrix transformation}
 
-\item{out_file}{Character; file path. output image file name}
-
 \item{timeshift}{Logical. time shift to mean slice time offset}
 
 \item{verbose}{Logical. more detailed description of the process}
 
 \item{zpad}{Integer. Zeropad around the edges by 'n' voxels during rotations}
+
+\item{floatize}{Logical. Force an image output to floating-point storage.}
 
 \item{.cwd}{Working directory override.}
 

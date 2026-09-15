@@ -17,6 +17,9 @@
       "cli": {
         "argstr": "-base %s",
         "position": -6
+      },
+      "validate": {
+        "exists": true
       }
     },
     "copyorigin": {
@@ -33,6 +36,9 @@
       "cli": {
         "argstr": "%s",
         "position": -1
+      },
+      "validate": {
+        "exists": true
       }
     },
     "in_weight_volume": {
@@ -63,28 +69,37 @@
       "cli": {
         "argstr": "-maxdisp1D %s",
         "position": -4
-      }
+      },
+      "role": "output"
     },
     "oned_file": {
       "type": "file",
       "desc": "1D movement parameters output file",
       "cli": {
         "argstr": "-1Dfile %s"
-      }
+      },
+      "role": "output"
     },
     "oned_matrix_save": {
       "type": "file",
       "desc": "Save the matrix transformation",
       "cli": {
         "argstr": "-1Dmatrix_save %s"
-      }
+      },
+      "role": "output"
     },
     "out_file": {
       "type": "file",
       "desc": "output image file name",
       "cli": {
         "argstr": "-prefix %s"
-      }
+      },
+      "required": true,
+      "default": "NULL",
+      "role": "output",
+      "path_sentinels": [
+        "NULL"
+      ]
     },
     "timeshift": {
       "type": "flag",
@@ -107,36 +122,55 @@
         "argstr": "-zpad %d",
         "position": -5
       }
+    },
+    "floatize": {
+      "type": "flag",
+      "desc": "Force an image output to floating-point storage.",
+      "cli": {
+        "argstr": "-float"
+      }
     }
   },
   "outputs": {
-    "md1d_file": {
-      "type": "file",
-      "path": {
-        "from_input": "md1d_file"
-      },
-      "must_exist": false
-    },
     "oned_file": {
       "type": "file",
       "path": {
-        "from_input": "oned_file"
+        "computed": true
       },
-      "must_exist": false
+      "must_exist": true,
+      "nonempty": true
     },
     "oned_matrix_save": {
       "type": "file",
       "path": {
-        "from_input": "oned_matrix_save"
+        "computed": true
       },
-      "must_exist": false
+      "must_exist": true,
+      "nonempty": true
+    },
+    "md1d_file": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true,
+      "nonempty": true
+    },
+    "md1d_delta_file": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true,
+      "nonempty": true
     },
     "out_file": {
       "type": "file",
       "path": {
-        "from_input": "out_file"
+        "computed": true
       },
-      "must_exist": false
+      "must_exist": true,
+      "nonempty": true
     }
   },
   "runtime": {
@@ -147,5 +181,6 @@
     "nipype_class": "nipype.interfaces.afni.preprocess.Volreg",
     "nipype_version": "1.10.0"
   },
-  "description": "Register input volumes to a base volume using AFNI 3dvolreg command"
+  "description": "Register input volumes to a base volume using AFNI 3dvolreg command",
+  "output_resolver": "afni_volreg"
 }

@@ -6,10 +6,10 @@
 \usage{
 ni_afni_t_shift(
   in_file,
+  out_file,
   args = NULL,
   ignore = NULL,
   interp = NULL,
-  out_file = NULL,
   rlt = NULL,
   rltplus = NULL,
   slice_timing = NULL,
@@ -28,23 +28,23 @@ ni_afni_t_shift(
 \arguments{
 \item{in_file}{Character; file path. input file to 3dTshift \strong{Required.}}
 
+\item{out_file}{Character; file path. output image file name \strong{Required.}}
+
 \item{args}{Character. Additional parameters to the command}
 
 \item{ignore}{Integer. ignore the first set of points specified}
 
 \item{interp}{Character; one of: "Fourier", "linear", "cubic", "quintic", "heptic". different interpolation methods (see 3dTshift for details) default = Fourier}
 
-\item{out_file}{Character; file path. output image file name}
-
 \item{rlt}{Logical. Before shifting, remove the mean and linear trend}
 
 \item{rltplus}{Logical. Before shifting, remove the mean and linear trend and later put back the mean}
 
-\item{slice_timing}{Character or numeric vector. time offsets from the volume acquisition onset for each slice}
+\item{slice_timing}{Character; file path. 1D file containing one slice offset per slice, in seconds.}
 
 \item{tpattern}{Character or numeric vector. use specified slice time pattern rather than one in header}
 
-\item{tr}{Character. manually set the TR. You can attach suffix "s" for seconds or "ms" for milliseconds.}
+\item{tr}{Numeric. Repetition time in seconds; rendered with an explicit seconds suffix.}
 
 \item{tslice}{Integer. align each slice to time offset of given slice}
 

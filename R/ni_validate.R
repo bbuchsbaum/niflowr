@@ -39,7 +39,7 @@ validate_inputs <- function(spec, values) {
     errors <- c(errors, errs)
 
     # Validate block
-    if (!is.null(def$validate)) {
+    if (!is.null(def$validate) && !is_path_sentinel(val, def)) {
       errs <- validate_constraints_single(nm, val, def$validate, type = def$type)
       errors <- c(errors, errs)
     }
@@ -87,6 +87,10 @@ validate_type <- function(name, value, def) {
         errors <- c(errors, cli::format_inline(
           "{.arg {name}} must be a single integer."
         ))
+      } else if (is.na(value) || !is.finite(value)) {
+        errors <- c(errors, cli::format_inline(
+          "{.arg {name}} must be finite."
+        ))
       } else if (value != trunc(value)) {
         errors <- c(errors, cli::format_inline(
           "{.arg {name}} must be a whole number, got {.val {value}}."
@@ -97,6 +101,10 @@ validate_type <- function(name, value, def) {
       if (!is.numeric(value) || length(value) != 1) {
         errors <- c(errors, cli::format_inline(
           "{.arg {name}} must be a single number."
+        ))
+      } else if (is.na(value) || !is.finite(value)) {
+        errors <- c(errors, cli::format_inline(
+          "{.arg {name}} must be finite."
         ))
       }
     },
@@ -140,7 +148,8 @@ validate_constraints_single <- function(name, value, validate_block, type = NULL
     }
   }
 
-  if (!is.null(validate_block$min) && is.numeric(value)) {
+  if (!is.null(validate_block$min) && is.numeric(value) &&
+      length(value) == 1L && !is.na(value) && is.finite(value)) {
     if (value < validate_block$min) {
       errors <- c(errors, cli::format_inline(
         "{.arg {name}} must be >= {validate_block$min}, got {value}."
@@ -148,7 +157,8 @@ validate_constraints_single <- function(name, value, validate_block, type = NULL
     }
   }
 
-  if (!is.null(validate_block$max) && is.numeric(value)) {
+  if (!is.null(validate_block$max) && is.numeric(value) &&
+      length(value) == 1L && !is.na(value) && is.finite(value)) {
     if (value > validate_block$max) {
       errors <- c(errors, cli::format_inline(
         "{.arg {name}} must be <= {validate_block$max}, got {value}."
@@ -165,6 +175,13 @@ validate_constraints_single <- function(name, value, validate_block, type = NULL
   }
 
   errors
+}
+
+# Test whether a typed path value is an exact backend sentinel.
+is_path_sentinel <- function(value, def) {
+  sentinels <- as.character(def$path_sentinels %||% character(0))
+  length(sentinels) > 0L && is.character(value) && length(value) == 1L &&
+    !is.na(value) && value %in% sentinels
 }
 
 #' Check XOR constraints across parameters

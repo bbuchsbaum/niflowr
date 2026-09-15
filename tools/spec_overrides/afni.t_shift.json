@@ -1,0 +1,33 @@
+{
+  "inputs": {
+    "in_file": { "validate": { "exists": true } },
+    "out_file": {
+      "required": true,
+      "role": "output"
+    },
+    "slice_timing": {
+      "type": "file",
+      "desc": "1D file containing one slice offset per slice, in seconds.",
+      "validate": { "exists": true }
+    },
+    "tr": {
+      "type": "double",
+      "desc": "Repetition time in seconds; rendered with an explicit seconds suffix.",
+      "validate": { "min": 0.000000000001 },
+      "cli": { "argstr": "-TR %gs" }
+    },
+    "ignore": { "validate": { "min": 0 } },
+    "tslice": { "validate": { "min": 0 } },
+    "tzero": { "validate": { "min": 0 } },
+    "rlt": { "constraints": { "xor": ["rltplus"] } },
+    "rltplus": { "constraints": { "xor": ["rlt"] } }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": { "from_input": "out_file" },
+      "must_exist": true,
+      "nonempty": true
+    }
+  }
+}
