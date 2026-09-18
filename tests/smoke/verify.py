@@ -21,6 +21,8 @@ for name, result in results.items():
                     if not (data.min() >= -1e-5 and data.max() <= 1+1e-5):
                         failures.append({'tool':name,'output':key,'path':path,'minimum':float(data.min()),'maximum':float(data.max())})
                 checks.append({'tool':name,'output':key,'shape':data.shape,'affine':img.affine.tolist()})
+            elif p.suffix=='.h5' and p.is_file():
+                assert p.stat().st_size > 0, (name,key,'empty composite transform')
             elif p.suffix=='.mat' and p.is_file():
                 mat=np.loadtxt(p); assert mat.shape==(4,4) and np.isfinite(mat).all()
                 assert abs(np.linalg.det(mat[:3,:3]))>1e-6

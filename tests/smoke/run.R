@@ -38,6 +38,17 @@ seg <- run("fast","fsl.fast",in_files=brain$outputs$out_file,out_basename=out("s
 mc <- run("mcflirt","fsl.mcflirt",in_file=infile("bold.nii.gz"),out_file=out("mc.nii.gz"),save_mats=TRUE,save_plots=TRUE)
 flirt <- run("flirt","fsl.flirt",in_file=brain$outputs$out_file,reference=brain$outputs$out_file,
   out_file=out("registered.nii.gz"),out_matrix_file=out("registered.mat"),dof=6)
+# Three-stage Rigid + Affine + SyN exercising every per-stage antsRegistration input.
+antsreg <- run("ants_registration","ants.registration",fixed_image=brain$outputs$out_file,
+  moving_image=n4$outputs$output_image,transforms=c("Rigid","Affine","SyN"),
+  transform_parameters=c("0.1","0.1","0.1,3,0"),metric=c("Mattes","Mattes","CC"),metric_weight=1,
+  radius_or_number_of_bins=c(32,32,2),sampling_strategy=c("Regular","Regular","None"),
+  sampling_percentage=c(0.25,0.25,1),number_of_iterations=c("20x10","20x10","10x5"),
+  convergence_threshold=1e-6,convergence_window_size=5,shrink_factors="2x1",smoothing_sigmas="1x0vox",
+  use_histogram_matching=TRUE,winsorize_lower_quantile=0.005,winsorize_upper_quantile=0.995,
+  output_transform_prefix=out("antsreg_"),output_warped_image=out("antsreg_Warped.nii.gz"),
+  output_inverse_warped_image=out("antsreg_InverseWarped.nii.gz"),write_composite_transform=TRUE,
+  float=TRUE,random_seed=1)
 # epi_reg consumes a binary WM segmentation derived from FAST's actual labels.
 run_python(c("-c",paste0("import nibabel as n,numpy as p,sys; i=n.load(sys.argv[1]); n.save(n.Nifti1Image((i.get_fdata()==3).astype('uint8'),i.affine),sys.argv[2])"),
   seg$outputs$tissue_class_map,out("wm.nii.gz")))

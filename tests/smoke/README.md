@@ -14,7 +14,10 @@ the harness uses `--pull=never`, per-step working directories, one thread, and
 five-minute workload limits. It preserves logs and failure provenance.
 
 The deterministic 48-cubed tissue phantom exercises N4 -> BET -> FAST -> FLIRT ->
-epi_reg, plus three-frame MCFLIRT. FAST's actual segmentation supplies the WM
+epi_reg, plus three-frame MCFLIRT and a three-stage Rigid + Affine + SyN
+`antsRegistration` that sets every per-stage input (transform parameters,
+iterations, convergence, metric bins, sampling, histogram matching) and writes
+warped images and composite `.h5` transforms. FAST's actual segmentation supplies the WM
 input. The independent Python checker reads image bytes, dimensions, affines,
 frame counts, finite values, probability ranges, and matrices. It also checks
 that N4's corrected image multiplied by its bias field reconstructs the input
