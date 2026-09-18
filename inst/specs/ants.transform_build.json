@@ -96,14 +96,26 @@
       "path": {
         "template": "{output_prefix}Composite.h5"
       },
-      "must_exist": false
+      "must_exist": false,
+      "transform": {
+        "kind": "composite",
+        "format": "ants_h5",
+        "source": "moving_image",
+        "target": "fixed_image"
+      }
     },
     "inverse_composite_transform": {
       "type": "file",
       "path": {
         "template": "{output_prefix}InverseComposite.h5"
       },
-      "must_exist": false
+      "must_exist": false,
+      "transform": {
+        "kind": "composite",
+        "format": "ants_h5",
+        "source": "fixed_image",
+        "target": "moving_image"
+      }
     },
     "warped_image": {
       "type": "file",

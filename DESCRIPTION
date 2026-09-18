@@ -32,6 +32,7 @@ Suggests:
     crew,
     fmriprepper,
     ggplot2,
+    hdf5r,
     knitr,
     neuroim2,
     neurotransform,

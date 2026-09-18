@@ -124,7 +124,13 @@
       "path": {
         "template": "{output_prefix}0GenericAffine.mat"
       },
-      "must_exist": false
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "itk",
+        "source": "moving_image",
+        "target": "fixed_image"
+      }
     },
     "warped_image": {
       "type": "file",
@@ -153,6 +159,12 @@
           "r",
           "a"
         ]
+      },
+      "transform": {
+        "kind": "warp",
+        "format": "ants",
+        "source": "moving_image",
+        "target": "fixed_image"
       }
     },
     "inverse_warp_field": {
@@ -168,6 +180,12 @@
           "r",
           "a"
         ]
+      },
+      "transform": {
+        "kind": "warp",
+        "format": "ants",
+        "source": "fixed_image",
+        "target": "moving_image"
       }
     }
   },

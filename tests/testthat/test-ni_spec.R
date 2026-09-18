@@ -33,3 +33,34 @@ test_that("ni_spec_validate catches invalid spec", {
   # Missing required fields: spec_version, inputs, outputs
   expect_error(ni_spec_validate(bad_spec, "test"), "validation failed")
 })
+
+test_that("transform metadata distinguishes format, payload, and domains", {
+  cases <- list(
+    c("fsl.flirt", "out_matrix_file", "affine", "fsl", "in_file", "reference"),
+    c("ants.ai", "output_transform", "affine", "itk", "moving_image", "fixed_image"),
+    c("afni.allineate", "out_matrix", "affine", "afni", "in_file", "reference"),
+    c("freesurfer.mri_coreg", "out_lta_file", "affine", "lta", "source_file", "reference_file"),
+    c("ants.transform_build", "composite_transform", "composite", "ants_h5", "moving_image", "fixed_image")
+  )
+
+  for (case in cases) {
+    spec <- ni_spec_read(case[[1]], cache = FALSE)
+    transform <- spec$outputs[[case[[2]]]]$transform
+    expect_equal(
+      unlist(transform, use.names = FALSE),
+      unname(case[3:6]),
+      info = paste(case[1:2], collapse = ":")
+    )
+  }
+
+  transform_build <- ni_spec_read("ants.transform_build", cache = FALSE)
+  inverse <- transform_build$outputs$inverse_composite_transform$transform
+  expect_equal(inverse$source, "fixed_image")
+  expect_equal(inverse$target, "moving_image")
+})
+
+test_that("spec schema rejects unsupported transform formats", {
+  spec <- ni_spec_read("fsl.flirt", cache = FALSE)
+  spec$outputs$out_matrix_file$transform$format <- "mystery_mat"
+  expect_error(ni_spec_validate(spec, "bad transform"), "validation failed")
+})

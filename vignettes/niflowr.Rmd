@@ -368,8 +368,10 @@ brain <- ni_read_output(result, "out_file")
 
 ### neurotransform — work with spatial transforms
 
-Registration outputs can be loaded as neurotransform morphism objects
-for composition and resampling:
+Registration outputs carry explicit transform metadata: affine versus warp or
+composite, the on-disk convention, and the source and target image inputs.
+This lets niflowr load them as neurotransform morphisms without guessing from
+an ambiguous `.mat` suffix:
 
 ```{r neurotransform, eval = FALSE}
 reg <- ni_fsl_flirt(
@@ -378,6 +380,9 @@ reg <- ni_fsl_flirt(
 )
 xfm <- ni_read_transform(reg, "out_matrix_file")
 # Returns an Affine3DMorphism — compose, invert, resample with it
+
+ni_convert_transform(reg, "func2t1_itk.txt", format = "itk")
+# Writes the same target-to-source mapping in ITK/ANTs LPS convention
 ```
 
 ### bidser — BIDS-aware input discovery

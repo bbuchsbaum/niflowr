@@ -69,3 +69,11 @@ test_that("FSL text/matrix outs do not declare cli.strip_ext", {
   }
   expect_identical(bad, character())
 })
+
+test_that("transform metadata only references file-like inputs", {
+  files <- list.files(system.file("specs", package = "niflowr"), "[.]json$", full.names = TRUE)
+  if (!length(files)) files <- list.files(testthat::test_path("..", "..", "inst", "specs"), "[.]json$", full.names = TRUE)
+  findings <- ni_lint_specs(spec_paths = files, strict = FALSE, fix = FALSE)
+  bad <- findings[findings$code %in% c("unknown_transform_domain", "invalid_transform_domain"), ]
+  expect_equal(nrow(bad), 0L)
+})

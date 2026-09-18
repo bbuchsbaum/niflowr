@@ -188,6 +188,23 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
     source <- spec$outputs[[nm]]$path$from_input
     if (!is.null(source) && !inputs[[source]]$type %in% c("file", "dir", "list"))
       add_finding("warning", "incompatible_output_input", source, "Output references a non-path input; automatic inference is disabled.")
+
+    transform <- spec$outputs[[nm]]$transform
+    if (is.null(transform)) next
+    for (domain in c("source", "target")) {
+      ref <- transform[[domain]]
+      if (is.null(inputs[[ref]])) {
+        add_finding(
+          "error", "unknown_transform_domain", nm,
+          sprintf("Transform %s references unknown input '%s'.", domain, ref)
+        )
+      } else if (!inputs[[ref]]$type %in% c("file", "list")) {
+        add_finding(
+          "error", "invalid_transform_domain", nm,
+          sprintf("Transform %s input '%s' must be typed file or list.", domain, ref)
+        )
+      }
+    }
   }
 
   # 1) Shell metacharacters in argstr

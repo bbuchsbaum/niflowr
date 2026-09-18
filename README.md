@@ -215,7 +215,8 @@ niflowr includes a small BIDS-facing adapter layer and optional integrations wit
 - `ni_bids_inputs()` / `ni_from_openneuro()` — query a BIDS project (via `bidser`) or pull a dataset from OpenNeuro (via `openneuroR`).
 - `ni_fmriprep_preproc()`, `ni_fmriprep_confounds()`, `ni_fmriprep_derivatives()` — locate and load outputs from an existing fMRIPrep derivatives directory.
 - `ni_bids_app()` — scaffold a BIDS App (via `bidsappr`).
-- `ni_read_output()` / `ni_read_transform()` — load results as `neuroim2` images or `neurotransform` transforms.
+- `ni_read_output()` / `ni_read_transform()` — load results as `neuroim2` images or metadata-typed `neurotransform` transforms.
+- `ni_convert_transform()` — preserve a transform's geometric mapping while writing FSL, ITK/ANTs, AFNI, FreeSurfer LTA, generic, or X5 formats.
 
 These helpers are adapters around existing BIDS datasets, derivatives, and
 packages. They are not a substitute for running fMRIPrep or another NiPreps app

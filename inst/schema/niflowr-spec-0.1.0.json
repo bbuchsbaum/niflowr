@@ -218,7 +218,35 @@
           "default": false,
           "description": "Whether an existing output must also contain data (positive file size or at least one directory entry)."
         },
+        "transform": { "$ref": "#/$defs/transform" },
         "when": { "$ref": "#/$defs/when" }
+      },
+      "additionalProperties": false
+    },
+    "transform": {
+      "type": "object",
+      "required": ["kind", "format", "source", "target"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["affine", "affine_array", "warp", "composite"],
+          "description": "Geometric transform payload represented by this output."
+        },
+        "format": {
+          "type": "string",
+          "enum": ["generic", "fsl", "itk", "afni", "lta", "ants", "ants_h5", "fsl_coef", "x5"],
+          "description": "On-disk transform convention, separate from filename extension."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Input whose image defines the moving/source domain."
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Input whose image defines the fixed/target domain."
+        }
       },
       "additionalProperties": false
     },

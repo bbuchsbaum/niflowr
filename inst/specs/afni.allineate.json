@@ -491,7 +491,13 @@
       "path": {
         "from_input": "out_matrix"
       },
-      "must_exist": false
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "afni",
+        "source": "in_file",
+        "target": "reference"
+      }
     },
     "out_param_file": {
       "type": "file",

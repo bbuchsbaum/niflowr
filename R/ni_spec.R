@@ -113,7 +113,7 @@ ni_spec_validate <- function(spec, source = "spec") {
     return(invisible(TRUE))
   }
 
-  json_str <- jsonlite::toJSON(spec, auto_unbox = TRUE, null = "null")
+  json_str <- jsonlite::toJSON(unclass(spec), auto_unbox = TRUE, null = "null")
   result <- jsonvalidate::json_validate(json_str, schema_path, verbose = TRUE,
                                         engine = "ajv")
 

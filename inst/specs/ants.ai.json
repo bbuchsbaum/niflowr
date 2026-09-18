@@ -121,7 +121,13 @@
       "path": {
         "from_input": "output_transform"
       },
-      "must_exist": false
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "itk",
+        "source": "moving_image",
+        "target": "fixed_image"
+      }
     }
   },
   "runtime": {

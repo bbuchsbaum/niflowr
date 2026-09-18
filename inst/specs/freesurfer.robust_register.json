@@ -277,7 +277,13 @@
       "path": {
         "from_input": "out_reg_file"
       },
-      "must_exist": false
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "lta",
+        "source": "source_file",
+        "target": "target_file"
+      }
     },
     "registered_file": {
       "type": "file",

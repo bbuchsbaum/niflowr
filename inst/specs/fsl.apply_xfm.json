@@ -398,7 +398,13 @@
       "path": {
         "from_input": "out_matrix_file"
       },
-      "must_exist": false
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "fsl",
+        "source": "in_file",
+        "target": "reference"
+      }
     }
   },
   "runtime": {
