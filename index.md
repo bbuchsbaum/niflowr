@@ -308,7 +308,11 @@ integrations with adjacent R packages:
 - [`ni_read_output()`](https://bbuchsbaum.github.io/niflowr/reference/ni_read_output.md)
   /
   [`ni_read_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_read_transform.md)
-  — load results as `neuroim2` images or `neurotransform` transforms.
+  — load results as `neuroim2` images or metadata-typed `neurotransform`
+  transforms.
+- [`ni_convert_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_convert_transform.md)
+  — preserve a transform’s geometric mapping while writing FSL,
+  ITK/ANTs, AFNI, FreeSurfer LTA, generic, or X5 formats.
 
 These helpers are adapters around existing BIDS datasets, derivatives,
 and packages. They are not a substitute for running fMRIPrep or another

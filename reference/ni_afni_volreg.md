@@ -7,6 +7,7 @@ Register input volumes to a base volume using AFNI 3dvolreg command
 ``` r
 ni_afni_volreg(
   in_file,
+  out_file = "NULL",
   args = NULL,
   basefile = NULL,
   copyorigin = NULL,
@@ -15,10 +16,10 @@ ni_afni_volreg(
   md1d_file = NULL,
   oned_file = NULL,
   oned_matrix_save = NULL,
-  out_file = NULL,
   timeshift = NULL,
   verbose = NULL,
   zpad = NULL,
+  floatize = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -33,6 +34,10 @@ ni_afni_volreg(
 - in_file:
 
   Character; file path. input file to 3dvolreg **Required.**
+
+- out_file:
+
+  Character; file path. output image file name
 
 - args:
 
@@ -68,10 +73,6 @@ ni_afni_volreg(
 
   Character; file path. Save the matrix transformation
 
-- out_file:
-
-  Character; file path. output image file name
-
 - timeshift:
 
   Logical. time shift to mean slice time offset
@@ -83,6 +84,10 @@ ni_afni_volreg(
 - zpad:
 
   Integer. Zeropad around the edges by 'n' voxels during rotations
+
+- floatize:
+
+  Logical. Force an image output to floating-point storage.
 
 - .cwd:
 

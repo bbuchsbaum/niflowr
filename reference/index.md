@@ -10,6 +10,10 @@
   : AFNI AlignEpiAnatPy
 - [`ni_afni_allineate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_allineate.md)
   : AFNI Allineate
+- [`ni_afni_allineate_apply()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_allineate_apply.md)
+  : AFNI 3dAllineate affine application
+- [`ni_afni_allineate_estimate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_allineate_estimate.md)
+  : AFNI 3dAllineate affine estimation
 - [`ni_afni_auto_tcorrelate()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_auto_tcorrelate.md)
   : AFNI AutoTcorrelate
 - [`ni_afni_auto_tlrc()`](https://bbuchsbaum.github.io/niflowr/reference/ni_afni_auto_tlrc.md)
@@ -242,6 +246,8 @@
   : Get or update niflowr runtime configuration
 - [`ni_constraints()`](https://bbuchsbaum.github.io/niflowr/reference/ni_constraints.md)
   : List spec constraints as a table
+- [`ni_convert_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_convert_transform.md)
+  : Convert a declared transform output to another format
 - [`ni_dcm2niix_convert()`](https://bbuchsbaum.github.io/niflowr/reference/ni_dcm2niix_convert.md)
   : dcm2niix Convert
 - [`ni_deriv_path()`](https://bbuchsbaum.github.io/niflowr/reference/ni_deriv_path.md)

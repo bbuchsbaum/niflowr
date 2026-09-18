@@ -7,10 +7,10 @@ Shifts voxel time series from input so that separate slices are aligned
 ``` r
 ni_afni_t_shift(
   in_file,
+  out_file,
   args = NULL,
   ignore = NULL,
   interp = NULL,
-  out_file = NULL,
   rlt = NULL,
   rltplus = NULL,
   slice_timing = NULL,
@@ -33,6 +33,10 @@ ni_afni_t_shift(
 
   Character; file path. input file to 3dTshift **Required.**
 
+- out_file:
+
+  Character; file path. output image file name **Required.**
+
 - args:
 
   Character. Additional parameters to the command
@@ -47,10 +51,6 @@ ni_afni_t_shift(
   different interpolation methods (see 3dTshift for details) default =
   Fourier
 
-- out_file:
-
-  Character; file path. output image file name
-
 - rlt:
 
   Logical. Before shifting, remove the mean and linear trend
@@ -62,8 +62,8 @@ ni_afni_t_shift(
 
 - slice_timing:
 
-  Character or numeric vector. time offsets from the volume acquisition
-  onset for each slice
+  Character; file path. 1D file containing one slice offset per slice,
+  in seconds.
 
 - tpattern:
 
@@ -72,8 +72,8 @@ ni_afni_t_shift(
 
 - tr:
 
-  Character. manually set the TR. You can attach suffix "s" for seconds
-  or "ms" for milliseconds.
+  Numeric. Repetition time in seconds; rendered with an explicit seconds
+  suffix.
 
 - tslice:
 

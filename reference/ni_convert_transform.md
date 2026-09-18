@@ -1,18 +1,21 @@
-# Read a transform output using neurotransform
+# Convert a declared transform output to another format
 
-Loads a spatial transform file using the output's declarative transform
-metadata. The metadata records the payload kind, on-disk convention, and
-the inputs that define its source and target image domains. This avoids
-guessing from a `.mat` suffix or tool name, both of which are ambiguous
-across FSL, ANTs/ITK, AFNI, and FreeSurfer.
+Reads a transform with
+[`ni_read_transform()`](https://bbuchsbaum.github.io/niflowr/reference/ni_read_transform.md)
+and writes the same geometric mapping in another supported convention.
+Affine transforms can be converted among generic text, FSL FLIRT,
+ITK/ANTs, AFNI, FreeSurfer LTA, and X5. Warp and composite transforms
+can be written as X5; a single warp can also be written as an
+ANTs-compatible NIfTI vector field.
 
 ## Usage
 
 ``` r
-ni_read_transform(
+ni_convert_transform(
   result,
+  path,
+  format = c("generic", "fsl", "itk", "afni", "lta", "x5", "ants"),
   output_name = NULL,
-  type = NULL,
   source_image = NULL,
   target_image = NULL,
   source = NULL,
@@ -27,16 +30,18 @@ ni_read_transform(
 
   An `ni_result` object.
 
+- path:
+
+  Destination file path.
+
+- format:
+
+  Destination format.
+
 - output_name:
 
   Name of the transform output. May be omitted when exactly one resolved
   output is declared as a transform.
-
-- type:
-
-  Optional explicit `neurotransform` type for an undeclared legacy
-  output. Requires `output_name`; declared outputs use their spec
-  metadata.
 
 - source_image, target_image:
 
@@ -55,4 +60,4 @@ ni_read_transform(
 
 ## Value
 
-A neurotransform morphism object.
+`path`, invisibly.
