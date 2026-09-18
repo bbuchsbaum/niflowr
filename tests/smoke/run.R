@@ -6,7 +6,13 @@ for (d in c("in", "out", "work")) fs::dir_create(file.path(root, d))
 python <- Sys.getenv("NIFLOWR_SMOKE_PYTHON", Sys.which("python3"))
 if (!nzchar(python)) stop("No python3 found; set NIFLOWR_SMOKE_PYTHON.")
 message("Smoke fixtures use ", python)
-processx::run(python, c("tests/smoke/fixture.py", file.path(root, "in")))
+# R's ldpaths prepends system library dirs to LD_LIBRARY_PATH, so a shared-lib
+# interpreter (e.g. setup-python's) would load the distro libpython and its
+# frozen site module, which drops the interpreter's own site-packages.
+py_env <- c("current", LD_LIBRARY_PATH = paste(c(file.path(dirname(dirname(python)), "lib"),
+  Sys.getenv("LD_LIBRARY_PATH")), collapse = .Platform$path.sep))
+run_python <- function(args, ...) processx::run(python, args, env = py_env, ...)
+run_python(c("tests/smoke/fixture.py", file.path(root, "in")))
 images <- jsonlite::read_json(Sys.getenv("NIFLOWR_SMOKE_IMAGES", "tests/smoke/images.json"), simplifyVector = TRUE)
 profiles <- lapply(images, function(x) list(docker_image = x$image, platform = x$platform, entrypoint = x$entrypoint))
 invisible(ni_config(.reset = TRUE, auto_read = FALSE))
@@ -33,9 +39,9 @@ mc <- run("mcflirt","fsl.mcflirt",in_file=infile("bold.nii.gz"),out_file=out("mc
 flirt <- run("flirt","fsl.flirt",in_file=brain$outputs$out_file,reference=brain$outputs$out_file,
   out_file=out("registered.nii.gz"),out_matrix_file=out("registered.mat"),dof=6)
 # epi_reg consumes a binary WM segmentation derived from FAST's actual labels.
-processx::run(python,c("-c",paste0("import nibabel as n,numpy as p,sys; i=n.load(sys.argv[1]); n.save(n.Nifti1Image((i.get_fdata()==3).astype('uint8'),i.affine),sys.argv[2])"),
+run_python(c("-c",paste0("import nibabel as n,numpy as p,sys; i=n.load(sys.argv[1]); n.save(n.Nifti1Image((i.get_fdata()==3).astype('uint8'),i.affine),sys.argv[2])"),
   seg$outputs$tissue_class_map,out("wm.nii.gz")))
 epi <- run("epi_reg","fsl.epi_reg",epi=flirt$outputs$out_file,t1_head=n4$outputs$output_image,
   t1_brain=brain$outputs$out_file,wmseg=out("wm.nii.gz"),out_base=out("epi"))
-processx::run(python,c("tests/smoke/verify.py",root),echo=TRUE)
+run_python(c("tests/smoke/verify.py",root),echo=TRUE)
 writeLines(system2("git", c("rev-parse","HEAD"),stdout=TRUE), file.path(root,"revision.txt"))

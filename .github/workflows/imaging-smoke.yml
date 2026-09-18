@@ -23,7 +23,7 @@ jobs:
       - shell: Rscript {0}
         run: install.packages(c("cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate", "processx", "yaml", "pkgload"))
       # Install into, and hand the harness, the exact interpreter setup-python
-      # provisioned; Rscript's own PATH lookup found a python3 without numpy.
+      # provisioned (run.R also fixes its LD_LIBRARY_PATH; see there).
       - run: '"${{ steps.py.outputs.python-path }}" -m pip install numpy==2.2.6 nibabel==5.3.2'
       - name: Pull pinned Linux images
         run: |
