@@ -31,6 +31,8 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/index.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/infer_output_path.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/is_missing_value.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/is_output_prefix_name.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/is_path_list_input.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_afni_a_boverlap.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_afni_afn_ito_nifti.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_afni_align_epi_anat_py.html</loc></url>
@@ -382,6 +384,7 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_spec_validate_file.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_transform_context.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/normalize_input_values.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/numeric_type_for_argstr.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/output_when_holds.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/populate_auto_output_inputs.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_ants_registration.html</loc></url>
@@ -389,7 +392,6 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_ants_transform_build.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_arg.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_nosplit.html</loc></url>
-<url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_single.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/resolve_legacy_spec_id.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/resolve_outputs.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/resolve_spec_path.html</loc></url>

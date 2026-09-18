@@ -72,7 +72,7 @@ ni_afni_outlier_count(
 
 - qthr:
 
-  Character. indicate a value for q to compute alpha
+  Numeric. indicate a value for q to compute alpha
 
 - .cwd:
 
