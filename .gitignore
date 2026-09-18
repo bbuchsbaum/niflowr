@@ -15,3 +15,5 @@ vignettes/extending-niflowr.html
 .niflowr/
 smoke-results/
 .DS_Store
+__pycache__/
+.ruff_cache/

@@ -19,3 +19,4 @@
 ^smoke-results$
 ^\.niflowr$
 ^tests/testthat/\.niflowr($|/)
+^\.ruff_cache$
