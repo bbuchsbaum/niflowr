@@ -82,7 +82,8 @@ ni_read_transform <- function(result, output_name = NULL, type = NULL,
   extra <- list(...)
 
   if (is.null(context$transform)) {
-    if (identical(type, "fsl")) {
+    # Dense FSL fields and FNIRT coefficient files both need image geometry.
+    if (isTRUE(type %in% c("fsl", "fsl_coef"))) {
       extra <- utils::modifyList(ni_transform_geometries(context, required = TRUE), extra)
     }
     args <- c(list(
@@ -115,7 +116,7 @@ ni_read_transform <- function(result, output_name = NULL, type = NULL,
     return(do.call(reader, args))
   }
 
-  if (identical(transform$format, "fsl")) {
+  if (transform$format %in% c("fsl", "fsl_coef")) {
     extra <- utils::modifyList(ni_transform_geometries(context, required = TRUE), extra)
   }
   args <- utils::modifyList(list(

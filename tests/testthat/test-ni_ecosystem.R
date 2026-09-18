@@ -313,6 +313,35 @@ test_that("FSL affine read reports missing geometry explicitly", {
 })
 
 
+test_that("FNIRT coefficient bridge passes both image geometries", {
+  skip_if_not_installed("neurotransform")
+  skip_if_not_installed("neuroim2")
+  skip_if_not_installed("RNifti")
+  fixture <- system.file("extdata", "fsl_coef_oracle", "srcright_refleft_aff",
+                         package = "neurotransform")
+  skip_if_not(nzchar(fixture), "neurotransform coefficient fixtures not installed")
+  td <- withr::local_tempdir()
+  for (name in c("source", "target", "coef", paste0("native_coord", 0:2), "native_support")) {
+    file.copy(file.path(fixture, paste0(name, ".nii.gz")), td)
+  }
+  path <- function(name) file.path(td, paste0(name, ".nii.gz"))
+  call <- ni_call("fsl.fnirt", in_file = path("source"), ref_file = path("target"),
+                  fieldcoeff_file = path("coef"), .validate = FALSE)
+  m <- ni_read_transform(transform_test_result(call), "fieldcoeff_file", type = "fsl_coef",
+                         source_image = path("source"), target_image = path("target"))
+  expect_equal(m@params$source_dim, dim(neuroim2::read_vol(path("source")))[1:3])
+  expect_equal(m@params$target_dim, dim(neuroim2::read_vol(path("target")))[1:3])
+
+  # Compare with FSL's own applywarp --warp=coef of the coordinate ramps.
+  target <- neuroim2::read_vol(path("target"))
+  dims <- dim(target)[1:3]
+  ijk <- as.matrix(expand.grid(lapply(dims, function(n) 0:(n - 1))))
+  world <- (cbind(ijk, 1) %*% t(neuroim2::trans(target)))[, 1:3]
+  expected <- sapply(0:2, function(k) as.numeric(as.array(neuroim2::read_vol(path(paste0("native_coord", k))))))
+  mask <- as.numeric(as.array(neuroim2::read_vol(path("native_support")))) > .999
+  expect_lt(max(abs(neurotransform::transform(m, world[mask, ]) - expected[mask, ])), 1e-4)
+})
+
 test_that("dense FSL bridge passes image geometry for declared and legacy outputs", {
   skip_if_not_installed("neurotransform")
   skip_if_not_installed("neuroim2")
