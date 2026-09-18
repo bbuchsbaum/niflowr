@@ -356,6 +356,18 @@ ni_normalize_docker_platform <- function(platform, profile = NULL) {
   ))
 }
 
+# Base R has no Sys.getuid(); ask id(1) so "auto" maps the host user into the
+# container and outputs are not left root-owned.
+ni_unix_id <- function(flag) {
+  out <- tryCatch(
+    suppressWarnings(system2("id", flag, stdout = TRUE, stderr = FALSE)),
+    error = function(e) character()
+  )
+  out <- suppressWarnings(as.integer(out))
+  if (length(out) != 1L || is.na(out)) return(NA_integer_)
+  out
+}
+
 #' @keywords internal
 ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, workdir, env,
                                  entrypoint = NULL, platform = NULL,
@@ -389,19 +401,10 @@ ni_build_docker_argv <- function(cfg, image, payload_cmd, payload_args, mounts, 
 
   argv <- c(argv, "-w", workdir)
 
-  lookup_unix_id <- function(name) {
-    fn <- get0(name, mode = "function", inherits = TRUE)
-    if (!is.function(fn)) return(NA_integer_)
-    out <- tryCatch(fn(), error = function(e) NA_integer_)
-    out <- suppressWarnings(as.integer(out))
-    if (length(out) != 1L || is.na(out)) return(NA_integer_)
-    out
-  }
-
   user_cfg <- cfg$docker$user %||% "auto"
   if (identical(user_cfg, "auto") && .Platform$OS.type == "unix") {
-    uid <- lookup_unix_id("Sys.getuid")
-    gid <- lookup_unix_id("Sys.getgid")
+    uid <- ni_unix_id("-u")
+    gid <- ni_unix_id("-g")
     if (!is.na(uid) && !is.na(gid)) {
       argv <- c(argv, "-u", paste0(uid, ":", gid))
     }

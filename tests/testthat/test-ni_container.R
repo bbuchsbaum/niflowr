@@ -525,6 +525,29 @@ test_that("ni_build_docker_argv handles custom user setting", {
   expect_true("customuser" %in% built$argv)
 })
 
+test_that("ni_build_docker_argv maps the host uid:gid when user is auto", {
+  skip_on_os("windows")
+  cfg <- ni_config_defaults()
+  cfg$docker$bin <- "echo"
+  expect_identical(cfg$docker$user, "auto")
+
+  built <- niflowr:::ni_build_docker_argv(
+    cfg = cfg,
+    image = "test/image:1.0",
+    payload_cmd = "bet",
+    payload_args = character(0),
+    mounts = list(),
+    workdir = "/work",
+    env = character(0)
+  )
+
+  uid <- system2("id", "-u", stdout = TRUE)
+  gid <- system2("id", "-g", stdout = TRUE)
+  i <- match("-u", built$argv)
+  expect_false(is.na(i))
+  expect_identical(built$argv[[i + 1L]], paste0(uid, ":", gid))
+})
+
 test_that("ni_build_docker_argv includes extra run args", {
   cfg <- ni_config_defaults()
   cfg$docker$bin <- "echo"
