@@ -54,7 +54,8 @@ validate_inputs <- function(spec, values) {
     }
     # Per-element choices for list inputs
     if (def$type == "list" && !is.null(def$choices)) {
-      bad <- setdiff(as.character(val), as.character(unlist(def$choices)))
+      given <- unlist(val, use.names = FALSE)
+      bad <- setdiff(as.character(given[!is.na(given)]), as.character(unlist(def$choices)))
       if (length(bad) > 0) {
         errors <- c(errors, cli::format_inline(
           "Each element of {.arg {nm}} must be one of {.val {unlist(def$choices)}}, got {.val {bad}}."
@@ -132,7 +133,18 @@ validate_type <- function(name, value, def) {
       }
     },
     list = {
-      if (!is.character(value) && !is.numeric(value)) {
+      if (isTRUE(def$nested)) {
+        # One element per stage; NULL/NA elements mean "not set" for that entry.
+        items <- if (is.list(value)) value else list(value)
+        ok <- all(vapply(items, function(x) {
+          is.null(x) || (is.atomic(x) && (is.character(x) || is.numeric(x) || all(is.na(x))))
+        }, logical(1)))
+        if (!ok) {
+          errors <- c(errors, cli::format_inline(
+            "{.arg {name}} must be a character or numeric vector, or a list of them."
+          ))
+        }
+      } else if (!is.character(value) && !is.numeric(value)) {
         errors <- c(errors, cli::format_inline(
           "{.arg {name}} must be a character or numeric vector."
         ))

@@ -368,13 +368,12 @@ test_that("staged registration rejects incomplete or missing stage values", {
     )))),
     "requires .*output_warped_image"
   )
-  # Flattened nested stage values get a hint about the string form.
+  # Stage-count mismatches point at the one-element-per-stage form.
   expect_error(
     ni_cmd(do.call(ni_call, c(base, list(
-      transforms = c("Rigid", "SyN"), metric = c("MI", "CC"),
-      transform_parameters = list(0.1, c(0.1, 3, 0))
+      transforms = c("Rigid", "SyN"), metric = c("MI", "CC", "CC")
     )))),
-    "one string"
+    "3 values, but the call has 2 stages.*one element per stage"
   )
 })
 
@@ -389,6 +388,240 @@ test_that("staged registration renders numbers ANTs parses literally", {
   expect_equal(a[which(a == "--convergence") + 1], "[1000,0.00000001,100000]")
   # An empty inverse path is absent, not an empty bracket slot.
   expect_equal(a[which(a == "--output") + 1], "[transform,w.nii.gz]")
+})
+
+# ---- nested per-stage values and multi-metric stages ----------------------
+
+test_that("nested per-stage values survive ni_call() instead of being flattened", {
+  call <- ni_call("ants.registration",
+    fixed_image = "f.nii.gz", moving_image = "m.nii.gz",
+    transforms = c("Rigid", "SyN"),
+    transform_parameters = list(0.1, c(0.1, 3, 0)),
+    metric = list("Mattes", c("Mattes", "CC")),
+    metric_weight = list(1, c(0.5, 0.5)),
+    number_of_iterations = list(c(100, 100), c(100, 70, 50)),
+    shrink_factors = list(c(2, 1), c(4, 2, 1)),
+    smoothing_sigmas = list(c(1, 0), c(2, 1, 0)),
+    sigma_units = "vox"
+  )
+  expect_identical(call$values$metric, list("Mattes", c("Mattes", "CC")))
+  expect_identical(call$values$transform_parameters, list(0.1, c(0.1, 3, 0)))
+
+  a <- ni_cmd(call)$args
+  expect_equal(a[which(a == "--transform") + 1], c("Rigid[0.1]", "SyN[0.1,3,0]"))
+  expect_equal(a[which(a == "--convergence") + 1], c("[100x100,1e-6,10]", "[100x70x50,1e-6,10]"))
+  expect_equal(a[which(a == "--shrink-factors") + 1], c("2x1", "4x2x1"))
+  expect_equal(a[which(a == "--smoothing-sigmas") + 1], c("1x0vox", "2x1x0vox"))
+})
+
+test_that("niworkflows' t1w-mni_registration_precise_001 preset renders exactly", {
+  # nipreps/niworkflows niworkflows/data/t1w-mni_registration_precise_001.json:
+  # the SyN stage combines Mattes and CC at 0.5/0.5 with no metric sampling.
+  call <- ni_call("ants.registration",
+    fixed_image = "F.nii.gz", moving_image = "M.nii.gz",
+    transforms = c("Rigid", "Affine", "SyN"),
+    transform_parameters = list(0.05, 0.1, c(0.2, 3, 0)),
+    metric = list("Mattes", "Mattes", c("Mattes", "CC")),
+    metric_weight = list(1, 1, c(0.5, 0.5)),
+    radius_or_number_of_bins = list(56, 56, c(56, 4)),
+    sampling_strategy = list("Regular", "Regular", c(NA, NA)),
+    sampling_percentage = list(0.3, 0.3, c(NA, NA)),
+    number_of_iterations = list(c(100, 100), c(100, 100), c(100, 30, 20)),
+    convergence_threshold = c(1e-8, 1e-8, -0.01),
+    convergence_window_size = c(20, 20, 5),
+    smoothing_sigmas = list(c(2, 1), c(2, 1), c(1, 0.5, 0)),
+    sigma_units = "vox",
+    shrink_factors = list(c(2, 1), c(2, 1), c(4, 2, 1)),
+    winsorize_lower_quantile = 0.005,
+    winsorize_upper_quantile = 0.995,
+    # The preset lists [false, false, true]; ANTs applies the last value to
+    # every stage, so the effective setting is TRUE.
+    use_histogram_matching = TRUE,
+    collapse_output_transforms = TRUE,
+    write_composite_transform = FALSE,
+    interpolation = "LanczosWindowedSinc",
+    output_transform_prefix = "ants_t1_to_mni",
+    output_warped_image = "ants_t1_to_mni_Warped.nii.gz"
+  )
+  expect_equal(ni_cmd(call)$args, c(
+    "--dimensionality", "3",
+    "--output", "[ants_t1_to_mni,ants_t1_to_mni_Warped.nii.gz]",
+    "--interpolation", "LanczosWindowedSinc",
+    "--winsorize-image-intensities", "[0.005,0.995]",
+    "--collapse-output-transforms", "1",
+    "--use-histogram-matching", "1",
+    "--transform", "Rigid[0.05]",
+    "--metric", "Mattes[F.nii.gz,M.nii.gz,1,56,Regular,0.3]",
+    "--convergence", "[100x100,0.00000001,20]",
+    "--shrink-factors", "2x1",
+    "--smoothing-sigmas", "2x1vox",
+    "--transform", "Affine[0.1]",
+    "--metric", "Mattes[F.nii.gz,M.nii.gz,1,56,Regular,0.3]",
+    "--convergence", "[100x100,0.00000001,20]",
+    "--shrink-factors", "2x1",
+    "--smoothing-sigmas", "2x1vox",
+    "--transform", "SyN[0.2,3,0]",
+    "--metric", "Mattes[F.nii.gz,M.nii.gz,0.5,56]",
+    "--metric", "CC[F.nii.gz,M.nii.gz,0.5,4]",
+    "--convergence", "[100x30x20,-0.01,5]",
+    "--shrink-factors", "4x2x1",
+    "--smoothing-sigmas", "1x0.5x0vox",
+    "--write-composite-transform", "0"
+  ))
+})
+
+test_that("images pair with the metrics within a stage, as in nipype", {
+  # antsBrainExtraction-style: the SyN stage matches the images and their
+  # Laplacians with one CC metric each.
+  call <- ni_call("ants.registration",
+    fixed_image = c("T.nii.gz", "T_lap.nii.gz"),
+    moving_image = c("A.nii.gz", "A_lap.nii.gz"),
+    transforms = c("Rigid", "SyN"),
+    metric = list("MI", c("CC", "CC")),
+    metric_weight = list(1, c(0.5, 0.5)),
+    radius_or_number_of_bins = list(32, 4),
+    sampling_strategy = list("Regular", "None"),
+    sampling_percentage = list(0.25, 1),
+    shrink_factors = "2x1", smoothing_sigmas = "1x0vox"
+  )
+  a <- ni_cmd(call)$args
+  expect_equal(a[which(a == "--metric") + 1], c(
+    "MI[T.nii.gz,A.nii.gz,1,32,Regular,0.25]",
+    "CC[T.nii.gz,A.nii.gz,0.5,4,None,1]",
+    "CC[T_lap.nii.gz,A_lap.nii.gz,0.5,4,None,1]"
+  ))
+})
+
+test_that("multi-metric stages reject mismatched per-metric settings", {
+  base <- list(
+    "ants.registration", moving_image = "m.nii.gz",
+    transforms = c("Rigid", "SyN"), shrink_factors = "2x1", smoothing_sigmas = "1x0vox"
+  )
+  expect_error(
+    ni_cmd(do.call(ni_call, c(base, list(
+      fixed_image = "f.nii.gz",
+      metric = list("MI", c("Mattes", "CC")), metric_weight = list(1, c(0.2, 0.3, 0.5))
+    )))),
+    "Stage 2.*metric_weight.*3 values for 2 metrics"
+  )
+  # One image per stage is not a thing antsRegistration has.
+  expect_error(
+    ni_cmd(do.call(ni_call, c(base, list(
+      metric = c("MI", "CC"), fixed_image = c("f1.nii.gz", "f2.nii.gz")
+    )))),
+    "pair with the metrics"
+  )
+  expect_error(
+    do.call(ni_call, c(base, list(fixed_image = "f.nii.gz", metric = "MI", sigma_units = "px"))),
+    "sigma_units"
+  )
+  expect_error(
+    ni_cmd(do.call(ni_call, c(base, list(fixed_image = "f.nii.gz", metric = "MI", sigma_units = "mm")))),
+    "already says"
+  )
+})
+
+test_that("a preset loaded from JSON renders the same with either jsonlite reader", {
+  # fromJSON() turns equal-length ladders into a matrix and null into NA;
+  # read_json(simplifyVector = FALSE) keeps lists and gives NULL for null.
+  preset <- '{
+    "transforms": ["Affine", "SyN"],
+    "transform_parameters": [[0.1], [0.1, 3.0, 0.0]],
+    "metric": ["Mattes", ["Mattes", "CC"]],
+    "metric_weight": [1, [0.5, 0.5]],
+    "radius_or_number_of_bins": [56, [56, 4]],
+    "sampling_strategy": ["Regular", [null, null]],
+    "sampling_percentage": [0.25, [null, null]],
+    "number_of_iterations": [[100, 50], [100, 50]],
+    "shrink_factors": [[2, 1], [2, 1]],
+    "smoothing_sigmas": [[1, 0], [1, 0]],
+    "sigma_units": ["vox", "vox"]
+  }'
+  render <- function(values) {
+    ni_cmd(do.call(ni_call, c(
+      list("ants.registration", fixed_image = "F.nii.gz", moving_image = "M.nii.gz"),
+      values
+    )))$args
+  }
+  simplified <- jsonlite::fromJSON(preset)
+  expect_true(is.matrix(simplified$number_of_iterations))
+  a <- render(simplified)
+  expect_identical(render(jsonlite::parse_json(preset, simplifyVector = FALSE)), a)
+
+  expect_equal(a[which(a == "--metric") + 1], c(
+    "Mattes[F.nii.gz,M.nii.gz,1,56,Regular,0.25]",
+    "Mattes[F.nii.gz,M.nii.gz,0.5,56]",
+    "CC[F.nii.gz,M.nii.gz,0.5,4]"
+  ))
+  expect_equal(a[which(a == "--transform") + 1], c("Affine[0.1]", "SyN[0.1,3,0]"))
+  expect_equal(a[which(a == "--convergence") + 1], rep("[100x50,1e-6,10]", 2))
+  expect_equal(a[which(a == "--smoothing-sigmas") + 1], rep("1x0vox", 2))
+})
+
+test_that("multi-metric stages must agree on sampling, as ANTs samples per stage", {
+  base <- list(
+    "ants.registration", fixed_image = "f.nii.gz", moving_image = "m.nii.gz",
+    transforms = "SyN", metric = list(c("Mattes", "CC")), radius_or_number_of_bins = list(c(32, 4)),
+    shrink_factors = "2x1", smoothing_sigmas = "1x0vox"
+  )
+  expect_error(
+    ni_cmd(do.call(ni_call, c(base, list(sampling_strategy = list(c("Regular", "None")))))),
+    "sampling settings differ"
+  )
+  expect_error(
+    ni_cmd(do.call(ni_call, c(base, list(
+      sampling_strategy = "Regular", sampling_percentage = list(c(0.25, 0.5))
+    )))),
+    "sampling settings differ"
+  )
+  # A shared setting is fine and applies to both metrics.
+  a <- ni_cmd(do.call(ni_call, c(base, list(
+    sampling_strategy = "Regular", sampling_percentage = 0.25
+  ))))$args
+  expect_equal(a[which(a == "--metric") + 1], c(
+    "Mattes[f.nii.gz,m.nii.gz,1,32,Regular,0.25]",
+    "CC[f.nii.gz,m.nii.gz,1,4,Regular,0.25]"
+  ))
+  expect_error(
+    do.call(ni_call, c(base, list(sampling_strategy = list(c("Regular", "bogus"))))),
+    "sampling_strategy.*bogus"
+  )
+})
+
+test_that("one bins value is not shared between different metric types", {
+  base <- list(
+    "ants.registration", fixed_image = "f.nii.gz", moving_image = "m.nii.gz",
+    transforms = "SyN", shrink_factors = "2x1", smoothing_sigmas = "1x0vox"
+  )
+  # 32 bins for Mattes would be a 65-voxel-wide CC window.
+  expect_error(
+    ni_cmd(do.call(ni_call, c(base, list(
+      metric = list(c("Mattes", "CC")), radius_or_number_of_bins = 32
+    )))),
+    "cannot serve metrics"
+  )
+  a <- ni_cmd(do.call(ni_call, c(base, list(
+    metric = list(c("CC", "CC")), radius_or_number_of_bins = 2
+  ))))$args
+  expect_equal(a[which(a == "--metric") + 1], rep("CC[f.nii.gz,m.nii.gz,1,2]", 2))
+  expect_error(
+    ni_cmd(do.call(ni_call, c(base, list(metric = character(0))))),
+    "at least one metric"
+  )
+})
+
+test_that("lint keeps nested lists to non-path inputs of custom-rendered specs", {
+  lint <- function(spec) niflowr:::lint_single_spec(spec, "x.json")$findings
+  codes <- function(f) vapply(f, function(x) x$code, character(1))
+  generic <- list(id = "x", inputs = list(a = list(type = "list", nested = TRUE, cli = list(argstr = "%s"))))
+  expect_true("invalid_nested_list" %in% codes(lint(generic)))
+  paths <- list(id = "x", render = "r", inputs = list(a = list(type = "list", nested = TRUE, items_type = "file")))
+  expect_true("invalid_nested_list" %in% codes(lint(paths)))
+  # A nested input that mentions images is not mistaken for a path list.
+  ok <- list(id = "x", render = "r", inputs = list(a = list(
+    type = "list", nested = TRUE, desc = "the metric for each image pair"
+  )))
+  expect_false(any(c("invalid_nested_list", "path_list_items_type") %in% codes(lint(ok))))
 })
 
 test_that("ants.registration fixes live in the Nipype spec override (#27, #28)", {
@@ -410,4 +643,13 @@ test_that("ants.registration fixes live in the Nipype spec override (#27, #28)",
     expect_identical(spec$inputs[[nm]]$type, "double")
   }
   expect_setequal(names(ov$outputs), names(spec$outputs))
+  nested <- c(
+    "metric", "metric_weight", "radius_or_number_of_bins", "sampling_strategy",
+    "sampling_percentage", "number_of_iterations", "shrink_factors",
+    "smoothing_sigmas", "transform_parameters"
+  )
+  for (nm in nested) {
+    expect_true(isTRUE(ov$inputs[[nm]]$nested), info = nm)
+    expect_true(isTRUE(spec$inputs[[nm]]$nested), info = nm)
+  }
 })

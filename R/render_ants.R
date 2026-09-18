@@ -39,39 +39,81 @@ ants_as_vec <- function(x) {
 
 #' Per-stage values for a staged antsRegistration input
 #'
-#' Element `i` is stage `i`'s value and a single value applies to every stage.
+#' Returns a list with one element per stage. Each element is an atomic
+#' vector: a single value, or several (the metrics of a multi-metric stage, or
+#' the levels of an iteration ladder). A single element applies to every stage.
 #' Any other length is a mis-specified stage list, so it is an error rather
 #' than silently wrapped around onto the wrong stages.
+#' @param allow_missing Whether `NULL`/`NA` entries are allowed (they mean
+#'   "omit" for optional per-metric settings such as sampling).
 #' @keywords internal
-ants_stage_values <- function(x, name, n_stages) {
-  x <- ants_as_vec(x)
-  if (length(x) == 0L) return(NULL)
-  if (anyNA(x)) {
+ants_stage_values <- function(x, name, n_stages, allow_missing = FALSE) {
+  if (is.null(x)) return(NULL)
+  items <- ni_nested_items(x)
+  if (length(items) == 0L) return(NULL)
+  if (!allow_missing &&
+      any(vapply(items, function(e) length(e) == 0L || anyNA(e), logical(1)))) {
     cli::cli_abort("{.arg {name}} contains missing values.")
   }
-  if (length(x) == 1L) return(rep(x, n_stages))
-  if (length(x) != n_stages) {
+  if (length(items) == 1L) return(rep(items, n_stages))
+  if (length(items) != n_stages) {
     cli::cli_abort(c(
-      "{.arg {name}} has {length(x)} values but there {?is/are} {n_stages} stage{?s}.",
+      "{.arg {name}} has {length(items)} value{?s}, but the call has {n_stages} stage{?s}.",
       "i" = "Give one value per stage, or a single value for all stages.",
-      "i" = "Nested lists are flattened, so write multi-value stages as one string \\
-             (e.g. {.val 0.1,3,0} or {.val 100x70x50x20})."
+      "i" = "Pass a list with one element per stage; a stage with several values \\
+             is a vector inside it, e.g. {.code list(0.1, 0.1, c(0.1, 3, 0))}."
     ))
+  }
+  items
+}
+
+#' Recycle a stage's per-metric setting across its `k` metrics
+#' @keywords internal
+ants_per_metric <- function(x, name, k, stage) {
+  if (length(x) == 0L) return(rep(NA, k))
+  if (length(x) == 1L) return(rep(x, k))
+  if (length(x) != k) {
+    cli::cli_abort(
+      "Stage {stage}: {.arg {name}} has {length(x)} values for {k} metric{?s}."
+    )
   }
   x
 }
 
-#' Format a CLI number without scientific notation (ANTs reads "1e+05" as 1)
+#' Format CLI numbers without scientific notation (ANTs reads "1e+05" as 1)
 #' @keywords internal
 ants_num <- function(x) {
   if (is.null(x)) return(NULL)
-  if (is.numeric(x)) return(format(x, scientific = FALSE, trim = TRUE, digits = 15))
-  as.character(x)
+  if (!is.numeric(x)) return(as.character(x))
+  vapply(x, function(e) format(e, scientific = FALSE, trim = TRUE, digits = 15), character(1),
+    USE.NAMES = FALSE)
+}
+
+#' Join a stage's values into one ANTs token ("100x70x50", "0.1,3,0")
+#' @keywords internal
+ants_join <- function(x, sep) {
+  if (is.null(x)) return(NULL)
+  paste(ants_num(x), collapse = sep)
 }
 
 #' @keywords internal
 ants_given <- function(x) {
   !is.null(x) && !(length(x) == 1L && (is.na(x) || !nzchar(as.character(x))))
+}
+
+#' Image for metric `j` of a stage: images pair with the metrics within a
+#' stage (as in nipype), with a single image shared by every metric
+#' @keywords internal
+ants_channel_images <- function(x, name, max_metrics) {
+  x <- as.character(ants_as_vec(x))
+  if (length(x) > 1L && length(x) != max_metrics) {
+    cli::cli_abort(c(
+      "{.arg {name}} has {length(x)} images but the stage with the most metrics has {max_metrics}.",
+      "i" = "Images pair with the metrics within a stage (image j serves metric j), \\
+             not with stages. Give one image, or one per metric."
+    ))
+  }
+  x
 }
 
 #' Default gradient step parameters for an ANTs transform
@@ -133,7 +175,7 @@ render_ants_registration_core <- function(command, pre_stage, stages, post_stage
     stage_args <- c(
       stage_args,
       "--transform", s$transform,
-      "--metric", s$metric,
+      as.vector(rbind("--metric", s$metric)),
       "--convergence", s$convergence,
       "--shrink-factors", s$shrink,
       "--smoothing-sigmas", s$smoothing
@@ -174,20 +216,29 @@ render_ants_registration <- function(call) {
   if (n_stages == 0L) {
     cli::cli_abort("{.arg transforms} must name at least one registration stage.")
   }
-  stage <- function(name, value = v[[name]]) ants_stage_values(value, name, n_stages)
-  metrics <- stage("metric")
+  stage <- function(name, value = v[[name]], allow_missing = FALSE) {
+    ants_stage_values(value, name, n_stages, allow_missing)
+  }
+  metrics <- stage("metric", v$metric %||% "MI")
+  if (is.null(metrics)) {
+    cli::cli_abort("{.arg metric} must name at least one metric per stage.")
+  }
   weights <- stage("metric_weight", v$metric_weight %||% vd$metric_weight)
-  fixed <- stage("fixed_image")
-  moving <- stage("moving_image")
+  bins <- stage("radius_or_number_of_bins")
+  sampling <- stage("sampling_strategy", allow_missing = TRUE)
+  percentages <- stage("sampling_percentage", allow_missing = TRUE)
   shrink <- stage("shrink_factors")
   smooth <- stage("smoothing_sigmas")
+  units <- stage("sigma_units")
   params <- stage("transform_parameters")
   iterations <- stage("number_of_iterations")
   thresholds <- stage("convergence_threshold")
   windows <- stage("convergence_window_size")
-  bins <- stage("radius_or_number_of_bins")
-  sampling <- stage("sampling_strategy")
-  percentages <- stage("sampling_percentage")
+
+  max_metrics <- max(lengths(metrics))
+  fixed <- ants_channel_images(v$fixed_image, "fixed_image", max_metrics)
+  moving <- ants_channel_images(v$moving_image, "moving_image", max_metrics)
+  channel <- function(images, j) images[[if (length(images) == 1L) 1L else j]]
 
   # ---- global flags before stages ----
   prefix <- vd$output_transform_prefix %||% "transform"
@@ -262,29 +313,77 @@ render_ants_registration <- function(call) {
       transform <- tname
     } else {
       transform <- sprintf("%s[%s]", tname,
-        ants_num(tparams %||% ants_default_transform_params(tname)))
+        ants_join(tparams %||% ants_default_transform_params(tname), ","))
     }
 
-    mname <- as.character(pick(metrics, i) %||% "MI")
-    strategy <- pick(sampling, i)
-    if (!is.null(strategy) && !strategy %in% c("None", "Regular", "Random")) {
-      cli::cli_abort(
-        "Stage {i}: {.arg sampling_strategy} must be None, Regular, or Random, got {.val {strategy}}."
+    # One --metric per metric of the stage; the stage's images, weights, bins,
+    # and sampling pair with its metrics position by position.
+    mnames <- as.character(metrics[[i]])
+    k <- length(mnames)
+    w <- ants_per_metric(pick(weights, i) %||% 1, "metric_weight", k, i)
+    bi <- pick(bins, i)
+    # Bins (MI/Mattes) and radius (CC) mean different things, so one value is
+    # only shared across metrics of one type.
+    if (length(bi) == 1L && k > 1L && length(unique(mnames)) > 1L) {
+      cli::cli_abort(c(
+        "Stage {i}: one {.arg radius_or_number_of_bins} value cannot serve metrics {.val {mnames}}.",
+        "i" = "Give one value per metric, e.g. {.code c(56, 4)} for Mattes and CC."
+      ))
+    }
+    b <- ants_per_metric(bi, "radius_or_number_of_bins", k, i)
+    strategy <- ants_per_metric(pick(sampling, i), "sampling_strategy", k, i)
+    percentage <- ants_per_metric(pick(percentages, i), "sampling_percentage", k, i)
+    # antsRegistration applies the first metric's sampling to the whole stage,
+    # so differing per-metric sampling would silently not happen.
+    if (length(unique(as.character(strategy))) > 1L ||
+        length(unique(as.character(percentage))) > 1L) {
+      cli::cli_abort(c(
+        "Stage {i}: the metrics' sampling settings differ.",
+        "i" = "antsRegistration samples every metric of a stage the way the first metric says; \\
+               give each metric the same sampling_strategy and sampling_percentage."
+      ))
+    }
+    metric_tokens <- character(k)
+    for (j in seq_len(k)) {
+      st <- if (is.na(strategy[[j]])) NULL else as.character(strategy[[j]])
+      if (!is.null(st) && !st %in% c("None", "Regular", "Random")) {
+        cli::cli_abort(
+          "Stage {i}: {.arg sampling_strategy} must be None, Regular, or Random, got {.val {st}}."
+        )
+      }
+      pc <- if (is.na(percentage[[j]])) NULL else percentage[[j]]
+      if (!is.null(pc)) {
+        if (is.null(st)) {
+          cli::cli_abort("Stage {i}: {.arg sampling_percentage} requires {.arg sampling_strategy}.")
+        }
+        pct <- suppressWarnings(as.numeric(pc))
+        if (is.na(pct) || pct <= 0 || pct > 1) {
+          cli::cli_abort("Stage {i}: {.arg sampling_percentage} must be in (0, 1], got {.val {pc}}.")
+        }
+      }
+      bj <- if (is.na(b[[j]])) ants_default_metric_bins(mnames[[j]]) else b[[j]]
+      metric_tokens[[j]] <- ants_metric_token(
+        mnames[[j]], channel(fixed, j), channel(moving, j),
+        ants_num(w[[j]]), ants_num(bj), st, ants_num(pc)
       )
     }
-    percentage <- pick(percentages, i)
-    if (!is.null(percentage)) {
-      if (is.null(strategy)) {
-        cli::cli_abort("Stage {i}: {.arg sampling_percentage} requires {.arg sampling_strategy}.")
+
+    sh <- ants_join(shrink[[i]], "x")
+    sm <- ants_join(smooth[[i]], "x")
+    unit <- pick(units, i)
+    if (!is.null(unit)) {
+      if (!unit %in% c("vox", "mm")) {
+        cli::cli_abort("Stage {i}: {.arg sigma_units} must be vox or mm, got {.val {unit}}.")
       }
-      pct <- suppressWarnings(as.numeric(percentage))
-      if (is.na(pct) || pct <= 0 || pct > 1) {
-        cli::cli_abort("Stage {i}: {.arg sampling_percentage} must be in (0, 1], got {.val {percentage}}.")
+      has_unit <- regmatches(sm, regexpr("(vox|mm)$", sm))
+      if (length(has_unit) == 0L) {
+        sm <- paste0(sm, unit)
+      } else if (!identical(has_unit, unit)) {
+        cli::cli_abort(
+          "Stage {i}: smoothing_sigmas {.val {sm}} already says {.val {has_unit}}, but sigma_units is {.val {unit}}."
+        )
       }
     }
-
-    sh <- as.character(shrink[[i]])
-    sm <- as.character(smooth[[i]])
 
     # antsRegistration requires equal multiresolution level counts per stage;
     # a mismatch is a fatal CLI error, so fail early with a clear message.
@@ -298,7 +397,7 @@ render_ants_registration <- function(call) {
         "i" = "antsRegistration requires equal level counts per stage."
       ))
     }
-    iters <- as.character(pick(iterations, i) %||% ants_default_convergence_iters(nl_sh))
+    iters <- ants_join(pick(iterations, i), "x") %||% ants_default_convergence_iters(nl_sh)
     nl_it <- ants_n_levels(iters)
     if (nl_it != nl_sh) {
       cli::cli_abort(c(
@@ -310,12 +409,7 @@ render_ants_registration <- function(call) {
 
     stages[[i]] <- list(
       transform = transform,
-      metric = ants_metric_token(
-        mname, as.character(fixed[[i]]), as.character(moving[[i]]),
-        ants_num(pick(weights, i) %||% "1"),
-        ants_num(pick(bins, i) %||% ants_default_metric_bins(mname)),
-        strategy, ants_num(percentage)
-      ),
+      metric = metric_tokens,
       convergence = ants_convergence_token(
         iters,
         ants_num(pick(thresholds, i) %||% "1e-6"),

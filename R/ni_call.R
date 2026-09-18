@@ -83,6 +83,27 @@ normalize_input_values <- function(spec, values) {
   values
 }
 
+#' Normalise a nested list input to one atomic vector per element
+#'
+#' Matrix rows are elements (`jsonlite::fromJSON()` simplifies equal-length
+#' ladders to a matrix), and `NULL` entries inside an element become `NA` so
+#' they keep their position (`read_json()` yields `NULL` for JSON `null`).
+#' @keywords internal
+ni_nested_items <- function(value) {
+  if (is.null(value)) return(NULL)
+  items <- if (is.matrix(value)) {
+    lapply(seq_len(nrow(value)), function(i) value[i, ])
+  } else if (is.list(value)) {
+    value
+  } else {
+    as.list(value)
+  }
+  unname(lapply(items, function(x) {
+    if (is.list(x)) x <- lapply(x, function(e) if (is.null(e)) NA else e)
+    unlist(x, use.names = FALSE)
+  }))
+}
+
 #' Coerce ni_result / ni_call inputs into file paths
 #' @keywords internal
 coerce_input_value <- function(value, def, param_name) {
@@ -91,6 +112,12 @@ coerce_input_value <- function(value, def, param_name) {
   }
   if (inherits(value, "ni_call")) {
     return(extract_pipeline_path(value$outputs, param_name))
+  }
+
+  # Nested list inputs keep one atomic vector per element (e.g. per stage);
+  # flattening would merge a multi-metric stage into several stages.
+  if (def$type == "list" && isTRUE(def$nested)) {
+    return(ni_nested_items(value))
   }
 
   if (def$type == "list" && is.list(value)) {

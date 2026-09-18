@@ -2,11 +2,11 @@
 % Please edit documentation in R/render_ants.R
 \name{ants_num}
 \alias{ants_num}
-\title{Format a CLI number without scientific notation (ANTs reads "1e+05" as 1)}
+\title{Format CLI numbers without scientific notation (ANTs reads "1e+05" as 1)}
 \usage{
 ants_num(x)
 }
 \description{
-Format a CLI number without scientific notation (ANTs reads "1e+05" as 1)
+Format CLI numbers without scientific notation (ANTs reads "1e+05" as 1)
 }
 \keyword{internal}

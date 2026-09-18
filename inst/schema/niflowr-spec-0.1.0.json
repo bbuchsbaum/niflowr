@@ -72,6 +72,11 @@
           "enum": ["file", "dir", "string", "int", "double", "bool", "enum"],
           "description": "Element type for list inputs."
         },
+        "nested": {
+          "type": "boolean",
+          "default": false,
+          "description": "For list inputs: keep each element as its own vector (e.g. one element per registration stage) instead of flattening. Not supported for path items."
+        },
         "path_sentinels": {
           "type": "array",
           "items": {

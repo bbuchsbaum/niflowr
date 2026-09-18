@@ -47,7 +47,7 @@ type_desc <- function(def) {
     bool = "Logical",
     flag = "Logical",
     enum = paste0("Character; one of: ", paste0('"', def$choices, '"', collapse = ", ")),
-    list = "Character or numeric vector",
+    list = if (isTRUE(def$nested)) "Vector, or list with one element per stage (an element may itself be a vector)" else "Character or numeric vector",
     "Character"
   )
   if (!is.null(def$desc)) {

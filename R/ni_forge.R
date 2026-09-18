@@ -540,6 +540,7 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
   for (nm in names(inputs)) {
     def <- inputs[[nm]]
     if (!identical(def$type, "list")) next
+    if (isTRUE(def$nested)) next
     if (!is.null(def$items_type) && nzchar(def$items_type)) next
     if (!is_path_list_input(nm, def)) next
 
@@ -559,6 +560,22 @@ lint_single_spec <- function(spec, path, fix = FALSE) {
         code = "path_list_items_type",
         param = nm,
         message = "Path-like list input should set items_type=file."
+      )
+    }
+  }
+
+  # 11) Nested lists are not path-mapped for containers and the generic argstr
+  # loop cannot render them, so they need non-path items and a custom renderer.
+  for (nm in names(inputs)) {
+    def <- inputs[[nm]]
+    if (!isTRUE(def$nested)) next
+    if (!identical(def$type, "list") || (def$items_type %||% "") %in% c("file", "dir") ||
+        is.null(spec$render)) {
+      add_finding(
+        level = "error",
+        code = "invalid_nested_list",
+        param = nm,
+        message = "nested applies only to non-path list inputs of specs with a custom renderer."
       )
     }
   }
@@ -754,14 +771,20 @@ synthesize_value <- function(name, def) {
     return("value")
   }
   if (type == "list") {
-    if (!is.null(def$choices) && length(def$choices) > 0) {
-      return(rep_len(unlist(def$choices, use.names = FALSE), 2L))
+    items <- if (!is.null(def$choices) && length(def$choices) > 0) {
+      rep_len(unlist(def$choices, use.names = FALSE), 2L)
+    } else {
+      switch(def$items_type %||% "",
+        int = c(1L, 2L),
+        double = c(0.25, 0.5),
+        c("item1", "item2")
+      )
     }
-    return(switch(def$items_type %||% "",
-      int = c(1L, 2L),
-      double = c(0.25, 0.5),
-      c("item1", "item2")
-    ))
+    # Nested: a one-value element and a two-value element. The two values are
+    # equal so renderers that require agreement within an element (e.g. ANTs
+    # per-stage sampling) still accept them.
+    if (isTRUE(def$nested)) return(list(items[1], rep(items[1], 2L)))
+    return(items)
   }
 
   paste0(name, "_value")
