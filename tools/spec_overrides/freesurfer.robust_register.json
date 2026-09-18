@@ -1,0 +1,66 @@
+{
+  "outputs": {
+    "half_source": {
+      "type": "file",
+      "path": {
+        "from_input": "half_source"
+      },
+      "must_exist": false
+    },
+    "half_source_xfm": {
+      "type": "file",
+      "path": {
+        "from_input": "half_source_xfm"
+      },
+      "must_exist": false
+    },
+    "half_targ": {
+      "type": "file",
+      "path": {
+        "from_input": "half_targ"
+      },
+      "must_exist": false
+    },
+    "half_targ_xfm": {
+      "type": "file",
+      "path": {
+        "from_input": "half_targ_xfm"
+      },
+      "must_exist": false
+    },
+    "half_weights": {
+      "type": "file",
+      "path": {
+        "from_input": "half_weights"
+      },
+      "must_exist": false
+    },
+    "out_reg_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_reg_file"
+      },
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "lta",
+        "source": "source_file",
+        "target": "target_file"
+      }
+    },
+    "registered_file": {
+      "type": "file",
+      "path": {
+        "from_input": "registered_file"
+      },
+      "must_exist": false
+    },
+    "weights_file": {
+      "type": "file",
+      "path": {
+        "from_input": "weights_file"
+      },
+      "must_exist": false
+    }
+  }
+}

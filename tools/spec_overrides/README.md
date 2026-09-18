@@ -31,6 +31,7 @@ An override is a partial spec; only the keys you set are merged. Examples:
 - `fsl.mcflirt.json` — marks `out_file` with `cli.strip_ext` and declares gated side outputs (`.par`, `.mat/`, `_mean_reg`, …).
 - `fsl.image_meants.json` — keeps text-matrix `-o` paths intact (`strip_ext=false`) and requires `out_file` to exist.
 - `freesurfer.mp_rto_mni305.json` — restores a hand-written input description Nipype doesn't provide.
+- `fsl.flirt.json`, `ants.ai.json`, `afni.allineate.json`, `freesurfer.mri_coreg.json`, … — declare `outputs.<name>.transform` (kind, format, source/target inputs) so `ni_read_transform()` never guesses a registration output's convention. Because `outputs` is replaced wholesale, these overrides carry the full outputs map.
 
 To customize a Nipype spec, add or edit the matching file here, rerun the
 pipeline above, and commit the regenerated `inst/specs/<id>.json`.

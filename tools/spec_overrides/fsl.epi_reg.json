@@ -19,7 +19,13 @@
       "path": {
         "computed": true
       },
-      "must_exist": true
+      "must_exist": true,
+      "transform": {
+        "kind": "affine",
+        "format": "fsl",
+        "source": "epi",
+        "target": "t1_brain"
+      }
     },
     "wmseg": {
       "type": "file",

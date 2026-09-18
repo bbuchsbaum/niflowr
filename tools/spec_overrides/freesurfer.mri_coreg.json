@@ -6,5 +6,34 @@
     "saturation_threshold": {
       "type": "double"
     }
+  },
+  "outputs": {
+    "out_lta_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_lta_file"
+      },
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "lta",
+        "source": "source_file",
+        "target": "reference_file"
+      }
+    },
+    "out_params_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_params_file"
+      },
+      "must_exist": false
+    },
+    "out_reg_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_reg_file"
+      },
+      "must_exist": false
+    }
   }
 }

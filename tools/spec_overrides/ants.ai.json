@@ -1,0 +1,17 @@
+{
+  "outputs": {
+    "output_transform": {
+      "type": "file",
+      "path": {
+        "from_input": "output_transform"
+      },
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "itk",
+        "source": "moving_image",
+        "target": "fixed_image"
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "outputs": {
+    "allcostx": {
+      "type": "file",
+      "path": {
+        "from_input": "allcostx"
+      },
+      "must_exist": false
+    },
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": false
+    },
+    "out_matrix": {
+      "type": "file",
+      "path": {
+        "from_input": "out_matrix"
+      },
+      "must_exist": false,
+      "transform": {
+        "kind": "affine",
+        "format": "afni",
+        "source": "in_file",
+        "target": "reference"
+      }
+    },
+    "out_param_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_param_file"
+      },
+      "must_exist": false
+    },
+    "out_weight_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_weight_file"
+      },
+      "must_exist": false
+    }
+  }
+}
