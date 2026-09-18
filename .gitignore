@@ -14,3 +14,4 @@ docs/
 vignettes/extending-niflowr.html
 .niflowr/
 smoke-results/
+.DS_Store
