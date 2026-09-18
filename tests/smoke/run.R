@@ -38,13 +38,17 @@ seg <- run("fast","fsl.fast",in_files=brain$outputs$out_file,out_basename=out("s
 mc <- run("mcflirt","fsl.mcflirt",in_file=infile("bold.nii.gz"),out_file=out("mc.nii.gz"),save_mats=TRUE,save_plots=TRUE)
 flirt <- run("flirt","fsl.flirt",in_file=brain$outputs$out_file,reference=brain$outputs$out_file,
   out_file=out("registered.nii.gz"),out_matrix_file=out("registered.mat"),dof=6)
-# Three-stage Rigid + Affine + SyN exercising every per-stage antsRegistration input.
-antsreg <- run("ants_registration","ants.registration",fixed_image=brain$outputs$out_file,
-  moving_image=n4$outputs$output_image,transforms=c("Rigid","Affine","SyN"),
-  transform_parameters=c("0.1","0.1","0.1,3,0"),metric=c("Mattes","Mattes","CC"),metric_weight=1,
-  radius_or_number_of_bins=c(32,32,2),sampling_strategy=c("Regular","Regular","None"),
-  sampling_percentage=c(0.25,0.25,1),number_of_iterations=c("20x10","20x10","10x5"),
-  convergence_threshold=1e-6,convergence_window_size=5,shrink_factors="2x1",smoothing_sigmas="1x0vox",
+# Three-stage Rigid + Affine + SyN exercising every per-stage antsRegistration
+# input. The SyN stage combines two metrics, each on its own image pair
+# (intensity, then brain mask), as niworkflows' multi-metric presets do.
+antsreg <- run("ants_registration","ants.registration",
+  fixed_image=c(brain$outputs$out_file,brain$outputs$mask_file),
+  moving_image=c(n4$outputs$output_image,infile("mask.nii.gz")),transforms=c("Rigid","Affine","SyN"),
+  transform_parameters=list(0.1,0.1,c(0.1,3,0)),metric=list("Mattes","Mattes",c("Mattes","CC")),
+  metric_weight=list(1,1,c(0.5,0.5)),radius_or_number_of_bins=list(32,32,c(32,2)),
+  sampling_strategy=list("Regular","Regular",c(NA,NA)),sampling_percentage=list(0.25,0.25,c(NA,NA)),
+  number_of_iterations=list(c(20,10),c(20,10),c(10,5)),convergence_threshold=1e-6,convergence_window_size=5,
+  shrink_factors=list(c(2,1)),smoothing_sigmas=list(c(1,0)),sigma_units="vox",
   use_histogram_matching=TRUE,winsorize_lower_quantile=0.005,winsorize_upper_quantile=0.995,
   output_transform_prefix=out("antsreg_"),output_warped_image=out("antsreg_Warped.nii.gz"),
   output_inverse_warped_image=out("antsreg_InverseWarped.nii.gz"),write_composite_transform=TRUE,
