@@ -4,9 +4,11 @@
 \alias{fsl_needs_strip_ext}
 \title{Whether an FSL input should strip known extensions before CLI rendering}
 \usage{
-fsl_needs_strip_ext(name, argstr)
+fsl_needs_strip_ext(name, argstr, desc = NULL)
 }
 \description{
-Whether an FSL input should strip known extensions before CLI rendering
+Image outs (BET/MCFLIRT \code{-out}, FAST basenames, …) strip \code{.nii.gz} so FSL
+does not double-append \code{FSLOUTPUTTYPE}. Text/matrix outs keep the full path
+(e.g. \verb{fslmeants -o mean.txt}).
 }
 \keyword{internal}

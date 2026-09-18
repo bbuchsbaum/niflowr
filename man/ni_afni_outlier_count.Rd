@@ -45,7 +45,7 @@ ni_afni_outlier_count(
 
 \item{polort}{Integer. detrend each voxel timeseries with polynomials}
 
-\item{qthr}{Character. indicate a value for q to compute alpha}
+\item{qthr}{Numeric. indicate a value for q to compute alpha}
 
 \item{.cwd}{Working directory override.}
 
