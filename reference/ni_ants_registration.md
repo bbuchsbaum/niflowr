@@ -30,6 +30,16 @@ ni_ants_registration(
   winsorize_lower_quantile = 0,
   winsorize_upper_quantile = 1,
   write_composite_transform = FALSE,
+  transform_parameters = NULL,
+  number_of_iterations = NULL,
+  convergence_threshold = NULL,
+  convergence_window_size = NULL,
+  radius_or_number_of_bins = NULL,
+  sampling_strategy = NULL,
+  sampling_percentage = NULL,
+  use_histogram_matching = NULL,
+  output_warped_image = NULL,
+  output_inverse_warped_image = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -73,11 +83,16 @@ ni_ants_registration(
 
 - transforms:
 
-  Character or numeric vector **Required.**
+  Character or numeric vector. Transform for each stage, in order: a
+  bare name such as Rigid, Affine, or SyN (parameters from
+  transform_parameters, else 0.1 for linear and 0.1,3,0 for deformable
+  transforms), or a complete bracketed token such as SyN\[0.2,3,0\] that
+  is passed through unchanged. **Required.**
 
 - args:
 
-  Character. Additional parameters to the command
+  Character. Extra global antsRegistration arguments, appended once
+  after all stages. Use the per-stage inputs for stage settings.
 
 - collapse_output_transforms:
 
@@ -151,15 +166,80 @@ ni_ants_registration(
 
 - winsorize_lower_quantile:
 
-  Character. The Lower quantile to clip image ranges
+  Numeric. Lower quantile for clipping image intensities before
+  registration (0 disables the lower clip).
 
 - winsorize_upper_quantile:
 
-  Character. The Upper quantile to clip image ranges
+  Numeric. Upper quantile for clipping image intensities before
+  registration (1 disables the upper clip).
 
 - write_composite_transform:
 
   Logical
+
+- transform_parameters:
+
+  Character or numeric vector. Per-stage transform parameters as
+  comma-separated strings, e.g. c("0.1", "0.1", "0.1,3,0") for Rigid,
+  Affine, SyN (gradient step, update field variance, total field
+  variance). One value per stage, or a single value applied to every
+  stage.
+
+- number_of_iterations:
+
+  Character or numeric vector. Per-stage iterations for each resolution
+  level, e.g. "1000x500x250x100"; the level count must match
+  shrink_factors. Defaults to a 1000x500x250x100... ladder truncated to
+  the stage's levels. One value per stage, or a single value applied to
+  every stage.
+
+- convergence_threshold:
+
+  Character or numeric vector. Per-stage convergence threshold (default
+  1e-6). One value per stage, or a single value applied to every stage.
+
+- convergence_window_size:
+
+  Character or numeric vector. Per-stage convergence window size
+  (default 10). One value per stage, or a single value applied to every
+  stage.
+
+- radius_or_number_of_bins:
+
+  Character or numeric vector. Per-stage number of histogram bins for MI
+  and Mattes metrics, or neighbourhood radius for CC (defaults: 32 for
+  MI/Mattes, 4 for CC, 1 for GC). One value per stage, or a single value
+  applied to every stage.
+
+- sampling_strategy:
+
+  Character or numeric vector. Per-stage metric sampling strategy:
+  "None", "Regular", or "Random". Omitted means antsRegistration's dense
+  default. One value per stage, or a single value applied to every
+  stage.
+
+- sampling_percentage:
+
+  Character or numeric vector. Per-stage fraction of voxels sampled by
+  the metric, in (0, 1\]; requires sampling_strategy. One value per
+  stage, or a single value applied to every stage.
+
+- use_histogram_matching:
+
+  Logical. Histogram-match the images before registration.
+  antsRegistration applies a single setting to every stage. Omitted
+  leaves antsRegistration's default.
+
+- output_warped_image:
+
+  Character; file path. Path for the moving image resampled into the
+  fixed image space.
+
+- output_inverse_warped_image:
+
+  Character; file path. Path for the fixed image resampled into the
+  moving image space; requires output_warped_image.
 
 - .cwd:
 
