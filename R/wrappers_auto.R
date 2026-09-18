@@ -4866,8 +4866,8 @@ ni_ants_n4_bias_field_correction <- function(copy_header = FALSE,
 #' @param moving_image Character or numeric vector. Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to **Required.**
 #' @param shrink_factors Character or numeric vector **Required.**
 #' @param smoothing_sigmas Character or numeric vector **Required.**
-#' @param transforms Character or numeric vector **Required.**
-#' @param args Character. Additional parameters to the command
+#' @param transforms Character or numeric vector. Transform for each stage, in order: a bare name such as Rigid, Affine, or SyN (parameters from transform_parameters, else 0.1 for linear and 0.1,3,0 for deformable transforms), or a complete bracketed token such as SyN\[0.2,3,0\] that is passed through unchanged. **Required.**
+#' @param args Character. Extra global antsRegistration arguments, appended once after all stages. Use the per-stage inputs for stage settings.
 #' @param collapse_output_transforms Logical. Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
 #' @param dimension Character; one of: "3", "2". image dimension (2 or 3)
 #' @param fixed_image_mask Character; file path. Mask used to limit metric sampling region of the fixed imagein all stages
@@ -4881,9 +4881,19 @@ ni_ants_n4_bias_field_correction <- function(copy_header = FALSE,
 #' @param restore_state Character; file path. Filename for restoring the internal restorable state of the registration
 #' @param save_state Character; file path. Filename for saving the internal restorable state of the registration
 #' @param verbose Logical
-#' @param winsorize_lower_quantile Character. The Lower quantile to clip image ranges
-#' @param winsorize_upper_quantile Character. The Upper quantile to clip image ranges
+#' @param winsorize_lower_quantile Numeric. Lower quantile for clipping image intensities before registration (0 disables the lower clip).
+#' @param winsorize_upper_quantile Numeric. Upper quantile for clipping image intensities before registration (1 disables the upper clip).
 #' @param write_composite_transform Logical
+#' @param transform_parameters Character or numeric vector. Per-stage transform parameters as comma-separated strings, e.g. c("0.1", "0.1", "0.1,3,0") for Rigid, Affine, SyN (gradient step, update field variance, total field variance). One value per stage, or a single value applied to every stage.
+#' @param number_of_iterations Character or numeric vector. Per-stage iterations for each resolution level, e.g. "1000x500x250x100"; the level count must match shrink_factors. Defaults to a 1000x500x250x100... ladder truncated to the stage's levels. One value per stage, or a single value applied to every stage.
+#' @param convergence_threshold Character or numeric vector. Per-stage convergence threshold (default 1e-6). One value per stage, or a single value applied to every stage.
+#' @param convergence_window_size Character or numeric vector. Per-stage convergence window size (default 10). One value per stage, or a single value applied to every stage.
+#' @param radius_or_number_of_bins Character or numeric vector. Per-stage number of histogram bins for MI and Mattes metrics, or neighbourhood radius for CC (defaults: 32 for MI/Mattes, 4 for CC, 1 for GC). One value per stage, or a single value applied to every stage.
+#' @param sampling_strategy Character or numeric vector. Per-stage metric sampling strategy: "None", "Regular", or "Random". Omitted means antsRegistration's dense default. One value per stage, or a single value applied to every stage.
+#' @param sampling_percentage Character or numeric vector. Per-stage fraction of voxels sampled by the metric, in (0, 1\]; requires sampling_strategy. One value per stage, or a single value applied to every stage.
+#' @param use_histogram_matching Logical. Histogram-match the images before registration. antsRegistration applies a single setting to every stage. Omitted leaves antsRegistration's default.
+#' @param output_warped_image Character; file path. Path for the moving image resampled into the fixed image space.
+#' @param output_inverse_warped_image Character; file path. Path for the fixed image resampled into the moving image space; requires output_warped_image.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .engine Execution engine override.
@@ -4916,13 +4926,23 @@ ni_ants_registration <- function(fixed_image,
                      winsorize_lower_quantile = 0,
                      winsorize_upper_quantile = 1,
                      write_composite_transform = FALSE,
+                     transform_parameters = NULL,
+                     number_of_iterations = NULL,
+                     convergence_threshold = NULL,
+                     convergence_window_size = NULL,
+                     radius_or_number_of_bins = NULL,
+                     sampling_strategy = NULL,
+                     sampling_percentage = NULL,
+                     use_histogram_matching = NULL,
+                     output_warped_image = NULL,
+                     output_inverse_warped_image = NULL,
                      .cwd = NULL,
                      .env = NULL,
                      .engine = NULL,
                      .profile = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("ants.registration", fixed_image = fixed_image, metric = metric, metric_weight = metric_weight, moving_image = moving_image, shrink_factors = shrink_factors, smoothing_sigmas = smoothing_sigmas, transforms = transforms, args = args, collapse_output_transforms = collapse_output_transforms, dimension = dimension, fixed_image_mask = fixed_image_mask, float = float, initial_moving_transform = initial_moving_transform, initial_moving_transform_com = initial_moving_transform_com, initialize_transforms_per_stage = initialize_transforms_per_stage, interpolation = interpolation, output_transform_prefix = output_transform_prefix, random_seed = random_seed, restore_state = restore_state, save_state = save_state, verbose = verbose, winsorize_lower_quantile = winsorize_lower_quantile, winsorize_upper_quantile = winsorize_upper_quantile, write_composite_transform = write_composite_transform, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
+  call <- ni_call("ants.registration", fixed_image = fixed_image, metric = metric, metric_weight = metric_weight, moving_image = moving_image, shrink_factors = shrink_factors, smoothing_sigmas = smoothing_sigmas, transforms = transforms, args = args, collapse_output_transforms = collapse_output_transforms, dimension = dimension, fixed_image_mask = fixed_image_mask, float = float, initial_moving_transform = initial_moving_transform, initial_moving_transform_com = initial_moving_transform_com, initialize_transforms_per_stage = initialize_transforms_per_stage, interpolation = interpolation, output_transform_prefix = output_transform_prefix, random_seed = random_seed, restore_state = restore_state, save_state = save_state, verbose = verbose, winsorize_lower_quantile = winsorize_lower_quantile, winsorize_upper_quantile = winsorize_upper_quantile, write_composite_transform = write_composite_transform, transform_parameters = transform_parameters, number_of_iterations = number_of_iterations, convergence_threshold = convergence_threshold, convergence_window_size = convergence_window_size, radius_or_number_of_bins = radius_or_number_of_bins, sampling_strategy = sampling_strategy, sampling_percentage = sampling_percentage, use_histogram_matching = use_histogram_matching, output_warped_image = output_warped_image, output_inverse_warped_image = output_inverse_warped_image, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 

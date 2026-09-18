@@ -52,6 +52,15 @@ validate_inputs <- function(spec, values) {
         ))
       }
     }
+    # Per-element choices for list inputs
+    if (def$type == "list" && !is.null(def$choices)) {
+      bad <- setdiff(as.character(val), as.character(unlist(def$choices)))
+      if (length(bad) > 0) {
+        errors <- c(errors, cli::format_inline(
+          "Each element of {.arg {nm}} must be one of {.val {unlist(def$choices)}}, got {.val {bad}}."
+        ))
+      }
+    }
   }
 
   # 3. XOR constraints

@@ -37,12 +37,41 @@ ants_as_vec <- function(x) {
   unlist(x, use.names = FALSE)
 }
 
-#' Recycle element i (1-based) of a vector, wrapping around
+#' Per-stage values for a staged antsRegistration input
+#'
+#' Element `i` is stage `i`'s value and a single value applies to every stage.
+#' Any other length is a mis-specified stage list, so it is an error rather
+#' than silently wrapped around onto the wrong stages.
 #' @keywords internal
-ants_recycle <- function(x, i) {
-  n <- length(x)
-  if (n == 0) return(NA)
-  x[[((i - 1L) %% n) + 1L]]
+ants_stage_values <- function(x, name, n_stages) {
+  x <- ants_as_vec(x)
+  if (length(x) == 0L) return(NULL)
+  if (anyNA(x)) {
+    cli::cli_abort("{.arg {name}} contains missing values.")
+  }
+  if (length(x) == 1L) return(rep(x, n_stages))
+  if (length(x) != n_stages) {
+    cli::cli_abort(c(
+      "{.arg {name}} has {length(x)} values but there {?is/are} {n_stages} stage{?s}.",
+      "i" = "Give one value per stage, or a single value for all stages.",
+      "i" = "Nested lists are flattened, so write multi-value stages as one string \\
+             (e.g. {.val 0.1,3,0} or {.val 100x70x50x20})."
+    ))
+  }
+  x
+}
+
+#' Format a CLI number without scientific notation (ANTs reads "1e+05" as 1)
+#' @keywords internal
+ants_num <- function(x) {
+  if (is.null(x)) return(NULL)
+  if (is.numeric(x)) return(format(x, scientific = FALSE, trim = TRUE, digits = 15))
+  as.character(x)
+}
+
+#' @keywords internal
+ants_given <- function(x) {
+  !is.null(x) && !(length(x) == 1L && (is.na(x) || !nzchar(as.character(x))))
 }
 
 #' Default gradient step parameters for an ANTs transform
@@ -140,29 +169,58 @@ render_ants_registration <- function(call) {
   if (is.list(command)) command <- unlist(command)
   command <- command[[1]]
 
-  transforms <- ants_as_vec(v$transforms)
-  metrics <- ants_as_vec(v$metric)
-  weights <- ants_as_vec(v$metric_weight %||% vd$metric_weight)
-  fixed <- ants_as_vec(v$fixed_image)
-  moving <- ants_as_vec(v$moving_image)
-  shrink <- ants_as_vec(v$shrink_factors)
-  smooth <- ants_as_vec(v$smoothing_sigmas)
+  transforms <- as.character(ants_as_vec(v$transforms))
   n_stages <- length(transforms)
+  if (n_stages == 0L) {
+    cli::cli_abort("{.arg transforms} must name at least one registration stage.")
+  }
+  stage <- function(name, value = v[[name]]) ants_stage_values(value, name, n_stages)
+  metrics <- stage("metric")
+  weights <- stage("metric_weight", v$metric_weight %||% vd$metric_weight)
+  fixed <- stage("fixed_image")
+  moving <- stage("moving_image")
+  shrink <- stage("shrink_factors")
+  smooth <- stage("smoothing_sigmas")
+  params <- stage("transform_parameters")
+  iterations <- stage("number_of_iterations")
+  thresholds <- stage("convergence_threshold")
+  windows <- stage("convergence_window_size")
+  bins <- stage("radius_or_number_of_bins")
+  sampling <- stage("sampling_strategy")
+  percentages <- stage("sampling_percentage")
 
   # ---- global flags before stages ----
   prefix <- vd$output_transform_prefix %||% "transform"
+  output <- prefix
+  if (ants_given(v$output_warped_image)) {
+    inverse <- if (ants_given(v$output_inverse_warped_image)) v$output_inverse_warped_image
+    output <- sprintf("[%s]", paste(c(prefix, v$output_warped_image, inverse), collapse = ","))
+  } else if (ants_given(v$output_inverse_warped_image)) {
+    cli::cli_abort("{.arg output_inverse_warped_image} requires {.arg output_warped_image}.")
+  }
   pre <- c("--dimensionality", as.character(vd$dimension %||% 3))
-  pre <- c(pre, "--output", prefix)
+  pre <- c(pre, "--output", output)
   pre <- c(pre, "--interpolation", as.character(vd$interpolation %||% "Linear"))
 
-  if (!is.null(v$winsorize_lower_quantile) || !is.null(v$winsorize_upper_quantile)) {
-    lo <- v$winsorize_lower_quantile %||% 0
-    hi <- v$winsorize_upper_quantile %||% 1
-    pre <- c(pre, "--winsorize-image-intensities", sprintf("[%s,%s]", lo, hi))
+  # [0,1] is antsRegistration's own no-op default, so only emit a real clip.
+  lo <- as.numeric(vd$winsorize_lower_quantile %||% 0)
+  hi <- as.numeric(vd$winsorize_upper_quantile %||% 1)
+  if (!(lo >= 0 && hi <= 1 && lo < hi)) {
+    cli::cli_abort(
+      "Winsorize quantiles must satisfy 0 <= lower < upper <= 1, got [{lo}, {hi}]."
+    )
+  }
+  if (lo > 0 || hi < 1) {
+    pre <- c(pre, "--winsorize-image-intensities", sprintf("[%s,%s]", ants_num(lo), ants_num(hi)))
   }
 
   collapse <- ants_bool01(vd$collapse_output_transforms)
   if (!is.null(collapse)) pre <- c(pre, "--collapse-output-transforms", collapse)
+
+  # antsRegistration honours only the last --use-histogram-matching and applies
+  # it to every stage, so this is one global setting, not a per-stage one.
+  histogram <- ants_bool01(v$use_histogram_matching)
+  if (!is.null(histogram)) pre <- c(pre, "--use-histogram-matching", histogram)
 
   if (isTRUE(vd$initialize_transforms_per_stage)) {
     pre <- c(pre, "--initialize-transforms-per-stage", "1")
@@ -189,17 +247,44 @@ render_ants_registration <- function(call) {
   }
 
   # ---- per-stage groups ----
+  pick <- function(x, i) if (is.null(x)) NULL else x[[i]]
   stages <- vector("list", n_stages)
   for (i in seq_len(n_stages)) {
     tname <- transforms[[i]]
-    mname <- as.character(ants_recycle(metrics, i))
-    if (is.na(mname)) mname <- "MI"
-    fimg <- as.character(ants_recycle(fixed, i))
-    mimg <- as.character(ants_recycle(moving, i))
-    wt <- as.character(ants_recycle(weights, i))
-    if (is.na(wt)) wt <- "1"
-    sh <- as.character(ants_recycle(shrink, i))
-    sm <- as.character(ants_recycle(smooth, i))
+    tparams <- pick(params, i)
+    if (grepl("[", tname, fixed = TRUE)) {
+      if (!is.null(tparams)) {
+        cli::cli_abort(c(
+          "Stage {i}: transform {.val {tname}} already carries its parameters.",
+          "i" = "Use a bare transform name with {.arg transform_parameters}, or bracketed parameters alone."
+        ))
+      }
+      transform <- tname
+    } else {
+      transform <- sprintf("%s[%s]", tname,
+        ants_num(tparams %||% ants_default_transform_params(tname)))
+    }
+
+    mname <- as.character(pick(metrics, i) %||% "MI")
+    strategy <- pick(sampling, i)
+    if (!is.null(strategy) && !strategy %in% c("None", "Regular", "Random")) {
+      cli::cli_abort(
+        "Stage {i}: {.arg sampling_strategy} must be None, Regular, or Random, got {.val {strategy}}."
+      )
+    }
+    percentage <- pick(percentages, i)
+    if (!is.null(percentage)) {
+      if (is.null(strategy)) {
+        cli::cli_abort("Stage {i}: {.arg sampling_percentage} requires {.arg sampling_strategy}.")
+      }
+      pct <- suppressWarnings(as.numeric(percentage))
+      if (is.na(pct) || pct <= 0 || pct > 1) {
+        cli::cli_abort("Stage {i}: {.arg sampling_percentage} must be in (0, 1], got {.val {percentage}}.")
+      }
+    }
+
+    sh <- as.character(shrink[[i]])
+    sm <- as.character(smooth[[i]])
 
     # antsRegistration requires equal multiresolution level counts per stage;
     # a mismatch is a fatal CLI error, so fail early with a clear message.
@@ -213,11 +298,29 @@ render_ants_registration <- function(call) {
         "i" = "antsRegistration requires equal level counts per stage."
       ))
     }
+    iters <- as.character(pick(iterations, i) %||% ants_default_convergence_iters(nl_sh))
+    nl_it <- ants_n_levels(iters)
+    if (nl_it != nl_sh) {
+      cli::cli_abort(c(
+        "Stage {i}: mismatched multiresolution level counts.",
+        "x" = "number_of_iterations {.val {iters}} has {nl_it} level{?s}; \\
+               shrink_factors {.val {sh}} has {nl_sh} level{?s}."
+      ))
+    }
 
     stages[[i]] <- list(
-      transform = sprintf("%s[%s]", tname, ants_default_transform_params(tname)),
-      metric = ants_metric_token(mname, fimg, mimg, wt, ants_default_metric_bins(mname)),
-      convergence = ants_convergence_token(ants_default_convergence_iters(ants_n_levels(sh))),
+      transform = transform,
+      metric = ants_metric_token(
+        mname, as.character(fixed[[i]]), as.character(moving[[i]]),
+        ants_num(pick(weights, i) %||% "1"),
+        ants_num(pick(bins, i) %||% ants_default_metric_bins(mname)),
+        strategy, ants_num(percentage)
+      ),
+      convergence = ants_convergence_token(
+        iters,
+        ants_num(pick(thresholds, i) %||% "1e-6"),
+        ants_num(pick(windows, i) %||% "10")
+      ),
       shrink = sh,
       smoothing = sm
     )
@@ -233,7 +336,8 @@ render_ants_registration <- function(call) {
   if (isTRUE(v$float)) post <- c(post, "--float", "1")
   if (isTRUE(v$verbose)) post <- c(post, "-v")
 
-  # Raw passthrough of any extra antsRegistration arguments.
+  # Raw passthrough of extra global antsRegistration arguments, appended once
+  # after every stage. Per-stage settings have dedicated inputs above.
   if (!is.null(v$args) && nzchar(as.character(v$args))) {
     post <- c(post, strsplit(trimws(as.character(v$args)), "\\s+")[[1]])
   }

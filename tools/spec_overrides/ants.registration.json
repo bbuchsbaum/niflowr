@@ -3,6 +3,176 @@
   "inputs": {
     "output_transform_prefix": {
       "type": "file"
+    },
+    "transforms": {
+      "desc": "Transform for each stage, in order: a bare name such as Rigid, Affine, or SyN (parameters from transform_parameters, else 0.1 for linear and 0.1,3,0 for deformable transforms), or a complete bracketed token such as SyN[0.2,3,0] that is passed through unchanged."
+    },
+    "transform_parameters": {
+      "type": "list",
+      "desc": "Per-stage transform parameters as comma-separated strings, e.g. c(\"0.1\", \"0.1\", \"0.1,3,0\") for Rigid, Affine, SyN (gradient step, update field variance, total field variance). One value per stage, or a single value applied to every stage.",
+      "constraints": {
+        "requires": [
+          "transforms"
+        ]
+      }
+    },
+    "number_of_iterations": {
+      "type": "list",
+      "desc": "Per-stage iterations for each resolution level, e.g. \"1000x500x250x100\"; the level count must match shrink_factors. Defaults to a 1000x500x250x100... ladder truncated to the stage's levels. One value per stage, or a single value applied to every stage."
+    },
+    "convergence_threshold": {
+      "type": "list",
+      "items_type": "double",
+      "desc": "Per-stage convergence threshold (default 1e-6). One value per stage, or a single value applied to every stage."
+    },
+    "convergence_window_size": {
+      "type": "list",
+      "items_type": "int",
+      "desc": "Per-stage convergence window size (default 10). One value per stage, or a single value applied to every stage."
+    },
+    "radius_or_number_of_bins": {
+      "type": "list",
+      "items_type": "int",
+      "desc": "Per-stage number of histogram bins for MI and Mattes metrics, or neighbourhood radius for CC (defaults: 32 for MI/Mattes, 4 for CC, 1 for GC). One value per stage, or a single value applied to every stage."
+    },
+    "sampling_strategy": {
+      "type": "list",
+      "items_type": "string",
+      "desc": "Per-stage metric sampling strategy: \"None\", \"Regular\", or \"Random\". Omitted means antsRegistration's dense default. One value per stage, or a single value applied to every stage.",
+      "choices": [
+        "None",
+        "Regular",
+        "Random"
+      ]
+    },
+    "sampling_percentage": {
+      "type": "list",
+      "items_type": "double",
+      "desc": "Per-stage fraction of voxels sampled by the metric, in (0, 1]; requires sampling_strategy. One value per stage, or a single value applied to every stage.",
+      "constraints": {
+        "requires": [
+          "sampling_strategy"
+        ]
+      }
+    },
+    "use_histogram_matching": {
+      "type": "bool",
+      "desc": "Histogram-match the images before registration. antsRegistration applies a single setting to every stage. Omitted leaves antsRegistration's default."
+    },
+    "output_warped_image": {
+      "type": "file",
+      "role": "output",
+      "desc": "Path for the moving image resampled into the fixed image space."
+    },
+    "output_inverse_warped_image": {
+      "type": "file",
+      "role": "output",
+      "desc": "Path for the fixed image resampled into the moving image space; requires output_warped_image.",
+      "constraints": {
+        "requires": [
+          "output_warped_image"
+        ]
+      }
+    },
+    "winsorize_lower_quantile": {
+      "type": "double",
+      "desc": "Lower quantile for clipping image intensities before registration (0 disables the lower clip).",
+      "default": 0,
+      "validate": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "winsorize_upper_quantile": {
+      "type": "double",
+      "desc": "Upper quantile for clipping image intensities before registration (1 disables the upper clip).",
+      "default": 1,
+      "validate": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "args": {
+      "desc": "Extra global antsRegistration arguments, appended once after all stages. Use the per-stage inputs for stage settings."
+    }
+  },
+  "outputs": {
+    "save_state": {
+      "type": "file",
+      "path": {
+        "from_input": "save_state"
+      },
+      "must_exist": false,
+      "when": {
+        "input": "save_state",
+        "not_in": [
+          ""
+        ]
+      }
+    },
+    "warped_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_warped_image"
+      },
+      "must_exist": true,
+      "when": {
+        "input": "output_warped_image",
+        "not_in": [
+          ""
+        ]
+      }
+    },
+    "inverse_warped_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_inverse_warped_image"
+      },
+      "must_exist": true,
+      "when": {
+        "input": "output_inverse_warped_image",
+        "not_in": [
+          ""
+        ]
+      }
+    },
+    "composite_transform": {
+      "type": "file",
+      "path": {
+        "template": "{output_transform_prefix}Composite.h5"
+      },
+      "must_exist": true,
+      "when": {
+        "input": "write_composite_transform",
+        "in": [
+          true
+        ]
+      },
+      "transform": {
+        "kind": "composite",
+        "format": "ants_h5",
+        "source": "moving_image",
+        "target": "fixed_image"
+      }
+    },
+    "inverse_composite_transform": {
+      "type": "file",
+      "path": {
+        "template": "{output_transform_prefix}InverseComposite.h5"
+      },
+      "must_exist": true,
+      "when": {
+        "input": "write_composite_transform",
+        "in": [
+          true
+        ]
+      },
+      "transform": {
+        "kind": "composite",
+        "format": "ants_h5",
+        "source": "fixed_image",
+        "target": "moving_image"
+      }
     }
   }
 }

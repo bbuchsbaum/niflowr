@@ -753,7 +753,16 @@ synthesize_value <- function(name, def) {
     if (!is.null(def$choices) && length(def$choices) > 0) return(def$choices[[1]])
     return("value")
   }
-  if (type == "list") return(c("item1", "item2"))
+  if (type == "list") {
+    if (!is.null(def$choices) && length(def$choices) > 0) {
+      return(rep_len(unlist(def$choices, use.names = FALSE), 2L))
+    }
+    return(switch(def$items_type %||% "",
+      int = c(1L, 2L),
+      double = c(0.25, 0.5),
+      c("item1", "item2")
+    ))
+  }
 
   paste0(name, "_value")
 }
