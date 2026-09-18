@@ -16,7 +16,9 @@ resource_files:
 - albers-header.html
 
 vignette: |
-  %\VignetteIndexEntry{From fMRIPrep to post-processing with niflowr} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{From fMRIPrep to post-processing with niflowr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}

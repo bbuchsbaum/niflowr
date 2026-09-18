@@ -16,7 +16,9 @@ resource_files:
 - albers-header.html
 
 vignette: |
-  %\VignetteIndexEntry{Extending niflowr: wrap a new tool} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Extending niflowr: wrap a new tool}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}

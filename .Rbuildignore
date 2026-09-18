@@ -9,9 +9,7 @@
 ^docs$
 ^pkgdown$
 ^\.github$
-^vignettes/albers\.css$
-^vignettes/albers\.js$
-^vignettes/albers-header\.html$
+^vignettes/extending-niflowr[.]html$
 ^\.albersdown\.bak$
 ^doc$
 ^Meta$

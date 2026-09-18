@@ -16,7 +16,9 @@ resource_files:
 - albers-header.html
 
 vignette: |
-  %\VignetteIndexEntry{From OpenNeuro to analysis with niflowr} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{From OpenNeuro to analysis with niflowr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

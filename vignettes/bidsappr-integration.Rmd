@@ -16,7 +16,9 @@ resource_files:
 - albers-header.html
 
 vignette: |
-  %\VignetteIndexEntry{Building BIDS Apps with niflowr and bidsappr} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Building BIDS Apps with niflowr and bidsappr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

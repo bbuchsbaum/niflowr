@@ -26,10 +26,12 @@ Imports:
     yaml,
     utils
 Suggests:
+    albersdown,
     bidsappr,
     bidser,
     crew,
     fmriprepper,
+    ggplot2,
     knitr,
     neuroim2,
     neurotransform,

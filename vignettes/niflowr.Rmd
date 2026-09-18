@@ -16,7 +16,9 @@ resource_files:
 - albers-header.html
 
 vignette: |
-  %\VignetteIndexEntry{Getting started with niflowr} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Getting started with niflowr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
