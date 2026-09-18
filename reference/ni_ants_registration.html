@@ -81,6 +81,7 @@
 <span>  use_histogram_matching <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_warped_image <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_inverse_warped_image <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sigma_units <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .cwd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .env <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .engine <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -95,27 +96,27 @@
 
 
 <dl><dt id="arg-fixed-image">fixed_image<a class="anchor" aria-label="anchor" href="#arg-fixed-image"></a></dt>
-<dd><p>Character or numeric vector. Image to which the moving_image should be transformed(usually a structural image) <strong>Required.</strong></p></dd>
+<dd><p>Character or numeric vector. Fixed (reference) image. Images pair with the metrics within a stage, as in nipype: give one image for every metric, or one per metric of the stage with the most metrics (image j serves metric j, e.g. an intensity image and its Laplacian). <strong>Required.</strong></p></dd>
 
 
 <dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
-<dd><p>Character or numeric vector. the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier. <strong>Required.</strong></p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Metric for each stage (MI, Mattes, CC, MeanSquares, Demons, GC). A stage with several metrics is a vector inside a list, e.g. list("Mattes", "Mattes", c("Mattes", "CC")); ANTs combines them by metric_weight. <strong>Required.</strong></p></dd>
 
 
 <dt id="arg-metric-weight">metric_weight<a class="anchor" aria-label="anchor" href="#arg-metric-weight"></a></dt>
-<dd><p>Character or numeric vector. the metric weight(s) for each stage. The weights must sum to 1 per stage.</p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Relative weight of each metric; antsRegistration normalises a stage's weights. One element per stage, or a single element for every stage. A multi-metric stage takes one weight per metric, e.g. list(1, 1, c(0.5, 0.5)); a single value weights them equally.</p></dd>
 
 
 <dt id="arg-moving-image">moving_image<a class="anchor" aria-label="anchor" href="#arg-moving-image"></a></dt>
-<dd><p>Character or numeric vector. Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to <strong>Required.</strong></p></dd>
+<dd><p>Character or numeric vector. Moving image, registered into the fixed image's space. Pairs with metrics like fixed_image: one image, or one per metric. <strong>Required.</strong></p></dd>
 
 
 <dt id="arg-shrink-factors">shrink_factors<a class="anchor" aria-label="anchor" href="#arg-shrink-factors"></a></dt>
-<dd><p>Character or numeric vector <strong>Required.</strong></p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Shrink factor per resolution level, each element as "8x4x2x1" or c(8, 4, 2, 1), e.g. list(c(2, 1), c(8, 4, 2, 1)). One element per stage, or a single element for every stage. <strong>Required.</strong></p></dd>
 
 
 <dt id="arg-smoothing-sigmas">smoothing_sigmas<a class="anchor" aria-label="anchor" href="#arg-smoothing-sigmas"></a></dt>
-<dd><p>Character or numeric vector <strong>Required.</strong></p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Smoothing sigma per resolution level, each element as "3x2x1x0vox" or c(3, 2, 1, 0) with sigma_units. One element per stage, or a single element for every stage. <strong>Required.</strong></p></dd>
 
 
 <dt id="arg-transforms">transforms<a class="anchor" aria-label="anchor" href="#arg-transforms"></a></dt>
@@ -191,11 +192,11 @@
 
 
 <dt id="arg-transform-parameters">transform_parameters<a class="anchor" aria-label="anchor" href="#arg-transform-parameters"></a></dt>
-<dd><p>Character or numeric vector. Per-stage transform parameters as comma-separated strings, e.g. c("0.1", "0.1", "0.1,3,0") for Rigid, Affine, SyN (gradient step, update field variance, total field variance). One value per stage, or a single value applied to every stage.</p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Transform parameters, each element as "0.1,3,0" or c(0.1, 3, 0), e.g. list(0.1, 0.1, c(0.1, 3, 0)) for Rigid, Affine, SyN (gradient step, update field variance, total field variance). A plain vector gives one number per stage. Defaults to 0.1 for linear and 0.1,3,0 for deformable transforms. One element per stage, or a single element for every stage.</p></dd>
 
 
 <dt id="arg-number-of-iterations">number_of_iterations<a class="anchor" aria-label="anchor" href="#arg-number-of-iterations"></a></dt>
-<dd><p>Character or numeric vector. Per-stage iterations for each resolution level, e.g. "1000x500x250x100"; the level count must match shrink_factors. Defaults to a 1000x500x250x100... ladder truncated to the stage's levels. One value per stage, or a single value applied to every stage.</p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Iterations per resolution level, each element as "100x70x50x20" or c(100, 70, 50, 20), e.g. list(c(100, 100), c(100, 100), c(100, 70, 50, 20)); the level count must match shrink_factors. Defaults to a 1000x500x250x100... ladder truncated to the stage's levels. One element per stage, or a single element for every stage.</p></dd>
 
 
 <dt id="arg-convergence-threshold">convergence_threshold<a class="anchor" aria-label="anchor" href="#arg-convergence-threshold"></a></dt>
@@ -207,15 +208,15 @@
 
 
 <dt id="arg-radius-or-number-of-bins">radius_or_number_of_bins<a class="anchor" aria-label="anchor" href="#arg-radius-or-number-of-bins"></a></dt>
-<dd><p>Character or numeric vector. Per-stage number of histogram bins for MI and Mattes metrics, or neighbourhood radius for CC (defaults: 32 for MI/Mattes, 4 for CC, 1 for GC). One value per stage, or a single value applied to every stage.</p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Number of histogram bins for MI and Mattes, or neighbourhood radius for CC (defaults: 32 for MI/Mattes, 4 for CC, 1 for GC). One element per stage, or a single element for every stage. A stage mixing metric types takes one value per metric, e.g. list(56, 56, c(56, 4)).</p></dd>
 
 
 <dt id="arg-sampling-strategy">sampling_strategy<a class="anchor" aria-label="anchor" href="#arg-sampling-strategy"></a></dt>
-<dd><p>Character or numeric vector. Per-stage metric sampling strategy: "None", "Regular", or "Random". Omitted means antsRegistration's dense default. One value per stage, or a single value applied to every stage.</p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Metric sampling strategy: "None", "Regular", or "Random"; NA omits sampling (antsRegistration's dense default). One element per stage, or a single element for every stage. antsRegistration samples every metric of a stage as its first metric says, so a multi-metric stage's entries must agree.</p></dd>
 
 
 <dt id="arg-sampling-percentage">sampling_percentage<a class="anchor" aria-label="anchor" href="#arg-sampling-percentage"></a></dt>
-<dd><p>Character or numeric vector. Per-stage fraction of voxels sampled by the metric, in (0, 1]; requires sampling_strategy. One value per stage, or a single value applied to every stage.</p></dd>
+<dd><p>Vector, or list with one element per stage (an element may itself be a vector). Fraction of voxels sampled by the metric, in (0, 1]; requires sampling_strategy, and NA omits it. One element per stage, or a single element for every stage. A multi-metric stage's entries must agree, as for sampling_strategy.</p></dd>
 
 
 <dt id="arg-use-histogram-matching">use_histogram_matching<a class="anchor" aria-label="anchor" href="#arg-use-histogram-matching"></a></dt>
@@ -228,6 +229,10 @@
 
 <dt id="arg-output-inverse-warped-image">output_inverse_warped_image<a class="anchor" aria-label="anchor" href="#arg-output-inverse-warped-image"></a></dt>
 <dd><p>Character; file path. Path for the fixed image resampled into the moving image space; requires output_warped_image.</p></dd>
+
+
+<dt id="arg-sigma-units">sigma_units<a class="anchor" aria-label="anchor" href="#arg-sigma-units"></a></dt>
+<dd><p>Character or numeric vector. Units appended to smoothing_sigmas that do not already end in vox or mm. One element per stage, or a single element for every stage.</p></dd>
 
 
 <dt id="arg--cwd">.cwd<a class="anchor" aria-label="anchor" href="#arg--cwd"></a></dt>

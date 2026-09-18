@@ -40,6 +40,7 @@ ni_ants_registration(
   use_histogram_matching = NULL,
   output_warped_image = NULL,
   output_inverse_warped_image = NULL,
+  sigma_units = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -53,33 +54,47 @@ ni_ants_registration(
 
 - fixed_image:
 
-  Character or numeric vector. Image to which the moving_image should be
-  transformed(usually a structural image) **Required.**
+  Character or numeric vector. Fixed (reference) image. Images pair with
+  the metrics within a stage, as in nipype: give one image for every
+  metric, or one per metric of the stage with the most metrics (image j
+  serves metric j, e.g. an intensity image and its Laplacian).
+  **Required.**
 
 - metric:
 
-  Character or numeric vector. the metric(s) to use for each stage. Note
-  that multiple metrics per stage are not supported in ANTS 1.9.1 and
-  earlier. **Required.**
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Metric for each stage (MI, Mattes, CC, MeanSquares, Demons,
+  GC). A stage with several metrics is a vector inside a list, e.g.
+  list("Mattes", "Mattes", c("Mattes", "CC")); ANTs combines them by
+  metric_weight. **Required.**
 
 - metric_weight:
 
-  Character or numeric vector. the metric weight(s) for each stage. The
-  weights must sum to 1 per stage.
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Relative weight of each metric; antsRegistration normalises a
+  stage's weights. One element per stage, or a single element for every
+  stage. A multi-metric stage takes one weight per metric, e.g. list(1,
+  1, c(0.5, 0.5)); a single value weights them equally.
 
 - moving_image:
 
-  Character or numeric vector. Image that will be registered to the
-  space of fixed_image. This is theimage on which the transformations
-  will be applied to **Required.**
+  Character or numeric vector. Moving image, registered into the fixed
+  image's space. Pairs with metrics like fixed_image: one image, or one
+  per metric. **Required.**
 
 - shrink_factors:
 
-  Character or numeric vector **Required.**
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Shrink factor per resolution level, each element as "8x4x2x1"
+  or c(8, 4, 2, 1), e.g. list(c(2, 1), c(8, 4, 2, 1)). One element per
+  stage, or a single element for every stage. **Required.**
 
 - smoothing_sigmas:
 
-  Character or numeric vector **Required.**
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Smoothing sigma per resolution level, each element as
+  "3x2x1x0vox" or c(3, 2, 1, 0) with sigma_units. One element per stage,
+  or a single element for every stage. **Required.**
 
 - transforms:
 
@@ -180,19 +195,22 @@ ni_ants_registration(
 
 - transform_parameters:
 
-  Character or numeric vector. Per-stage transform parameters as
-  comma-separated strings, e.g. c("0.1", "0.1", "0.1,3,0") for Rigid,
-  Affine, SyN (gradient step, update field variance, total field
-  variance). One value per stage, or a single value applied to every
-  stage.
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Transform parameters, each element as "0.1,3,0" or c(0.1, 3,
+  0), e.g. list(0.1, 0.1, c(0.1, 3, 0)) for Rigid, Affine, SyN (gradient
+  step, update field variance, total field variance). A plain vector
+  gives one number per stage. Defaults to 0.1 for linear and 0.1,3,0 for
+  deformable transforms. One element per stage, or a single element for
+  every stage.
 
 - number_of_iterations:
 
-  Character or numeric vector. Per-stage iterations for each resolution
-  level, e.g. "1000x500x250x100"; the level count must match
-  shrink_factors. Defaults to a 1000x500x250x100... ladder truncated to
-  the stage's levels. One value per stage, or a single value applied to
-  every stage.
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Iterations per resolution level, each element as
+  "100x70x50x20" or c(100, 70, 50, 20), e.g. list(c(100, 100), c(100,
+  100), c(100, 70, 50, 20)); the level count must match shrink_factors.
+  Defaults to a 1000x500x250x100... ladder truncated to the stage's
+  levels. One element per stage, or a single element for every stage.
 
 - convergence_threshold:
 
@@ -207,23 +225,28 @@ ni_ants_registration(
 
 - radius_or_number_of_bins:
 
-  Character or numeric vector. Per-stage number of histogram bins for MI
-  and Mattes metrics, or neighbourhood radius for CC (defaults: 32 for
-  MI/Mattes, 4 for CC, 1 for GC). One value per stage, or a single value
-  applied to every stage.
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Number of histogram bins for MI and Mattes, or neighbourhood
+  radius for CC (defaults: 32 for MI/Mattes, 4 for CC, 1 for GC). One
+  element per stage, or a single element for every stage. A stage mixing
+  metric types takes one value per metric, e.g. list(56, 56, c(56, 4)).
 
 - sampling_strategy:
 
-  Character or numeric vector. Per-stage metric sampling strategy:
-  "None", "Regular", or "Random". Omitted means antsRegistration's dense
-  default. One value per stage, or a single value applied to every
-  stage.
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Metric sampling strategy: "None", "Regular", or "Random"; NA
+  omits sampling (antsRegistration's dense default). One element per
+  stage, or a single element for every stage. antsRegistration samples
+  every metric of a stage as its first metric says, so a multi-metric
+  stage's entries must agree.
 
 - sampling_percentage:
 
-  Character or numeric vector. Per-stage fraction of voxels sampled by
-  the metric, in (0, 1\]; requires sampling_strategy. One value per
-  stage, or a single value applied to every stage.
+  Vector, or list with one element per stage (an element may itself be a
+  vector). Fraction of voxels sampled by the metric, in (0, 1\];
+  requires sampling_strategy, and NA omits it. One element per stage, or
+  a single element for every stage. A multi-metric stage's entries must
+  agree, as for sampling_strategy.
 
 - use_histogram_matching:
 
@@ -240,6 +263,12 @@ ni_ants_registration(
 
   Character; file path. Path for the fixed image resampled into the
   moving image space; requires output_warped_image.
+
+- sigma_units:
+
+  Character or numeric vector. Units appended to smoothing_sigmas that
+  do not already end in vox or mm. One element per stage, or a single
+  element for every stage.
 
 - .cwd:
 
