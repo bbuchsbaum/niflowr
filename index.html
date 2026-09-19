@@ -251,6 +251,17 @@
 <p>These helpers are adapters around existing BIDS datasets, derivatives, and packages. They are not a substitute for running fMRIPrep or another NiPreps app when that is the appropriate preprocessing tool.</p>
 </div>
 <div class="section level3">
+<h3 id="template-registration-you-can-check">Template registration you can check<a class="anchor" aria-label="anchor" href="#template-registration-you-can-check"></a>
+</h3>
+<p>An under-converged registration runs, writes a transform, and does not fold; it is wrong only in a way you see by measuring it.</p>
+<ul>
+<li>
+<code><a href="reference/ni_ants_register_to_template.html">ni_ants_register_to_template()</a></code> runs a pinned Rigid + Affine + SyN schedule for T1w-to-template registration at about 1 mm. The default <code>"precise"</code> schedule matched fMRIPrep 25.x’s T1w-to-MNI152NLin2009cAsym transform within noise, at about 17 minutes with 8 threads; <code>"testing"</code> exists only to exercise pipelines. <code><a href="reference/ni_ants_template_preset.html">ni_ants_template_preset()</a></code> shows each schedule with its provenance and cost. Neither is a default of <code><a href="reference/ni_ants_registration.html">ni_ants_registration()</a></code>.</li>
+<li>
+<code><a href="reference/ni_ants_registration_qa.html">ni_ants_registration_qa()</a></code> reports ANTs similarity costs inside a mask, brain-mask and label Dice after warping, and the Jacobian determinant’s minimum with counts of folded and non-finite voxels.</li>
+</ul>
+</div>
+<div class="section level3">
 <h3 id="introspection-and-diagnostics">Introspection and diagnostics<a class="anchor" aria-label="anchor" href="#introspection-and-diagnostics"></a>
 </h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">

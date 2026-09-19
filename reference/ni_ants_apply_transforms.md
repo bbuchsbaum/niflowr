@@ -6,16 +6,18 @@ ApplyTransforms, applied to an input image, transforms it according to a
 
 ``` r
 ni_ants_apply_transforms(
-  input_image,
+  output_image,
   reference_image,
   transforms,
   args = NULL,
   default_value = 0,
   dimension = NULL,
   float = FALSE,
+  input_image = NULL,
   input_image_type = NULL,
   interpolation = "Linear",
-  output_image = NULL,
+  invert_transform_flags = NULL,
+  print_out_composite_warp_file = FALSE,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -27,10 +29,10 @@ ni_ants_apply_transforms(
 
 ## Arguments
 
-- input_image:
+- output_image:
 
-  Character; file path. image to apply transformation to (generally a
-  coregistered functional) **Required.**
+  Character; file path. Output image, or the composed displacement field
+  when print_out_composite_warp_file is TRUE. **Required.**
 
 - reference_image:
 
@@ -39,9 +41,9 @@ ni_ants_apply_transforms(
 
 - transforms:
 
-  Character or numeric vector. transform files: will be applied in
-  reverse order. For example, the last specified transform will be
-  applied first. **Required.**
+  Character or numeric vector. Transform files, applied in reverse order
+  (the last is applied first), as antsApplyTransforms expects.
+  **Required.**
 
 - args:
 
@@ -61,6 +63,12 @@ ni_ants_apply_transforms(
 
   Logical. Use float instead of double for computations.
 
+- input_image:
+
+  Character; file path. Image to transform. Not needed when
+  print_out_composite_warp_file writes the composed displacement field
+  instead.
+
 - input_image_type:
 
   Character; one of: "0", "1", "2", "3". Option specifying the input
@@ -70,11 +78,19 @@ ni_ants_apply_transforms(
 
   Character; one of: "Linear", "NearestNeighbor", "CosineWindowedSinc",
   "WelchWindowedSinc", "HammingWindowedSinc", "LanczosWindowedSinc",
-  "MultiLabel", "Gaussian", "BSpline", "GenericLabel"
+  "MultiLabel", "Gaussian", "BSpline", "GenericLabel". Interpolation for
+  the output image; use NearestNeighbor or GenericLabel for masks and
+  label images.
 
-- output_image:
+- invert_transform_flags:
 
-  Character. output file name
+  Logical vector. Whether to invert each transform, one logical per
+  transform (linear transforms only).
+
+- print_out_composite_warp_file:
+
+  Logical. Write the composition of transforms as a displacement field
+  on the reference grid instead of a transformed image.
 
 - .cwd:
 

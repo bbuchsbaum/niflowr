@@ -146,9 +146,12 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_measure_image_similarity.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_multiply_images.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_n4_bias_field_correction.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_register_to_template.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration_qa.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration_syn_quick.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_resample_image_by_spacing.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_template_preset.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_threshold_image.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_transform_build.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_ants_warp_image_multi_transform.html</loc></url>
@@ -156,6 +159,7 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_bids_app.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_bids_inputs.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_call.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_check_same_grid.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_cmd.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_config.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_config_defaults.html</loc></url>
@@ -166,6 +170,7 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_convert_transform.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_dcm2niix_convert.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_deriv_path.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_dice.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_doctor.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_doctor_probe_docker_payload.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_doctor_profile_docker_fields.html</loc></url>
@@ -366,6 +371,8 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_x_fibres5.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_golden_cmdline_generate.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_inputs.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_jacobian_summary.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_label_dice.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_lint_specs.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_lock_read.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_lock_validate.html</loc></url>
@@ -373,11 +380,13 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_normalize_docker_entrypoint.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_normalize_docker_platform.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_outputs.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_parse_similarity.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_pin.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_plan.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_provenance.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_provenance_read.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_provenance_write.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_read_nifti.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_read_output.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_read_transform.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/ni_result.html</loc></url>
@@ -392,6 +401,8 @@
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/numeric_type_for_argstr.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/output_when_holds.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/populate_auto_output_inputs.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_ants_apply_transforms.html</loc></url>
+<url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_ants_measure_image_similarity.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_ants_registration.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_ants_registration_core.html</loc></url>
 <url><loc>https://bbuchsbaum.github.io/niflowr/reference/render_ants_transform_build.html</loc></url>

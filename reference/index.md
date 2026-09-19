@@ -220,12 +220,18 @@
   : ANTS MultiplyImages
 - [`ni_ants_n4_bias_field_correction()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_n4_bias_field_correction.md)
   : ANTS N4BiasFieldCorrection
+- [`ni_ants_register_to_template()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_register_to_template.md)
+  : Register a T1w image to a T1w template with a pinned preset
 - [`ni_ants_registration()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration.md)
   : ANTS Registration
+- [`ni_ants_registration_qa()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration_qa.md)
+  : Measure how well a registration aligned
 - [`ni_ants_registration_syn_quick()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_registration_syn_quick.md)
   : ANTS RegistrationSynQuick
 - [`ni_ants_resample_image_by_spacing()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_resample_image_by_spacing.md)
   : ANTS ResampleImageBySpacing
+- [`ni_ants_template_preset()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_template_preset.md)
+  : Read a pinned T1w-to-template registration preset
 - [`ni_ants_threshold_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_threshold_image.md)
   : ANTS ThresholdImage
 - [`ni_ants_transform_build()`](https://bbuchsbaum.github.io/niflowr/reference/ni_ants_transform_build.md)

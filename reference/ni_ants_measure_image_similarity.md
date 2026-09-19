@@ -10,10 +10,13 @@ ni_ants_measure_image_similarity(
   metric,
   moving_image,
   radius_or_number_of_bins,
-  sampling_percentage,
   args = NULL,
-  dimension = NULL,
+  dimension = 3,
   fixed_image_mask = NULL,
+  sampling_percentage = NULL,
+  metric_weight = 1,
+  sampling_strategy = NULL,
+  moving_image_mask = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -42,13 +45,8 @@ ni_ants_measure_image_similarity(
 
 - radius_or_number_of_bins:
 
-  Integer. The number of bins in each stage for the MI and Mattes
-  metric, or the radius for other metrics **Required.**
-
-- sampling_percentage:
-
-  Character. Percentage of points accessible to the sampling strategy
-  over which to optimize the metric. **Required.**
+  Integer. Number of histogram bins for MI and Mattes, or neighbourhood
+  radius for CC. **Required.**
 
 - args:
 
@@ -61,8 +59,29 @@ ni_ants_measure_image_similarity(
 
 - fixed_image_mask:
 
-  Character; file path. mask used to limit metric sampling region of the
-  fixed image
+  Character; file path. Mask limiting the voxels the metric considers,
+  in fixed-image space. MeasureImageSimilarity ignores a mask it cannot
+  read, so the path must exist.
+
+- sampling_percentage:
+
+  Numeric. Fraction of voxels sampled, in (0, 1\]; requires
+  sampling_strategy.
+
+- metric_weight:
+
+  Numeric. Metric weight (not used by MeasureImageSimilarity; kept for
+  the metric token).
+
+- sampling_strategy:
+
+  Character; one of: "None", "Regular", "Random". Metric sampling
+  strategy; omitted means dense sampling (one sample per voxel).
+
+- moving_image_mask:
+
+  Character; file path. Mask in moving-image space; requires
+  fixed_image_mask.
 
 - .cwd:
 

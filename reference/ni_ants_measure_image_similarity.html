@@ -51,10 +51,13 @@
 <span>  <span class="va">metric</span>,</span>
 <span>  <span class="va">moving_image</span>,</span>
 <span>  <span class="va">radius_or_number_of_bins</span>,</span>
-<span>  <span class="va">sampling_percentage</span>,</span>
 <span>  args <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dimension <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dimension <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  fixed_image_mask <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sampling_percentage <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  metric_weight <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  sampling_strategy <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  moving_image_mask <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .cwd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .env <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .engine <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -81,11 +84,7 @@
 
 
 <dt id="arg-radius-or-number-of-bins">radius_or_number_of_bins<a class="anchor" aria-label="anchor" href="#arg-radius-or-number-of-bins"></a></dt>
-<dd><p>Integer. The number of bins in each stage for the MI and Mattes metric, or the radius for other metrics <strong>Required.</strong></p></dd>
-
-
-<dt id="arg-sampling-percentage">sampling_percentage<a class="anchor" aria-label="anchor" href="#arg-sampling-percentage"></a></dt>
-<dd><p>Character. Percentage of points accessible to the sampling strategy over which to optimize the metric. <strong>Required.</strong></p></dd>
+<dd><p>Integer. Number of histogram bins for MI and Mattes, or neighbourhood radius for CC. <strong>Required.</strong></p></dd>
 
 
 <dt id="arg-args">args<a class="anchor" aria-label="anchor" href="#arg-args"></a></dt>
@@ -97,7 +96,23 @@
 
 
 <dt id="arg-fixed-image-mask">fixed_image_mask<a class="anchor" aria-label="anchor" href="#arg-fixed-image-mask"></a></dt>
-<dd><p>Character; file path. mask used to limit metric sampling region of the fixed image</p></dd>
+<dd><p>Character; file path. Mask limiting the voxels the metric considers, in fixed-image space. MeasureImageSimilarity ignores a mask it cannot read, so the path must exist.</p></dd>
+
+
+<dt id="arg-sampling-percentage">sampling_percentage<a class="anchor" aria-label="anchor" href="#arg-sampling-percentage"></a></dt>
+<dd><p>Numeric. Fraction of voxels sampled, in (0, 1]; requires sampling_strategy.</p></dd>
+
+
+<dt id="arg-metric-weight">metric_weight<a class="anchor" aria-label="anchor" href="#arg-metric-weight"></a></dt>
+<dd><p>Numeric. Metric weight (not used by MeasureImageSimilarity; kept for the metric token).</p></dd>
+
+
+<dt id="arg-sampling-strategy">sampling_strategy<a class="anchor" aria-label="anchor" href="#arg-sampling-strategy"></a></dt>
+<dd><p>Character; one of: "None", "Regular", "Random". Metric sampling strategy; omitted means dense sampling (one sample per voxel).</p></dd>
+
+
+<dt id="arg-moving-image-mask">moving_image_mask<a class="anchor" aria-label="anchor" href="#arg-moving-image-mask"></a></dt>
+<dd><p>Character; file path. Mask in moving-image space; requires fixed_image_mask.</p></dd>
 
 
 <dt id="arg--cwd">.cwd<a class="anchor" aria-label="anchor" href="#arg--cwd"></a></dt>
