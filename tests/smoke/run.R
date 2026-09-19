@@ -58,5 +58,30 @@ run_python(c("-c",paste0("import nibabel as n,numpy as p,sys; i=n.load(sys.argv[
   seg$outputs$tissue_class_map,out("wm.nii.gz")))
 epi <- run("epi_reg","fsl.epi_reg",epi=flirt$outputs$out_file,t1_head=n4$outputs$output_image,
   t1_brain=brain$outputs$out_file,wmseg=out("wm.nii.gz"),out_base=out("epi"))
+# Pinned T1w-to-template preset (the testing schedule, so it runs in seconds) on
+# the phantom shifted by two voxels. Its QA report must show finite costs, no
+# folding, and a registration that beats the unregistered images.
+shift2 <- function(name, to) {
+  img <- RNifti::readNifti(infile(name)); a <- as.array(img); b <- a; b[] <- 0
+  b[3:48, , ] <- a[1:46, , ]; RNifti::writeNifti(b, infile(to), template = img); infile(to)
+}
+moving <- shift2("t1.nii.gz", "t1_shifted.nii.gz")
+moving_mask <- shift2("mask.nii.gz", "mask_shifted.nii.gz")
+tpl_plan <- ni_ants_register_to_template(infile("t1.nii.gz"),moving,out("tpl_"),preset="testing",
+  random_seed=1,dry_run=TRUE,echo=FALSE,.engine="docker",.cwd=file.path(root,"work","template"))
+tpl <- ni_run(tpl_plan$call,timeout=300,echo=TRUE,log_dir=file.path(root,"logs"))
+results[["template"]] <- list(outputs=tpl$outputs,provenance=tpl$provenance)
+jsonlite::write_json(results,file.path(root,"results.json"),auto_unbox=TRUE,pretty=TRUE,null="null")
+qa <- ni_ants_registration_qa(tpl,fixed_mask=infile("mask.nii.gz"),moving_mask=moving_mask,timeout=300)
+print(qa)
+before_mi <- ni_parse_similarity(ni_run(ni_call("ants.measure_image_similarity",dimension=3,
+  fixed_image=infile("t1.nii.gz"),moving_image=moving,metric="MI",radius_or_number_of_bins=32L,
+  fixed_image_mask=infile("mask.nii.gz"),.engine="docker"),timeout=300,echo=FALSE)$runtime$stdout,"MI")
+before_dice <- ni_dice(ni_read_nifti(infile("mask.nii.gz"))>0,ni_read_nifti(moving_mask)>0)
+jsonlite::write_json(c(unclass(qa)[c("similarity","mask_dice","jacobian")],
+  list(unregistered=list(MI=before_mi,mask_dice=before_dice))),file.path(root,"qa.json"),
+  auto_unbox=TRUE,pretty=TRUE,digits=NA)
+stopifnot(all(is.finite(qa$similarity$value)),qa$jacobian$n_nonpositive==0,qa$jacobian$n_nonfinite==0,
+  qa$similarity$value[qa$similarity$metric=="MI"]<before_mi,qa$mask_dice>before_dice)
 run_python(c("tests/smoke/verify.py",root),echo=TRUE)
 writeLines(system2("git", c("rev-parse","HEAD"),stdout=TRUE), file.path(root,"revision.txt"))

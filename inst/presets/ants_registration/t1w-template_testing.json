@@ -1,0 +1,118 @@
+{
+  "name": "t1w-template_testing",
+  "title": "Testing T1w-to-template registration",
+  "intended_for": "Exercising pipelines and CI only. Deliberately under-converged: never use its transforms for analysis.",
+  "provenance": "Same stage structure as t1w-template_precise with a few iterations at two coarse levels, so runs finish in seconds.",
+  "cost": "Seconds on small images.",
+  "values": {
+    "dimension": 3,
+    "float": true,
+    "collapse_output_transforms": true,
+    "use_histogram_matching": true,
+    "winsorize_lower_quantile": 0.005,
+    "winsorize_upper_quantile": 0.995,
+    "initial_moving_transform_com": 1,
+    "transforms": [
+      "Rigid",
+      "Affine",
+      "SyN"
+    ],
+    "transform_parameters": [
+      [
+        0.1
+      ],
+      [
+        0.1
+      ],
+      [
+        0.1,
+        3,
+        0
+      ]
+    ],
+    "metric": [
+      "Mattes",
+      "Mattes",
+      "CC"
+    ],
+    "metric_weight": [
+      1,
+      1,
+      1
+    ],
+    "sampling_strategy": [
+      "Regular",
+      "Regular",
+      null
+    ],
+    "sampling_percentage": [
+      0.25,
+      0.25,
+      null
+    ],
+    "convergence_threshold": [
+      1e-06,
+      1e-06,
+      1e-06
+    ],
+    "convergence_window_size": [
+      10,
+      10,
+      10
+    ],
+    "sigma_units": [
+      "vox",
+      "vox",
+      "vox"
+    ],
+    "write_composite_transform": true,
+    "interpolation": "Linear",
+    "radius_or_number_of_bins": [
+      32,
+      32,
+      2
+    ],
+    "number_of_iterations": [
+      [
+        20,
+        10
+      ],
+      [
+        20,
+        10
+      ],
+      [
+        10,
+        5
+      ]
+    ],
+    "shrink_factors": [
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        2
+      ]
+    ],
+    "smoothing_sigmas": [
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ]
+  }
+}

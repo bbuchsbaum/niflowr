@@ -21,7 +21,7 @@ jobs:
           python-version: '3.12'
       - run: sudo apt-get update && sudo apt-get install -y libnode-dev
       - shell: Rscript {0}
-        run: install.packages(c("cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate", "processx", "yaml", "pkgload"))
+        run: install.packages(c("cli", "digest", "fs", "glue", "jsonlite", "jsonvalidate", "processx", "yaml", "pkgload", "RNifti"))
       # Install into, and hand the harness, the exact interpreter setup-python
       # provisioned (run.R also fixes its LD_LIBRARY_PATH; see there).
       - run: '"${{ steps.py.outputs.python-path }}" -m pip install numpy==2.2.6 nibabel==5.3.2'

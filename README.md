@@ -222,6 +222,21 @@ These helpers are adapters around existing BIDS datasets, derivatives, and
 packages. They are not a substitute for running fMRIPrep or another NiPreps app
 when that is the appropriate preprocessing tool.
 
+### Template registration you can check
+
+An under-converged registration runs, writes a transform, and does not fold;
+it is wrong only in a way you see by measuring it.
+
+- `ni_ants_register_to_template()` runs a pinned Rigid + Affine + SyN schedule
+  for T1w-to-template registration at about 1 mm. The default `"precise"`
+  schedule matched fMRIPrep 25.x's T1w-to-MNI152NLin2009cAsym transform within
+  noise, at about 17 minutes with 8 threads; `"testing"` exists only to
+  exercise pipelines. `ni_ants_template_preset()` shows each schedule with its
+  provenance and cost. Neither is a default of `ni_ants_registration()`.
+- `ni_ants_registration_qa()` reports ANTs similarity costs inside a mask,
+  brain-mask and label Dice after warping, and the Jacobian determinant's
+  minimum with counts of folded and non-finite voxels.
+
 ### Introspection and diagnostics
 
 ```r

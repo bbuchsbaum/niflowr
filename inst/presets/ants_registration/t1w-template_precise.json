@@ -1,0 +1,139 @@
+{
+  "name": "t1w-template_precise",
+  "title": "Precise T1w-to-template registration",
+  "intended_for": "Brain-extracted T1w to a brain-extracted T1w template (e.g. MNI152NLin2009cAsym res-01) at about 1 mm. Not for EPI-to-T1w, low-resolution, or non-brain data: CC radius 4 over five levels assumes that resolution and field of view.",
+  "provenance": "Schedule from bbuchsbaum/niflowr#29, shaped like niworkflows' precise T1w-to-MNI preset. With antsx/ants:v2.6.5 it matched fMRIPrep 25.x's T1w-to-MNI152NLin2009cAsym transform on two MSC participants (MI, CC, and brain-mask Dice within noise of fMRIPrep's, differences of either sign; query-target error median 0.19 mm, p95 0.75 mm, all 825 targets), where antsRegistrationSyN.sh -t s left a 3.62 mm median error.",
+  "cost": "About 17 min with 8 threads for a 1 mm T1w to MNI152NLin2009cAsym res-01, roughly 2.4 times antsRegistrationSyN.sh -t s.",
+  "values": {
+    "dimension": 3,
+    "float": true,
+    "collapse_output_transforms": true,
+    "use_histogram_matching": true,
+    "winsorize_lower_quantile": 0.005,
+    "winsorize_upper_quantile": 0.995,
+    "initial_moving_transform_com": 1,
+    "transforms": [
+      "Rigid",
+      "Affine",
+      "SyN"
+    ],
+    "transform_parameters": [
+      [
+        0.1
+      ],
+      [
+        0.1
+      ],
+      [
+        0.1,
+        3,
+        0
+      ]
+    ],
+    "metric": [
+      "Mattes",
+      "Mattes",
+      "CC"
+    ],
+    "metric_weight": [
+      1,
+      1,
+      1
+    ],
+    "sampling_strategy": [
+      "Regular",
+      "Regular",
+      null
+    ],
+    "sampling_percentage": [
+      0.25,
+      0.25,
+      null
+    ],
+    "convergence_threshold": [
+      1e-06,
+      1e-06,
+      1e-06
+    ],
+    "convergence_window_size": [
+      10,
+      10,
+      10
+    ],
+    "sigma_units": [
+      "vox",
+      "vox",
+      "vox"
+    ],
+    "write_composite_transform": true,
+    "interpolation": "LanczosWindowedSinc",
+    "radius_or_number_of_bins": [
+      56,
+      56,
+      4
+    ],
+    "number_of_iterations": [
+      [
+        1000,
+        500,
+        250,
+        100
+      ],
+      [
+        1000,
+        500,
+        250,
+        100
+      ],
+      [
+        100,
+        100,
+        70,
+        50,
+        20
+      ]
+    ],
+    "shrink_factors": [
+      [
+        8,
+        4,
+        2,
+        1
+      ],
+      [
+        8,
+        4,
+        2,
+        1
+      ],
+      [
+        10,
+        6,
+        4,
+        2,
+        1
+      ]
+    ],
+    "smoothing_sigmas": [
+      [
+        3,
+        2,
+        1,
+        0
+      ],
+      [
+        3,
+        2,
+        1,
+        0
+      ],
+      [
+        5,
+        3,
+        2,
+        1,
+        0
+      ]
+    ]
+  }
+}

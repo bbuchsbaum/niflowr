@@ -18,7 +18,11 @@ epi_reg, plus three-frame MCFLIRT and a three-stage Rigid + Affine + SyN
 `antsRegistration` that sets every per-stage input (transform parameters,
 iterations, convergence, metric bins, sampling, histogram matching), combines
 Mattes and CC on separate image pairs in the SyN stage, and writes warped
-images and composite `.h5` transforms. FAST's actual segmentation supplies the WM
+images and composite `.h5` transforms. The pinned T1w-to-template preset then
+registers a copy of the phantom shifted by two voxels with its testing
+schedule, and `ni_ants_registration_qa()` must report finite similarity costs,
+no folded or non-finite Jacobian voxels, and a lower MI cost and higher
+brain-mask Dice than the unregistered images (`qa.json`). FAST's actual segmentation supplies the WM
 input. The independent Python checker reads image bytes, dimensions, affines,
 frame counts, finite values, probability ranges, and matrices. It also checks
 that N4's corrected image multiplied by its bias field reconstructs the input
