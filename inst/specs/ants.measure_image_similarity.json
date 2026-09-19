@@ -22,18 +22,25 @@
       "cli": {
         "argstr": "--dimensionality %d",
         "position": 1
-      }
+      },
+      "default": 3
     },
     "fixed_image": {
       "type": "file",
       "desc": "Image to which the moving image is warped",
-      "required": true
+      "required": true,
+      "validate": {
+        "exists": true
+      }
     },
     "fixed_image_mask": {
       "type": "file",
-      "desc": "mask used to limit metric sampling region of the fixed image",
+      "desc": "Mask limiting the voxels the metric considers, in fixed-image space. MeasureImageSimilarity ignores a mask it cannot read, so the path must exist.",
       "cli": {
         "argstr": "%s"
+      },
+      "validate": {
+        "exists": true
       }
     },
     "metric": {
@@ -54,11 +61,14 @@
     "moving_image": {
       "type": "file",
       "desc": "Image to apply transformation to (generally a coregistered functional)",
-      "required": true
+      "required": true,
+      "validate": {
+        "exists": true
+      }
     },
     "radius_or_number_of_bins": {
       "type": "int",
-      "desc": "The number of bins in each stage for the MI and Mattes metric, or the radius for other metrics",
+      "desc": "Number of histogram bins for MI and Mattes, or neighbourhood radius for CC.",
       "required": true,
       "constraints": {
         "requires": [
@@ -67,12 +77,42 @@
       }
     },
     "sampling_percentage": {
-      "type": "string",
-      "desc": "Percentage of points accessible to the sampling strategy over which to optimize the metric.",
-      "required": true,
+      "type": "double",
+      "desc": "Fraction of voxels sampled, in (0, 1]; requires sampling_strategy.",
+      "required": false,
       "constraints": {
         "requires": [
-          "metric"
+          "sampling_strategy"
+        ]
+      },
+      "validate": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "metric_weight": {
+      "type": "double",
+      "default": 1,
+      "desc": "Metric weight (not used by MeasureImageSimilarity; kept for the metric token)."
+    },
+    "sampling_strategy": {
+      "type": "enum",
+      "choices": [
+        "None",
+        "Regular",
+        "Random"
+      ],
+      "desc": "Metric sampling strategy; omitted means dense sampling (one sample per voxel)."
+    },
+    "moving_image_mask": {
+      "type": "file",
+      "desc": "Mask in moving-image space; requires fixed_image_mask.",
+      "validate": {
+        "exists": true
+      },
+      "constraints": {
+        "requires": [
+          "fixed_image_mask"
         ]
       }
     }
@@ -86,5 +126,6 @@
     "nipype_class": "nipype.interfaces.ants.registration.MeasureImageSimilarity",
     "nipype_version": "1.10.0"
   },
-  "description": "Examples"
+  "description": "Examples",
+  "render": "ants_measure_image_similarity"
 }

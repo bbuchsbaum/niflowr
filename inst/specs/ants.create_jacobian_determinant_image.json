@@ -52,7 +52,8 @@
       "cli": {
         "argstr": "%s",
         "position": 2
-      }
+      },
+      "role": "output"
     },
     "useGeometric": {
       "type": "enum",
@@ -67,7 +68,15 @@
       }
     }
   },
-  "outputs": {},
+  "outputs": {
+    "jacobian_image": {
+      "type": "file",
+      "path": {
+        "from_input": "outputImage"
+      },
+      "must_exist": false
+    }
+  },
   "runtime": {
     "profile": "ants"
   },

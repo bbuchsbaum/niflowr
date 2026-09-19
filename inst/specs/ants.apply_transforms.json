@@ -40,8 +40,8 @@
     },
     "input_image": {
       "type": "file",
-      "desc": "image to apply transformation to (generally a coregistered functional)",
-      "required": true,
+      "desc": "Image to transform. Not needed when print_out_composite_warp_file writes the composed displacement field instead.",
+      "required": false,
       "cli": {
         "argstr": "--input %s"
       }
@@ -76,14 +76,17 @@
       ],
       "cli": {
         "argstr": "%s"
-      }
+      },
+      "desc": "Interpolation for the output image; use NearestNeighbor or GenericLabel for masks and label images."
     },
     "output_image": {
-      "type": "string",
-      "desc": "output file name",
+      "type": "file",
+      "desc": "Output image, or the composed displacement field when print_out_composite_warp_file is TRUE.",
       "cli": {
         "argstr": "--output %s"
-      }
+      },
+      "role": "output",
+      "required": true
     },
     "reference_image": {
       "type": "file",
@@ -95,12 +98,22 @@
     },
     "transforms": {
       "type": "list",
-      "desc": "transform files: will be applied in reverse order. For example, the last specified transform will be applied first.",
+      "desc": "Transform files, applied in reverse order (the last is applied first), as antsApplyTransforms expects.",
       "required": true,
       "cli": {
         "argstr": "%s"
       },
       "items_type": "file"
+    },
+    "invert_transform_flags": {
+      "type": "list",
+      "items_type": "bool",
+      "desc": "Whether to invert each transform, one logical per transform (linear transforms only)."
+    },
+    "print_out_composite_warp_file": {
+      "type": "bool",
+      "default": false,
+      "desc": "Write the composition of transforms as a displacement field on the reference grid instead of a transformed image."
     }
   },
   "outputs": {
@@ -120,5 +133,6 @@
     "nipype_class": "nipype.interfaces.ants.resampling.ApplyTransforms",
     "nipype_version": "1.10.0"
   },
-  "description": "ApplyTransforms, applied to an input image, transforms it according to a"
+  "description": "ApplyTransforms, applied to an input image, transforms it according to a",
+  "render": "ants_apply_transforms"
 }

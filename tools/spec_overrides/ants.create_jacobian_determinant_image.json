@@ -1,0 +1,16 @@
+{
+  "inputs": {
+    "outputImage": {
+      "role": "output"
+    }
+  },
+  "outputs": {
+    "jacobian_image": {
+      "type": "file",
+      "path": {
+        "from_input": "outputImage"
+      },
+      "must_exist": false
+    }
+  }
+}

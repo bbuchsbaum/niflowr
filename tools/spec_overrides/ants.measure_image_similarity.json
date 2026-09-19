@@ -1,0 +1,68 @@
+{
+  "render": "ants_measure_image_similarity",
+  "inputs": {
+    "dimension": {
+      "default": 3
+    },
+    "metric_weight": {
+      "type": "double",
+      "default": 1,
+      "desc": "Metric weight (not used by MeasureImageSimilarity; kept for the metric token)."
+    },
+    "radius_or_number_of_bins": {
+      "desc": "Number of histogram bins for MI and Mattes, or neighbourhood radius for CC."
+    },
+    "sampling_strategy": {
+      "type": "enum",
+      "choices": [
+        "None",
+        "Regular",
+        "Random"
+      ],
+      "desc": "Metric sampling strategy; omitted means dense sampling (one sample per voxel)."
+    },
+    "sampling_percentage": {
+      "type": "double",
+      "required": false,
+      "desc": "Fraction of voxels sampled, in (0, 1]; requires sampling_strategy.",
+      "validate": {
+        "min": 0,
+        "max": 1
+      },
+      "constraints": {
+        "requires": [
+          "sampling_strategy"
+        ]
+      }
+    },
+    "fixed_image_mask": {
+      "desc": "Mask limiting the voxels the metric considers, in fixed-image space. MeasureImageSimilarity ignores a mask it cannot read, so the path must exist.",
+      "validate": {
+        "exists": true
+      }
+    },
+    "moving_image_mask": {
+      "type": "file",
+      "desc": "Mask in moving-image space; requires fixed_image_mask.",
+      "validate": {
+        "exists": true
+      },
+      "constraints": {
+        "requires": [
+          "fixed_image_mask"
+        ]
+      }
+    },
+    "fixed_image": {
+      "validate": {
+        "exists": true
+      }
+    },
+    "moving_image": {
+      "validate": {
+        "exists": true
+      }
+    }
+  },
+  "outputs": {}
+}

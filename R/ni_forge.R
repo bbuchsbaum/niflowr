@@ -775,6 +775,7 @@ synthesize_value <- function(name, def) {
       rep_len(unlist(def$choices, use.names = FALSE), 2L)
     } else {
       switch(def$items_type %||% "",
+        bool = c(FALSE, TRUE),
         int = c(1L, 2L),
         double = c(0.25, 0.5),
         c("item1", "item2")

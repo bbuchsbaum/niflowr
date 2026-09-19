@@ -1,0 +1,40 @@
+{
+  "render": "ants_apply_transforms",
+  "inputs": {
+    "input_image": {
+      "required": false,
+      "desc": "Image to transform. Not needed when print_out_composite_warp_file writes the composed displacement field instead."
+    },
+    "output_image": {
+      "type": "file",
+      "role": "output",
+      "desc": "Output image, or the composed displacement field when print_out_composite_warp_file is TRUE.",
+      "required": true
+    },
+    "interpolation": {
+      "desc": "Interpolation for the output image; use NearestNeighbor or GenericLabel for masks and label images."
+    },
+    "transforms": {
+      "desc": "Transform files, applied in reverse order (the last is applied first), as antsApplyTransforms expects."
+    },
+    "invert_transform_flags": {
+      "type": "list",
+      "items_type": "bool",
+      "desc": "Whether to invert each transform, one logical per transform (linear transforms only)."
+    },
+    "print_out_composite_warp_file": {
+      "type": "bool",
+      "default": false,
+      "desc": "Write the composition of transforms as a displacement field on the reference grid instead of a transformed image."
+    }
+  },
+  "outputs": {
+    "output_image": {
+      "type": "file",
+      "path": {
+        "from_input": "output_image"
+      },
+      "must_exist": false
+    }
+  }
+}

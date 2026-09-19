@@ -345,7 +345,7 @@
   },
   "ants.apply_transforms": {
     "command": "antsApplyTransforms",
-    "args": ["args_value", "--default-value", "0", "--dimensionality", "2", "--float", "0", "--input", "/tmp/niflowr/input_image.nii.gz", "--input-image-type", "0", "Linear", "--output", "output_image_value", "--reference-image", "/tmp/niflowr/reference_image.nii.gz", "item1,item2"]
+    "args": ["--dimensionality", "2", "--input-image-type", "0", "--input", "/tmp/niflowr/input_image.nii.gz", "--reference-image", "/tmp/niflowr/reference_image.nii.gz", "--output", "/tmp/niflowr/output_image.nii.gz", "--interpolation", "Linear", "--default-value", "0", "--transform", "item1", "--transform", "[item2,1]", "args_value"]
   },
   "ants.apply_transforms_to_points": {
     "command": "antsApplyTransformsToPoints",
@@ -425,7 +425,7 @@
   },
   "ants.measure_image_similarity": {
     "command": "MeasureImageSimilarity",
-    "args": ["--dimensionality", "2", "args_value", "/tmp/niflowr/fixed_image_mask.nii.gz", "CC"]
+    "args": ["--dimensionality", "3", "--metric", "CC[/tmp/niflowr/fixed_image.nii.gz,/tmp/niflowr/moving_image.nii.gz,1,1,None,1]", "--masks", "[/tmp/niflowr/fixed_image_mask.nii.gz,/tmp/niflowr/moving_image_mask.nii.gz]", "args_value"]
   },
   "ants.multiply_images": {
     "command": "MultiplyImages",

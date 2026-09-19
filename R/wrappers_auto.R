@@ -3912,16 +3912,18 @@ ni_ants_ants_introduction <- function(input_image,
 #'
 #' ApplyTransforms, applied to an input image, transforms it according to a
 #'
-#' @param input_image Character; file path. image to apply transformation to (generally a coregistered functional) **Required.**
+#' @param output_image Character; file path. Output image, or the composed displacement field when print_out_composite_warp_file is TRUE. **Required.**
 #' @param reference_image Character; file path. reference image space that you wish to warp INTO **Required.**
-#' @param transforms Character or numeric vector. transform files: will be applied in reverse order. For example, the last specified transform will be applied first. **Required.**
+#' @param transforms Character or numeric vector. Transform files, applied in reverse order (the last is applied first), as antsApplyTransforms expects. **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param default_value Numeric
 #' @param dimension Character; one of: "2", "3", "4". This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.
 #' @param float Logical. Use float instead of double for computations.
+#' @param input_image Character; file path. Image to transform. Not needed when print_out_composite_warp_file writes the composed displacement field instead.
 #' @param input_image_type Character; one of: "0", "1", "2", "3". Option specifying the input image type of scalar (default), vector, tensor, or time series.
-#' @param interpolation Character; one of: "Linear", "NearestNeighbor", "CosineWindowedSinc", "WelchWindowedSinc", "HammingWindowedSinc", "LanczosWindowedSinc", "MultiLabel", "Gaussian", "BSpline", "GenericLabel"
-#' @param output_image Character. output file name
+#' @param interpolation Character; one of: "Linear", "NearestNeighbor", "CosineWindowedSinc", "WelchWindowedSinc", "HammingWindowedSinc", "LanczosWindowedSinc", "MultiLabel", "Gaussian", "BSpline", "GenericLabel". Interpolation for the output image; use NearestNeighbor or GenericLabel for masks and label images.
+#' @param invert_transform_flags Logical vector. Whether to invert each transform, one logical per transform (linear transforms only).
+#' @param print_out_composite_warp_file Logical. Write the composition of transforms as a displacement field on the reference grid instead of a transformed image.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .engine Execution engine override.
@@ -3930,23 +3932,25 @@ ni_ants_ants_introduction <- function(input_image,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_ants_apply_transforms <- function(input_image,
+ni_ants_apply_transforms <- function(output_image,
                      reference_image,
                      transforms,
                      args = NULL,
                      default_value = 0,
                      dimension = NULL,
                      float = FALSE,
+                     input_image = NULL,
                      input_image_type = NULL,
                      interpolation = "Linear",
-                     output_image = NULL,
+                     invert_transform_flags = NULL,
+                     print_out_composite_warp_file = FALSE,
                      .cwd = NULL,
                      .env = NULL,
                      .engine = NULL,
                      .profile = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("ants.apply_transforms", input_image = input_image, reference_image = reference_image, transforms = transforms, args = args, default_value = default_value, dimension = dimension, float = float, input_image_type = input_image_type, interpolation = interpolation, output_image = output_image, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
+  call <- ni_call("ants.apply_transforms", output_image = output_image, reference_image = reference_image, transforms = transforms, args = args, default_value = default_value, dimension = dimension, float = float, input_image = input_image, input_image_type = input_image_type, interpolation = interpolation, invert_transform_flags = invert_transform_flags, print_out_composite_warp_file = print_out_composite_warp_file, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
@@ -4743,11 +4747,14 @@ ni_ants_laplacian_thickness <- function(input_gm,
 #' @param fixed_image Character; file path. Image to which the moving image is warped **Required.**
 #' @param metric Character; one of: "CC", "MI", "Mattes", "MeanSquares", "Demons", "GC" **Required.**
 #' @param moving_image Character; file path. Image to apply transformation to (generally a coregistered functional) **Required.**
-#' @param radius_or_number_of_bins Integer. The number of bins in each stage for the MI and Mattes metric, or the radius for other metrics **Required.**
-#' @param sampling_percentage Character. Percentage of points accessible to the sampling strategy over which to optimize the metric. **Required.**
+#' @param radius_or_number_of_bins Integer. Number of histogram bins for MI and Mattes, or neighbourhood radius for CC. **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param dimension Character; one of: "2", "3", "4". Dimensionality of the fixed/moving image pair
-#' @param fixed_image_mask Character; file path. mask used to limit metric sampling region of the fixed image
+#' @param fixed_image_mask Character; file path. Mask limiting the voxels the metric considers, in fixed-image space. MeasureImageSimilarity ignores a mask it cannot read, so the path must exist.
+#' @param sampling_percentage Numeric. Fraction of voxels sampled, in (0, 1\]; requires sampling_strategy.
+#' @param metric_weight Numeric. Metric weight (not used by MeasureImageSimilarity; kept for the metric token).
+#' @param sampling_strategy Character; one of: "None", "Regular", "Random". Metric sampling strategy; omitted means dense sampling (one sample per voxel).
+#' @param moving_image_mask Character; file path. Mask in moving-image space; requires fixed_image_mask.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .engine Execution engine override.
@@ -4760,17 +4767,20 @@ ni_ants_measure_image_similarity <- function(fixed_image,
                      metric,
                      moving_image,
                      radius_or_number_of_bins,
-                     sampling_percentage,
                      args = NULL,
-                     dimension = NULL,
+                     dimension = 3,
                      fixed_image_mask = NULL,
+                     sampling_percentage = NULL,
+                     metric_weight = 1,
+                     sampling_strategy = NULL,
+                     moving_image_mask = NULL,
                      .cwd = NULL,
                      .env = NULL,
                      .engine = NULL,
                      .profile = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("ants.measure_image_similarity", fixed_image = fixed_image, metric = metric, moving_image = moving_image, radius_or_number_of_bins = radius_or_number_of_bins, sampling_percentage = sampling_percentage, args = args, dimension = dimension, fixed_image_mask = fixed_image_mask, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
+  call <- ni_call("ants.measure_image_similarity", fixed_image = fixed_image, metric = metric, moving_image = moving_image, radius_or_number_of_bins = radius_or_number_of_bins, args = args, dimension = dimension, fixed_image_mask = fixed_image_mask, sampling_percentage = sampling_percentage, metric_weight = metric_weight, sampling_strategy = sampling_strategy, moving_image_mask = moving_image_mask, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 

@@ -27,6 +27,7 @@ Rscript -e 'pkgload::load_all("."); ni_lint_specs("inst/specs", fix = TRUE, writ
 An override is a partial spec; only the keys you set are merged. Examples:
 
 - `ants.registration.json` — adds the staged `render` hook, the per-stage inputs Nipype declares without an argstr (transform parameters, iterations, convergence, metric bins, sampling), numeric winsorize quantiles, warped-image outputs, and composite-transform outputs with transform metadata.
+- `ants.apply_transforms.json`, `ants.measure_image_similarity.json` — route both through custom renderers, since Nipype formats `--transform`, `--interpolation`, `--output [field,1]`, and the `--metric` token in Python rather than in argstrs; `ants.create_jacobian_determinant_image.json` declares its output image.
 - `ants.registration_syn_quick.json` — declares prefix-derived `outputs` and marks `output_prefix` required.
 - `fsl.mcflirt.json` — marks `out_file` with `cli.strip_ext` and declares gated side outputs (`.par`, `.mat/`, `_mean_reg`, …).
 - `fsl.image_meants.json` — keeps text-matrix `-o` paths intact (`strip_ext=false`) and requires `out_file` to exist.

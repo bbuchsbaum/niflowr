@@ -144,6 +144,12 @@ validate_type <- function(name, value, def) {
             "{.arg {name}} must be a character or numeric vector, or a list of them."
           ))
         }
+      } else if (identical(def$items_type, "bool")) {
+        if (!is.logical(value) || anyNA(value)) {
+          errors <- c(errors, cli::format_inline(
+            "{.arg {name}} must be a logical vector without missing values."
+          ))
+        }
       } else if (!is.character(value) && !is.numeric(value)) {
         errors <- c(errors, cli::format_inline(
           "{.arg {name}} must be a character or numeric vector."

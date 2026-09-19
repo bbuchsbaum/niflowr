@@ -16,6 +16,8 @@ dispatch_custom_render <- function(name, call) {
   fn <- switch(name,
     ants_registration_staged = render_ants_registration,
     ants_transform_build = render_ants_transform_build,
+    ants_apply_transforms = render_ants_apply_transforms,
+    ants_measure_image_similarity = render_ants_measure_image_similarity,
     ants_n4 = render_ants_n4,
     fsl_fast = render_fsl_fast,
     NULL
@@ -211,7 +213,7 @@ render_ants_registration <- function(call) {
   if (is.list(command)) command <- unlist(command)
   command <- command[[1]]
 
-  transforms <- as.character(ants_as_vec(v$transforms))
+  transforms <- as.character(ants_as_vec(v[["transforms"]]))
   n_stages <- length(transforms)
   if (n_stages == 0L) {
     cli::cli_abort("{.arg transforms} must name at least one registration stage.")
@@ -219,11 +221,11 @@ render_ants_registration <- function(call) {
   stage <- function(name, value = v[[name]], allow_missing = FALSE) {
     ants_stage_values(value, name, n_stages, allow_missing)
   }
-  metrics <- stage("metric", v$metric %||% "MI")
+  metrics <- stage("metric", v[["metric"]] %||% "MI")
   if (is.null(metrics)) {
     cli::cli_abort("{.arg metric} must name at least one metric per stage.")
   }
-  weights <- stage("metric_weight", v$metric_weight %||% vd$metric_weight)
+  weights <- stage("metric_weight", v[["metric_weight"]] %||% vd[["metric_weight"]])
   bins <- stage("radius_or_number_of_bins")
   sampling <- stage("sampling_strategy", allow_missing = TRUE)
   percentages <- stage("sampling_percentage", allow_missing = TRUE)
@@ -236,26 +238,26 @@ render_ants_registration <- function(call) {
   windows <- stage("convergence_window_size")
 
   max_metrics <- max(lengths(metrics))
-  fixed <- ants_channel_images(v$fixed_image, "fixed_image", max_metrics)
-  moving <- ants_channel_images(v$moving_image, "moving_image", max_metrics)
+  fixed <- ants_channel_images(v[["fixed_image"]], "fixed_image", max_metrics)
+  moving <- ants_channel_images(v[["moving_image"]], "moving_image", max_metrics)
   channel <- function(images, j) images[[if (length(images) == 1L) 1L else j]]
 
   # ---- global flags before stages ----
-  prefix <- vd$output_transform_prefix %||% "transform"
+  prefix <- vd[["output_transform_prefix"]] %||% "transform"
   output <- prefix
-  if (ants_given(v$output_warped_image)) {
-    inverse <- if (ants_given(v$output_inverse_warped_image)) v$output_inverse_warped_image
-    output <- sprintf("[%s]", paste(c(prefix, v$output_warped_image, inverse), collapse = ","))
-  } else if (ants_given(v$output_inverse_warped_image)) {
+  if (ants_given(v[["output_warped_image"]])) {
+    inverse <- if (ants_given(v[["output_inverse_warped_image"]])) v[["output_inverse_warped_image"]]
+    output <- sprintf("[%s]", paste(c(prefix, v[["output_warped_image"]], inverse), collapse = ","))
+  } else if (ants_given(v[["output_inverse_warped_image"]])) {
     cli::cli_abort("{.arg output_inverse_warped_image} requires {.arg output_warped_image}.")
   }
-  pre <- c("--dimensionality", as.character(vd$dimension %||% 3))
+  pre <- c("--dimensionality", as.character(vd[["dimension"]] %||% 3))
   pre <- c(pre, "--output", output)
-  pre <- c(pre, "--interpolation", as.character(vd$interpolation %||% "Linear"))
+  pre <- c(pre, "--interpolation", as.character(vd[["interpolation"]] %||% "Linear"))
 
   # [0,1] is antsRegistration's own no-op default, so only emit a real clip.
-  lo <- as.numeric(vd$winsorize_lower_quantile %||% 0)
-  hi <- as.numeric(vd$winsorize_upper_quantile %||% 1)
+  lo <- as.numeric(vd[["winsorize_lower_quantile"]] %||% 0)
+  hi <- as.numeric(vd[["winsorize_upper_quantile"]] %||% 1)
   if (!(lo >= 0 && hi <= 1 && lo < hi)) {
     cli::cli_abort(
       "Winsorize quantiles must satisfy 0 <= lower < upper <= 1, got [{lo}, {hi}]."
@@ -265,36 +267,36 @@ render_ants_registration <- function(call) {
     pre <- c(pre, "--winsorize-image-intensities", sprintf("[%s,%s]", ants_num(lo), ants_num(hi)))
   }
 
-  collapse <- ants_bool01(vd$collapse_output_transforms)
+  collapse <- ants_bool01(vd[["collapse_output_transforms"]])
   if (!is.null(collapse)) pre <- c(pre, "--collapse-output-transforms", collapse)
 
   # antsRegistration honours only the last --use-histogram-matching and applies
   # it to every stage, so this is one global setting, not a per-stage one.
-  histogram <- ants_bool01(v$use_histogram_matching)
+  histogram <- ants_bool01(v[["use_histogram_matching"]])
   if (!is.null(histogram)) pre <- c(pre, "--use-histogram-matching", histogram)
 
-  if (isTRUE(vd$initialize_transforms_per_stage)) {
+  if (isTRUE(vd[["initialize_transforms_per_stage"]])) {
     pre <- c(pre, "--initialize-transforms-per-stage", "1")
   }
 
-  imt <- ants_as_vec(v$initial_moving_transform)
+  imt <- ants_as_vec(v[["initial_moving_transform"]])
   if (length(imt) > 0) {
     for (t in imt) pre <- c(pre, "--initial-moving-transform", t)
-  } else if (!is.null(v$initial_moving_transform_com) && length(fixed) > 0 && length(moving) > 0) {
+  } else if (!is.null(v[["initial_moving_transform_com"]]) && length(fixed) > 0 && length(moving) > 0) {
     pre <- c(pre, "--initial-moving-transform",
       sprintf("[%s,%s,%s]", fixed[[1]], moving[[1]],
-        as.character(v$initial_moving_transform_com)))
+        as.character(v[["initial_moving_transform_com"]])))
   }
 
-  if (!is.null(v$fixed_image_mask)) {
-    pre <- c(pre, "--masks", sprintf("[%s]", v$fixed_image_mask))
+  if (!is.null(v[["fixed_image_mask"]])) {
+    pre <- c(pre, "--masks", sprintf("[%s]", v[["fixed_image_mask"]]))
   }
 
-  if (!is.null(v$restore_state)) {
-    pre <- c(pre, "--restore-state", as.character(v$restore_state))
+  if (!is.null(v[["restore_state"]])) {
+    pre <- c(pre, "--restore-state", as.character(v[["restore_state"]]))
   }
-  if (!is.null(v$save_state)) {
-    pre <- c(pre, "--save-state", as.character(v$save_state))
+  if (!is.null(v[["save_state"]])) {
+    pre <- c(pre, "--save-state", as.character(v[["save_state"]]))
   }
 
   # ---- per-stage groups ----
@@ -422,18 +424,18 @@ render_ants_registration <- function(call) {
 
   # ---- trailing global flags ----
   post <- character(0)
-  wc <- ants_bool01(vd$write_composite_transform)
+  wc <- ants_bool01(vd[["write_composite_transform"]])
   if (!is.null(wc)) post <- c(post, "--write-composite-transform", wc)
-  if (!is.null(v$random_seed)) {
-    post <- c(post, "--random-seed", as.character(as.integer(v$random_seed)))
+  if (!is.null(v[["random_seed"]])) {
+    post <- c(post, "--random-seed", as.character(as.integer(v[["random_seed"]])))
   }
-  if (isTRUE(v$float)) post <- c(post, "--float", "1")
-  if (isTRUE(v$verbose)) post <- c(post, "-v")
+  if (isTRUE(v[["float"]])) post <- c(post, "--float", "1")
+  if (isTRUE(v[["verbose"]])) post <- c(post, "-v")
 
   # Raw passthrough of extra global antsRegistration arguments, appended once
   # after every stage. Per-stage settings have dedicated inputs above.
-  if (!is.null(v$args) && nzchar(as.character(v$args))) {
-    post <- c(post, strsplit(trimws(as.character(v$args)), "\\s+")[[1]])
+  if (!is.null(v[["args"]]) && nzchar(as.character(v[["args"]]))) {
+    post <- c(post, strsplit(trimws(as.character(v[["args"]])), "\\s+")[[1]])
   }
 
   render_ants_registration_core(command, pre, stages, post)
@@ -471,16 +473,16 @@ render_ants_transform_build <- function(call) {
   if (is.list(command)) command <- unlist(command)
   command <- command[[1]]
 
-  fixed <- as.character(v$fixed_image)
-  moving <- as.character(v$moving_image)
-  prefix <- as.character(v$output_prefix)
-  preset <- as.character(vd$preset %||% "rigid_affine_syn")
+  fixed <- as.character(v[["fixed_image"]])
+  moving <- as.character(v[["moving_image"]])
+  prefix <- as.character(v[["output_prefix"]])
+  preset <- as.character(vd[["preset"]] %||% "rigid_affine_syn")
   warped <- paste0(prefix, "Warped.nii.gz")
 
   # ---- global flags ----
-  pre <- c("--dimensionality", as.character(vd$dimension %||% 3))
+  pre <- c("--dimensionality", as.character(vd[["dimension"]] %||% 3))
   pre <- c(pre, "--output", sprintf("[%s,%s]", prefix, warped))
-  pre <- c(pre, "--interpolation", as.character(vd$interpolation %||% "Linear"))
+  pre <- c(pre, "--interpolation", as.character(vd[["interpolation"]] %||% "Linear"))
   pre <- c(pre, "--winsorize-image-intensities", "[0.005,0.995]")
   pre <- c(pre, "--use-histogram-matching", "1")
   pre <- c(pre, "--collapse-output-transforms", "1")
@@ -490,12 +492,12 @@ render_ants_transform_build <- function(call) {
   # ANTs --masks takes [fixedMask,movingMask]. Emit only the masks actually
   # provided rather than a literal "NULL" path. A fixed-only mask is the common
   # case; moving-only uses ANTs' positional NULL placeholder.
-  if (!is.null(v$fixed_mask) && !is.null(v$moving_mask)) {
-    pre <- c(pre, "--masks", sprintf("[%s,%s]", v$fixed_mask, v$moving_mask))
-  } else if (!is.null(v$fixed_mask)) {
-    pre <- c(pre, "--masks", sprintf("[%s]", v$fixed_mask))
-  } else if (!is.null(v$moving_mask)) {
-    pre <- c(pre, "--masks", sprintf("[NULL,%s]", v$moving_mask))
+  if (!is.null(v[["fixed_mask"]]) && !is.null(v[["moving_mask"]])) {
+    pre <- c(pre, "--masks", sprintf("[%s,%s]", v[["fixed_mask"]], v[["moving_mask"]]))
+  } else if (!is.null(v[["fixed_mask"]])) {
+    pre <- c(pre, "--masks", sprintf("[%s]", v[["fixed_mask"]]))
+  } else if (!is.null(v[["moving_mask"]])) {
+    pre <- c(pre, "--masks", sprintf("[NULL,%s]", v[["moving_mask"]]))
   }
 
   # ---- stages ----
@@ -514,12 +516,117 @@ render_ants_transform_build <- function(call) {
 
   # ---- trailing flags ----
   post <- c("--write-composite-transform", "1")
-  if (!is.null(v$random_seed)) {
-    post <- c(post, "--random-seed", as.character(as.integer(v$random_seed)))
+  if (!is.null(v[["random_seed"]])) {
+    post <- c(post, "--random-seed", as.character(as.integer(v[["random_seed"]])))
   }
-  if (identical(as.character(vd$precision %||% "double"), "float")) {
+  if (identical(as.character(vd[["precision"]] %||% "double"), "float")) {
     post <- c(post, "--float", "1")
   }
 
   render_ants_registration_core(command, pre, stages, post)
+}
+
+# ---- antsApplyTransforms ----------------------------------------------------
+
+#' Render antsApplyTransforms (renderer: ants_apply_transforms)
+#'
+#' Each transform is its own `--transform` (wrapped as `[file,1]` when
+#' inverted), and `print_out_composite_warp_file` writes the composed
+#' displacement field as `--output [field,1]`.
+#' @keywords internal
+render_ants_apply_transforms <- function(call) {
+  spec <- call$spec
+  v <- call$values
+  vd <- apply_spec_defaults(spec, v)
+
+  transforms <- as.character(ants_as_vec(v[["transforms"]]))
+  if (length(transforms) == 0L) {
+    cli::cli_abort("{.arg transforms} must list at least one transform.")
+  }
+  invert <- ants_as_vec(v[["invert_transform_flags"]])
+  if (length(invert) == 0L) invert <- rep(FALSE, length(transforms))
+  if (length(invert) != length(transforms)) {
+    cli::cli_abort(
+      "{.arg invert_transform_flags} has {length(invert)} value{?s} for {length(transforms)} transform{?s}."
+    )
+  }
+  composite <- isTRUE(vd[["print_out_composite_warp_file"]])
+  if (!composite && !ants_given(v[["input_image"]])) {
+    cli::cli_abort("{.arg input_image} is required unless {.arg print_out_composite_warp_file} is TRUE.")
+  }
+  if (!ants_given(v[["output_image"]])) {
+    cli::cli_abort("{.arg output_image} is required.")
+  }
+
+  args <- character(0)
+  if (!is.null(v[["dimension"]])) args <- c(args, "--dimensionality", as.character(v[["dimension"]]))
+  if (!is.null(v[["input_image_type"]])) {
+    args <- c(args, "--input-image-type", as.character(v[["input_image_type"]]))
+  }
+  if (ants_given(v[["input_image"]])) args <- c(args, "--input", v[["input_image"]])
+  args <- c(args, "--reference-image", v[["reference_image"]])
+  args <- c(args, "--output",
+    if (composite) sprintf("[%s,1]", v[["output_image"]]) else v[["output_image"]])
+  args <- c(args, "--interpolation", as.character(vd[["interpolation"]] %||% "Linear"))
+  args <- c(args, "--default-value", ants_num(vd[["default_value"]] %||% 0))
+  if (isTRUE(v[["float"]])) args <- c(args, "--float", "1")
+  for (i in seq_along(transforms)) {
+    args <- c(args, "--transform",
+      if (isTRUE(as.logical(invert[[i]]))) sprintf("[%s,1]", transforms[[i]]) else transforms[[i]])
+  }
+  if (!is.null(v[["args"]]) && nzchar(as.character(v[["args"]]))) {
+    args <- c(args, strsplit(trimws(as.character(v[["args"]])), "\\s+")[[1]])
+  }
+
+  command <- spec$command
+  if (is.list(command)) command <- unlist(command)
+  list(command = command[[1]], args = unname(args), stdout = NULL, stderr = NULL)
+}
+
+# ---- MeasureImageSimilarity -------------------------------------------------
+
+#' Render MeasureImageSimilarity (renderer: ants_measure_image_similarity)
+#'
+#' The metric value is printed on stdout.
+#' @keywords internal
+render_ants_measure_image_similarity <- function(call) {
+  spec <- call$spec
+  v <- call$values
+  vd <- apply_spec_defaults(spec, v)
+
+  strategy <- v[["sampling_strategy"]]
+  percentage <- v[["sampling_percentage"]]
+  if (!is.null(percentage)) {
+    if (is.null(strategy)) {
+      cli::cli_abort("{.arg sampling_percentage} requires {.arg sampling_strategy}.")
+    }
+    if (!(percentage > 0 && percentage <= 1)) {
+      cli::cli_abort("{.arg sampling_percentage} must be in (0, 1], got {.val {percentage}}.")
+    }
+  }
+  metric <- ants_metric_token(
+    as.character(v[["metric"]]), v[["fixed_image"]], v[["moving_image"]],
+    ants_num(vd[["metric_weight"]] %||% 1), ants_num(v[["radius_or_number_of_bins"]]),
+    strategy, ants_num(percentage)
+  )
+  args <- c("--dimensionality", as.character(vd[["dimension"]] %||% 3), "--metric", metric)
+
+  fixed_mask <- v[["fixed_image_mask"]]
+  moving_mask <- v[["moving_image_mask"]]
+  # MeasureImageSimilarity documents fixedMask and [fixedMask,movingMask] only.
+  if (!is.null(moving_mask) && is.null(fixed_mask)) {
+    cli::cli_abort("{.arg moving_image_mask} requires {.arg fixed_image_mask}.")
+  }
+  if (!is.null(moving_mask)) {
+    args <- c(args, "--masks", sprintf("[%s,%s]", fixed_mask, moving_mask))
+  } else if (!is.null(fixed_mask)) {
+    args <- c(args, "--masks", fixed_mask)
+  }
+  if (!is.null(v[["args"]]) && nzchar(as.character(v[["args"]]))) {
+    args <- c(args, strsplit(trimws(as.character(v[["args"]])), "\\s+")[[1]])
+  }
+
+  command <- spec$command
+  if (is.list(command)) command <- unlist(command)
+  list(command = command[[1]], args = unname(args), stdout = NULL, stderr = NULL)
 }

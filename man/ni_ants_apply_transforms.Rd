@@ -5,16 +5,18 @@
 \title{ANTS ApplyTransforms}
 \usage{
 ni_ants_apply_transforms(
-  input_image,
+  output_image,
   reference_image,
   transforms,
   args = NULL,
   default_value = 0,
   dimension = NULL,
   float = FALSE,
+  input_image = NULL,
   input_image_type = NULL,
   interpolation = "Linear",
-  output_image = NULL,
+  invert_transform_flags = NULL,
+  print_out_composite_warp_file = FALSE,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -24,11 +26,11 @@ ni_ants_apply_transforms(
 )
 }
 \arguments{
-\item{input_image}{Character; file path. image to apply transformation to (generally a coregistered functional) \strong{Required.}}
+\item{output_image}{Character; file path. Output image, or the composed displacement field when print_out_composite_warp_file is TRUE. \strong{Required.}}
 
 \item{reference_image}{Character; file path. reference image space that you wish to warp INTO \strong{Required.}}
 
-\item{transforms}{Character or numeric vector. transform files: will be applied in reverse order. For example, the last specified transform will be applied first. \strong{Required.}}
+\item{transforms}{Character or numeric vector. Transform files, applied in reverse order (the last is applied first), as antsApplyTransforms expects. \strong{Required.}}
 
 \item{args}{Character. Additional parameters to the command}
 
@@ -38,11 +40,15 @@ ni_ants_apply_transforms(
 
 \item{float}{Logical. Use float instead of double for computations.}
 
+\item{input_image}{Character; file path. Image to transform. Not needed when print_out_composite_warp_file writes the composed displacement field instead.}
+
 \item{input_image_type}{Character; one of: "0", "1", "2", "3". Option specifying the input image type of scalar (default), vector, tensor, or time series.}
 
-\item{interpolation}{Character; one of: "Linear", "NearestNeighbor", "CosineWindowedSinc", "WelchWindowedSinc", "HammingWindowedSinc", "LanczosWindowedSinc", "MultiLabel", "Gaussian", "BSpline", "GenericLabel"}
+\item{interpolation}{Character; one of: "Linear", "NearestNeighbor", "CosineWindowedSinc", "WelchWindowedSinc", "HammingWindowedSinc", "LanczosWindowedSinc", "MultiLabel", "Gaussian", "BSpline", "GenericLabel". Interpolation for the output image; use NearestNeighbor or GenericLabel for masks and label images.}
 
-\item{output_image}{Character. output file name}
+\item{invert_transform_flags}{Logical vector. Whether to invert each transform, one logical per transform (linear transforms only).}
+
+\item{print_out_composite_warp_file}{Logical. Write the composition of transforms as a displacement field on the reference grid instead of a transformed image.}
 
 \item{.cwd}{Working directory override.}
 
