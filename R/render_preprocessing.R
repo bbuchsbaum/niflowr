@@ -64,6 +64,12 @@ resolve_tool_outputs <- function(spec, values) {
       }
       out
     },
+    fsl_applyxfm4d = {
+      # applyxfm4D receives only a stem and always delegates the NIfTI suffix
+      # to FSLOUTPUTTYPE. Resolve the canonical .nii.gz form first; ni_call()
+      # converts it to .nii for a NIFTI runtime.
+      list(out_file = paste0(strip_known_extension(v[["out_file"]]), ".nii.gz"))
+    },
     cli::cli_abort("Unknown output resolver: {.val {spec$output_resolver}}")
   )
 }
@@ -89,4 +95,84 @@ render_fsl_fast <- function(call) {
   built <- build_command(call)
   if (length(call$values$in_files) > 1L) built$args <- c("-S", as.character(length(call$values$in_files)), built$args)
   built
+}
+
+# FSL applyxfm4D has a positional matrix source whose type changes with
+# -singlematrix. Keep those sources separately typed so both files and
+# directories are mapped correctly for container execution.
+render_fsl_applyxfm4d <- function(call) {
+  v <- call$values
+  has_dir <- !is_missing_value(v[["mat_dir"]])
+  has_single <- !is_missing_value(v[["single_matrix"]])
+
+  if (identical(has_dir, has_single)) {
+    cli::cli_abort(c(
+      "applyxfm4D requires exactly one matrix source.",
+      "i" = "Provide {.arg mat_dir} for one MAT_0000-style matrix per volume, or {.arg single_matrix} to apply one matrix to every volume."
+    ))
+  }
+
+  matrix_source <- if (has_dir) v[["mat_dir"]] else v[["single_matrix"]]
+  if (has_dir) fsl_validate_applyxfm4d_matrix_dir(v[["in_file"]], matrix_source)
+
+  list(
+    command = call$spec$command,
+    args = c(
+      v[["in_file"]],
+      v[["reference"]],
+      strip_known_extension(v[["out_file"]]),
+      matrix_source,
+      if (has_dir) "-fourdigit" else "-singlematrix"
+    ),
+    stdout = NULL,
+    stderr = NULL
+  )
+}
+
+# Validate the only matrix-directory convention this adapter exposes. FSL's
+# default numbering is five digits; -fourdigit is rendered above so MCFLIRT's
+# MAT_0000 convention stays explicit and inspectable.
+fsl_validate_applyxfm4d_matrix_dir <- function(in_file, mat_dir) {
+  # Validation may be disabled for a dry command preview. In normal ni_call()
+  # construction the declared `exists` checks guarantee both paths exist.
+  if (!file.exists(in_file) || !dir.exists(mat_dir)) return(invisible(TRUE))
+  if (!requireNamespace("RNifti", quietly = TRUE)) {
+    cli::cli_abort("Package {.pkg RNifti} is required to validate applyxfm4D matrix counts.")
+  }
+
+  header <- tryCatch(
+    RNifti::niftiHeader(in_file),
+    error = function(e) {
+      cli::cli_abort(c(
+        "Could not read {.arg in_file} as a NIfTI image for applyxfm4D.",
+        "x" = conditionMessage(e)
+      ))
+    }
+  )
+  dims <- as.integer(header$dim)
+  if (length(dims) < 5L || is.na(dims[[1]]) || dims[[1]] < 4L ||
+      is.na(dims[[5]]) || dims[[5]] < 1L) {
+    cli::cli_abort("applyxfm4D requires {.arg in_file} to be a 4D NIfTI image.")
+  }
+  n_volumes <- dims[[5]]
+  expected <- sprintf("MAT_%04d", seq.int(0L, n_volumes - 1L))
+  actual <- sort(
+    basename(list.files(mat_dir, pattern = "^MAT_[0-9]{4}$", full.names = TRUE)),
+    method = "radix"
+  )
+
+  if (!identical(actual, expected)) {
+    missing <- setdiff(expected, actual)
+    unexpected <- setdiff(actual, expected)
+    details <- c(
+      if (length(missing)) paste0("Missing: ", paste(missing, collapse = ", ")),
+      if (length(unexpected)) paste0("Unexpected: ", paste(unexpected, collapse = ", "))
+    )
+    cli::cli_abort(c(
+      "applyxfm4D {.arg mat_dir} must contain exactly one MAT_0000-style matrix for each of {n_volumes} input volume{?s}.",
+      "i" = if (length(details)) paste(details, collapse = "; ") else "No four-digit MAT_ files were found."
+    ))
+  }
+
+  invisible(TRUE)
 }

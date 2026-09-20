@@ -733,6 +733,9 @@ synthesize_values_for_spec <- function(spec) {
   }
 
   if (identical(spec$render, "ants_n4") && !isTRUE(out$save_bias)) out$bias_image <- NULL
+  # applyxfm4D accepts exactly one of its separately typed matrix sources.
+  # Prefer the directory form for deterministic generated command examples.
+  if (identical(spec$render, "fsl_applyxfm4d")) out$single_matrix <- NULL
   out
 }
 

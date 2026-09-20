@@ -20,6 +20,7 @@ dispatch_custom_render <- function(name, call) {
     ants_measure_image_similarity = render_ants_measure_image_similarity,
     ants_n4 = render_ants_n4,
     fsl_fast = render_fsl_fast,
+    fsl_applyxfm4d = render_fsl_applyxfm4d,
     NULL
   )
   if (is.null(fn)) {

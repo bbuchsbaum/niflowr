@@ -1,0 +1,79 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.applyxfm4d",
+  "title": "FSL applyxfm4D",
+  "description": "Apply either one FSL affine per 4D volume from a MAT_0000-style directory, or one affine to every volume.",
+  "command": "applyxfm4D",
+  "render": "fsl_applyxfm4d",
+  "output_resolver": "fsl_applyxfm4d",
+  "inputs": {
+    "in_file": {
+      "type": "file",
+      "desc": "4D moving NIfTI image.",
+      "required": true,
+      "validate": {
+        "exists": true
+      }
+    },
+    "reference": {
+      "type": "file",
+      "desc": "3D reference NIfTI image defining the output grid.",
+      "required": true,
+      "validate": {
+        "exists": true
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "role": "output",
+      "desc": "Requested output NIfTI path. applyxfm4D receives its extension-free stem and FSL appends the configured NIFTI or NIFTI_GZ suffix.",
+      "required": true,
+      "cli": {
+        "strip_ext": true
+      }
+    },
+    "mat_dir": {
+      "type": "dir",
+      "desc": "Directory containing exactly MAT_0000 through MAT_NNNN, one FSL affine matrix per input volume.",
+      "validate": {
+        "exists": true
+      },
+      "constraints": {
+        "xor": [
+          "single_matrix"
+        ]
+      }
+    },
+    "single_matrix": {
+      "type": "file",
+      "desc": "One FSL affine matrix applied to every input volume using applyxfm4D -singlematrix.",
+      "validate": {
+        "exists": true
+      },
+      "constraints": {
+        "xor": [
+          "mat_dir"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true,
+      "nonempty": true
+    }
+  },
+  "runtime": {
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
+  },
+  "origin": {
+    "source": "manual"
+  }
+}
