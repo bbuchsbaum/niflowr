@@ -733,6 +733,7 @@ synthesize_values_for_spec <- function(spec) {
   }
 
   if (identical(spec$render, "ants_n4") && !isTRUE(out$save_bias)) out$bias_image <- NULL
+  if (identical(spec$render, "fsl_applyxfm4d")) out$single_matrix <- NULL
   out
 }
 

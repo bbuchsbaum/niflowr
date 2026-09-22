@@ -77,6 +77,7 @@ validate_inputs <- function(spec, values) {
     cli::cli_abort(c(header, stats::setNames(errors, rep("x", length(errors)))))
   }
 
+  if (identical(spec$id, "fsl.applyxfm4d")) validate_fsl_applyxfm4d(values)
   invisible(TRUE)
 }
 

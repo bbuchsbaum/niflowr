@@ -344,6 +344,12 @@ collections. epi_reg returns the final image and matrix and treats supplied WM
 segmentation as an input. These FSL output resolvers support `NIFTI_GZ` and
 `NIFTI`; other formats fail explicitly.
 
+The manual `ni_fsl_applyxfm4d()` adapter checks one `MAT_0000`-style affine
+per source volume, or a single affine for all volumes, and declares the actual
+`NIFTI`/`NIFTI_GZ` output. RNifti is required for its source-header check.
+See the [adapter qualification record](inst/qualification/applyxfm4d.md) for
+the tested FSL image, generated-spec contract, and real-image evidence.
+
 The [smoke harness](tests/smoke/README.md) runs a synthetic preprocessing chain
 with digest-pinned images and independently reads its products with NiBabel.
 This establishes mechanical interface behavior, not scientific equivalence or

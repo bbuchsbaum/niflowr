@@ -4,6 +4,7 @@
 resolve_tool_outputs <- function(spec, values) {
   v <- apply_spec_defaults(spec, values)
   switch(spec$output_resolver,
+    fsl_applyxfm4d = list(out_file = paste0(strip_known_extension(v[["out_file"]]), ".nii.gz")),
     afni_volreg = {
       out <- list()
       if (!is.null(v[["oned_file"]])) out$oned_file <- v[["oned_file"]]

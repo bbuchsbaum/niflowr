@@ -10486,6 +10486,38 @@ ni_fsl_apply_xfm <- function(in_file,
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
+#' FSL applyxfm4D
+#'
+#' Apply FSL affine matrices to a 4D series using the binary default sinc interpolation. Requires RNifti for header validation.
+#'
+#' @param in_file Character; file path. Four-dimensional source image. **Required.**
+#' @param reference Character; file path. Reference image defining the output grid. **Required.**
+#' @param out_file Character; file path. Output stem or NIfTI path; FSLOUTPUTTYPE determines the actual suffix. **Required.**
+#' @param mat_dir Character; directory path. Exactly one finite affine MAT_0000-style matrix per source volume.
+#' @param single_matrix Character; file path. One finite FSL affine matrix for all volumes.
+#' @param .cwd Working directory override.
+#' @param .env Named character vector of environment variables.
+#' @param .engine Execution engine override.
+#' @param .profile Runtime profile override.
+#' @param dry_run Logical; preview command without executing.
+#' @param echo Logical; echo stdout/stderr in real time.
+#' @return An `ni_result` object.
+#' @export
+ni_fsl_applyxfm4d <- function(in_file,
+                     reference,
+                     out_file,
+                     mat_dir = NULL,
+                     single_matrix = NULL,
+                     .cwd = NULL,
+                     .env = NULL,
+                     .engine = NULL,
+                     .profile = NULL,
+                     dry_run = FALSE,
+                     echo = interactive()) {
+  call <- ni_call("fsl.applyxfm4d", in_file = in_file, reference = reference, out_file = out_file, mat_dir = mat_dir, single_matrix = single_matrix, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
+  ni_run(call, dry_run = dry_run, echo = echo)
+}
+
 #' FSL AR1Image
 #'
 #' Use fslmaths to generate an AR1 coefficient image across a

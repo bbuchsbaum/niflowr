@@ -35,6 +35,9 @@ ni_run <- function(call, ..., dry_run = FALSE, echo = interactive(),
     cli::cli_alert_info("Dry run [{plan$engine}]: {.code {paste(c(plan$execution$command, plan$execution$args), collapse = ' ')}}")
     return(invisible(plan))
   }
+  # Recheck the adapter contract immediately before execution, including calls
+  # constructed for preview and matrix directories changed since construction.
+  if (identical(call$spec$id, "fsl.applyxfm4d")) validate_inputs(call$spec, call$values)
   files <- unname(unlist(call$outputs, use.names = FALSE))
   parent <- if (length(files)) dirname(files[[1]]) else plan$host_cwd
   log_root <- log_dir %||% file.path(parent, ".niflowr", "runs")

@@ -1,0 +1,80 @@
+{
+  "spec_version": "0.1.0",
+  "id": "fsl.applyxfm4d",
+  "title": "FSL applyxfm4D",
+  "description": "Apply FSL affine matrices to a 4D series using the binary default sinc interpolation. Requires RNifti for header validation.",
+  "command": "applyxfm4D",
+  "render": "fsl_applyxfm4d",
+  "output_resolver": "fsl_applyxfm4d",
+  "inputs": {
+    "in_file": {
+      "type": "file",
+      "desc": "Four-dimensional source image.",
+      "required": true,
+      "validate": {
+        "exists": true
+      }
+    },
+    "reference": {
+      "type": "file",
+      "desc": "Reference image defining the output grid.",
+      "required": true,
+      "validate": {
+        "exists": true
+      }
+    },
+    "out_file": {
+      "type": "file",
+      "desc": "Output stem or NIfTI path; FSLOUTPUTTYPE determines the actual suffix.",
+      "required": true,
+      "role": "output",
+      "cli": {
+        "argstr": "%s",
+        "strip_ext": true
+      }
+    },
+    "mat_dir": {
+      "type": "dir",
+      "desc": "Exactly one finite affine MAT_0000-style matrix per source volume.",
+      "validate": {
+        "exists": true
+      },
+      "constraints": {
+        "xor": [
+          "single_matrix"
+        ]
+      }
+    },
+    "single_matrix": {
+      "type": "file",
+      "desc": "One finite FSL affine matrix for all volumes.",
+      "validate": {
+        "exists": true
+      },
+      "constraints": {
+        "xor": [
+          "mat_dir"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "computed": true
+      },
+      "must_exist": true,
+      "nonempty": true
+    }
+  },
+  "runtime": {
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
+  },
+  "origin": {
+    "source": "manual"
+  }
+}

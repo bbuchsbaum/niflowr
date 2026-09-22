@@ -859,6 +859,10 @@
     "command": "flirt",
     "args": ["-in", "/tmp/niflowr/in_file.nii.gz", "-ref", "/tmp/niflowr/reference.nii.gz", "-out", "/tmp/niflowr/out_file", "-omat", "/tmp/niflowr/out_matrix_file.mat", "-anglerep", "quaternion", "-applyisoxfm", "1.000000", "-applyxfm", "args_value", "-bbrslope", "1.000000", "-bbrtype", "signed", "-setbackground", "1.000000", "-bins", "1", "-coarsesearch", "1", "-cost", "mutualinfo", "-searchcost", "mutualinfo", "-datatype", "char", "-dof", "1", "-echospacing", "1.000000", "-fieldmap", "/tmp/niflowr/fieldmap.nii.gz", "-fieldmapmask", "/tmp/niflowr/fieldmapmask.nii.gz", "-finesearch", "1", "-init", "/tmp/niflowr/in_matrix_file.mat", "-inweight", "/tmp/niflowr/in_weight.nii.gz", "-interp", "trilinear", "-minsampling", "1.000000", "-paddingsize", "1", "-pedir", "1", "-refweight", "/tmp/niflowr/ref_weight.nii.gz", "-schedule", "/tmp/niflowr/schedule.nii.gz", "-searchrx", "item1,item2", "-searchry", "item1,item2", "-searchrz", "item1,item2", "-sincwidth", "1", "-sincwindow", "rectangular", "-verbose", "1", "-wmseg", "/tmp/niflowr/wm_seg.nii.gz", "-wmcoords", "/tmp/niflowr/wmcoords.nii.gz", "-wmnorms", "/tmp/niflowr/wmnorms.nii.gz"]
   },
+  "fsl.applyxfm4d": {
+    "command": "applyxfm4D",
+    "args": ["/tmp/niflowr/in_file.nii.gz", "/tmp/niflowr/reference.nii.gz", "/tmp/niflowr/out_file", "/tmp/niflowr/mat_dir_dir", "-fourdigit"]
+  },
   "fsl.ar1_image": {
     "command": "fslmaths",
     "args": ["-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-Tar1", "args_value", "/tmp/niflowr/out_file", "-odt", "float"]
