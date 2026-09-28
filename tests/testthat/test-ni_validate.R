@@ -214,3 +214,22 @@ test_that("is_missing_value returns FALSE for non-NULL values", {
   expect_false(niflowr:::is_missing_value(TRUE))
   expect_false(niflowr:::is_missing_value(list(a = 1)))
 })
+
+test_that("required XOR inputs accept alternatives without weakening other validation", {
+  for (include_self in c(FALSE, TRUE)) {
+    alternatives <- if (include_self) c("a", "b") else "b"
+    spec <- structure(list(id = "test.required_xor", inputs = list(
+      a = list(type = "double", required = TRUE, constraints = list(xor = alternatives)),
+      b = list(type = "double", constraints = list(xor = "a")),
+      c = list(type = "string", required = TRUE)
+    )), class = "ni_spec")
+    expect_true(niflowr:::validate_inputs(spec, list(a = 0, c = "yes")))
+    expect_true(niflowr:::validate_inputs(spec, list(b = 2, c = "yes")))
+    expect_error(niflowr:::validate_inputs(spec, list(c = "yes")), "Required parameter.*a")
+    expect_error(niflowr:::validate_inputs(spec, list(a = 1, b = 2, c = "yes")), "mutually exclusive")
+    expect_error(niflowr:::validate_inputs(spec, list(b = 2)), "Required parameter.*c")
+    expect_error(niflowr:::validate_inputs(spec, list(b = "bad", c = "yes")), "single number")
+    spec$inputs$a$required <- FALSE
+    expect_true(niflowr:::validate_inputs(spec, list(c = "yes")))
+  }
+})

@@ -5,8 +5,8 @@
 \title{FREESURFER CheckTalairachAlignment}
 \usage{
 ni_freesurfer_check_talairach_alignment(
-  in_file,
-  subject,
+  in_file = NULL,
+  subject = NULL,
   args = NULL,
   threshold = 0.01,
   .cwd = NULL,
@@ -18,9 +18,9 @@ ni_freesurfer_check_talairach_alignment(
 )
 }
 \arguments{
-\item{in_file}{Character; file path. specify the talairach.xfm file to check \strong{Required.}}
+\item{in_file}{Character; file path. specify the talairach.xfm file to check \strong{Required unless an alternative is supplied:} \code{subject}.}
 
-\item{subject}{Character. specify subject's name \strong{Required.}}
+\item{subject}{Character. specify subject's name \strong{Required unless an alternative is supplied:} \code{in_file}.}
 
 \item{args}{Character. Additional parameters to the command}
 

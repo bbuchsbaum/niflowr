@@ -5,9 +5,9 @@
 \title{FSL IsotropicSmooth}
 \usage{
 ni_fsl_isotropic_smooth(
-  fwhm,
+  fwhm = NULL,
   in_file,
-  sigma,
+  sigma = NULL,
   args = NULL,
   internal_datatype = NULL,
   nan2zeros = NULL,
@@ -22,11 +22,11 @@ ni_fsl_isotropic_smooth(
 )
 }
 \arguments{
-\item{fwhm}{Numeric. fwhm of smoothing kernel [mm] \strong{Required.}}
+\item{fwhm}{Numeric. fwhm of smoothing kernel [mm] \strong{Required unless an alternative is supplied:} \code{sigma}.}
 
 \item{in_file}{Character; file path. image to operate on \strong{Required.}}
 
-\item{sigma}{Numeric. sigma of smoothing kernel [mm] \strong{Required.}}
+\item{sigma}{Numeric. sigma of smoothing kernel [mm] \strong{Required unless an alternative is supplied:} \code{fwhm}.}
 
 \item{args}{Character. Additional parameters to the command}
 

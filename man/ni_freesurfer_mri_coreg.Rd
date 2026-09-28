@@ -5,9 +5,9 @@
 \title{FREESURFER MRICoreg}
 \usage{
 ni_freesurfer_mri_coreg(
-  reference_file,
+  reference_file = NULL,
   source_file,
-  subject_id,
+  subject_id = NULL,
   args = NULL,
   brute_force_limit = NULL,
   brute_force_samples = NULL,
@@ -45,11 +45,11 @@ ni_freesurfer_mri_coreg(
 )
 }
 \arguments{
-\item{reference_file}{Character; file path. reference (target) file \strong{Required.}}
+\item{reference_file}{Character; file path. reference (target) file \strong{Required unless an alternative is supplied:} \code{subject_id}.}
 
 \item{source_file}{Character; file path. source file to be registered \strong{Required.}}
 
-\item{subject_id}{Character. freesurfer subject ID (implies \code{reference_mask == aparc+aseg.mgz} unless otherwise specified) \strong{Required.}}
+\item{subject_id}{Character. freesurfer subject ID (implies \code{reference_mask == aparc+aseg.mgz} unless otherwise specified) \strong{Required unless an alternative is supplied:} \code{reference_file}.}
 
 \item{args}{Character. Additional parameters to the command}
 

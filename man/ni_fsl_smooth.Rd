@@ -5,9 +5,9 @@
 \title{FSL Smooth}
 \usage{
 ni_fsl_smooth(
-  fwhm,
+  fwhm = NULL,
   in_file,
-  sigma,
+  sigma = NULL,
   args = NULL,
   smoothed_file = NULL,
   .cwd = NULL,
@@ -19,11 +19,11 @@ ni_fsl_smooth(
 )
 }
 \arguments{
-\item{fwhm}{Numeric. gaussian kernel fwhm, will be converted to sigma in mm (not voxels) \strong{Required.}}
+\item{fwhm}{Numeric. gaussian kernel fwhm, will be converted to sigma in mm (not voxels) \strong{Required unless an alternative is supplied:} \code{sigma}.}
 
 \item{in_file}{Character; file path \strong{Required.}}
 
-\item{sigma}{Numeric. gaussian kernel sigma in mm (not voxels) \strong{Required.}}
+\item{sigma}{Numeric. gaussian kernel sigma in mm (not voxels) \strong{Required unless an alternative is supplied:} \code{fwhm}.}
 
 \item{args}{Character. Additional parameters to the command}
 

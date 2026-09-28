@@ -125,7 +125,8 @@ gen_wrapper <- function(spec_path) {
   for (nm in req_names) {
     formal_nm <- name_map[[nm]]
     def <- inputs[[nm]]
-    params <- c(params, if (is.null(def$default)) formal_nm else paste0(formal_nm, " = ", type_default(def)))
+    has_alternatives <- length(def$constraints$xor) > 0L
+    params <- c(params, if (is.null(def$default) && !has_alternatives) formal_nm else paste0(formal_nm, " = ", type_default(def)))
     fwd_pairs <- c(fwd_pairs, paste0(nm, " = ", formal_nm))
   }
   for (nm in opt_names) {
@@ -148,7 +149,12 @@ gen_wrapper <- function(spec_path) {
   }
   for (nm in c(req_names, opt_names)) {
     def <- inputs[[nm]]
-    tag <- if (isTRUE(def$required) && is.null(def$default)) " **Required.**" else ""
+    tag <- if (isTRUE(def$required) && is.null(def$default)) {
+      if (length(def$constraints$xor) > 0L) {
+        paste0(" **Required unless an alternative is supplied:** ",
+               paste(paste0("`", def$constraints$xor, "`"), collapse = ", "), ".")
+      } else " **Required.**"
+    } else ""
     formal_nm <- name_map[[nm]]
     alias_note <- if (formal_nm != nm) paste0(" (spec input: ", nm, ")") else ""
     roxy <- c(roxy, paste0("#' @param ", formal_nm, " ", type_desc(def), alias_note, tag))

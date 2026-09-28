@@ -5,7 +5,7 @@
 \title{FSL SmoothEstimate}
 \usage{
 ni_fsl_smooth_estimate(
-  dof,
+  dof = NULL,
   mask_file,
   args = NULL,
   residual_fit_file = NULL,
@@ -19,7 +19,7 @@ ni_fsl_smooth_estimate(
 )
 }
 \arguments{
-\item{dof}{Integer. number of degrees of freedom \strong{Required.}}
+\item{dof}{Integer. number of degrees of freedom \strong{Required unless an alternative is supplied:} \code{zstat_file}.}
 
 \item{mask_file}{Character; file path. brain mask volume \strong{Required.}}
 

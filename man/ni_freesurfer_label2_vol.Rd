@@ -5,10 +5,10 @@
 \title{FREESURFER Label2Vol}
 \usage{
 ni_freesurfer_label2_vol(
-  annot_file,
-  aparc_aseg,
-  label_file,
-  seg_file,
+  annot_file = NULL,
+  aparc_aseg = NULL,
+  label_file = NULL,
+  seg_file = NULL,
   template_file,
   args = NULL,
   fill_thresh = NULL,
@@ -34,13 +34,13 @@ ni_freesurfer_label2_vol(
 )
 }
 \arguments{
-\item{annot_file}{Character; file path. surface annotation file \strong{Required.}}
+\item{annot_file}{Character; file path. surface annotation file \strong{Required unless an alternative is supplied:} \code{label_file}, \code{seg_file}, \code{aparc_aseg}.}
 
-\item{aparc_aseg}{Logical. use aparc+aseg.mgz in subjectdir as seg \strong{Required.}}
+\item{aparc_aseg}{Logical. use aparc+aseg.mgz in subjectdir as seg \strong{Required unless an alternative is supplied:} \code{label_file}, \code{annot_file}, \code{seg_file}.}
 
-\item{label_file}{Character or numeric vector. list of label files \strong{Required.}}
+\item{label_file}{Character or numeric vector. list of label files \strong{Required unless an alternative is supplied:} \code{annot_file}, \code{seg_file}, \code{aparc_aseg}.}
 
-\item{seg_file}{Character; file path. segmentation file \strong{Required.}}
+\item{seg_file}{Character; file path. segmentation file \strong{Required unless an alternative is supplied:} \code{label_file}, \code{annot_file}, \code{aparc_aseg}.}
 
 \item{template_file}{Character; file path. output template volume \strong{Required.}}
 

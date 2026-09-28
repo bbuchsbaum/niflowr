@@ -5,7 +5,7 @@
 \title{FREESURFER SegStatsReconAll}
 \usage{
 ni_freesurfer_seg_stats_recon_all(
-  annot,
+  annot = NULL,
   lh_orig_nofix,
   lh_pial,
   lh_white,
@@ -13,9 +13,9 @@ ni_freesurfer_seg_stats_recon_all(
   rh_pial,
   rh_white,
   ribbon,
-  segmentation_file,
+  segmentation_file = NULL,
   subject_id = "subject_id",
-  surf_label,
+  surf_label = NULL,
   transform,
   args = NULL,
   avgwf_file = NULL,
@@ -61,7 +61,7 @@ ni_freesurfer_seg_stats_recon_all(
 )
 }
 \arguments{
-\item{annot}{Character or numeric vector. subject hemi parc : use surface parcellation \strong{Required.}}
+\item{annot}{Character or numeric vector. subject hemi parc : use surface parcellation \strong{Required unless an alternative is supplied:} \code{segmentation_file}, \code{surf_label}.}
 
 \item{lh_orig_nofix}{Character; file path. Input lh.orig.nofix \strong{Required.}}
 
@@ -77,11 +77,11 @@ ni_freesurfer_seg_stats_recon_all(
 
 \item{ribbon}{Character; file path. Input file mri/ribbon.mgz \strong{Required.}}
 
-\item{segmentation_file}{Character; file path. segmentation volume path \strong{Required.}}
+\item{segmentation_file}{Character; file path. segmentation volume path \strong{Required unless an alternative is supplied:} \code{annot}, \code{surf_label}.}
 
 \item{subject_id}{Character. Subject id being processed}
 
-\item{surf_label}{Character or numeric vector. subject hemi label : use surface label \strong{Required.}}
+\item{surf_label}{Character or numeric vector. subject hemi label : use surface label \strong{Required unless an alternative is supplied:} \code{segmentation_file}, \code{annot}.}
 
 \item{transform}{Character; file path. Input transform file \strong{Required.}}
 

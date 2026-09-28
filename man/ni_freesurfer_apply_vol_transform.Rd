@@ -5,18 +5,18 @@
 \title{FREESURFER ApplyVolTransform}
 \usage{
 ni_freesurfer_apply_vol_transform(
-  fs_target,
-  fsl_reg_file,
-  lta_file,
-  lta_inv_file,
-  mni_152_reg,
-  reg_file,
-  reg_header,
+  fs_target = NULL,
+  fsl_reg_file = NULL,
+  lta_file = NULL,
+  lta_inv_file = NULL,
+  mni_152_reg = NULL,
+  reg_file = NULL,
+  reg_header = NULL,
   source_file,
-  subject,
-  tal,
-  target_file,
-  xfm_reg_file,
+  subject = NULL,
+  tal = NULL,
+  target_file = NULL,
+  xfm_reg_file = NULL,
   args = NULL,
   interp = NULL,
   inverse = NULL,
@@ -35,29 +35,29 @@ ni_freesurfer_apply_vol_transform(
 )
 }
 \arguments{
-\item{fs_target}{Logical. use orig.mgz from subject in regfile as target \strong{Required.}}
+\item{fs_target}{Logical. use orig.mgz from subject in regfile as target \strong{Required unless an alternative is supplied:} \code{target_file}, \code{tal}.}
 
-\item{fsl_reg_file}{Character; file path. fslRAS-to-fslRAS matrix (FSL format) \strong{Required.}}
+\item{fsl_reg_file}{Character; file path. fslRAS-to-fslRAS matrix (FSL format) \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{lta_file}, \code{lta_inv_file}, \code{xfm_reg_file}, \code{reg_header}, \code{mni_152_reg}, \code{subject}.}
 
-\item{lta_file}{Character; file path. Linear Transform Array file \strong{Required.}}
+\item{lta_file}{Character; file path. Linear Transform Array file \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{lta_inv_file}, \code{fsl_reg_file}, \code{xfm_reg_file}, \code{reg_header}, \code{mni_152_reg}, \code{subject}.}
 
-\item{lta_inv_file}{Character; file path. LTA, invert \strong{Required.}}
+\item{lta_inv_file}{Character; file path. LTA, invert \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{lta_file}, \code{fsl_reg_file}, \code{xfm_reg_file}, \code{reg_header}, \code{mni_152_reg}, \code{subject}.}
 
-\item{mni_152_reg}{Logical. target MNI152 space \strong{Required.}}
+\item{mni_152_reg}{Logical. target MNI152 space \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{lta_file}, \code{lta_inv_file}, \code{fsl_reg_file}, \code{xfm_reg_file}, \code{reg_header}, \code{subject}.}
 
-\item{reg_file}{Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) \strong{Required.}}
+\item{reg_file}{Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) \strong{Required unless an alternative is supplied:} \code{lta_file}, \code{lta_inv_file}, \code{fsl_reg_file}, \code{xfm_reg_file}, \code{reg_header}, \code{mni_152_reg}, \code{subject}.}
 
-\item{reg_header}{Logical. ScannerRAS-to-ScannerRAS matrix = identity \strong{Required.}}
+\item{reg_header}{Logical. ScannerRAS-to-ScannerRAS matrix = identity \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{lta_file}, \code{lta_inv_file}, \code{fsl_reg_file}, \code{xfm_reg_file}, \code{mni_152_reg}, \code{subject}.}
 
 \item{source_file}{Character; file path. Input volume you wish to transform \strong{Required.}}
 
-\item{subject}{Character. set matrix = identity and use subject for any templates \strong{Required.}}
+\item{subject}{Character. set matrix = identity and use subject for any templates \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{lta_file}, \code{lta_inv_file}, \code{fsl_reg_file}, \code{xfm_reg_file}, \code{reg_header}, \code{mni_152_reg}.}
 
-\item{tal}{Logical. map to a sub FOV of MNI305 (with --reg only) \strong{Required.}}
+\item{tal}{Logical. map to a sub FOV of MNI305 (with --reg only) \strong{Required unless an alternative is supplied:} \code{target_file}, \code{fs_target}.}
 
-\item{target_file}{Character; file path. Output template volume \strong{Required.}}
+\item{target_file}{Character; file path. Output template volume \strong{Required unless an alternative is supplied:} \code{tal}, \code{fs_target}.}
 
-\item{xfm_reg_file}{Character; file path. ScannerRAS-to-ScannerRAS matrix (MNI format) \strong{Required.}}
+\item{xfm_reg_file}{Character; file path. ScannerRAS-to-ScannerRAS matrix (MNI format) \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{lta_file}, \code{lta_inv_file}, \code{fsl_reg_file}, \code{reg_header}, \code{mni_152_reg}, \code{subject}.}
 
 \item{args}{Character. Additional parameters to the command}
 

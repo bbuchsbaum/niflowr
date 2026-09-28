@@ -5,12 +5,12 @@
 \title{FREESURFER LTAConvert}
 \usage{
 ni_freesurfer_lta_convert(
-  in_fsl,
-  in_itk,
-  in_lta,
-  in_mni,
-  in_niftyreg,
-  in_reg,
+  in_fsl = NULL,
+  in_itk = NULL,
+  in_lta = NULL,
+  in_mni = NULL,
+  in_niftyreg = NULL,
+  in_reg = NULL,
   args = NULL,
   invert = NULL,
   ltavox2vox = NULL,
@@ -31,17 +31,17 @@ ni_freesurfer_lta_convert(
 )
 }
 \arguments{
-\item{in_fsl}{Character; file path. input transform of FSL type \strong{Required.}}
+\item{in_fsl}{Character; file path. input transform of FSL type \strong{Required unless an alternative is supplied:} \code{in_lta}, \code{in_mni}, \code{in_reg}, \code{in_niftyreg}, \code{in_itk}.}
 
-\item{in_itk}{Character; file path. input transform of ITK type \strong{Required.}}
+\item{in_itk}{Character; file path. input transform of ITK type \strong{Required unless an alternative is supplied:} \code{in_lta}, \code{in_fsl}, \code{in_mni}, \code{in_reg}, \code{in_niftyreg}.}
 
-\item{in_lta}{Character or numeric vector. input transform of LTA type \strong{Required.}}
+\item{in_lta}{Character or numeric vector. input transform of LTA type \strong{Required unless an alternative is supplied:} \code{in_fsl}, \code{in_mni}, \code{in_reg}, \code{in_niftyreg}, \code{in_itk}.}
 
-\item{in_mni}{Character; file path. input transform of MNI/XFM type \strong{Required.}}
+\item{in_mni}{Character; file path. input transform of MNI/XFM type \strong{Required unless an alternative is supplied:} \code{in_lta}, \code{in_fsl}, \code{in_reg}, \code{in_niftyreg}, \code{in_itk}.}
 
-\item{in_niftyreg}{Character; file path. input transform of Nifty Reg type (inverse RAS2RAS) \strong{Required.}}
+\item{in_niftyreg}{Character; file path. input transform of Nifty Reg type (inverse RAS2RAS) \strong{Required unless an alternative is supplied:} \code{in_lta}, \code{in_fsl}, \code{in_mni}, \code{in_reg}, \code{in_itk}.}
 
-\item{in_reg}{Character; file path. input transform of TK REG type (deprecated format) \strong{Required.}}
+\item{in_reg}{Character; file path. input transform of TK REG type (deprecated format) \strong{Required unless an alternative is supplied:} \code{in_lta}, \code{in_fsl}, \code{in_mni}, \code{in_niftyreg}, \code{in_itk}.}
 
 \item{args}{Character. Additional parameters to the command}
 

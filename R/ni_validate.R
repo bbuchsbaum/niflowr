@@ -15,6 +15,10 @@ validate_inputs <- function(spec, values) {
   for (nm in names(input_defs)) {
     def <- input_defs[[nm]]
     if (isTRUE(def$required) && is_missing_value(values[[nm]])) {
+      # Nipype mandatory XOR traits require one of the alternatives, rather
+      # than every member. The XOR pass below still rejects multiple values.
+      alternatives <- intersect(as.character(unlist(def$constraints$xor)), names(input_defs))
+      if (any(vapply(alternatives, function(p) !is_missing_value(values[[p]]), logical(1)))) next
       errors <- c(errors, cli::format_inline(
         "Required parameter {.arg {nm}} is missing."
       ))

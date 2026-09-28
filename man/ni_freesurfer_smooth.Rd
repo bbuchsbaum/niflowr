@@ -6,9 +6,9 @@
 \usage{
 ni_freesurfer_smooth(
   in_file,
-  num_iters,
+  num_iters = NULL,
   reg_file,
-  surface_fwhm,
+  surface_fwhm = NULL,
   args = NULL,
   proj_frac = NULL,
   proj_frac_avg = NULL,
@@ -25,11 +25,11 @@ ni_freesurfer_smooth(
 \arguments{
 \item{in_file}{Character; file path. source volume \strong{Required.}}
 
-\item{num_iters}{Integer. number of iterations instead of fwhm \strong{Required.}}
+\item{num_iters}{Integer. number of iterations instead of fwhm \strong{Required unless an alternative is supplied:} \code{surface_fwhm}.}
 
 \item{reg_file}{Character; file path. registers volume to surface anatomical \strong{Required.}}
 
-\item{surface_fwhm}{Numeric. surface FWHM in mm \strong{Required.}}
+\item{surface_fwhm}{Numeric. surface FWHM in mm \strong{Required unless an alternative is supplied:} \code{num_iters}.}
 
 \item{args}{Character. Additional parameters to the command}
 

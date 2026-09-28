@@ -6,8 +6,8 @@
 \usage{
 ni_fsl_binary_maths(
   in_file,
-  operand_file,
-  operand_value,
+  operand_file = NULL,
+  operand_value = NULL,
   operation,
   args = NULL,
   internal_datatype = NULL,
@@ -25,9 +25,9 @@ ni_fsl_binary_maths(
 \arguments{
 \item{in_file}{Character; file path. image to operate on \strong{Required.}}
 
-\item{operand_file}{Character; file path. second image to perform operation with \strong{Required.}}
+\item{operand_file}{Character; file path. second image to perform operation with \strong{Required unless an alternative is supplied:} \code{operand_value}.}
 
-\item{operand_value}{Numeric. value to perform operation with \strong{Required.}}
+\item{operand_value}{Numeric. value to perform operation with \strong{Required unless an alternative is supplied:} \code{operand_file}.}
 
 \item{operation}{Character; one of: "add", "sub", "mul", "div", "rem", "max", "min". operation to perform \strong{Required.}}
 

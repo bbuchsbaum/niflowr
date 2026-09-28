@@ -6,8 +6,8 @@
 \usage{
 ni_fsl_filter_regressor(
   design_file,
-  filter_all,
-  filter_columns,
+  filter_all = NULL,
+  filter_columns = NULL,
   in_file,
   args = NULL,
   mask = NULL,
@@ -25,9 +25,9 @@ ni_fsl_filter_regressor(
 \arguments{
 \item{design_file}{Character; file path. name of the matrix with time courses (e.g. GLM design or MELODIC mixing matrix) \strong{Required.}}
 
-\item{filter_all}{Logical. use all columns in the design file in denoising \strong{Required.}}
+\item{filter_all}{Logical. use all columns in the design file in denoising \strong{Required unless an alternative is supplied:} \code{filter_columns}.}
 
-\item{filter_columns}{Character or numeric vector. (1-based) column indices to filter out of the data \strong{Required.}}
+\item{filter_columns}{Character or numeric vector. (1-based) column indices to filter out of the data \strong{Required unless an alternative is supplied:} \code{filter_all}.}
 
 \item{in_file}{Character; file path. input file name (4D image) \strong{Required.}}
 

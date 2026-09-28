@@ -5,9 +5,9 @@
 \title{FREESURFER SegStats}
 \usage{
 ni_freesurfer_seg_stats(
-  annot,
-  segmentation_file,
-  surf_label,
+  annot = NULL,
+  segmentation_file = NULL,
+  surf_label = NULL,
   args = NULL,
   avgwf_file = NULL,
   avgwf_txt_file = NULL,
@@ -52,11 +52,11 @@ ni_freesurfer_seg_stats(
 )
 }
 \arguments{
-\item{annot}{Character or numeric vector. subject hemi parc : use surface parcellation \strong{Required.}}
+\item{annot}{Character or numeric vector. subject hemi parc : use surface parcellation \strong{Required unless an alternative is supplied:} \code{segmentation_file}, \code{surf_label}.}
 
-\item{segmentation_file}{Character; file path. segmentation volume path \strong{Required.}}
+\item{segmentation_file}{Character; file path. segmentation volume path \strong{Required unless an alternative is supplied:} \code{annot}, \code{surf_label}.}
 
-\item{surf_label}{Character or numeric vector. subject hemi label : use surface label \strong{Required.}}
+\item{surf_label}{Character or numeric vector. subject hemi label : use surface label \strong{Required unless an alternative is supplied:} \code{segmentation_file}, \code{annot}.}
 
 \item{args}{Character. Additional parameters to the command}
 

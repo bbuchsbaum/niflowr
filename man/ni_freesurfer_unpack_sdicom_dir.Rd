@@ -5,9 +5,9 @@
 \title{FREESURFER UnpackSDICOMDir}
 \usage{
 ni_freesurfer_unpack_sdicom_dir(
-  config,
-  run_info,
-  seq_config,
+  config = NULL,
+  run_info = NULL,
+  seq_config = NULL,
   source_dir,
   args = NULL,
   dir_structure = NULL,
@@ -26,11 +26,11 @@ ni_freesurfer_unpack_sdicom_dir(
 )
 }
 \arguments{
-\item{config}{Character; file path. specify unpacking rules in file \strong{Required.}}
+\item{config}{Character; file path. specify unpacking rules in file \strong{Required unless an alternative is supplied:} \code{run_info}, \code{seq_config}.}
 
-\item{run_info}{Character or numeric vector. runno subdir format name : spec unpacking rules on cmdline \strong{Required.}}
+\item{run_info}{Character or numeric vector. runno subdir format name : spec unpacking rules on cmdline \strong{Required unless an alternative is supplied:} \code{config}, \code{seq_config}.}
 
-\item{seq_config}{Character; file path. specify unpacking rules based on sequence \strong{Required.}}
+\item{seq_config}{Character; file path. specify unpacking rules based on sequence \strong{Required unless an alternative is supplied:} \code{run_info}, \code{config}.}
 
 \item{source_dir}{Character; directory path. directory with the DICOM files \strong{Required.}}
 

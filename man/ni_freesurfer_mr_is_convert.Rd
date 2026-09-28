@@ -6,8 +6,8 @@
 \usage{
 ni_freesurfer_mr_is_convert(
   in_file,
-  out_datatype,
-  out_file,
+  out_datatype = NULL,
+  out_file = NULL,
   annot_file = NULL,
   args = NULL,
   dataarray_num = NULL,
@@ -37,9 +37,9 @@ ni_freesurfer_mr_is_convert(
 \arguments{
 \item{in_file}{Character; file path. File to read/convert \strong{Required.}}
 
-\item{out_datatype}{Character; one of: "asc", "ico", "tri", "stl", "vtk", "gii", "mgh", "mgz". These file formats are supported: ASCII: .ascICO: .ico, .tri GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded 'volume': .mgh, .mgz \strong{Required.}}
+\item{out_datatype}{Character; one of: "asc", "ico", "tri", "stl", "vtk", "gii", "mgh", "mgz". These file formats are supported: ASCII: .ascICO: .ico, .tri GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded 'volume': .mgh, .mgz \strong{Required unless an alternative is supplied:} \code{out_file}.}
 
-\item{out_file}{Character; file path. output filename or True to generate one \strong{Required.}}
+\item{out_file}{Character; file path. output filename or True to generate one \strong{Required unless an alternative is supplied:} \code{out_datatype}.}
 
 \item{annot_file}{Character; file path. input is annotation or gifti label data}
 

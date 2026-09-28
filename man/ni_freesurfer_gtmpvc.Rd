@@ -6,9 +6,9 @@
 \usage{
 ni_freesurfer_gtmpvc(
   in_file,
-  reg_file,
-  reg_identity,
-  regheader,
+  reg_file = NULL,
+  reg_identity = NULL,
+  regheader = NULL,
   segmentation,
   X = NULL,
   X0 = NULL,
@@ -72,11 +72,11 @@ ni_freesurfer_gtmpvc(
 \arguments{
 \item{in_file}{Character; file path. input volume - source data to pvc \strong{Required.}}
 
-\item{reg_file}{Character; file path. LTA registration file that maps PET to anatomical \strong{Required.}}
+\item{reg_file}{Character; file path. LTA registration file that maps PET to anatomical \strong{Required unless an alternative is supplied:} \code{regheader}, \code{reg_identity}.}
 
-\item{reg_identity}{Logical. assume that input is in anatomical space \strong{Required.}}
+\item{reg_identity}{Logical. assume that input is in anatomical space \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{regheader}.}
 
-\item{regheader}{Logical. assume input and seg share scanner space \strong{Required.}}
+\item{regheader}{Logical. assume input and seg share scanner space \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{reg_identity}.}
 
 \item{segmentation}{Character; file path. segfile : anatomical segmentation to define regions for GTM \strong{Required.}}
 

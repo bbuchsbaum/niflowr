@@ -6,8 +6,8 @@
 \usage{
 ni_freesurfer_surface_transform(
   hemi,
-  source_annot_file,
-  source_file,
+  source_annot_file = NULL,
+  source_file = NULL,
   source_subject,
   target_subject,
   args = NULL,
@@ -28,9 +28,9 @@ ni_freesurfer_surface_transform(
 \arguments{
 \item{hemi}{Character; one of: "lh", "rh". hemisphere to transform \strong{Required.}}
 
-\item{source_annot_file}{Character; file path. surface annotation file \strong{Required.}}
+\item{source_annot_file}{Character; file path. surface annotation file \strong{Required unless an alternative is supplied:} \code{source_file}.}
 
-\item{source_file}{Character; file path. surface file with source values \strong{Required.}}
+\item{source_file}{Character; file path. surface file with source values \strong{Required unless an alternative is supplied:} \code{source_annot_file}.}
 
 \item{source_subject}{Character. subject id for source surface \strong{Required.}}
 

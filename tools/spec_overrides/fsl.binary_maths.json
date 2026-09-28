@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "operand_value": {
+      "cli": {
+        "position": 6
+      }
+    }
+  }
+}

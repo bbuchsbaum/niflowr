@@ -5,10 +5,10 @@
 \title{FSL Overlay}
 \usage{
 ni_fsl_overlay(
-  auto_thresh_bg,
+  auto_thresh_bg = NULL,
   background_image,
-  bg_thresh,
-  full_bg_range,
+  bg_thresh = NULL,
+  full_bg_range = NULL,
   stat_image,
   stat_thresh,
   args = NULL,
@@ -28,13 +28,13 @@ ni_fsl_overlay(
 )
 }
 \arguments{
-\item{auto_thresh_bg}{Logical. automatically threshold the background image \strong{Required.}}
+\item{auto_thresh_bg}{Logical. automatically threshold the background image \strong{Required unless an alternative is supplied:} \code{full_bg_range}, \code{bg_thresh}.}
 
 \item{background_image}{Character; file path. image to use as background \strong{Required.}}
 
-\item{bg_thresh}{Character or numeric vector. min and max values for background intensity \strong{Required.}}
+\item{bg_thresh}{Character or numeric vector. min and max values for background intensity \strong{Required unless an alternative is supplied:} \code{auto_thresh_bg}, \code{full_bg_range}.}
 
-\item{full_bg_range}{Logical. use full range of background image \strong{Required.}}
+\item{full_bg_range}{Logical. use full range of background image \strong{Required unless an alternative is supplied:} \code{auto_thresh_bg}, \code{bg_thresh}.}
 
 \item{stat_image}{Character; file path. statistical image to overlay in color \strong{Required.}}
 

@@ -5572,18 +5572,18 @@ ni_freesurfer_apply_mask <- function(in_file,
 #'
 #' Use FreeSurfer mri_vol2vol to apply a transform.
 #'
-#' @param fs_target Logical. use orig.mgz from subject in regfile as target **Required.**
-#' @param fsl_reg_file Character; file path. fslRAS-to-fslRAS matrix (FSL format) **Required.**
-#' @param lta_file Character; file path. Linear Transform Array file **Required.**
-#' @param lta_inv_file Character; file path. LTA, invert **Required.**
-#' @param mni_152_reg Logical. target MNI152 space **Required.**
-#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) **Required.**
-#' @param reg_header Logical. ScannerRAS-to-ScannerRAS matrix = identity **Required.**
+#' @param fs_target Logical. use orig.mgz from subject in regfile as target **Required unless an alternative is supplied:** `target_file`, `tal`.
+#' @param fsl_reg_file Character; file path. fslRAS-to-fslRAS matrix (FSL format) **Required unless an alternative is supplied:** `reg_file`, `lta_file`, `lta_inv_file`, `xfm_reg_file`, `reg_header`, `mni_152_reg`, `subject`.
+#' @param lta_file Character; file path. Linear Transform Array file **Required unless an alternative is supplied:** `reg_file`, `lta_inv_file`, `fsl_reg_file`, `xfm_reg_file`, `reg_header`, `mni_152_reg`, `subject`.
+#' @param lta_inv_file Character; file path. LTA, invert **Required unless an alternative is supplied:** `reg_file`, `lta_file`, `fsl_reg_file`, `xfm_reg_file`, `reg_header`, `mni_152_reg`, `subject`.
+#' @param mni_152_reg Logical. target MNI152 space **Required unless an alternative is supplied:** `reg_file`, `lta_file`, `lta_inv_file`, `fsl_reg_file`, `xfm_reg_file`, `reg_header`, `subject`.
+#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) **Required unless an alternative is supplied:** `lta_file`, `lta_inv_file`, `fsl_reg_file`, `xfm_reg_file`, `reg_header`, `mni_152_reg`, `subject`.
+#' @param reg_header Logical. ScannerRAS-to-ScannerRAS matrix = identity **Required unless an alternative is supplied:** `reg_file`, `lta_file`, `lta_inv_file`, `fsl_reg_file`, `xfm_reg_file`, `mni_152_reg`, `subject`.
 #' @param source_file Character; file path. Input volume you wish to transform **Required.**
-#' @param subject Character. set matrix = identity and use subject for any templates **Required.**
-#' @param tal Logical. map to a sub FOV of MNI305 (with --reg only) **Required.**
-#' @param target_file Character; file path. Output template volume **Required.**
-#' @param xfm_reg_file Character; file path. ScannerRAS-to-ScannerRAS matrix (MNI format) **Required.**
+#' @param subject Character. set matrix = identity and use subject for any templates **Required unless an alternative is supplied:** `reg_file`, `lta_file`, `lta_inv_file`, `fsl_reg_file`, `xfm_reg_file`, `reg_header`, `mni_152_reg`.
+#' @param tal Logical. map to a sub FOV of MNI305 (with --reg only) **Required unless an alternative is supplied:** `target_file`, `fs_target`.
+#' @param target_file Character; file path. Output template volume **Required unless an alternative is supplied:** `tal`, `fs_target`.
+#' @param xfm_reg_file Character; file path. ScannerRAS-to-ScannerRAS matrix (MNI format) **Required unless an alternative is supplied:** `reg_file`, `lta_file`, `lta_inv_file`, `fsl_reg_file`, `reg_header`, `mni_152_reg`, `subject`.
 #' @param args Character. Additional parameters to the command
 #' @param interp Character; one of: "trilin", "nearest", "cubic". Interpolation method (<trilin> or nearest)
 #' @param inverse Logical. sample from target to source
@@ -5601,18 +5601,18 @@ ni_freesurfer_apply_mask <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_apply_vol_transform <- function(fs_target,
-                     fsl_reg_file,
-                     lta_file,
-                     lta_inv_file,
-                     mni_152_reg,
-                     reg_file,
-                     reg_header,
+ni_freesurfer_apply_vol_transform <- function(fs_target = NULL,
+                     fsl_reg_file = NULL,
+                     lta_file = NULL,
+                     lta_inv_file = NULL,
+                     mni_152_reg = NULL,
+                     reg_file = NULL,
+                     reg_header = NULL,
                      source_file,
-                     subject,
-                     tal,
-                     target_file,
-                     xfm_reg_file,
+                     subject = NULL,
+                     tal = NULL,
+                     target_file = NULL,
+                     xfm_reg_file = NULL,
                      args = NULL,
                      interp = NULL,
                      inverse = NULL,
@@ -5900,8 +5900,8 @@ ni_freesurfer_ca_register <- function(in_file,
 #'
 #' This program detects Talairach alignment failures
 #'
-#' @param in_file Character; file path. specify the talairach.xfm file to check **Required.**
-#' @param subject Character. specify subject's name **Required.**
+#' @param in_file Character; file path. specify the talairach.xfm file to check **Required unless an alternative is supplied:** `subject`.
+#' @param subject Character. specify subject's name **Required unless an alternative is supplied:** `in_file`.
 #' @param args Character. Additional parameters to the command
 #' @param threshold Numeric. Talairach transforms for subjects with p-values <= T are considered as very unlikely default=0.010
 #' @param .cwd Working directory override.
@@ -5912,8 +5912,8 @@ ni_freesurfer_ca_register <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_check_talairach_alignment <- function(in_file,
-                     subject,
+ni_freesurfer_check_talairach_alignment <- function(in_file = NULL,
+                     subject = NULL,
                      args = NULL,
                      threshold = 0.01,
                      .cwd = NULL,
@@ -6611,9 +6611,9 @@ ni_freesurfer_gtm_seg <- function(subject_id,
 #' Perform Partial Volume Correction (PVC) to PET Data.
 #'
 #' @param in_file Character; file path. input volume - source data to pvc **Required.**
-#' @param reg_file Character; file path. LTA registration file that maps PET to anatomical **Required.**
-#' @param reg_identity Logical. assume that input is in anatomical space **Required.**
-#' @param regheader Logical. assume input and seg share scanner space **Required.**
+#' @param reg_file Character; file path. LTA registration file that maps PET to anatomical **Required unless an alternative is supplied:** `regheader`, `reg_identity`.
+#' @param reg_identity Logical. assume that input is in anatomical space **Required unless an alternative is supplied:** `reg_file`, `regheader`.
+#' @param regheader Logical. assume input and seg share scanner space **Required unless an alternative is supplied:** `reg_file`, `reg_identity`.
 #' @param segmentation Character; file path. segfile : anatomical segmentation to define regions for GTM **Required.**
 #' @param X Logical. save X matrix in matlab4 format as X.mat (it will be big)
 #' @param X0 Logical. save X0 matrix in matlab4 format as X0.mat (it will be big)
@@ -6675,9 +6675,9 @@ ni_freesurfer_gtm_seg <- function(subject_id,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_gtmpvc <- function(in_file,
-                     reg_file,
-                     reg_identity,
-                     regheader,
+                     reg_file = NULL,
+                     reg_identity = NULL,
+                     regheader = NULL,
                      segmentation,
                      X = NULL,
                      X0 = NULL,
@@ -6884,10 +6884,10 @@ ni_freesurfer_label2_label <- function(hemisphere,
 #'
 #' Make a binary volume from a Freesurfer label
 #'
-#' @param annot_file Character; file path. surface annotation file **Required.**
-#' @param aparc_aseg Logical. use aparc+aseg.mgz in subjectdir as seg **Required.**
-#' @param label_file Character or numeric vector. list of label files **Required.**
-#' @param seg_file Character; file path. segmentation file **Required.**
+#' @param annot_file Character; file path. surface annotation file **Required unless an alternative is supplied:** `label_file`, `seg_file`, `aparc_aseg`.
+#' @param aparc_aseg Logical. use aparc+aseg.mgz in subjectdir as seg **Required unless an alternative is supplied:** `label_file`, `annot_file`, `seg_file`.
+#' @param label_file Character or numeric vector. list of label files **Required unless an alternative is supplied:** `annot_file`, `seg_file`, `aparc_aseg`.
+#' @param seg_file Character; file path. segmentation file **Required unless an alternative is supplied:** `label_file`, `annot_file`, `aparc_aseg`.
 #' @param template_file Character; file path. output template volume **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param fill_thresh Numeric. thresh : between 0 and 1
@@ -6912,10 +6912,10 @@ ni_freesurfer_label2_label <- function(hemisphere,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_label2_vol <- function(annot_file,
-                     aparc_aseg,
-                     label_file,
-                     seg_file,
+ni_freesurfer_label2_vol <- function(annot_file = NULL,
+                     aparc_aseg = NULL,
+                     label_file = NULL,
+                     seg_file = NULL,
                      template_file,
                      args = NULL,
                      fill_thresh = NULL,
@@ -7084,12 +7084,12 @@ ni_freesurfer_logan <- function(in_file,
 #'
 #' Convert different transformation formats.
 #'
-#' @param in_fsl Character; file path. input transform of FSL type **Required.**
-#' @param in_itk Character; file path. input transform of ITK type **Required.**
-#' @param in_lta Character or numeric vector. input transform of LTA type **Required.**
-#' @param in_mni Character; file path. input transform of MNI/XFM type **Required.**
-#' @param in_niftyreg Character; file path. input transform of Nifty Reg type (inverse RAS2RAS) **Required.**
-#' @param in_reg Character; file path. input transform of TK REG type (deprecated format) **Required.**
+#' @param in_fsl Character; file path. input transform of FSL type **Required unless an alternative is supplied:** `in_lta`, `in_mni`, `in_reg`, `in_niftyreg`, `in_itk`.
+#' @param in_itk Character; file path. input transform of ITK type **Required unless an alternative is supplied:** `in_lta`, `in_fsl`, `in_mni`, `in_reg`, `in_niftyreg`.
+#' @param in_lta Character or numeric vector. input transform of LTA type **Required unless an alternative is supplied:** `in_fsl`, `in_mni`, `in_reg`, `in_niftyreg`, `in_itk`.
+#' @param in_mni Character; file path. input transform of MNI/XFM type **Required unless an alternative is supplied:** `in_lta`, `in_fsl`, `in_reg`, `in_niftyreg`, `in_itk`.
+#' @param in_niftyreg Character; file path. input transform of Nifty Reg type (inverse RAS2RAS) **Required unless an alternative is supplied:** `in_lta`, `in_fsl`, `in_mni`, `in_reg`, `in_itk`.
+#' @param in_reg Character; file path. input transform of TK REG type (deprecated format) **Required unless an alternative is supplied:** `in_lta`, `in_fsl`, `in_mni`, `in_niftyreg`, `in_itk`.
 #' @param args Character. Additional parameters to the command
 #' @param invert Logical
 #' @param ltavox2vox Logical
@@ -7109,12 +7109,12 @@ ni_freesurfer_logan <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_lta_convert <- function(in_fsl,
-                     in_itk,
-                     in_lta,
-                     in_mni,
-                     in_niftyreg,
-                     in_reg,
+ni_freesurfer_lta_convert <- function(in_fsl = NULL,
+                     in_itk = NULL,
+                     in_lta = NULL,
+                     in_mni = NULL,
+                     in_niftyreg = NULL,
+                     in_reg = NULL,
                      args = NULL,
                      invert = NULL,
                      ltavox2vox = NULL,
@@ -7411,8 +7411,8 @@ ni_freesurfer_mr_is_combine <- function(in_files,
 #' Uses Freesurfer's mris_convert to convert surface files to various formats
 #'
 #' @param in_file Character; file path. File to read/convert **Required.**
-#' @param out_datatype Character; one of: "asc", "ico", "tri", "stl", "vtk", "gii", "mgh", "mgz". These file formats are supported: ASCII: .ascICO: .ico, .tri GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded 'volume': .mgh, .mgz **Required.**
-#' @param out_file Character; file path. output filename or True to generate one **Required.**
+#' @param out_datatype Character; one of: "asc", "ico", "tri", "stl", "vtk", "gii", "mgh", "mgz". These file formats are supported: ASCII: .ascICO: .ico, .tri GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded 'volume': .mgh, .mgz **Required unless an alternative is supplied:** `out_file`.
+#' @param out_file Character; file path. output filename or True to generate one **Required unless an alternative is supplied:** `out_datatype`.
 #' @param annot_file Character; file path. input is annotation or gifti label data
 #' @param args Character. Additional parameters to the command
 #' @param dataarray_num Integer. if input is gifti, 'num' specifies which data array to use
@@ -7440,8 +7440,8 @@ ni_freesurfer_mr_is_combine <- function(in_files,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_mr_is_convert <- function(in_file,
-                     out_datatype,
-                     out_file,
+                     out_datatype = NULL,
+                     out_file = NULL,
                      annot_file = NULL,
                      args = NULL,
                      dataarray_num = NULL,
@@ -7740,9 +7740,9 @@ ni_freesurfer_mri_convert <- function(in_file,
 #'
 #' This program registers one volume to another
 #'
-#' @param reference_file Character; file path. reference (target) file **Required.**
+#' @param reference_file Character; file path. reference (target) file **Required unless an alternative is supplied:** `subject_id`.
 #' @param source_file Character; file path. source file to be registered **Required.**
-#' @param subject_id Character. freesurfer subject ID (implies ``reference_mask == aparc+aseg.mgz`` unless otherwise specified) **Required.**
+#' @param subject_id Character. freesurfer subject ID (implies ``reference_mask == aparc+aseg.mgz`` unless otherwise specified) **Required unless an alternative is supplied:** `reference_file`.
 #' @param args Character. Additional parameters to the command
 #' @param brute_force_limit Numeric. constrain brute force search to +/- lim
 #' @param brute_force_samples Integer. number of samples in brute force search
@@ -7779,9 +7779,9 @@ ni_freesurfer_mri_convert <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_mri_coreg <- function(reference_file,
+ni_freesurfer_mri_coreg <- function(reference_file = NULL,
                      source_file,
-                     subject_id,
+                     subject_id = NULL,
                      args = NULL,
                      brute_force_limit = NULL,
                      brute_force_samples = NULL,
@@ -8970,8 +8970,8 @@ ni_freesurfer_resample <- function(in_file,
 #'
 #' Perform intramodal linear registration (translation and rotation) using
 #'
-#' @param auto_sens Logical. auto-detect good sensitivity **Required.**
-#' @param outlier_sens Numeric. set outlier sensitivity explicitly **Required.**
+#' @param auto_sens Logical. auto-detect good sensitivity **Required unless an alternative is supplied:** `outlier_sens`.
+#' @param outlier_sens Numeric. set outlier sensitivity explicitly **Required unless an alternative is supplied:** `auto_sens`.
 #' @param source_file Character; file path. volume to be registered **Required.**
 #' @param target_file Character; file path. target volume for the registration **Required.**
 #' @param args Character. Additional parameters to the command
@@ -9008,8 +9008,8 @@ ni_freesurfer_resample <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_robust_register <- function(auto_sens,
-                     outlier_sens,
+ni_freesurfer_robust_register <- function(auto_sens = NULL,
+                     outlier_sens = NULL,
                      source_file,
                      target_file,
                      args = NULL,
@@ -9052,10 +9052,10 @@ ni_freesurfer_robust_register <- function(auto_sens,
 #'
 #' construct an unbiased robust template for longitudinal volumes
 #'
-#' @param auto_detect_sensitivity Logical. auto-detect good sensitivity (recommended for head or full brain scans) **Required.**
+#' @param auto_detect_sensitivity Logical. auto-detect good sensitivity (recommended for head or full brain scans) **Required unless an alternative is supplied:** `outlier_sensitivity`.
 #' @param in_files Character or numeric vector. input movable volumes to be aligned to common mean/median template **Required.**
 #' @param out_file Character; file path. output template volume (final mean/median image)
-#' @param outlier_sensitivity Numeric. set outlier sensitivity manually (e.g. "--sat 4.685" ). Higher values mean less sensitivity. **Required.**
+#' @param outlier_sensitivity Numeric. set outlier sensitivity manually (e.g. "--sat 4.685" ). Higher values mean less sensitivity. **Required unless an alternative is supplied:** `auto_detect_sensitivity`.
 #' @param args Character. Additional parameters to the command
 #' @param average_metric Character; one of: "median", "mean". construct template from: 0 Mean, 1 Median (default)
 #' @param fixed_timepoint Logical. map everything to init TP# (init TP is not resampled)
@@ -9075,10 +9075,10 @@ ni_freesurfer_robust_register <- function(auto_sens,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_robust_template <- function(auto_detect_sensitivity,
+ni_freesurfer_robust_template <- function(auto_detect_sensitivity = NULL,
                      in_files,
                      out_file = "mri_robust_template_out.mgz",
-                     outlier_sensitivity,
+                     outlier_sensitivity = NULL,
                      args = NULL,
                      average_metric = NULL,
                      fixed_timepoint = NULL,
@@ -9105,11 +9105,11 @@ ni_freesurfer_robust_template <- function(auto_detect_sensitivity,
 #' Sample a volume to the cortical surface using Freesurfer's mri_vol2surf.
 #'
 #' @param hemi Character; one of: "lh", "rh". target hemisphere **Required.**
-#' @param mni152reg Logical. source volume is in MNI152 space **Required.**
-#' @param projection_stem Character. stem for precomputed linear estimates and volume fractions **Required.**
-#' @param reg_file Character; file path. source-to-reference registration file **Required.**
-#' @param reg_header Logical. register based on header geometry **Required.**
-#' @param sampling_method Character; one of: "point", "max", "average". how to sample -- at a point or at the max or average over a range **Required.**
+#' @param mni152reg Logical. source volume is in MNI152 space **Required unless an alternative is supplied:** `reg_file`, `reg_header`.
+#' @param projection_stem Character. stem for precomputed linear estimates and volume fractions **Required unless an alternative is supplied:** `sampling_method`.
+#' @param reg_file Character; file path. source-to-reference registration file **Required unless an alternative is supplied:** `reg_header`, `mni152reg`.
+#' @param reg_header Logical. register based on header geometry **Required unless an alternative is supplied:** `reg_file`, `mni152reg`.
+#' @param sampling_method Character; one of: "point", "max", "average". how to sample -- at a point or at the max or average over a range **Required unless an alternative is supplied:** `projection_stem`.
 #' @param source_file Character; file path. volume to sample values from **Required.**
 #' @param apply_rot Character or numeric vector. rotation angles (in degrees) to apply to reg matrix
 #' @param apply_trans Character or numeric vector. translation (in mm) to apply to reg matrix
@@ -9146,11 +9146,11 @@ ni_freesurfer_robust_template <- function(auto_detect_sensitivity,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_sample_to_surface <- function(hemi,
-                     mni152reg,
-                     projection_stem,
-                     reg_file,
-                     reg_header,
-                     sampling_method,
+                     mni152reg = NULL,
+                     projection_stem = NULL,
+                     reg_file = NULL,
+                     reg_header = NULL,
+                     sampling_method = NULL,
                      source_file,
                      apply_rot = NULL,
                      apply_trans = NULL,
@@ -9192,9 +9192,9 @@ ni_freesurfer_sample_to_surface <- function(hemi,
 #'
 #' Use FreeSurfer mri_segstats for ROI analysis
 #'
-#' @param annot Character or numeric vector. subject hemi parc : use surface parcellation **Required.**
-#' @param segmentation_file Character; file path. segmentation volume path **Required.**
-#' @param surf_label Character or numeric vector. subject hemi label : use surface label **Required.**
+#' @param annot Character or numeric vector. subject hemi parc : use surface parcellation **Required unless an alternative is supplied:** `segmentation_file`, `surf_label`.
+#' @param segmentation_file Character; file path. segmentation volume path **Required unless an alternative is supplied:** `annot`, `surf_label`.
+#' @param surf_label Character or numeric vector. subject hemi label : use surface label **Required unless an alternative is supplied:** `segmentation_file`, `annot`.
 #' @param args Character. Additional parameters to the command
 #' @param avgwf_file Character or numeric vector. Save as binary volume (bool or filename)
 #' @param avgwf_txt_file Character or numeric vector. Save average waveform into file (bool or filename)
@@ -9238,9 +9238,9 @@ ni_freesurfer_sample_to_surface <- function(hemi,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_seg_stats <- function(annot,
-                     segmentation_file,
-                     surf_label,
+ni_freesurfer_seg_stats <- function(annot = NULL,
+                     segmentation_file = NULL,
+                     surf_label = NULL,
                      args = NULL,
                      avgwf_file = NULL,
                      avgwf_txt_file = NULL,
@@ -9290,7 +9290,7 @@ ni_freesurfer_seg_stats <- function(annot,
 #'
 #' This class inherits SegStats and modifies it for use in a recon-all workflow.
 #'
-#' @param annot Character or numeric vector. subject hemi parc : use surface parcellation **Required.**
+#' @param annot Character or numeric vector. subject hemi parc : use surface parcellation **Required unless an alternative is supplied:** `segmentation_file`, `surf_label`.
 #' @param lh_orig_nofix Character; file path. Input lh.orig.nofix **Required.**
 #' @param lh_pial Character; file path. Input file must be <subject_id>/surf/lh.pial **Required.**
 #' @param lh_white Character; file path. Input file must be <subject_id>/surf/lh.white **Required.**
@@ -9298,9 +9298,9 @@ ni_freesurfer_seg_stats <- function(annot,
 #' @param rh_pial Character; file path. Input file must be <subject_id>/surf/rh.pial **Required.**
 #' @param rh_white Character; file path. Input file must be <subject_id>/surf/rh.white **Required.**
 #' @param ribbon Character; file path. Input file mri/ribbon.mgz **Required.**
-#' @param segmentation_file Character; file path. segmentation volume path **Required.**
+#' @param segmentation_file Character; file path. segmentation volume path **Required unless an alternative is supplied:** `annot`, `surf_label`.
 #' @param subject_id Character. Subject id being processed
-#' @param surf_label Character or numeric vector. subject hemi label : use surface label **Required.**
+#' @param surf_label Character or numeric vector. subject hemi label : use surface label **Required unless an alternative is supplied:** `segmentation_file`, `annot`.
 #' @param transform Character; file path. Input transform file **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param avgwf_file Character or numeric vector. Save as binary volume (bool or filename)
@@ -9345,7 +9345,7 @@ ni_freesurfer_seg_stats <- function(annot,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_seg_stats_recon_all <- function(annot,
+ni_freesurfer_seg_stats_recon_all <- function(annot = NULL,
                      lh_orig_nofix,
                      lh_pial,
                      lh_white,
@@ -9353,9 +9353,9 @@ ni_freesurfer_seg_stats_recon_all <- function(annot,
                      rh_pial,
                      rh_white,
                      ribbon,
-                     segmentation_file,
+                     segmentation_file = NULL,
                      subject_id = "subject_id",
-                     surf_label,
+                     surf_label = NULL,
                      transform,
                      args = NULL,
                      avgwf_file = NULL,
@@ -9469,9 +9469,9 @@ ni_freesurfer_segment_wm <- function(in_file,
 #' Use FreeSurfer mris_volsmooth to smooth a volume
 #'
 #' @param in_file Character; file path. source volume **Required.**
-#' @param num_iters Integer. number of iterations instead of fwhm **Required.**
+#' @param num_iters Integer. number of iterations instead of fwhm **Required unless an alternative is supplied:** `surface_fwhm`.
 #' @param reg_file Character; file path. registers volume to surface anatomical **Required.**
-#' @param surface_fwhm Numeric. surface FWHM in mm **Required.**
+#' @param surface_fwhm Numeric. surface FWHM in mm **Required unless an alternative is supplied:** `num_iters`.
 #' @param args Character. Additional parameters to the command
 #' @param proj_frac Numeric. project frac of thickness a long surface normal
 #' @param proj_frac_avg Character or numeric vector. average a long normal min max delta
@@ -9486,9 +9486,9 @@ ni_freesurfer_segment_wm <- function(in_file,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_smooth <- function(in_file,
-                     num_iters,
+                     num_iters = NULL,
                      reg_file,
-                     surface_fwhm,
+                     surface_fwhm = NULL,
                      args = NULL,
                      proj_frac = NULL,
                      proj_frac_avg = NULL,
@@ -9637,8 +9637,8 @@ ni_freesurfer_spherical_average <- function(fname,
 #' Use FreeSurfer mri_surf2vol to apply a transform.
 #'
 #' @param hemi Character. hemisphere of data **Required.**
-#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) **Required.**
-#' @param source_file Character; file path. This is the source of the surface values **Required.**
+#' @param reg_file Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) **Required unless an alternative is supplied:** `subject_id`.
+#' @param source_file Character; file path. This is the source of the surface values **Required unless an alternative is supplied:** `mkmask`.
 #' @param args Character. Additional parameters to the command
 #' @param mkmask Logical. make a mask instead of loading surface values
 #' @param projfrac Numeric. thickness fraction
@@ -9657,8 +9657,8 @@ ni_freesurfer_spherical_average <- function(fname,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_surface2_vol_transform <- function(hemi,
-                     reg_file,
-                     source_file,
+                     reg_file = NULL,
+                     source_file = NULL,
                      args = NULL,
                      mkmask = NULL,
                      projfrac = NULL,
@@ -9803,8 +9803,8 @@ ni_freesurfer_surface_snapshots <- function(hemi,
 #' Transform a surface file from one subject to another via a spherical registration.
 #'
 #' @param hemi Character; one of: "lh", "rh". hemisphere to transform **Required.**
-#' @param source_annot_file Character; file path. surface annotation file **Required.**
-#' @param source_file Character; file path. surface file with source values **Required.**
+#' @param source_annot_file Character; file path. surface annotation file **Required unless an alternative is supplied:** `source_file`.
+#' @param source_file Character; file path. surface file with source values **Required unless an alternative is supplied:** `source_annot_file`.
 #' @param source_subject Character. subject id for source surface **Required.**
 #' @param target_subject Character. subject id of target surface **Required.**
 #' @param args Character. Additional parameters to the command
@@ -9823,8 +9823,8 @@ ni_freesurfer_surface_snapshots <- function(hemi,
 #' @return An `ni_result` object.
 #' @export
 ni_freesurfer_surface_transform <- function(hemi,
-                     source_annot_file,
-                     source_file,
+                     source_annot_file = NULL,
+                     source_file = NULL,
                      source_subject,
                      target_subject,
                      args = NULL,
@@ -10124,9 +10124,9 @@ ni_freesurfer_tkregister2 <- function(moving_image,
 #'
 #' Use unpacksdcmdir to convert dicom files
 #'
-#' @param config Character; file path. specify unpacking rules in file **Required.**
-#' @param run_info Character or numeric vector. runno subdir format name : spec unpacking rules on cmdline **Required.**
-#' @param seq_config Character; file path. specify unpacking rules based on sequence **Required.**
+#' @param config Character; file path. specify unpacking rules in file **Required unless an alternative is supplied:** `run_info`, `seq_config`.
+#' @param run_info Character or numeric vector. runno subdir format name : spec unpacking rules on cmdline **Required unless an alternative is supplied:** `config`, `seq_config`.
+#' @param seq_config Character; file path. specify unpacking rules based on sequence **Required unless an alternative is supplied:** `run_info`, `config`.
 #' @param source_dir Character; directory path. directory with the DICOM files **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param dir_structure Character; one of: "fsfast", "generic". unpack to specified directory structures
@@ -10144,9 +10144,9 @@ ni_freesurfer_tkregister2 <- function(moving_image,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_freesurfer_unpack_sdicom_dir <- function(config,
-                     run_info,
-                     seq_config,
+ni_freesurfer_unpack_sdicom_dir <- function(config = NULL,
+                     run_info = NULL,
+                     seq_config = NULL,
                      source_dir,
                      args = NULL,
                      dir_structure = NULL,
@@ -10777,8 +10777,8 @@ ni_fsl_bet <- function(in_file,
 #' Use fslmaths to perform mathematical operations using a second image or
 #'
 #' @param in_file Character; file path. image to operate on **Required.**
-#' @param operand_file Character; file path. second image to perform operation with **Required.**
-#' @param operand_value Numeric. value to perform operation with **Required.**
+#' @param operand_file Character; file path. second image to perform operation with **Required unless an alternative is supplied:** `operand_value`.
+#' @param operand_value Numeric. value to perform operation with **Required unless an alternative is supplied:** `operand_file`.
 #' @param operation Character; one of: "add", "sub", "mul", "div", "rem", "max", "min". operation to perform **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param internal_datatype Character; one of: "float", "char", "int", "short", "double", "input". datatype to use for calculations (default is float)
@@ -10794,8 +10794,8 @@ ni_fsl_bet <- function(in_file,
 #' @return An `ni_result` object.
 #' @export
 ni_fsl_binary_maths <- function(in_file,
-                     operand_file,
-                     operand_value,
+                     operand_file = NULL,
+                     operand_value = NULL,
                      operation,
                      args = NULL,
                      internal_datatype = NULL,
@@ -11871,8 +11871,8 @@ ni_fsl_filmgls <- function(in_file,
 #' Data de-noising by regressing out part of a design matrix
 #'
 #' @param design_file Character; file path. name of the matrix with time courses (e.g. GLM design or MELODIC mixing matrix) **Required.**
-#' @param filter_all Logical. use all columns in the design file in denoising **Required.**
-#' @param filter_columns Character or numeric vector. (1-based) column indices to filter out of the data **Required.**
+#' @param filter_all Logical. use all columns in the design file in denoising **Required unless an alternative is supplied:** `filter_columns`.
+#' @param filter_columns Character or numeric vector. (1-based) column indices to filter out of the data **Required unless an alternative is supplied:** `filter_all`.
 #' @param in_file Character; file path. input file name (4D image) **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param mask Character; file path. mask image file name
@@ -11888,8 +11888,8 @@ ni_fsl_filmgls <- function(in_file,
 #' @return An `ni_result` object.
 #' @export
 ni_fsl_filter_regressor <- function(design_file,
-                     filter_all,
-                     filter_columns,
+                     filter_all = NULL,
+                     filter_columns = NULL,
                      in_file,
                      args = NULL,
                      mask = NULL,
@@ -12409,9 +12409,9 @@ ni_fsl_glm <- function(design,
 #' Interface for the ICA_AROMA.py script.
 #'
 #' @param denoise_type Character; one of: "nonaggr", "aggr", "both", "no". Type of denoising strategy: -no: only classification, no denoising -nonaggr (default): non-aggresssive denoising, i.e. partial component regression -aggr: aggressive denoising, i.e. full component regression -both: both aggressive and non-aggressive denoising (two outputs)
-#' @param feat_dir Character; directory path. If a feat directory exists and temporal filtering has not been run yet, ICA_AROMA can use the files in this directory. **Required.**
-#' @param in_file Character; file path. volume to be denoised **Required.**
-#' @param motion_parameters Character; file path. motion parameters file **Required.**
+#' @param feat_dir Character; directory path. If a feat directory exists and temporal filtering has not been run yet, ICA_AROMA can use the files in this directory. **Required unless an alternative is supplied:** `in_file`, `mat_file`, `fnirt_warp_file`, `motion_parameters`.
+#' @param in_file Character; file path. volume to be denoised **Required unless an alternative is supplied:** `feat_dir`.
+#' @param motion_parameters Character; file path. motion parameters file **Required unless an alternative is supplied:** `feat_dir`.
 #' @param out_dir Character; directory path. output directory
 #' @param TR Numeric. TR in seconds. If this is not specified the TR will be extracted from the header of the fMRI nifti file.
 #' @param args Character. Additional parameters to the command
@@ -12429,9 +12429,9 @@ ni_fsl_glm <- function(design,
 #' @return An `ni_result` object.
 #' @export
 ni_fsl_ica_aroma <- function(denoise_type = "nonaggr",
-                     feat_dir,
-                     in_file,
-                     motion_parameters,
+                     feat_dir = NULL,
+                     in_file = NULL,
+                     motion_parameters = NULL,
                      out_dir = "out",
                      TR = NULL,
                      args = NULL,
@@ -12610,9 +12610,9 @@ ni_fsl_inv_warp <- function(reference,
 #'
 #' Use fslmaths to spatially smooth an image with a gaussian kernel.
 #'
-#' @param fwhm Numeric. fwhm of smoothing kernel \[mm\] **Required.**
+#' @param fwhm Numeric. fwhm of smoothing kernel \[mm\] **Required unless an alternative is supplied:** `sigma`.
 #' @param in_file Character; file path. image to operate on **Required.**
-#' @param sigma Numeric. sigma of smoothing kernel \[mm\] **Required.**
+#' @param sigma Numeric. sigma of smoothing kernel \[mm\] **Required unless an alternative is supplied:** `fwhm`.
 #' @param args Character. Additional parameters to the command
 #' @param internal_datatype Character; one of: "float", "char", "int", "short", "double", "input". datatype to use for calculations (default is float)
 #' @param nan2zeros Logical. change NaNs to zeros before doing anything
@@ -12626,9 +12626,9 @@ ni_fsl_inv_warp <- function(reference,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_isotropic_smooth <- function(fwhm,
+ni_fsl_isotropic_smooth <- function(fwhm = NULL,
                      in_file,
-                     sigma,
+                     sigma = NULL,
                      args = NULL,
                      internal_datatype = NULL,
                      nan2zeros = NULL,
@@ -13192,10 +13192,10 @@ ni_fsl_multi_image_maths <- function(in_file,
 #'
 #' Use FSL's overlay command to combine background and statistical images
 #'
-#' @param auto_thresh_bg Logical. automatically threshold the background image **Required.**
+#' @param auto_thresh_bg Logical. automatically threshold the background image **Required unless an alternative is supplied:** `full_bg_range`, `bg_thresh`.
 #' @param background_image Character; file path. image to use as background **Required.**
-#' @param bg_thresh Character or numeric vector. min and max values for background intensity **Required.**
-#' @param full_bg_range Logical. use full range of background image **Required.**
+#' @param bg_thresh Character or numeric vector. min and max values for background intensity **Required unless an alternative is supplied:** `auto_thresh_bg`, `full_bg_range`.
+#' @param full_bg_range Logical. use full range of background image **Required unless an alternative is supplied:** `auto_thresh_bg`, `bg_thresh`.
 #' @param stat_image Character; file path. statistical image to overlay in color **Required.**
 #' @param stat_thresh Character or numeric vector. min and max values for the statistical overlay **Required.**
 #' @param args Character. Additional parameters to the command
@@ -13214,10 +13214,10 @@ ni_fsl_multi_image_maths <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_overlay <- function(auto_thresh_bg,
+ni_fsl_overlay <- function(auto_thresh_bg = NULL,
                      background_image,
-                     bg_thresh,
-                     full_bg_range,
+                     bg_thresh = NULL,
+                     full_bg_range = NULL,
                      stat_image,
                      stat_thresh,
                      args = NULL,
@@ -13396,9 +13396,9 @@ ni_fsl_power_spectrum <- function(in_file,
 #'
 #' FSL prelude wrapper for phase unwrapping
 #'
-#' @param complex_phase_file Character; file path. complex phase input volume **Required.**
-#' @param magnitude_file Character; file path. file containing magnitude image **Required.**
-#' @param phase_file Character; file path. raw phase file **Required.**
+#' @param complex_phase_file Character; file path. complex phase input volume **Required unless an alternative is supplied:** `magnitude_file`, `phase_file`.
+#' @param magnitude_file Character; file path. file containing magnitude image **Required unless an alternative is supplied:** `complex_phase_file`.
+#' @param phase_file Character; file path. raw phase file **Required unless an alternative is supplied:** `complex_phase_file`.
 #' @param args Character. Additional parameters to the command
 #' @param end Integer. final image number to process (default Inf)
 #' @param label_file Character; file path. saving the area labels output
@@ -13421,9 +13421,9 @@ ni_fsl_power_spectrum <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_prelude <- function(complex_phase_file,
-                     magnitude_file,
-                     phase_file,
+ni_fsl_prelude <- function(complex_phase_file = NULL,
+                     magnitude_file = NULL,
+                     phase_file = NULL,
                      args = NULL,
                      end = NULL,
                      label_file = NULL,
@@ -14066,9 +14066,9 @@ ni_fsl_smm <- function(mask,
 #'
 #' Use fslmaths to smooth the image
 #'
-#' @param fwhm Numeric. gaussian kernel fwhm, will be converted to sigma in mm (not voxels) **Required.**
+#' @param fwhm Numeric. gaussian kernel fwhm, will be converted to sigma in mm (not voxels) **Required unless an alternative is supplied:** `sigma`.
 #' @param in_file Character; file path **Required.**
-#' @param sigma Numeric. gaussian kernel sigma in mm (not voxels) **Required.**
+#' @param sigma Numeric. gaussian kernel sigma in mm (not voxels) **Required unless an alternative is supplied:** `fwhm`.
 #' @param args Character. Additional parameters to the command
 #' @param smoothed_file Character; file path
 #' @param .cwd Working directory override.
@@ -14079,9 +14079,9 @@ ni_fsl_smm <- function(mask,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_smooth <- function(fwhm,
+ni_fsl_smooth <- function(fwhm = NULL,
                      in_file,
-                     sigma,
+                     sigma = NULL,
                      args = NULL,
                      smoothed_file = NULL,
                      .cwd = NULL,
@@ -14098,7 +14098,7 @@ ni_fsl_smooth <- function(fwhm,
 #'
 #' Estimates the smoothness of an image
 #'
-#' @param dof Integer. number of degrees of freedom **Required.**
+#' @param dof Integer. number of degrees of freedom **Required unless an alternative is supplied:** `zstat_file`.
 #' @param mask_file Character; file path. brain mask volume **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param residual_fit_file Character; file path. residual-fit image file
@@ -14111,7 +14111,7 @@ ni_fsl_smooth <- function(fwhm,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_smooth_estimate <- function(dof,
+ni_fsl_smooth_estimate <- function(dof = NULL,
                      mask_file,
                      args = NULL,
                      residual_fit_file = NULL,
@@ -14406,10 +14406,10 @@ ni_fsl_threshold <- function(in_file,
 #'
 #' Interface for FSL topup, a tool for estimating and correcting
 #'
-#' @param encoding_direction Character or numeric vector. encoding direction for automatic generation of encoding_file **Required.**
-#' @param encoding_file Character; file path. name of text file with PE directions/times **Required.**
+#' @param encoding_direction Character or numeric vector. encoding direction for automatic generation of encoding_file **Required unless an alternative is supplied:** `encoding_file`.
+#' @param encoding_file Character; file path. name of text file with PE directions/times **Required unless an alternative is supplied:** `encoding_direction`.
 #' @param in_file Character; file path. name of 4D file with images **Required.**
-#' @param readout_times Character or numeric vector. readout times (dwell times by # phase-encode steps minus 1) **Required.**
+#' @param readout_times Character or numeric vector. readout times (dwell times by # phase-encode steps minus 1) **Required unless an alternative is supplied:** `encoding_file`.
 #' @param args Character. Additional parameters to the command
 #' @param config Character. Name of config file specifying command line arguments
 #' @param estmov Character; one of: "1", "0". estimate movements if set
@@ -14441,10 +14441,10 @@ ni_fsl_threshold <- function(in_file,
 #' @param echo Logical; echo stdout/stderr in real time.
 #' @return An `ni_result` object.
 #' @export
-ni_fsl_topup <- function(encoding_direction,
-                     encoding_file,
+ni_fsl_topup <- function(encoding_direction = NULL,
+                     encoding_file = NULL,
                      in_file,
-                     readout_times,
+                     readout_times = NULL,
                      args = NULL,
                      config = "b02b0.cnf",
                      estmov = NULL,

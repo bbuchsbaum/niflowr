@@ -885,7 +885,7 @@
   },
   "fsl.binary_maths": {
     "command": "fslmaths",
-    "args": ["-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-add", "/tmp/niflowr/operand_file.nii.gz", "args_value", "1.00000000", "/tmp/niflowr/out_file", "-odt", "float"]
+    "args": ["-dt", "float", "/tmp/niflowr/in_file.nii.gz", "-add", "/tmp/niflowr/operand_file.nii.gz", "1.00000000", "args_value", "/tmp/niflowr/out_file", "-odt", "float"]
   },
   "fsl.change_data_type": {
     "command": "fslmaths",

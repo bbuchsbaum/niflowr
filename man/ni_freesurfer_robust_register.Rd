@@ -5,8 +5,8 @@
 \title{FREESURFER RobustRegister}
 \usage{
 ni_freesurfer_robust_register(
-  auto_sens,
-  outlier_sens,
+  auto_sens = NULL,
+  outlier_sens = NULL,
   source_file,
   target_file,
   args = NULL,
@@ -44,9 +44,9 @@ ni_freesurfer_robust_register(
 )
 }
 \arguments{
-\item{auto_sens}{Logical. auto-detect good sensitivity \strong{Required.}}
+\item{auto_sens}{Logical. auto-detect good sensitivity \strong{Required unless an alternative is supplied:} \code{outlier_sens}.}
 
-\item{outlier_sens}{Numeric. set outlier sensitivity explicitly \strong{Required.}}
+\item{outlier_sens}{Numeric. set outlier sensitivity explicitly \strong{Required unless an alternative is supplied:} \code{auto_sens}.}
 
 \item{source_file}{Character; file path. volume to be registered \strong{Required.}}
 

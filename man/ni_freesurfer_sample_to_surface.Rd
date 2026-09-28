@@ -6,11 +6,11 @@
 \usage{
 ni_freesurfer_sample_to_surface(
   hemi,
-  mni152reg,
-  projection_stem,
-  reg_file,
-  reg_header,
-  sampling_method,
+  mni152reg = NULL,
+  projection_stem = NULL,
+  reg_file = NULL,
+  reg_header = NULL,
+  sampling_method = NULL,
   source_file,
   apply_rot = NULL,
   apply_trans = NULL,
@@ -49,15 +49,15 @@ ni_freesurfer_sample_to_surface(
 \arguments{
 \item{hemi}{Character; one of: "lh", "rh". target hemisphere \strong{Required.}}
 
-\item{mni152reg}{Logical. source volume is in MNI152 space \strong{Required.}}
+\item{mni152reg}{Logical. source volume is in MNI152 space \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{reg_header}.}
 
-\item{projection_stem}{Character. stem for precomputed linear estimates and volume fractions \strong{Required.}}
+\item{projection_stem}{Character. stem for precomputed linear estimates and volume fractions \strong{Required unless an alternative is supplied:} \code{sampling_method}.}
 
-\item{reg_file}{Character; file path. source-to-reference registration file \strong{Required.}}
+\item{reg_file}{Character; file path. source-to-reference registration file \strong{Required unless an alternative is supplied:} \code{reg_header}, \code{mni152reg}.}
 
-\item{reg_header}{Logical. register based on header geometry \strong{Required.}}
+\item{reg_header}{Logical. register based on header geometry \strong{Required unless an alternative is supplied:} \code{reg_file}, \code{mni152reg}.}
 
-\item{sampling_method}{Character; one of: "point", "max", "average". how to sample -- at a point or at the max or average over a range \strong{Required.}}
+\item{sampling_method}{Character; one of: "point", "max", "average". how to sample -- at a point or at the max or average over a range \strong{Required unless an alternative is supplied:} \code{projection_stem}.}
 
 \item{source_file}{Character; file path. volume to sample values from \strong{Required.}}
 

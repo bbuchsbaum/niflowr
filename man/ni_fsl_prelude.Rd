@@ -5,9 +5,9 @@
 \title{FSL PRELUDE}
 \usage{
 ni_fsl_prelude(
-  complex_phase_file,
-  magnitude_file,
-  phase_file,
+  complex_phase_file = NULL,
+  magnitude_file = NULL,
+  phase_file = NULL,
   args = NULL,
   end = NULL,
   label_file = NULL,
@@ -31,11 +31,11 @@ ni_fsl_prelude(
 )
 }
 \arguments{
-\item{complex_phase_file}{Character; file path. complex phase input volume \strong{Required.}}
+\item{complex_phase_file}{Character; file path. complex phase input volume \strong{Required unless an alternative is supplied:} \code{magnitude_file}, \code{phase_file}.}
 
-\item{magnitude_file}{Character; file path. file containing magnitude image \strong{Required.}}
+\item{magnitude_file}{Character; file path. file containing magnitude image \strong{Required unless an alternative is supplied:} \code{complex_phase_file}.}
 
-\item{phase_file}{Character; file path. raw phase file \strong{Required.}}
+\item{phase_file}{Character; file path. raw phase file \strong{Required unless an alternative is supplied:} \code{complex_phase_file}.}
 
 \item{args}{Character. Additional parameters to the command}
 

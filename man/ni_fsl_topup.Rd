@@ -5,10 +5,10 @@
 \title{FSL TOPUP}
 \usage{
 ni_fsl_topup(
-  encoding_direction,
-  encoding_file,
+  encoding_direction = NULL,
+  encoding_file = NULL,
   in_file,
-  readout_times,
+  readout_times = NULL,
   args = NULL,
   config = "b02b0.cnf",
   estmov = NULL,
@@ -41,13 +41,13 @@ ni_fsl_topup(
 )
 }
 \arguments{
-\item{encoding_direction}{Character or numeric vector. encoding direction for automatic generation of encoding_file \strong{Required.}}
+\item{encoding_direction}{Character or numeric vector. encoding direction for automatic generation of encoding_file \strong{Required unless an alternative is supplied:} \code{encoding_file}.}
 
-\item{encoding_file}{Character; file path. name of text file with PE directions/times \strong{Required.}}
+\item{encoding_file}{Character; file path. name of text file with PE directions/times \strong{Required unless an alternative is supplied:} \code{encoding_direction}.}
 
 \item{in_file}{Character; file path. name of 4D file with images \strong{Required.}}
 
-\item{readout_times}{Character or numeric vector. readout times (dwell times by # phase-encode steps minus 1) \strong{Required.}}
+\item{readout_times}{Character or numeric vector. readout times (dwell times by # phase-encode steps minus 1) \strong{Required unless an alternative is supplied:} \code{encoding_file}.}
 
 \item{args}{Character. Additional parameters to the command}
 

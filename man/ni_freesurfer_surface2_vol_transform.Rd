@@ -6,8 +6,8 @@
 \usage{
 ni_freesurfer_surface2_vol_transform(
   hemi,
-  reg_file,
-  source_file,
+  reg_file = NULL,
+  source_file = NULL,
   args = NULL,
   mkmask = NULL,
   projfrac = NULL,
@@ -28,9 +28,9 @@ ni_freesurfer_surface2_vol_transform(
 \arguments{
 \item{hemi}{Character. hemisphere of data \strong{Required.}}
 
-\item{reg_file}{Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) \strong{Required.}}
+\item{reg_file}{Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format) \strong{Required unless an alternative is supplied:} \code{subject_id}.}
 
-\item{source_file}{Character; file path. This is the source of the surface values \strong{Required.}}
+\item{source_file}{Character; file path. This is the source of the surface values \strong{Required unless an alternative is supplied:} \code{mkmask}.}
 
 \item{args}{Character. Additional parameters to the command}
 
