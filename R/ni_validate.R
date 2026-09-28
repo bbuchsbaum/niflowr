@@ -179,6 +179,38 @@ validate_constraints_single <- function(name, value, validate_block, type = NULL
     }
   }
 
+  numeric_file <- validate_block$numeric_file
+  if (!is.null(numeric_file) && identical(type, "file") &&
+      is.character(value) && length(value) == 1L && file.exists(value)) {
+    lines <- trimws(readLines(value, warn = FALSE))
+    lines <- lines[nzchar(lines)]
+    tokens <- strsplit(lines, "[[:space:]]+")
+    columns <- as.integer(numeric_file$columns %||% 1L)
+    if (!length(lines) || any(lengths(tokens) != columns)) {
+      errors <- c(errors, cli::format_inline(
+        "File for {.arg {name}} must contain non-empty numeric rows with exactly {columns} column{?s}."
+      ))
+    } else {
+      parsed <- suppressWarnings(as.numeric(unlist(tokens, use.names = FALSE)))
+      if (anyNA(parsed) || any(!is.finite(parsed))) {
+        errors <- c(errors, cli::format_inline(
+          "File for {.arg {name}} must contain only finite numeric values."
+        ))
+      } else {
+        if (!is.null(numeric_file$min) && any(parsed < numeric_file$min)) {
+          errors <- c(errors, cli::format_inline(
+            "Values in {.arg {name}} must be >= {numeric_file$min}."
+          ))
+        }
+        if (!is.null(numeric_file$max) && any(parsed > numeric_file$max)) {
+          errors <- c(errors, cli::format_inline(
+            "Values in {.arg {name}} must be <= {numeric_file$max}."
+          ))
+        }
+      }
+    }
+  }
+
   if (!is.null(validate_block$min) && is.numeric(value) &&
       length(value) == 1L && !is.na(value) && is.finite(value)) {
     if (value < validate_block$min) {

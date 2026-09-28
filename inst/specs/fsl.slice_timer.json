@@ -16,20 +16,55 @@
       "desc": "filename of single-column custom interleave order file (first slice is referred to as 1 not 0)",
       "cli": {
         "argstr": "--ocustom=%s"
+      },
+      "validate": {
+        "exists": true,
+        "numeric_file": {
+          "columns": 1,
+          "min": 1
+        }
+      },
+      "constraints": {
+        "xor": [
+          "custom_timings",
+          "interleaved"
+        ]
       }
     },
     "custom_timings": {
       "type": "file",
-      "desc": "slice timings, in fractions of TR, range 0:1 (default is 0.5 = no shift)",
+      "desc": "Single-column FSL forward shifts in fractions of TR. Negative values shift data backwards. custom_timing_units and timing_reference are required.",
       "cli": {
         "argstr": "--tcustom=%s"
+      },
+      "validate": {
+        "exists": true,
+        "numeric_file": {
+          "columns": 1,
+          "min": -1,
+          "max": 1
+        }
+      },
+      "constraints": {
+        "xor": [
+          "custom_order",
+          "interleaved"
+        ],
+        "requires": [
+          "custom_timing_units",
+          "timing_reference"
+        ]
       }
     },
     "global_shift": {
       "type": "double",
-      "desc": "shift in fraction of TR, range 0:1 (default is 0.5 = no shift)",
+      "desc": "Global forward shift in fractions of TR; 0 means no global shift.",
       "cli": {
-        "argstr": "--tglobal"
+        "argstr": "--tglobal=%f"
+      },
+      "validate": {
+        "min": -1,
+        "max": 1
       }
     },
     "in_file": {
@@ -53,11 +88,17 @@
       "desc": "use interleaved acquisition",
       "cli": {
         "argstr": "--odd"
+      },
+      "constraints": {
+        "xor": [
+          "custom_order",
+          "custom_timings"
+        ]
       }
     },
     "out_file": {
       "type": "file",
-      "desc": "filename of output timeseries",
+      "desc": "Requested corrected NIfTI path. slicetimer receives its extension-free stem and FSL appends the configured NIFTI or NIFTI_GZ suffix.",
       "cli": {
         "argstr": "--out=%s",
         "strip_ext": true
@@ -77,15 +118,44 @@
     },
     "time_repetition": {
       "type": "double",
-      "desc": "Specify TR of data - default is 3s",
+      "desc": "Repetition time in seconds.",
       "cli": {
         "argstr": "--repeat=%f"
+      },
+      "validate": {
+        "min": 1e-12
       }
+    },
+    "custom_timing_units": {
+      "type": "enum",
+      "desc": "Units contract for custom_timings; FSL accepts forward-shift fractions of TR only.",
+      "choices": [
+        "fraction_of_tr"
+      ]
+    },
+    "timing_reference": {
+      "type": "enum",
+      "desc": "Interpretation contract for custom_timings: every file value is a forward shift to the declared reference.",
+      "choices": [
+        "forward_shift_to_reference"
+      ]
     }
   },
-  "outputs": {},
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": true,
+      "nonempty": true
+    }
+  },
   "runtime": {
-    "profile": "fsl"
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
   },
   "origin": {
     "source": "nipype",

@@ -1,0 +1,90 @@
+{
+  "inputs": {
+    "custom_order": {
+      "validate": {
+        "exists": true,
+        "numeric_file": {
+          "columns": 1,
+          "min": 1
+        }
+      },
+      "constraints": {
+        "xor": ["custom_timings", "interleaved"]
+      }
+    },
+    "custom_timings": {
+      "desc": "Single-column FSL forward shifts in fractions of TR. Negative values shift data backwards. custom_timing_units and timing_reference are required.",
+      "validate": {
+        "exists": true,
+        "numeric_file": {
+          "columns": 1,
+          "min": -1,
+          "max": 1
+        }
+      },
+      "constraints": {
+        "xor": ["custom_order", "interleaved"],
+        "requires": ["custom_timing_units", "timing_reference"]
+      }
+    },
+    "custom_timing_units": {
+      "type": "enum",
+      "desc": "Units contract for custom_timings; FSL accepts forward-shift fractions of TR only.",
+      "choices": ["fraction_of_tr"]
+    },
+    "global_shift": {
+      "type": "double",
+      "desc": "Global forward shift in fractions of TR; 0 means no global shift.",
+      "cli": {
+        "argstr": "--tglobal=%f"
+      },
+      "validate": {
+        "min": -1,
+        "max": 1
+      }
+    },
+    "interleaved": {
+      "constraints": {
+        "xor": ["custom_order", "custom_timings"]
+      }
+    },
+    "out_file": {
+      "desc": "Requested corrected NIfTI path. slicetimer receives its extension-free stem and FSL appends the configured NIFTI or NIFTI_GZ suffix.",
+      "cli": {
+        "argstr": "--out=%s",
+        "strip_ext": true
+      }
+    },
+    "time_repetition": {
+      "type": "double",
+      "desc": "Repetition time in seconds.",
+      "cli": {
+        "argstr": "--repeat=%f"
+      },
+      "validate": {
+        "min": 1e-12
+      }
+    },
+    "timing_reference": {
+      "type": "enum",
+      "desc": "Interpretation contract for custom_timings: every file value is a forward shift to the declared reference.",
+      "choices": ["forward_shift_to_reference"]
+    }
+  },
+  "outputs": {
+    "out_file": {
+      "type": "file",
+      "path": {
+        "from_input": "out_file"
+      },
+      "must_exist": true,
+      "nonempty": true
+    }
+  },
+  "runtime": {
+    "profile": "fsl",
+    "env": {
+      "FSLOUTPUTTYPE": "NIFTI_GZ"
+    }
+  }
+}

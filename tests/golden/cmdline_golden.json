@@ -1141,7 +1141,7 @@
   },
   "fsl.slice_timer": {
     "command": "slicetimer",
-    "args": ["--in=/tmp/niflowr/in_file.nii.gz", "args_value", "--ocustom=/tmp/niflowr/custom_order.nii.gz", "--tcustom=/tmp/niflowr/custom_timings.nii.gz", "--tglobal", "--out=/tmp/niflowr/out_file", "--direction=1", "--repeat=1.000000"]
+    "args": ["--in=/tmp/niflowr/in_file.nii.gz", "args_value", "--ocustom=/tmp/niflowr/custom_order.nii.gz", "--tcustom=/tmp/niflowr/custom_timings.nii.gz", "--tglobal=1.000000", "--out=/tmp/niflowr/out_file", "--direction=1", "--repeat=1.000000"]
   },
   "fsl.slicer": {
     "command": "slicer",

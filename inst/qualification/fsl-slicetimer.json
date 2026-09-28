@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "backend": {
+    "program": "FSL slicetimer",
+    "version_line": "Part of FSL (build 509)",
+    "docker_image_argument": "48724e8a5a8d",
+    "docker_image_id": "sha256:48724e8a5a8d7c466d4ccd8c088cee4b9039f32b687690ab1cf9352694d0f7d5",
+    "platform": "linux/amd64"
+  },
+  "estimand": "RMSE between two slices sampling the same sinusoid half a TR apart after correction",
+  "thresholds": {
+    "max_corrected_rmse": 0.03,
+    "min_improvement_ratio": 10
+  },
+  "cases": [
+    {
+      "direction": 1,
+      "reference_time_seconds": 0,
+      "forward_shift_fractions": [0, -0.5],
+      "raw_slice_rmse": 0.275899379282943,
+      "corrected_slice_rmse": 0.0120976027200384,
+      "improvement_ratio": 22.8061199948271,
+      "passed": true
+    },
+    {
+      "direction": 2,
+      "reference_time_seconds": 0,
+      "forward_shift_fractions": [0, -0.5],
+      "raw_slice_rmse": 0.275899379282943,
+      "corrected_slice_rmse": 0.0120976027200384,
+      "improvement_ratio": 22.8061199948271,
+      "passed": true
+    },
+    {
+      "direction": 3,
+      "reference_time_seconds": 0,
+      "forward_shift_fractions": [0, -0.5],
+      "raw_slice_rmse": 0.275899379282943,
+      "corrected_slice_rmse": 0.0120976027200384,
+      "improvement_ratio": 22.8061199948271,
+      "passed": true
+    },
+    {
+      "direction": 3,
+      "reference_time_seconds": 1,
+      "forward_shift_fractions": [0.5, 0],
+      "raw_slice_rmse": 0.275899379282943,
+      "corrected_slice_rmse": 0.0120976917557389,
+      "improvement_ratio": 22.8059521480254,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

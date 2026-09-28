@@ -147,6 +147,24 @@
         "regex": {
           "type": "string",
           "description": "Value must match this regex"
+        },
+        "numeric_file": {
+          "type": "object",
+          "description": "Validate a whitespace-delimited numeric file.",
+          "properties": {
+            "columns": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

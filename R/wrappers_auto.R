@@ -13939,13 +13939,15 @@ ni_fsl_slice <- function(in_file,
 #' @param in_file Character; file path. filename of input timeseries **Required.**
 #' @param args Character. Additional parameters to the command
 #' @param custom_order Character; file path. filename of single-column custom interleave order file (first slice is referred to as 1 not 0)
-#' @param custom_timings Character; file path. slice timings, in fractions of TR, range 0:1 (default is 0.5 = no shift)
-#' @param global_shift Numeric. shift in fraction of TR, range 0:1 (default is 0.5 = no shift)
+#' @param custom_timings Character; file path. Single-column FSL forward shifts in fractions of TR. Negative values shift data backwards. custom_timing_units and timing_reference are required.
+#' @param global_shift Numeric. Global forward shift in fractions of TR; 0 means no global shift.
 #' @param index_dir Logical. slice indexing from top to bottom
 #' @param interleaved Logical. use interleaved acquisition
-#' @param out_file Character; file path. filename of output timeseries
+#' @param out_file Character; file path. Requested corrected NIfTI path. slicetimer receives its extension-free stem and FSL appends the configured NIFTI or NIFTI_GZ suffix.
 #' @param slice_direction Character; one of: "1", "2", "3". direction of slice acquisition (x=1, y=2, z=3) - default is z
-#' @param time_repetition Numeric. Specify TR of data - default is 3s
+#' @param time_repetition Numeric. Repetition time in seconds.
+#' @param custom_timing_units Character; one of: "fraction_of_tr". Units contract for custom_timings; FSL accepts forward-shift fractions of TR only.
+#' @param timing_reference Character; one of: "forward_shift_to_reference". Interpretation contract for custom_timings: every file value is a forward shift to the declared reference.
 #' @param .cwd Working directory override.
 #' @param .env Named character vector of environment variables.
 #' @param .engine Execution engine override.
@@ -13964,13 +13966,15 @@ ni_fsl_slice_timer <- function(in_file,
                      out_file = NULL,
                      slice_direction = NULL,
                      time_repetition = NULL,
+                     custom_timing_units = NULL,
+                     timing_reference = NULL,
                      .cwd = NULL,
                      .env = NULL,
                      .engine = NULL,
                      .profile = NULL,
                      dry_run = FALSE,
                      echo = interactive()) {
-  call <- ni_call("fsl.slice_timer", in_file = in_file, args = args, custom_order = custom_order, custom_timings = custom_timings, global_shift = global_shift, index_dir = index_dir, interleaved = interleaved, out_file = out_file, slice_direction = slice_direction, time_repetition = time_repetition, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
+  call <- ni_call("fsl.slice_timer", in_file = in_file, args = args, custom_order = custom_order, custom_timings = custom_timings, global_shift = global_shift, index_dir = index_dir, interleaved = interleaved, out_file = out_file, slice_direction = slice_direction, time_repetition = time_repetition, custom_timing_units = custom_timing_units, timing_reference = timing_reference, .cwd = .cwd, .env = .env, .engine = .engine, .profile = .profile)
   ni_run(call, dry_run = dry_run, echo = echo)
 }
 
