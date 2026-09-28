@@ -6,7 +6,7 @@ Estimates the smoothness of an image
 
 ``` r
 ni_fsl_smooth_estimate(
-  dof,
+  dof = NULL,
   mask_file,
   args = NULL,
   residual_fit_file = NULL,
@@ -24,7 +24,8 @@ ni_fsl_smooth_estimate(
 
 - dof:
 
-  Integer. number of degrees of freedom **Required.**
+  Integer. number of degrees of freedom **Required unless an alternative
+  is supplied:** `zstat_file`.
 
 - mask_file:
 

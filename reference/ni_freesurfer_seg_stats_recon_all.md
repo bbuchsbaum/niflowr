@@ -7,7 +7,7 @@ workflow.
 
 ``` r
 ni_freesurfer_seg_stats_recon_all(
-  annot,
+  annot = NULL,
   lh_orig_nofix,
   lh_pial,
   lh_white,
@@ -15,9 +15,9 @@ ni_freesurfer_seg_stats_recon_all(
   rh_pial,
   rh_white,
   ribbon,
-  segmentation_file,
+  segmentation_file = NULL,
   subject_id = "subject_id",
-  surf_label,
+  surf_label = NULL,
   transform,
   args = NULL,
   avgwf_file = NULL,
@@ -68,7 +68,8 @@ ni_freesurfer_seg_stats_recon_all(
 - annot:
 
   Character or numeric vector. subject hemi parc : use surface
-  parcellation **Required.**
+  parcellation **Required unless an alternative is supplied:**
+  `segmentation_file`, `surf_label`.
 
 - lh_orig_nofix:
 
@@ -104,7 +105,8 @@ ni_freesurfer_seg_stats_recon_all(
 
 - segmentation_file:
 
-  Character; file path. segmentation volume path **Required.**
+  Character; file path. segmentation volume path **Required unless an
+  alternative is supplied:** `annot`, `surf_label`.
 
 - subject_id:
 
@@ -113,7 +115,8 @@ ni_freesurfer_seg_stats_recon_all(
 - surf_label:
 
   Character or numeric vector. subject hemi label : use surface label
-  **Required.**
+  **Required unless an alternative is supplied:** `segmentation_file`,
+  `annot`.
 
 - transform:
 

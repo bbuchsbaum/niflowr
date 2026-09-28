@@ -6,10 +6,10 @@ Interface for FSL topup, a tool for estimating and correcting
 
 ``` r
 ni_fsl_topup(
-  encoding_direction,
-  encoding_file,
+  encoding_direction = NULL,
+  encoding_file = NULL,
   in_file,
-  readout_times,
+  readout_times = NULL,
   args = NULL,
   config = "b02b0.cnf",
   estmov = NULL,
@@ -47,12 +47,13 @@ ni_fsl_topup(
 - encoding_direction:
 
   Character or numeric vector. encoding direction for automatic
-  generation of encoding_file **Required.**
+  generation of encoding_file **Required unless an alternative is
+  supplied:** `encoding_file`.
 
 - encoding_file:
 
   Character; file path. name of text file with PE directions/times
-  **Required.**
+  **Required unless an alternative is supplied:** `encoding_direction`.
 
 - in_file:
 
@@ -61,7 +62,8 @@ ni_fsl_topup(
 - readout_times:
 
   Character or numeric vector. readout times (dwell times by \#
-  phase-encode steps minus 1) **Required.**
+  phase-encode steps minus 1) **Required unless an alternative is
+  supplied:** `encoding_file`.
 
 - args:
 

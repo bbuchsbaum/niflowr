@@ -6,8 +6,8 @@ This program detects Talairach alignment failures
 
 ``` r
 ni_freesurfer_check_talairach_alignment(
-  in_file,
-  subject,
+  in_file = NULL,
+  subject = NULL,
   args = NULL,
   threshold = 0.01,
   .cwd = NULL,
@@ -24,11 +24,12 @@ ni_freesurfer_check_talairach_alignment(
 - in_file:
 
   Character; file path. specify the talairach.xfm file to check
-  **Required.**
+  **Required unless an alternative is supplied:** `subject`.
 
 - subject:
 
-  Character. specify subject's name **Required.**
+  Character. specify subject's name **Required unless an alternative is
+  supplied:** `in_file`.
 
 - args:
 

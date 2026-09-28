@@ -6,10 +6,10 @@ Use FSL's overlay command to combine background and statistical images
 
 ``` r
 ni_fsl_overlay(
-  auto_thresh_bg,
+  auto_thresh_bg = NULL,
   background_image,
-  bg_thresh,
-  full_bg_range,
+  bg_thresh = NULL,
+  full_bg_range = NULL,
   stat_image,
   stat_thresh,
   args = NULL,
@@ -33,7 +33,8 @@ ni_fsl_overlay(
 
 - auto_thresh_bg:
 
-  Logical. automatically threshold the background image **Required.**
+  Logical. automatically threshold the background image **Required
+  unless an alternative is supplied:** `full_bg_range`, `bg_thresh`.
 
 - background_image:
 
@@ -42,11 +43,13 @@ ni_fsl_overlay(
 - bg_thresh:
 
   Character or numeric vector. min and max values for background
-  intensity **Required.**
+  intensity **Required unless an alternative is supplied:**
+  `auto_thresh_bg`, `full_bg_range`.
 
 - full_bg_range:
 
-  Logical. use full range of background image **Required.**
+  Logical. use full range of background image **Required unless an
+  alternative is supplied:** `auto_thresh_bg`, `bg_thresh`.
 
 - stat_image:
 

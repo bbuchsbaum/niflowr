@@ -8,8 +8,8 @@ formats
 ``` r
 ni_freesurfer_mr_is_convert(
   in_file,
-  out_datatype,
-  out_file,
+  out_datatype = NULL,
+  out_file = NULL,
   annot_file = NULL,
   args = NULL,
   dataarray_num = NULL,
@@ -48,12 +48,13 @@ ni_freesurfer_mr_is_convert(
   Character; one of: "asc", "ico", "tri", "stl", "vtk", "gii", "mgh",
   "mgz". These file formats are supported: ASCII: .ascICO: .ico, .tri
   GEO: .geo STL: .stl VTK: .vtk GIFTI: .gii MGH surface-encoded
-  'volume': .mgh, .mgz **Required.**
+  'volume': .mgh, .mgz **Required unless an alternative is supplied:**
+  `out_file`.
 
 - out_file:
 
   Character; file path. output filename or True to generate one
-  **Required.**
+  **Required unless an alternative is supplied:** `out_datatype`.
 
 - annot_file:
 

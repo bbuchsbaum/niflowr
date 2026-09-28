@@ -6,18 +6,18 @@ Use FreeSurfer mri_vol2vol to apply a transform.
 
 ``` r
 ni_freesurfer_apply_vol_transform(
-  fs_target,
-  fsl_reg_file,
-  lta_file,
-  lta_inv_file,
-  mni_152_reg,
-  reg_file,
-  reg_header,
+  fs_target = NULL,
+  fsl_reg_file = NULL,
+  lta_file = NULL,
+  lta_inv_file = NULL,
+  mni_152_reg = NULL,
+  reg_file = NULL,
+  reg_header = NULL,
   source_file,
-  subject,
-  tal,
-  target_file,
-  xfm_reg_file,
+  subject = NULL,
+  tal = NULL,
+  target_file = NULL,
+  xfm_reg_file = NULL,
   args = NULL,
   interp = NULL,
   inverse = NULL,
@@ -40,33 +40,46 @@ ni_freesurfer_apply_vol_transform(
 
 - fs_target:
 
-  Logical. use orig.mgz from subject in regfile as target **Required.**
+  Logical. use orig.mgz from subject in regfile as target **Required
+  unless an alternative is supplied:** `target_file`, `tal`.
 
 - fsl_reg_file:
 
-  Character; file path. fslRAS-to-fslRAS matrix (FSL format)
-  **Required.**
+  Character; file path. fslRAS-to-fslRAS matrix (FSL format) **Required
+  unless an alternative is supplied:** `reg_file`, `lta_file`,
+  `lta_inv_file`, `xfm_reg_file`, `reg_header`, `mni_152_reg`,
+  `subject`.
 
 - lta_file:
 
-  Character; file path. Linear Transform Array file **Required.**
+  Character; file path. Linear Transform Array file **Required unless an
+  alternative is supplied:** `reg_file`, `lta_inv_file`, `fsl_reg_file`,
+  `xfm_reg_file`, `reg_header`, `mni_152_reg`, `subject`.
 
 - lta_inv_file:
 
-  Character; file path. LTA, invert **Required.**
+  Character; file path. LTA, invert **Required unless an alternative is
+  supplied:** `reg_file`, `lta_file`, `fsl_reg_file`, `xfm_reg_file`,
+  `reg_header`, `mni_152_reg`, `subject`.
 
 - mni_152_reg:
 
-  Logical. target MNI152 space **Required.**
+  Logical. target MNI152 space **Required unless an alternative is
+  supplied:** `reg_file`, `lta_file`, `lta_inv_file`, `fsl_reg_file`,
+  `xfm_reg_file`, `reg_header`, `subject`.
 
 - reg_file:
 
   Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format)
-  **Required.**
+  **Required unless an alternative is supplied:** `lta_file`,
+  `lta_inv_file`, `fsl_reg_file`, `xfm_reg_file`, `reg_header`,
+  `mni_152_reg`, `subject`.
 
 - reg_header:
 
-  Logical. ScannerRAS-to-ScannerRAS matrix = identity **Required.**
+  Logical. ScannerRAS-to-ScannerRAS matrix = identity **Required unless
+  an alternative is supplied:** `reg_file`, `lta_file`, `lta_inv_file`,
+  `fsl_reg_file`, `xfm_reg_file`, `mni_152_reg`, `subject`.
 
 - source_file:
 
@@ -75,20 +88,26 @@ ni_freesurfer_apply_vol_transform(
 - subject:
 
   Character. set matrix = identity and use subject for any templates
-  **Required.**
+  **Required unless an alternative is supplied:** `reg_file`,
+  `lta_file`, `lta_inv_file`, `fsl_reg_file`, `xfm_reg_file`,
+  `reg_header`, `mni_152_reg`.
 
 - tal:
 
-  Logical. map to a sub FOV of MNI305 (with –reg only) **Required.**
+  Logical. map to a sub FOV of MNI305 (with –reg only) **Required unless
+  an alternative is supplied:** `target_file`, `fs_target`.
 
 - target_file:
 
-  Character; file path. Output template volume **Required.**
+  Character; file path. Output template volume **Required unless an
+  alternative is supplied:** `tal`, `fs_target`.
 
 - xfm_reg_file:
 
   Character; file path. ScannerRAS-to-ScannerRAS matrix (MNI format)
-  **Required.**
+  **Required unless an alternative is supplied:** `reg_file`,
+  `lta_file`, `lta_inv_file`, `fsl_reg_file`, `reg_header`,
+  `mni_152_reg`, `subject`.
 
 - args:
 

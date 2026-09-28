@@ -8,8 +8,8 @@ registration.
 ``` r
 ni_freesurfer_surface_transform(
   hemi,
-  source_annot_file,
-  source_file,
+  source_annot_file = NULL,
+  source_file = NULL,
   source_subject,
   target_subject,
   args = NULL,
@@ -36,11 +36,13 @@ ni_freesurfer_surface_transform(
 
 - source_annot_file:
 
-  Character; file path. surface annotation file **Required.**
+  Character; file path. surface annotation file **Required unless an
+  alternative is supplied:** `source_file`.
 
 - source_file:
 
-  Character; file path. surface file with source values **Required.**
+  Character; file path. surface file with source values **Required
+  unless an alternative is supplied:** `source_annot_file`.
 
 - source_subject:
 

@@ -6,9 +6,9 @@ Use unpacksdcmdir to convert dicom files
 
 ``` r
 ni_freesurfer_unpack_sdicom_dir(
-  config,
-  run_info,
-  seq_config,
+  config = NULL,
+  run_info = NULL,
+  seq_config = NULL,
   source_dir,
   args = NULL,
   dir_structure = NULL,
@@ -31,17 +31,19 @@ ni_freesurfer_unpack_sdicom_dir(
 
 - config:
 
-  Character; file path. specify unpacking rules in file **Required.**
+  Character; file path. specify unpacking rules in file **Required
+  unless an alternative is supplied:** `run_info`, `seq_config`.
 
 - run_info:
 
   Character or numeric vector. runno subdir format name : spec unpacking
-  rules on cmdline **Required.**
+  rules on cmdline **Required unless an alternative is supplied:**
+  `config`, `seq_config`.
 
 - seq_config:
 
   Character; file path. specify unpacking rules based on sequence
-  **Required.**
+  **Required unless an alternative is supplied:** `run_info`, `config`.
 
 - source_dir:
 

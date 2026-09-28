@@ -6,10 +6,10 @@ construct an unbiased robust template for longitudinal volumes
 
 ``` r
 ni_freesurfer_robust_template(
-  auto_detect_sensitivity,
+  auto_detect_sensitivity = NULL,
   in_files,
   out_file = "mri_robust_template_out.mgz",
-  outlier_sensitivity,
+  outlier_sensitivity = NULL,
   args = NULL,
   average_metric = NULL,
   fixed_timepoint = NULL,
@@ -35,7 +35,8 @@ ni_freesurfer_robust_template(
 - auto_detect_sensitivity:
 
   Logical. auto-detect good sensitivity (recommended for head or full
-  brain scans) **Required.**
+  brain scans) **Required unless an alternative is supplied:**
+  `outlier_sensitivity`.
 
 - in_files:
 
@@ -49,7 +50,8 @@ ni_freesurfer_robust_template(
 - outlier_sensitivity:
 
   Numeric. set outlier sensitivity manually (e.g. "–sat 4.685" ). Higher
-  values mean less sensitivity. **Required.**
+  values mean less sensitivity. **Required unless an alternative is
+  supplied:** `auto_detect_sensitivity`.
 
 - args:
 

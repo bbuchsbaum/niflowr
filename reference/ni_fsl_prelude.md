@@ -6,9 +6,9 @@ FSL prelude wrapper for phase unwrapping
 
 ``` r
 ni_fsl_prelude(
-  complex_phase_file,
-  magnitude_file,
-  phase_file,
+  complex_phase_file = NULL,
+  magnitude_file = NULL,
+  phase_file = NULL,
   args = NULL,
   end = NULL,
   label_file = NULL,
@@ -36,15 +36,18 @@ ni_fsl_prelude(
 
 - complex_phase_file:
 
-  Character; file path. complex phase input volume **Required.**
+  Character; file path. complex phase input volume **Required unless an
+  alternative is supplied:** `magnitude_file`, `phase_file`.
 
 - magnitude_file:
 
-  Character; file path. file containing magnitude image **Required.**
+  Character; file path. file containing magnitude image **Required
+  unless an alternative is supplied:** `complex_phase_file`.
 
 - phase_file:
 
-  Character; file path. raw phase file **Required.**
+  Character; file path. raw phase file **Required unless an alternative
+  is supplied:** `complex_phase_file`.
 
 - args:
 

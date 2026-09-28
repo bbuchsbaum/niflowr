@@ -7,9 +7,9 @@ Interface for the ICA_AROMA.py script.
 ``` r
 ni_fsl_ica_aroma(
   denoise_type = "nonaggr",
-  feat_dir,
-  in_file,
-  motion_parameters,
+  feat_dir = NULL,
+  in_file = NULL,
+  motion_parameters = NULL,
   out_dir = "out",
   TR = NULL,
   args = NULL,
@@ -41,15 +41,18 @@ ni_fsl_ica_aroma(
 
   Character; directory path. If a feat directory exists and temporal
   filtering has not been run yet, ICA_AROMA can use the files in this
-  directory. **Required.**
+  directory. **Required unless an alternative is supplied:** `in_file`,
+  `mat_file`, `fnirt_warp_file`, `motion_parameters`.
 
 - in_file:
 
-  Character; file path. volume to be denoised **Required.**
+  Character; file path. volume to be denoised **Required unless an
+  alternative is supplied:** `feat_dir`.
 
 - motion_parameters:
 
-  Character; file path. motion parameters file **Required.**
+  Character; file path. motion parameters file **Required unless an
+  alternative is supplied:** `feat_dir`.
 
 - out_dir:
 

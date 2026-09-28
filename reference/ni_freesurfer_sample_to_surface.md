@@ -7,11 +7,11 @@ Sample a volume to the cortical surface using Freesurfer's mri_vol2surf.
 ``` r
 ni_freesurfer_sample_to_surface(
   hemi,
-  mni152reg,
-  projection_stem,
-  reg_file,
-  reg_header,
-  sampling_method,
+  mni152reg = NULL,
+  projection_stem = NULL,
+  reg_file = NULL,
+  reg_header = NULL,
+  sampling_method = NULL,
   source_file,
   apply_rot = NULL,
   apply_trans = NULL,
@@ -56,26 +56,29 @@ ni_freesurfer_sample_to_surface(
 
 - mni152reg:
 
-  Logical. source volume is in MNI152 space **Required.**
+  Logical. source volume is in MNI152 space **Required unless an
+  alternative is supplied:** `reg_file`, `reg_header`.
 
 - projection_stem:
 
   Character. stem for precomputed linear estimates and volume fractions
-  **Required.**
+  **Required unless an alternative is supplied:** `sampling_method`.
 
 - reg_file:
 
-  Character; file path. source-to-reference registration file
-  **Required.**
+  Character; file path. source-to-reference registration file **Required
+  unless an alternative is supplied:** `reg_header`, `mni152reg`.
 
 - reg_header:
 
-  Logical. register based on header geometry **Required.**
+  Logical. register based on header geometry **Required unless an
+  alternative is supplied:** `reg_file`, `mni152reg`.
 
 - sampling_method:
 
   Character; one of: "point", "max", "average". how to sample – at a
-  point or at the max or average over a range **Required.**
+  point or at the max or average over a range **Required unless an
+  alternative is supplied:** `projection_stem`.
 
 - source_file:
 

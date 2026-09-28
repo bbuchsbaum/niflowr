@@ -6,9 +6,9 @@ Use FreeSurfer mri_segstats for ROI analysis
 
 ``` r
 ni_freesurfer_seg_stats(
-  annot,
-  segmentation_file,
-  surf_label,
+  annot = NULL,
+  segmentation_file = NULL,
+  surf_label = NULL,
   args = NULL,
   avgwf_file = NULL,
   avgwf_txt_file = NULL,
@@ -58,16 +58,19 @@ ni_freesurfer_seg_stats(
 - annot:
 
   Character or numeric vector. subject hemi parc : use surface
-  parcellation **Required.**
+  parcellation **Required unless an alternative is supplied:**
+  `segmentation_file`, `surf_label`.
 
 - segmentation_file:
 
-  Character; file path. segmentation volume path **Required.**
+  Character; file path. segmentation volume path **Required unless an
+  alternative is supplied:** `annot`, `surf_label`.
 
 - surf_label:
 
   Character or numeric vector. subject hemi label : use surface label
-  **Required.**
+  **Required unless an alternative is supplied:** `segmentation_file`,
+  `annot`.
 
 - args:
 

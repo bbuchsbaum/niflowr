@@ -7,8 +7,8 @@ Data de-noising by regressing out part of a design matrix
 ``` r
 ni_fsl_filter_regressor(
   design_file,
-  filter_all,
-  filter_columns,
+  filter_all = NULL,
+  filter_columns = NULL,
   in_file,
   args = NULL,
   mask = NULL,
@@ -33,12 +33,13 @@ ni_fsl_filter_regressor(
 
 - filter_all:
 
-  Logical. use all columns in the design file in denoising **Required.**
+  Logical. use all columns in the design file in denoising **Required
+  unless an alternative is supplied:** `filter_columns`.
 
 - filter_columns:
 
   Character or numeric vector. (1-based) column indices to filter out of
-  the data **Required.**
+  the data **Required unless an alternative is supplied:** `filter_all`.
 
 - in_file:
 

@@ -7,9 +7,9 @@ Perform Partial Volume Correction (PVC) to PET Data.
 ``` r
 ni_freesurfer_gtmpvc(
   in_file,
-  reg_file,
-  reg_identity,
-  regheader,
+  reg_file = NULL,
+  reg_identity = NULL,
+  regheader = NULL,
   segmentation,
   X = NULL,
   X0 = NULL,
@@ -80,15 +80,18 @@ ni_freesurfer_gtmpvc(
 - reg_file:
 
   Character; file path. LTA registration file that maps PET to
-  anatomical **Required.**
+  anatomical **Required unless an alternative is supplied:**
+  `regheader`, `reg_identity`.
 
 - reg_identity:
 
-  Logical. assume that input is in anatomical space **Required.**
+  Logical. assume that input is in anatomical space **Required unless an
+  alternative is supplied:** `reg_file`, `regheader`.
 
 - regheader:
 
-  Logical. assume input and seg share scanner space **Required.**
+  Logical. assume input and seg share scanner space **Required unless an
+  alternative is supplied:** `reg_file`, `reg_identity`.
 
 - segmentation:
 

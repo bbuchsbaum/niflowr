@@ -6,8 +6,8 @@ Perform intramodal linear registration (translation and rotation) using
 
 ``` r
 ni_freesurfer_robust_register(
-  auto_sens,
-  outlier_sens,
+  auto_sens = NULL,
+  outlier_sens = NULL,
   source_file,
   target_file,
   args = NULL,
@@ -49,11 +49,13 @@ ni_freesurfer_robust_register(
 
 - auto_sens:
 
-  Logical. auto-detect good sensitivity **Required.**
+  Logical. auto-detect good sensitivity **Required unless an alternative
+  is supplied:** `outlier_sens`.
 
 - outlier_sens:
 
-  Numeric. set outlier sensitivity explicitly **Required.**
+  Numeric. set outlier sensitivity explicitly **Required unless an
+  alternative is supplied:** `auto_sens`.
 
 - source_file:
 

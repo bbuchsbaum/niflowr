@@ -6,9 +6,9 @@ Use fslmaths to smooth the image
 
 ``` r
 ni_fsl_smooth(
-  fwhm,
+  fwhm = NULL,
   in_file,
-  sigma,
+  sigma = NULL,
   args = NULL,
   smoothed_file = NULL,
   .cwd = NULL,
@@ -25,7 +25,7 @@ ni_fsl_smooth(
 - fwhm:
 
   Numeric. gaussian kernel fwhm, will be converted to sigma in mm (not
-  voxels) **Required.**
+  voxels) **Required unless an alternative is supplied:** `sigma`.
 
 - in_file:
 
@@ -33,7 +33,8 @@ ni_fsl_smooth(
 
 - sigma:
 
-  Numeric. gaussian kernel sigma in mm (not voxels) **Required.**
+  Numeric. gaussian kernel sigma in mm (not voxels) **Required unless an
+  alternative is supplied:** `fwhm`.
 
 - args:
 

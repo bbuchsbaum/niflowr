@@ -7,9 +7,9 @@ Use FreeSurfer mris_volsmooth to smooth a volume
 ``` r
 ni_freesurfer_smooth(
   in_file,
-  num_iters,
+  num_iters = NULL,
   reg_file,
-  surface_fwhm,
+  surface_fwhm = NULL,
   args = NULL,
   proj_frac = NULL,
   proj_frac_avg = NULL,
@@ -32,7 +32,8 @@ ni_freesurfer_smooth(
 
 - num_iters:
 
-  Integer. number of iterations instead of fwhm **Required.**
+  Integer. number of iterations instead of fwhm **Required unless an
+  alternative is supplied:** `surface_fwhm`.
 
 - reg_file:
 
@@ -41,7 +42,8 @@ ni_freesurfer_smooth(
 
 - surface_fwhm:
 
-  Numeric. surface FWHM in mm **Required.**
+  Numeric. surface FWHM in mm **Required unless an alternative is
+  supplied:** `num_iters`.
 
 - args:
 

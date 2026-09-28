@@ -6,10 +6,10 @@ Make a binary volume from a Freesurfer label
 
 ``` r
 ni_freesurfer_label2_vol(
-  annot_file,
-  aparc_aseg,
-  label_file,
-  seg_file,
+  annot_file = NULL,
+  aparc_aseg = NULL,
+  label_file = NULL,
+  seg_file = NULL,
   template_file,
   args = NULL,
   fill_thresh = NULL,
@@ -39,19 +39,23 @@ ni_freesurfer_label2_vol(
 
 - annot_file:
 
-  Character; file path. surface annotation file **Required.**
+  Character; file path. surface annotation file **Required unless an
+  alternative is supplied:** `label_file`, `seg_file`, `aparc_aseg`.
 
 - aparc_aseg:
 
-  Logical. use aparc+aseg.mgz in subjectdir as seg **Required.**
+  Logical. use aparc+aseg.mgz in subjectdir as seg **Required unless an
+  alternative is supplied:** `label_file`, `annot_file`, `seg_file`.
 
 - label_file:
 
-  Character or numeric vector. list of label files **Required.**
+  Character or numeric vector. list of label files **Required unless an
+  alternative is supplied:** `annot_file`, `seg_file`, `aparc_aseg`.
 
 - seg_file:
 
-  Character; file path. segmentation file **Required.**
+  Character; file path. segmentation file **Required unless an
+  alternative is supplied:** `label_file`, `annot_file`, `aparc_aseg`.
 
 - template_file:
 

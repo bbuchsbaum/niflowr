@@ -6,9 +6,9 @@ Use fslmaths to spatially smooth an image with a gaussian kernel.
 
 ``` r
 ni_fsl_isotropic_smooth(
-  fwhm,
+  fwhm = NULL,
   in_file,
-  sigma,
+  sigma = NULL,
   args = NULL,
   internal_datatype = NULL,
   nan2zeros = NULL,
@@ -27,7 +27,8 @@ ni_fsl_isotropic_smooth(
 
 - fwhm:
 
-  Numeric. fwhm of smoothing kernel \[mm\] **Required.**
+  Numeric. fwhm of smoothing kernel \[mm\] **Required unless an
+  alternative is supplied:** `sigma`.
 
 - in_file:
 
@@ -35,7 +36,8 @@ ni_fsl_isotropic_smooth(
 
 - sigma:
 
-  Numeric. sigma of smoothing kernel \[mm\] **Required.**
+  Numeric. sigma of smoothing kernel \[mm\] **Required unless an
+  alternative is supplied:** `fwhm`.
 
 - args:
 

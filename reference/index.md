@@ -466,6 +466,8 @@
   : FSL ApplyWarp
 - [`ni_fsl_apply_xfm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_apply_xfm.md)
   : FSL ApplyXFM
+- [`ni_fsl_applyxfm4d()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_applyxfm4d.md)
+  : FSL applyxfm4D
 - [`ni_fsl_ar1_image()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_ar1_image.md)
   : FSL AR1Image
 - [`ni_fsl_av_scale()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_av_scale.md)

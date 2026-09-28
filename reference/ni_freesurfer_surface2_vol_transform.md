@@ -7,8 +7,8 @@ Use FreeSurfer mri_surf2vol to apply a transform.
 ``` r
 ni_freesurfer_surface2_vol_transform(
   hemi,
-  reg_file,
-  source_file,
+  reg_file = NULL,
+  source_file = NULL,
   args = NULL,
   mkmask = NULL,
   projfrac = NULL,
@@ -36,12 +36,12 @@ ni_freesurfer_surface2_vol_transform(
 - reg_file:
 
   Character; file path. tkRAS-to-tkRAS matrix (tkregister2 format)
-  **Required.**
+  **Required unless an alternative is supplied:** `subject_id`.
 
 - source_file:
 
   Character; file path. This is the source of the surface values
-  **Required.**
+  **Required unless an alternative is supplied:** `mkmask`.
 
 - args:
 

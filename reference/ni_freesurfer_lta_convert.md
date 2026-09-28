@@ -6,12 +6,12 @@ Convert different transformation formats.
 
 ``` r
 ni_freesurfer_lta_convert(
-  in_fsl,
-  in_itk,
-  in_lta,
-  in_mni,
-  in_niftyreg,
-  in_reg,
+  in_fsl = NULL,
+  in_itk = NULL,
+  in_lta = NULL,
+  in_mni = NULL,
+  in_niftyreg = NULL,
+  in_reg = NULL,
   args = NULL,
   invert = NULL,
   ltavox2vox = NULL,
@@ -36,29 +36,39 @@ ni_freesurfer_lta_convert(
 
 - in_fsl:
 
-  Character; file path. input transform of FSL type **Required.**
+  Character; file path. input transform of FSL type **Required unless an
+  alternative is supplied:** `in_lta`, `in_mni`, `in_reg`,
+  `in_niftyreg`, `in_itk`.
 
 - in_itk:
 
-  Character; file path. input transform of ITK type **Required.**
+  Character; file path. input transform of ITK type **Required unless an
+  alternative is supplied:** `in_lta`, `in_fsl`, `in_mni`, `in_reg`,
+  `in_niftyreg`.
 
 - in_lta:
 
-  Character or numeric vector. input transform of LTA type **Required.**
+  Character or numeric vector. input transform of LTA type **Required
+  unless an alternative is supplied:** `in_fsl`, `in_mni`, `in_reg`,
+  `in_niftyreg`, `in_itk`.
 
 - in_mni:
 
-  Character; file path. input transform of MNI/XFM type **Required.**
+  Character; file path. input transform of MNI/XFM type **Required
+  unless an alternative is supplied:** `in_lta`, `in_fsl`, `in_reg`,
+  `in_niftyreg`, `in_itk`.
 
 - in_niftyreg:
 
   Character; file path. input transform of Nifty Reg type (inverse
-  RAS2RAS) **Required.**
+  RAS2RAS) **Required unless an alternative is supplied:** `in_lta`,
+  `in_fsl`, `in_mni`, `in_reg`, `in_itk`.
 
 - in_reg:
 
   Character; file path. input transform of TK REG type (deprecated
-  format) **Required.**
+  format) **Required unless an alternative is supplied:** `in_lta`,
+  `in_fsl`, `in_mni`, `in_niftyreg`, `in_itk`.
 
 - args:
 

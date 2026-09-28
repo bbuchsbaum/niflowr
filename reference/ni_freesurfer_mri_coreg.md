@@ -6,9 +6,9 @@ This program registers one volume to another
 
 ``` r
 ni_freesurfer_mri_coreg(
-  reference_file,
+  reference_file = NULL,
   source_file,
-  subject_id,
+  subject_id = NULL,
   args = NULL,
   brute_force_limit = NULL,
   brute_force_samples = NULL,
@@ -50,7 +50,8 @@ ni_freesurfer_mri_coreg(
 
 - reference_file:
 
-  Character; file path. reference (target) file **Required.**
+  Character; file path. reference (target) file **Required unless an
+  alternative is supplied:** `subject_id`.
 
 - source_file:
 
@@ -60,7 +61,7 @@ ni_freesurfer_mri_coreg(
 
   Character. freesurfer subject ID (implies
   `reference_mask == aparc+aseg.mgz` unless otherwise specified)
-  **Required.**
+  **Required unless an alternative is supplied:** `reference_file`.
 
 - args:
 

@@ -7,8 +7,8 @@ Use fslmaths to perform mathematical operations using a second image or
 ``` r
 ni_fsl_binary_maths(
   in_file,
-  operand_file,
-  operand_value,
+  operand_file = NULL,
+  operand_value = NULL,
   operation,
   args = NULL,
   internal_datatype = NULL,
@@ -33,11 +33,12 @@ ni_fsl_binary_maths(
 - operand_file:
 
   Character; file path. second image to perform operation with
-  **Required.**
+  **Required unless an alternative is supplied:** `operand_value`.
 
 - operand_value:
 
-  Numeric. value to perform operation with **Required.**
+  Numeric. value to perform operation with **Required unless an
+  alternative is supplied:** `operand_file`.
 
 - operation:
 
