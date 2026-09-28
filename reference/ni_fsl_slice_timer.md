@@ -16,6 +16,8 @@ ni_fsl_slice_timer(
   out_file = NULL,
   slice_direction = NULL,
   time_repetition = NULL,
+  custom_timing_units = NULL,
+  timing_reference = NULL,
   .cwd = NULL,
   .env = NULL,
   .engine = NULL,
@@ -42,13 +44,14 @@ ni_fsl_slice_timer(
 
 - custom_timings:
 
-  Character; file path. slice timings, in fractions of TR, range 0:1
-  (default is 0.5 = no shift)
+  Character; file path. Single-column FSL forward shifts in fractions of
+  TR. Negative values shift data backwards. custom_timing_units and
+  timing_reference are required.
 
 - global_shift:
 
-  Numeric. shift in fraction of TR, range 0:1 (default is 0.5 = no
-  shift)
+  Numeric. Global forward shift in fractions of TR; 0 means no global
+  shift.
 
 - index_dir:
 
@@ -60,7 +63,9 @@ ni_fsl_slice_timer(
 
 - out_file:
 
-  Character; file path. filename of output timeseries
+  Character; file path. Requested corrected NIfTI path. slicetimer
+  receives its extension-free stem and FSL appends the configured NIFTI
+  or NIFTI_GZ suffix.
 
 - slice_direction:
 
@@ -69,7 +74,18 @@ ni_fsl_slice_timer(
 
 - time_repetition:
 
-  Numeric. Specify TR of data - default is 3s
+  Numeric. Repetition time in seconds.
+
+- custom_timing_units:
+
+  Character; one of: "fraction_of_tr". Units contract for
+  custom_timings; FSL accepts forward-shift fractions of TR only.
+
+- timing_reference:
+
+  Character; one of: "forward_shift_to_reference". Interpretation
+  contract for custom_timings: every file value is a forward shift to
+  the declared reference.
 
 - .cwd:
 

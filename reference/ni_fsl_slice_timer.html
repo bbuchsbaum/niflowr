@@ -57,6 +57,8 @@
 <span>  out_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  slice_direction <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  time_repetition <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  custom_timing_units <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  timing_reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .cwd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .env <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  .engine <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -83,11 +85,11 @@
 
 
 <dt id="arg-custom-timings">custom_timings<a class="anchor" aria-label="anchor" href="#arg-custom-timings"></a></dt>
-<dd><p>Character; file path. slice timings, in fractions of TR, range 0:1 (default is 0.5 = no shift)</p></dd>
+<dd><p>Character; file path. Single-column FSL forward shifts in fractions of TR. Negative values shift data backwards. custom_timing_units and timing_reference are required.</p></dd>
 
 
 <dt id="arg-global-shift">global_shift<a class="anchor" aria-label="anchor" href="#arg-global-shift"></a></dt>
-<dd><p>Numeric. shift in fraction of TR, range 0:1 (default is 0.5 = no shift)</p></dd>
+<dd><p>Numeric. Global forward shift in fractions of TR; 0 means no global shift.</p></dd>
 
 
 <dt id="arg-index-dir">index_dir<a class="anchor" aria-label="anchor" href="#arg-index-dir"></a></dt>
@@ -99,7 +101,7 @@
 
 
 <dt id="arg-out-file">out_file<a class="anchor" aria-label="anchor" href="#arg-out-file"></a></dt>
-<dd><p>Character; file path. filename of output timeseries</p></dd>
+<dd><p>Character; file path. Requested corrected NIfTI path. slicetimer receives its extension-free stem and FSL appends the configured NIFTI or NIFTI_GZ suffix.</p></dd>
 
 
 <dt id="arg-slice-direction">slice_direction<a class="anchor" aria-label="anchor" href="#arg-slice-direction"></a></dt>
@@ -107,7 +109,15 @@
 
 
 <dt id="arg-time-repetition">time_repetition<a class="anchor" aria-label="anchor" href="#arg-time-repetition"></a></dt>
-<dd><p>Numeric. Specify TR of data - default is 3s</p></dd>
+<dd><p>Numeric. Repetition time in seconds.</p></dd>
+
+
+<dt id="arg-custom-timing-units">custom_timing_units<a class="anchor" aria-label="anchor" href="#arg-custom-timing-units"></a></dt>
+<dd><p>Character; one of: "fraction_of_tr". Units contract for custom_timings; FSL accepts forward-shift fractions of TR only.</p></dd>
+
+
+<dt id="arg-timing-reference">timing_reference<a class="anchor" aria-label="anchor" href="#arg-timing-reference"></a></dt>
+<dd><p>Character; one of: "forward_shift_to_reference". Interpretation contract for custom_timings: every file value is a forward shift to the declared reference.</p></dd>
 
 
 <dt id="arg--cwd">.cwd<a class="anchor" aria-label="anchor" href="#arg--cwd"></a></dt>

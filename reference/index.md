@@ -608,6 +608,8 @@
   : FSL Slice
 - [`ni_fsl_slice_timer()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_slice_timer.md)
   : FSL SliceTimer
+- [`ni_fsl_slice_timing_file()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_slice_timing_file.md)
+  : Write an explicit FSL slicetimer custom-timing file
 - [`ni_fsl_slicer()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_slicer.md)
   : FSL Slicer
 - [`ni_fsl_smm()`](https://bbuchsbaum.github.io/niflowr/reference/ni_fsl_smm.md)
