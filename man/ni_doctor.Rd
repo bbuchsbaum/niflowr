@@ -24,7 +24,8 @@ Data frame with \code{check}, \code{status}, and \code{message} columns.
 }
 \description{
 Performs quick checks for runtime binaries, mount roots, profile shape, and
-lockfile availability/consistency. When Docker is available, optionally
-probes each profile image to confirm the payload command actually runs
-(catching shell ENTRYPOINTs that silently ignore the command).
+lockfile availability/consistency. Mount roots and profiles are required
+(missing = \code{"fail"}) unless \code{runtime.engine} is \code{"native"}. When Docker is
+available, optionally probes each profile image to confirm the payload
+command actually runs (catching shell ENTRYPOINTs that silently ignore the command).
 }

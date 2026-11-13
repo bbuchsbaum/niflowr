@@ -1,9 +1,10 @@
 #' Run runtime diagnostics
 #'
 #' Performs quick checks for runtime binaries, mount roots, profile shape, and
-#' lockfile availability/consistency. When Docker is available, optionally
-#' probes each profile image to confirm the payload command actually runs
-#' (catching shell ENTRYPOINTs that silently ignore the command).
+#' lockfile availability/consistency. Mount roots and profiles are required
+#' (missing = `"fail"`) unless `runtime.engine` is `"native"`. When Docker is
+#' available, optionally probes each profile image to confirm the payload
+#' command actually runs (catching shell ENTRYPOINTs that silently ignore the command).
 #'
 #' @param cfg Optional resolved config list. Defaults to current effective
 #'   config.
@@ -38,21 +39,40 @@ ni_doctor <- function(cfg = NULL, strict = FALSE, check_lock = TRUE,
   add_check("apptainer_bin", if (!is.null(ni_which_or_null(apptainer_bin))) "pass" else "warn",
             if (!is.null(ni_which_or_null(apptainer_bin))) sprintf("Found: %s", apptainer_bin) else sprintf("Not found: %s", apptainer_bin))
 
-  # Mount roots
+  # Mount roots and profiles are only needed for container execution
+  # (see ni_prepare_mount_roots()). With engine = "native" their absence is
+  # informational; otherwise (docker, apptainer, or auto with container
+  # fallback) missing roots or profiles will abort a run.
+  engine <- cfg$runtime$engine %||% "auto"
+  needs_containers <- !identical(engine, "native")
+  missing_status <- if (needs_containers) "fail" else "warn"
+  add_check("runtime.engine", "pass", if (needs_containers) {
+    sprintf("engine=%s; container mount roots and profiles are required.", engine)
+  } else {
+    "engine=native; container mount roots and profiles are not required."
+  })
+
   in_root <- cfg$paths$in_root
   out_root <- cfg$paths$out_root
   work_root <- cfg$paths$work_root
-  add_check("paths.in_root", if (!is.null(in_root) && dir.exists(in_root)) "pass" else "fail",
+  # in_root must exist; out_root/work_root are created on demand, so a
+  # configured-but-absent directory is only a warning.
+  root_status <- function(root, must_exist) {
+    if (is.null(root)) return(missing_status)
+    if (dir.exists(root)) return("pass")
+    if (must_exist) missing_status else "warn"
+  }
+  add_check("paths.in_root", root_status(in_root, TRUE),
             if (!is.null(in_root)) sprintf("in_root=%s", in_root) else "in_root not configured")
-  add_check("paths.out_root", if (!is.null(out_root) && dir.exists(out_root)) "pass" else "warn",
+  add_check("paths.out_root", root_status(out_root, FALSE),
             if (!is.null(out_root)) sprintf("out_root=%s", out_root) else "out_root not configured")
-  add_check("paths.work_root", if (!is.null(work_root) && dir.exists(work_root)) "pass" else "warn",
+  add_check("paths.work_root", root_status(work_root, FALSE),
             if (!is.null(work_root)) sprintf("work_root=%s", work_root) else "work_root not configured")
 
   # Profiles
   prof_names <- names(cfg$profiles)
   if (length(prof_names) == 0) {
-    add_check("profiles", "fail", "No runtime profiles configured.")
+    add_check("profiles", missing_status, "No runtime profiles configured.")
   } else {
     add_check("profiles", "pass", sprintf("%d profiles configured.", length(prof_names)))
     for (p in prof_names) {
