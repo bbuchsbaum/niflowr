@@ -36,6 +36,10 @@ brain <- run("bet","fsl.bet",in_file=n4$outputs$output_image,out_file=out("brain
 seg <- run("fast","fsl.fast",in_files=brain$outputs$out_file,out_basename=out("seg"),number_classes=3,img_type=1,
   probability_maps=TRUE,output_biascorrected=TRUE,output_biasfield=TRUE)
 mc <- run("mcflirt","fsl.mcflirt",in_file=infile("bold.nii.gz"),out_file=out("mc.nii.gz"),save_mats=TRUE,save_plots=TRUE)
+for (ext in c("txt", "tsv")) {
+  run(paste0("meants_", ext), "fsl.image_meants", in_file=mc$outputs$out_file,
+    mask=infile("mask.nii.gz"), out_file=out(paste0("requested_mean.", ext)), order=1L)
+}
 flirt <- run("flirt","fsl.flirt",in_file=brain$outputs$out_file,reference=brain$outputs$out_file,
   out_file=out("registered.nii.gz"),out_matrix_file=out("registered.mat"),dof=6)
 # Three-stage Rigid + Affine + SyN exercising every per-stage antsRegistration
