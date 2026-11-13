@@ -14,7 +14,8 @@ the harness uses `--pull=never`, per-step working directories, one thread, and
 five-minute workload limits. It preserves logs and failure provenance.
 
 The deterministic 48-cubed tissue phantom exercises N4 -> BET -> FAST -> FLIRT ->
-epi_reg, plus three-frame MCFLIRT and a three-stage Rigid + Affine + SyN
+epi_reg, plus three-frame MCFLIRT, masked `fslmeants` with exact `.txt` and `.tsv`
+destinations, and a three-stage Rigid + Affine + SyN
 `antsRegistration` that sets every per-stage input (transform parameters,
 iterations, convergence, metric bins, sampling, histogram matching), combines
 Mattes and CC on separate image pairs in the SyN stage, and writes warped
@@ -25,6 +26,9 @@ no folded or non-finite Jacobian voxels, and a lower MI cost and higher
 brain-mask Dice than the unregistered images (`qa.json`). FAST's actual segmentation supplies the WM
 input. The independent Python checker reads image bytes, dimensions, affines,
 frame counts, finite values, probability ranges, and matrices. It also checks
+that both text outputs contain one finite mean per frame, agree with masked
+means computed directly from the MCFLIRT image, and produce no extensionless file;
+and checks
 that N4's corrected image multiplied by its bias field reconstructs the input
 inside the mask with intensity rescaling explicitly disabled. Every declared artifact must exist. These are mechanical
 contracts, not anatomical accuracy or scientific efficacy tests.

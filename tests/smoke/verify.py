@@ -33,6 +33,21 @@ bias=nib.load(results['n4']['outputs']['bias_image']).get_fdata()
 original=nib.load(root/'in/t1.nii.gz').get_fdata()
 mask=nib.load(root/'in/mask.nii.gz').get_fdata()>0
 assert np.allclose(corrected[mask]*bias[mask], original[mask],rtol=2e-4,atol=1e-3)
-json.dump({'status':'failed' if failures else 'passed','scope':'mechanical artifact contracts','checks':checks,'failures':failures,'n4_reconstruction':'passed'},open(root/'verification.json','w'),indent=2)
-print(f'Checked {len(checks)} image artifacts and N4 multiplicative reconstruction; {len(failures)} failures')
+# Compare the text products with image bytes, independently of the R wrapper.
+bold=nib.load(results['mcflirt']['outputs']['out_file']).get_fdata()
+expected_means=bold[mask].mean(axis=0)
+meants_checks=[]
+for ext in ('txt','tsv'):
+    requested=root/'out'/f'requested_mean.{ext}'
+    declared=Path(results[f'meants_{ext}']['outputs']['out_file'])
+    assert declared == requested, (ext,'wrong declared text destination',str(declared))
+    assert not requested.with_suffix('').exists(), (ext,'unexpected extensionless output')
+    means=np.loadtxt(declared,ndmin=2)
+    assert means.shape == (bold.shape[3],1), (ext,'wrong frame count or columns',means.shape)
+    assert np.isfinite(means).all(), (ext,'nonfinite means')
+    assert np.allclose(means[:,0],expected_means,rtol=1e-5,atol=1e-5), (ext,'incorrect masked means')
+    meants_checks.append({'extension':ext,'rows':means.shape[0],
+                          'max_absolute_error':float(np.max(np.abs(means[:,0]-expected_means)))})
+json.dump({'status':'failed' if failures else 'passed','scope':'mechanical artifact contracts','checks':checks,'failures':failures,'n4_reconstruction':'passed','meants':meants_checks},open(root/'verification.json','w'),indent=2)
+print(f'Checked {len(checks)} image artifacts, N4 multiplicative reconstruction, and both meants text outputs; {len(failures)} failures')
 assert not failures, failures
