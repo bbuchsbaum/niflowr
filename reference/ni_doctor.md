@@ -1,10 +1,11 @@
 # Run runtime diagnostics
 
 Performs quick checks for runtime binaries, mount roots, profile shape,
-and lockfile availability/consistency. When Docker is available,
-optionally probes each profile image to confirm the payload command
-actually runs (catching shell ENTRYPOINTs that silently ignore the
-command).
+and lockfile availability/consistency. Mount roots and profiles are
+required (missing = `"fail"`) unless `runtime.engine` is `"native"`.
+When Docker is available, optionally probes each profile image to
+confirm the payload command actually runs (catching shell ENTRYPOINTs
+that silently ignore the command).
 
 ## Usage
 
