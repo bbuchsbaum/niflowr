@@ -114,3 +114,40 @@ test_that("ni_doctor_probe_docker_payload detects swallowed commands", {
   ok <- niflowr:::ni_doctor_probe_docker_payload(cfg, "fsl", profile)
   expect_equal(ok$status, "pass")
 })
+
+test_that("ni_doctor fails when out_root/work_root are unset for containers", {
+  withr::with_tempdir({
+    cfg <- ni_config_defaults()
+    cfg$docker$bin <- "echo"
+    cfg$apptainer$bin <- "echo"
+    cfg$paths$in_root <- getwd()
+    cfg$profiles <- list(fsl = list(docker_image = "example/fsl:1.0"))
+
+    report <- ni_doctor(cfg = cfg, check_lock = FALSE, check_payload = FALSE)
+    status <- stats::setNames(report$status, report$check)
+    expect_equal(status[["paths.out_root"]], "fail")
+    expect_equal(status[["paths.work_root"]], "fail")
+
+    # Configured but not yet created roots are created on demand: warn only.
+    cfg$paths$out_root <- file.path(getwd(), "out")
+    cfg$paths$work_root <- file.path(getwd(), "work")
+    report <- ni_doctor(cfg = cfg, check_lock = FALSE, check_payload = FALSE)
+    status <- stats::setNames(report$status, report$check)
+    expect_equal(status[["paths.out_root"]], "warn")
+    expect_equal(status[["paths.work_root"]], "warn")
+  })
+})
+
+test_that("ni_doctor does not fail native-engine configs without containers", {
+  cfg <- ni_config_defaults()
+  cfg$runtime$engine <- "native"
+  cfg$profiles <- list()
+
+  report <- ni_doctor(cfg = cfg, check_lock = FALSE, check_payload = FALSE)
+  expect_false(any(report$status == "fail"))
+  status <- stats::setNames(report$status, report$check)
+  expect_equal(status[["paths.in_root"]], "warn")
+  expect_equal(status[["profiles"]], "warn")
+  expect_silent(ni_doctor(cfg = cfg, strict = TRUE, check_lock = FALSE,
+                          check_payload = FALSE))
+})
