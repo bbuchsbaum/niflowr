@@ -1116,3 +1116,34 @@ test_that("ni_norm resolves relative paths that do not exist yet under existing 
   expect_identical(p, file.path(normalizePath("out", winslash = "/"), "sub-01", "new_file.nii.gz"))
   expect_false(is.null(niflowr:::ni_relpath(p, normalizePath("out", winslash = "/"))))
 })
+
+test_that("relative paths resolve against the R working directory for containers", {
+  withr::with_tempdir({
+    proj <- getwd()
+    for (d in c("data", "derivatives", "work")) dir.create(d)
+    writeLines("x", file.path("data", "img.nii.gz"))
+    writeLines("x", file.path("data", "xfm.txt"))
+    ni_config(.reset = TRUE)
+    withr::defer(ni_config(.reset = TRUE))
+    ni_config(config = list(
+      runtime = list(engine = "docker"),
+      docker = list(bin = "echo"),
+      paths = list(in_root = file.path(proj, "data"),
+                   out_root = file.path(proj, "derivatives"),
+                   work_root = file.path(proj, "work")),
+      profiles = list(ants = list(docker_image = "test/ants:1.0"))))
+
+    call <- ni_call("ants.apply_transforms",
+      input_image = "data/img.nii.gz", reference_image = "data/img.nii.gz",
+      transforms = "data/xfm.txt", output_image = "derivatives/out.nii.gz",
+      .profile = "ants")
+    expect_equal(normalizePath(call$values$input_image),
+                 normalizePath(file.path(proj, "data", "img.nii.gz")))
+
+    argv <- ni_plan(call)$execution$args
+    expect_true("/in/img.nii.gz" %in% argv)
+    expect_true("/in/xfm.txt" %in% argv)
+    expect_true("/out/out.nii.gz" %in% argv)
+    expect_false(any(grepl("^/work/", argv[seq(which(argv == "antsApplyTransforms"), length(argv))])))
+  })
+})
