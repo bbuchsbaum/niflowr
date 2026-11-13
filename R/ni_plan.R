@@ -17,8 +17,16 @@ ni_plan <- function(call) {
   wd <- ni_norm(wd)
   env <- ni_env_vector(c(cfg$env %||% list(), call$spec$runtime$env %||% list(), runtime$env %||% list()))
   # Anchor every typed path before host/container rendering and identity capture.
-  call$values <- ni_absolute_values(call$spec, call$values, wd)
-  call$outputs <- lapply(call$outputs, function(x) as.character(fs::path_abs(x, start = wd)))
+  # Caller-supplied paths (and outputs derived from them) are relative to where
+  # the caller wrote them: `.cwd`, else the R working directory. Only static
+  # output names, which the tool writes into its own working directory, are
+  # relative to the execution directory (`work_root` for containers).
+  anchor <- ni_norm(runtime$cwd %||% call$spec$runtime$cwd %||% getwd())
+  call$values <- ni_absolute_values(call$spec, call$values, anchor)
+  call$outputs <- stats::setNames(lapply(names(call$outputs), function(nm) {
+    static <- !is.null(call$spec$outputs[[nm]]$path$static)
+    as.character(fs::path_abs(call$outputs[[nm]], start = if (static) wd else anchor))
+  }), names(call$outputs))
   payload_host <- build_command(call)
   built <- NULL
   payload_exec <- payload_host
