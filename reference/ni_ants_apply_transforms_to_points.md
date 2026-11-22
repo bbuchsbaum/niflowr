@@ -36,8 +36,8 @@ ni_ants_apply_transforms_to_points(
 
 - transforms:
 
-  Character or numeric vector. transforms that will be applied to the
-  points **Required.**
+  Character vector. Transform files in ANTs command-line order, one per
+  element. Use \[affine.mat,1\] to invert an affine. **Required.**
 
 - args:
 
@@ -51,7 +51,7 @@ ni_ants_apply_transforms_to_points(
 
 - output_file:
 
-  Character. Name of the output CSV file
+  Character; file path. Name of the output CSV file
 
 - .cwd:
 
