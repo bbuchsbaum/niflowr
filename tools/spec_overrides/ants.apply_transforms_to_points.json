@@ -1,0 +1,25 @@
+{
+  "inputs": {
+    "output_file": {
+      "type": "file",
+      "role": "output"
+    },
+    "transforms": {
+      "desc": "Transform files in ANTs command-line order, one per element. Use [affine.mat,1] to invert an affine.",
+      "items_type": "file",
+      "path_syntax": "ants_transform",
+      "cli": {
+        "argstr": "--transform %s",
+        "repeat": true
+      }
+    }
+  },
+  "outputs": {
+    "output_file": {
+      "type": "file",
+      "path": {"from_input": "output_file"},
+      "must_exist": true,
+      "when": {"input": "output_file", "not_in": [""]}
+    }
+  }
+}

@@ -72,6 +72,10 @@
           "enum": ["file", "dir", "string", "int", "double", "bool", "enum"],
           "description": "Element type for list inputs."
         },
+        "path_syntax": {
+          "enum": ["ants_transform"],
+          "description": "ANTs transform file arguments accept a path or [path,0/1]. Resolve the embedded path before rendering the argument."
+        },
         "nested": {
           "type": "boolean",
           "default": false,
@@ -90,6 +94,11 @@
         "cli": { "$ref": "#/$defs/cli" },
         "validate": { "$ref": "#/$defs/validate" },
         "constraints": { "$ref": "#/$defs/constraints" }
+      },
+      "if": { "required": ["path_syntax"] },
+      "then": {
+        "properties": { "type": { "const": "list" }, "items_type": { "const": "file" }, "nested": { "const": false } },
+        "required": ["items_type"]
       },
       "additionalProperties": false
     },

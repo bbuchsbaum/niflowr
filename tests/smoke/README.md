@@ -13,6 +13,10 @@ and FSL 6.0.7.22 by registry digest on Linux amd64. CI pulls those references;
 the harness uses `--pull=never`, per-step working directories, one thread, and
 five-minute workload limits. It preserves logs and failure provenance.
 
+The point-transform check sends three labeled landmarks through a translation
+and an inverted scale in ANTs. It checks the requested CSV path, each expected
+coordinate, and the preserved time and label columns.
+
 The deterministic 48-cubed tissue phantom exercises N4 -> BET -> FAST -> FLIRT ->
 epi_reg, plus three-frame MCFLIRT, masked `fslmeants` with exact `.txt` and `.tsv`
 destinations, and a three-stage Rigid + Affine + SyN

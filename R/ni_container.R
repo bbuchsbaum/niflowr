@@ -186,7 +186,8 @@ ni_rewrite_values_for_container <- function(spec, values, cfg) {
     if (def$type == "list" && is.character(val)) {
       item_type <- def$items_type %||% "string"
       if (item_type %in% c("file", "dir")) {
-        out[[nm]] <- unname(vapply(val, function(v) ni_map_host_to_container(v, cfg), character(1)))
+        out[[nm]] <- ni_map_path_values(val, def,
+          function(paths) vapply(paths, ni_map_host_to_container, character(1), cfg = cfg, USE.NAMES = FALSE))
         next
       }
 

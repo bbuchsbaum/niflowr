@@ -30,6 +30,8 @@ run <- function(name, spec, ...) {
 }
 out <- function(x) file.path(root,"out",x)
 infile <- function(x) file.path(root,"in",x)
+source("tests/smoke/ants-points.R")
+verify_ants_points(root, run)
 n4 <- run("n4","ants.n4_bias_field_correction",input_image=infile("t1.nii.gz"),output_image=out("corrected.nii.gz"),
   mask_image=infile("mask.nii.gz"),dimension=3,save_bias=TRUE,rescale_intensities=FALSE,shrink_factor=2,n_iterations=c(5,5))
 brain <- run("bet","fsl.bet",in_file=n4$outputs$output_image,out_file=out("brain.nii.gz"),mask=TRUE,frac=.35)

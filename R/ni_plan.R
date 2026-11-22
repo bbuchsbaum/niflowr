@@ -84,10 +84,37 @@ ni_absolute_values <- function(spec, values, wd) {
     if (is_path_sentinel(values[[nm]], def)) next
     if (def$type %in% c("file", "dir") ||
         (def$type == "list" && (def$items_type %||% "") %in% c("file", "dir"))) {
-      values[[nm]] <- as.character(fs::path_abs(values[[nm]], start = wd))
+      values[[nm]] <- ni_map_path_values(values[[nm]], def,
+        function(paths) as.character(fs::path_abs(paths, start = wd)))
     }
   }
   values
+}
+
+# Apply a path operation to the filenames inside typed arguments. ANTs reads
+# the brackets and inversion flag as part of one argv token. Only its filename
+# is anchored, mounted or hashed. Identity is a built-in ANTs transform.
+ni_map_path_values <- function(value, def, map = identity, paths_only = FALSE) {
+  if (!identical(def$path_syntax, "ants_transform")) return(map(value))
+  if (!is.character(value) || !length(value) || anyNA(value) || any(!nzchar(value))) {
+    cli::cli_abort("{.arg transforms} must contain non-empty transform names.")
+  }
+
+  paths <- value
+  bracketed <- startsWith(value, "[")
+  if (any(bracketed)) {
+    parts <- utils::strcapture("^\\[([^,]+?)(,\\s*[01]\\s*)?\\]$", value[bracketed],
+      list(path = character(), flag = character()), perl = TRUE)
+    if (anyNA(parts$path)) {
+      cli::cli_abort("Expected an ANTs transform filename or {.code [filename,0/1]}.")
+    }
+    paths[bracketed] <- parts$path
+  }
+  files <- !paths %in% c("identity", "Identity")
+  if (paths_only) return(paths[files])
+  if (any(files)) paths[files] <- map(paths[files])
+  if (any(bracketed)) paths[bracketed] <- paste0("[", paths[bracketed], parts$flag, "]")
+  paths
 }
 
 ni_source_identity <- function() {

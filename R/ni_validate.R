@@ -44,7 +44,8 @@ validate_inputs <- function(spec, values) {
 
     # Validate block
     if (!is.null(def$validate) && !is_path_sentinel(val, def)) {
-      errs <- validate_constraints_single(nm, val, def$validate, type = def$type)
+      constraint_value <- ni_map_path_values(val, def, paths_only = TRUE)
+      errs <- validate_constraints_single(nm, constraint_value, def$validate, type = def$type)
       errors <- c(errors, errs)
     }
 
@@ -137,7 +138,9 @@ validate_type <- function(name, value, def) {
       }
     },
     list = {
-      if (isTRUE(def$nested)) {
+      if (identical(def$path_syntax, "ants_transform")) {
+        ni_map_path_values(value, def, paths_only = TRUE)
+      } else if (isTRUE(def$nested)) {
         # One element per stage; NULL/NA elements mean "not set" for that entry.
         items <- if (is.list(value)) value else list(value)
         ok <- all(vapply(items, function(x) {

@@ -51,6 +51,8 @@ type_desc <- function(def) {
       "Vector, or list with one element per stage (an element may itself be a vector)"
     } else if (identical(def$items_type, "bool")) {
       "Logical vector"
+    } else if (identical(def$path_syntax, "ants_transform")) {
+      "Character vector"
     } else {
       "Character or numeric vector"
     },

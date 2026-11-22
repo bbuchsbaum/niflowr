@@ -110,7 +110,7 @@ ni_input_identities <- function(call) {
     if (role == "output") next
     if (def$type %in% c("file", "dir") ||
         (def$type == "list" && (def$items_type %||% "") %in% c("file", "dir"))) {
-      identities[[nm]] <- ni_file_identities(call$values[[nm]])
+      identities[[nm]] <- ni_file_identities(ni_map_path_values(call$values[[nm]], def, paths_only = TRUE))
     }
   }
   identities

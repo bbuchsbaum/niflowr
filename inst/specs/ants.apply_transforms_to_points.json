@@ -32,19 +32,23 @@
       }
     },
     "output_file": {
-      "type": "string",
+      "type": "file",
       "desc": "Name of the output CSV file",
       "cli": {
         "argstr": "--output %s"
-      }
+      },
+      "role": "output"
     },
     "transforms": {
       "type": "list",
-      "desc": "transforms that will be applied to the points",
+      "desc": "Transform files in ANTs command-line order, one per element. Use [affine.mat,1] to invert an affine.",
       "required": true,
       "cli": {
-        "argstr": "%s"
-      }
+        "argstr": "--transform %s",
+        "repeat": true
+      },
+      "items_type": "file",
+      "path_syntax": "ants_transform"
     }
   },
   "outputs": {
@@ -53,7 +57,13 @@
       "path": {
         "from_input": "output_file"
       },
-      "must_exist": false
+      "must_exist": true,
+      "when": {
+        "input": "output_file",
+        "not_in": [
+          ""
+        ]
+      }
     }
   },
   "runtime": {

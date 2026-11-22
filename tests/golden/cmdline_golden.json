@@ -349,7 +349,7 @@
   },
   "ants.apply_transforms_to_points": {
     "command": "antsApplyTransformsToPoints",
-    "args": ["args_value", "--dimensionality", "2", "--input", "/tmp/niflowr/input_file.nii.gz", "--output", "output_file_value", "item1,item2"]
+    "args": ["args_value", "--dimensionality", "2", "--input", "/tmp/niflowr/input_file.nii.gz", "--output", "/tmp/niflowr/output_file.nii.gz", "--transform", "item1", "--transform", "item2"]
   },
   "ants.atropos": {
     "command": "Atropos",
